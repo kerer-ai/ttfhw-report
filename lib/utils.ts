@@ -238,8 +238,9 @@ export function deriveRepoIdentity(source: {
   // 直接从配置表获取社区
   const community = getRepoCommunity(repoName)
 
-  // URL 优先使用 repoUrl 或 repoInfoUrl
-  const url = source.repoUrl || source.repoInfoUrl
+  // URL 优先使用 repoUrl、repoInfoUrl，回退到 repoPath（当它是 URL 时）
+  const repoPathUrl = source.repoPath && /^https?:\/\//.test(source.repoPath) ? source.repoPath : undefined
+  const url = source.repoUrl || source.repoInfoUrl || repoPathUrl
 
   return {
     repoName,
