@@ -938,8 +938,11 @@ function deriveOverallResult(buildable: boolean, testable: boolean, exampleRunna
 }
 
 function deriveOverallResultFromStatus(buildStatus: ResultStatus, utStatus: ResultStatus, sampleStatus: ResultStatus): ResultStatus {
-  if (buildStatus === 'success' && utStatus === 'success' && sampleStatus === 'success') return 'success'
-  if (buildStatus === 'success' || buildStatus === 'partial_success' || utStatus === 'success' || utStatus === 'partial_success' || sampleStatus === 'success') return 'partial_success'
+  const sampleRan = sampleStatus !== 'not_run' && sampleStatus !== 'unknown'
+  const sampleOk = !sampleRan || sampleStatus === 'success'
+
+  if (buildStatus === 'success' && utStatus === 'success' && sampleOk) return 'success'
+  if (buildStatus === 'success' || buildStatus === 'partial_success' || utStatus === 'success' || utStatus === 'partial_success' || (sampleRan && sampleStatus === 'success')) return 'partial_success'
   return 'failed'
 }
 
