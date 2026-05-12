@@ -356,6 +356,7 @@ export interface SummaryStats {
   success: number;
   failed: number;
   partial: number;
+  other: number;
   avgDuration: number;
   avgEnvironmentDuration: number;
   totalTestsAll: number;

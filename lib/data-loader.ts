@@ -7,18 +7,23 @@ const JSON_DIR = path.join(process.cwd(), 'json')
 
 // 获取所有仓库名称（从JSON文件名提取，去重保留每个仓库一份）
 export function getAllRepoNames(): string[] {
-  const names = fs.readdirSync(JSON_DIR, { withFileTypes: true })
+  const seen = new Map<string, string>() // normalizedKey → originalName
+  const entries = fs.readdirSync(JSON_DIR, { withFileTypes: true })
     .filter(dirent => dirent.isFile() && dirent.name.endsWith('.json'))
-    .map(dirent => {
-      let name = dirent.name
-        .replace('verification_report_', '')
-        .replace('.json', '')
-        .replace(/_202605\d{2}$/, '')  // 移除日期后缀
-        .replace(/_202605\d{2}_final$/, '')  // 移除日期+final后缀
-      // 规范化名称，去掉 WSL_/Ubuntu_ 前缀，防止同一仓库出现多个条目
-      return normalizeRepoName(name)
-    })
-  return [...new Set(names)].sort()
+
+  for (const dirent of entries) {
+    const rawName = dirent.name
+      .replace('verification_report_', '')
+      .replace('.json', '')
+      .replace(/_202605\d{2}$/, '')
+      .replace(/_202605\d{2}_final$/, '')
+    // 用归一化后的 key 去重，但保留原始文件名用于文件查找
+    const key = normalizeRepoName(rawName).toLowerCase().replace(/[-_]/g, '-')
+    if (!seen.has(key)) {
+      seen.set(key, rawName)
+    }
+  }
+  return [...seen.values()].sort()
 }
 
 // 获取所有仓库汇总数据
@@ -558,12 +563,14 @@ export function calculateSummaryStats(repos: RepoSummary[]): SummaryStats {
   const testableCount = repos.filter(r => r.utStatus === 'success' || r.utStatus === 'partial_success').length
   const ttfhwPassRate = total > 0 ? Math.round((success / total) * 100) : 0
   const buildPassRate = total > 0 ? Math.round((buildableCount / total) * 100) : 0
+  const other = total - success - failed - partial
 
   return {
     total,
     success,
     failed,
     partial,
+    other,
     avgDuration,
     avgEnvironmentDuration,
     totalTestsAll,
