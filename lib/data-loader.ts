@@ -5,9 +5,9 @@ import { deriveRepoIdentity } from './utils'
 
 const JSON_DIR = path.join(process.cwd(), 'json')
 
-// 获取所有仓库名称（从JSON文件名提取）
+// 获取所有仓库名称（从JSON文件名提取，去重保留每个仓库一份）
 export function getAllRepoNames(): string[] {
-  return fs.readdirSync(JSON_DIR, { withFileTypes: true })
+  const names = fs.readdirSync(JSON_DIR, { withFileTypes: true })
     .filter(dirent => dirent.isFile() && dirent.name.endsWith('.json'))
     .map(dirent => {
       let name = dirent.name
@@ -17,7 +17,7 @@ export function getAllRepoNames(): string[] {
         .replace(/_202605\d{2}_final$/, '')  // 移除日期+final后缀
       return name
     })
-    .sort()
+  return [...new Set(names)].sort()
 }
 
 // 获取所有仓库汇总数据
