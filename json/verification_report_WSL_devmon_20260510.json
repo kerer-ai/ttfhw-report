@@ -75,7 +75,7 @@
     },
     {
       "timestamp": "2026-05-10T14:41:00",
-      "command": "docker pull swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/ubuntu:24.04",
+      "command": "docker pull internal-registry.example.com/ddn-k8s/docker.io/library/ubuntu:24.04",
       "success": true,
       "output": "Status: Downloaded newer image",
       "error": "",
@@ -330,7 +330,7 @@
   "problems_encountered": [
     {
       "problem": "Docker Hub not accessible - timeout pulling ubuntu:24.04",
-      "solution": "Used Huawei Cloud mirror: swr.cn-north-4.myhuaweicloud.com/ddn-k8s/docker.io/library/ubuntu:24.04",
+      "solution": "Used Huawei Cloud mirror: internal-registry.example.com/ddn-k8s/docker.io/library/ubuntu:24.04",
       "source": "Network environment limitation"
     },
     {

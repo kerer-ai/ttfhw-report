@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "/root/Documents/trae_projects/ttfhw_sta/tmp_src/ge",
+    "repo_path": "/root/<user>/Documents/<path>/ttfhw_sta/tmp_src/ge",
     "repo_url": "https://gitcode.com/cann/ge.git",
     "start_time": "2026-05-10T12:06:00",
     "end_time": "2026-05-10T13:30:00",
@@ -76,7 +76,7 @@
     },
     {
       "timestamp": "2026-05-10T12:07:00",
-      "command": "docker pull swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler22.03_lts_sp3:latest",
+      "command": "docker pull internal-registry.example.com/example-org/openeuler22.03_lts_sp3:latest",
       "success": true,
       "output": "openEuler 镜像拉取成功",
       "error": "",
@@ -84,7 +84,7 @@
     },
     {
       "timestamp": "2026-05-10T12:08:00",
-      "command": "docker run -d --name verification-env -v ./tmp_src/ge:/workspace swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler22.03_lts_sp3:latest",
+      "command": "docker run -d --name verification-env -v ./tmp_src/ge:/workspace internal-registry.example.com/example-org/openeuler22.03_lts_sp3:latest",
       "success": true,
       "output": "容器启动成功",
       "error": "",

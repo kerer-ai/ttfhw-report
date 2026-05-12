@@ -64,15 +64,20 @@ export function getRepoDetail(repoName: string): RepoDetail | null {
 }
 
 function loadReportData(repoName: string): any {
-  // 尝试多种文件名格式
+  // 尝试多种文件名格式（优先更新日期，优先带 WSL/Ubuntu 前缀）
   const possibleNames = [
-    `verification_report_${repoName}_20260510.json`,
+    `verification_report_WSL_${repoName}_20260512.json`,
+    `verification_report_WSL_${repoName}_20260511.json`,
+    `verification_report_WSL_${repoName}_20260511_final.json`,
+    `verification_report_WSL_${repoName}_20260510.json`,
+    `verification_report_Ubuntu_${repoName}_20260512.json`,
+    `verification_report_Ubuntu_${repoName}_20260511.json`,
+    `verification_report_Ubuntu_${repoName}_20260510.json`,
+    `verification_report_${repoName}_20260512.json`,
     `verification_report_${repoName}_20260511.json`,
     `verification_report_${repoName}_20260511_final.json`,
+    `verification_report_${repoName}_20260510.json`,
     `verification_report_${repoName}.json`,
-    `verification_report_WSL_${repoName}_20260510.json`,
-    `verification_report_WSL_${repoName}_20260511.json`,
-    `verification_report_Ubuntu_${repoName}_20260510.json`,
   ]
 
   for (const filename of possibleNames) {
@@ -95,7 +100,20 @@ function convertReport511Format(data: any, repoName?: string): any {
     return { ...data, __original: data }
   }
 
-  // 转换 metadata -> meta
+  // openEuler/bishengjdk 格式（verification_info 顶级键）
+  if (data.verification_info) {
+    return convertOpenEulerFormat(data, repoName)
+  }
+
+  // stratovirt 格式（verification_summary 顶级键）
+  if (data.verification_summary) {
+    return convertStratovirtFormat(data, repoName)
+  }
+
+  // 原有 report-511 格式（metadata 顶级键）
+  return convertReport511LegacyFormat(data, repoName)
+}
+function convertReport511LegacyFormat(data: any, repoName?: string): any {
   const metadata = data.metadata || {}
   const meta = {
     report_version: '3.0',
@@ -106,7 +124,6 @@ function convertReport511Format(data: any, repoName?: string): any {
   }
 
   // 转换 repo_info
-  // 优先使用 JSON 中的 repo_info.name 或 metadata.repo_name，否则使用传入的 repoName
   const identity = deriveRepoIdentity({
     fallbackName: repoName || data.repo_info?.name || metadata.repo_name || 'unknown',
     repoPath: metadata.repo_path,
@@ -194,9 +211,312 @@ function convertReport511Format(data: any, repoName?: string): any {
     overall,
     ttfhw_timeline: { total_attempt_duration_seconds: durationSeconds },
     problems_encountered: data.problems_encountered || [],
-    // 保留原始数据
     __original: data
   }
+}
+
+// 转换 openEuler 格式（bishengjdk-8 等）
+function convertOpenEulerFormat(data: any, repoName?: string): any {
+  const vi = data.verification_info || {}
+  const env = data.execution_environment || {}
+  const doc = data.document_analysis || {}
+  const deps = data.dependency_installation || {}
+  const cfg = data.build_configuration || {}
+  const bld = data.build_execution || {}
+  const ut = data.unit_tests || {}
+  const sample = data.samples || {}
+  const result = data.verification_result || {}
+
+  const actualRepoName = vi.repository || repoName || 'unknown'
+  const identity = deriveRepoIdentity({
+    fallbackName: actualRepoName,
+    repoUrl: vi.repository_url,
+    repoInfoName: actualRepoName,
+    repoInfoUrl: vi.repository_url,
+  })
+
+  const buildStatus = mapOpenEulerStatus(bld.status)
+  const utStatus = mapOpenEulerStatus(ut.status || ut.test_results?.status)
+  const sampleStatus = mapOpenEulerStatus(sample.status)
+  const buildDuration = parseTimeString(bld.build_time)
+
+  return {
+    meta: {
+      report_version: '3.0',
+      skill_name: 'ttfhw-verify',
+      generated_at: vi.verification_date || 'N/A',
+      generator: 'Claude Code',
+      remote_server: 'local',
+    },
+    repo_info: {
+      name: identity.repoName,
+      url: identity.url || vi.repository_url || '',
+      branch: 'master',
+    },
+    build_result: {
+      status: buildStatus,
+      build_command: cfg.configure_command || doc.build_command || '',
+      error: bld.errors ? String(bld.errors) : '',
+      build_duration_seconds: buildDuration,
+      duration_seconds: buildDuration,
+    },
+    ut_stats: {
+      ut_status: utStatus,
+      ut_skipped_reason: ut.note || '',
+      ut_total_count: ut.test_results?.total,
+      ut_passed_count: ut.test_results?.passed,
+      ut_failed_count: ut.test_results?.failed,
+      total_tests: ut.test_results?.total,
+      passed: ut.test_results?.passed,
+      failed: ut.test_results?.failed,
+    },
+    attempt_log: {
+      attempts: buildOpenEulerExecutionLog(data),
+      total_attempts: 5,
+    },
+    documentation_checklist: {
+      readme_found: true,
+      build_docs_found: Boolean(doc.build_command),
+      readme_has_quick_start: Boolean(doc.sample_command),
+      readme_has_install_section: Boolean(doc.build_dependencies),
+    },
+    hardware_config: {
+      server: env.os || 'unknown',
+      npu_available: false,
+    },
+    overall: {
+      build_status: buildStatus,
+      ut_status: utStatus,
+      sample_status: sampleStatus,
+      result: deriveOverallResultSimple(buildStatus, utStatus),
+    },
+    ttfhw_timeline: { total_attempt_duration_seconds: buildDuration || 0 },
+    problems_encountered: (data.issues_and_solutions || []).map((iss: any) => ({
+      problem: iss.issue,
+      root_cause: iss.cause,
+      solution: iss.solution,
+      resolved: iss.status === '已解决',
+    })),
+    __original: data,
+  }
+}
+
+// 转换 stratovirt 格式（verification_summary 顶级键）
+function convertStratovirtFormat(data: any, repoName?: string): any {
+  const vs = data.verification_summary || {}
+  const env = vs.environment || {}
+  const build = vs.build_result || {}
+  const test = vs.test_result || {}
+  const conclusion = vs.conclusion || {}
+
+  const urlMatch = vs.repository?.match(/\/([^/]+)\.git$/)
+  const derivedName = urlMatch ? urlMatch[1] : (repoName || 'stratovirt')
+
+  const identity = deriveRepoIdentity({
+    fallbackName: derivedName,
+    repoUrl: vs.repository,
+    repoInfoName: derivedName,
+    repoInfoUrl: vs.repository,
+  })
+
+  const buildStatus = build.status === 'SUCCESS' ? 'success' : 'failed'
+  const utStatus = mapStratovirtTestStatus(test.status)
+  const buildDuration = parseDurationString(build.duration)
+
+  return {
+    meta: {
+      report_version: '3.0',
+      skill_name: 'ttfhw-verify',
+      generated_at: vs.verification_date || 'N/A',
+      generator: 'Claude Code',
+      remote_server: 'local',
+    },
+    repo_info: {
+      name: identity.repoName,
+      url: identity.url || vs.repository || '',
+      branch: 'master',
+    },
+    build_result: {
+      status: buildStatus,
+      build_command: build.command || '',
+      error: '',
+      build_duration_seconds: buildDuration,
+      duration_seconds: buildDuration,
+    },
+    ut_stats: {
+      ut_status: utStatus,
+      ut_skipped_reason: test.failure_reason || '',
+      ut_total_count: test.total_tests,
+      ut_passed_count: test.passed_tests,
+      ut_failed_count: (test.total_tests || 0) - (test.passed_tests || 0),
+      total_tests: test.total_tests,
+      passed: test.passed_tests,
+      failed: (test.total_tests || 0) - (test.passed_tests || 0),
+    },
+    attempt_log: {
+      attempts: [
+        {
+          sequence: 1,
+          phase: 'build',
+          action: '构建',
+          command: build.command || '',
+          result: buildStatus === 'success' ? 'success' : 'failed',
+          duration_seconds: buildDuration || 0,
+          output: build.output_binary ? `${build.output_binary} (${build.binary_size})` : '',
+        },
+        {
+          sequence: 2,
+          phase: 'test',
+          action: '测试',
+          command: 'cargo test',
+          result: utStatus === 'success' ? 'success' : (utStatus === 'partial_success' ? 'partial_success' : 'failed'),
+          duration_seconds: 0,
+          output: `${test.passed_tests || 0}/${test.total_tests || 0} passed`,
+        },
+      ],
+      total_attempts: 2,
+    },
+    documentation_checklist: {
+      readme_found: true,
+    },
+    hardware_config: {
+      server: env.os || 'unknown',
+      npu_available: false,
+    },
+    overall: {
+      build_status: buildStatus,
+      ut_status: utStatus,
+      sample_status: 'not_run',
+      result: deriveOverallResultSimple(buildStatus, utStatus),
+    },
+    ttfhw_timeline: { total_attempt_duration_seconds: buildDuration || 0 },
+    problems_encountered: (vs.issues_encountered || []).map((iss: any) => ({
+      problem: iss.issue,
+      root_cause: iss.description,
+      solution: iss.resolution,
+      resolved: iss.status === 'RESOLVED',
+    })),
+    __original: data,
+  }
+}
+
+function buildOpenEulerExecutionLog(data: any): any[] {
+  const log: any[] = []
+  const vi = data.verification_info || {}
+  const env = data.execution_environment || {}
+  const deps = data.dependency_installation || {}
+  const cfg = data.build_configuration || {}
+  const bld = data.build_execution || {}
+  const ut = data.unit_tests || {}
+  const sample = data.samples || {}
+
+  if (env.docker_image) {
+    log.push({
+      timestamp: vi.verification_date || '',
+      step: '容器设置',
+      command: `docker run ${env.container_name || ''} ${env.docker_image}`,
+      success: true,
+      output: `${env.os} ${env.architecture}`,
+    })
+  }
+  if (deps.packages_installed?.length) {
+    log.push({
+      timestamp: vi.verification_date || '',
+      step: '安装依赖',
+      command: `dnf install -y ${deps.packages_installed.slice(0, 5).join(' ')}...`,
+      success: deps.status === '成功',
+      output: `${deps.packages_installed.length} packages installed`,
+    })
+  }
+  if (cfg.configure_command) {
+    log.push({
+      timestamp: vi.verification_date || '',
+      step: '配置构建',
+      command: cfg.configure_command,
+      success: cfg.status === '成功',
+      output: cfg.configure_output?.configuration_name || '',
+    })
+  }
+  if (bld.build_time) {
+    log.push({
+      timestamp: vi.verification_date || '',
+      step: '构建',
+      command: 'make',
+      success: bld.status === '成功',
+      output: `Duration: ${bld.build_time}, Errors: ${bld.errors || 0}`,
+    })
+  }
+  if (ut.test_results) {
+    log.push({
+      timestamp: vi.verification_date || '',
+      step: 'UT',
+      command: 'make test',
+      success: ut.test_results?.status === '通过',
+      output: ut.test_results?.sample_test || '',
+    })
+  }
+  return log
+}
+
+function buildOpenEulerTimeline(data: any): any[] {
+  const vi = data.verification_info || {}
+  const tl: any[] = []
+  const steps = [
+    { key: 'dependency_installation', name: '安装依赖' },
+    { key: 'build_configuration', name: '配置' },
+    { key: 'build_execution', name: '构建' },
+    { key: 'unit_tests', name: 'UT' },
+    { key: 'samples', name: '示例' },
+  ]
+  for (const { key, name } of steps) {
+    const item = data[key]
+    if (item) {
+      tl.push({
+        timestamp: vi.verification_date || '',
+        step: key,
+        action: name,
+        result: item.status || 'unknown',
+      })
+    }
+  }
+  return tl
+}
+
+function mapOpenEulerStatus(status: string | undefined): string {
+  if (!status) return 'unknown'
+  const s = status.toLowerCase()
+  if (s.includes('成功') || s.includes('success') || s.includes('通过')) return 'success'
+  if (s.includes('失败') || s.includes('fail') || s.includes('error')) return 'failed'
+  if (s.includes('部分') || s.includes('partial')) return 'partial_success'
+  return 'unknown'
+}
+
+function mapStratovirtTestStatus(status: string | undefined): string {
+  if (!status) return 'unknown'
+  const s = status.toUpperCase()
+  if (s === 'SUCCESS') return 'success'
+  if (s === 'PARTIAL_FAILURE') return 'partial_success'
+  if (s === 'FAILED') return 'failed'
+  return 'unknown'
+}
+
+function parseTimeString(timeStr: string | undefined): number | undefined {
+  if (!timeStr) return undefined
+  // "00:09:03" or "8m 48s"
+  const hms = timeStr.match(/(\d{2}):(\d{2}):(\d{2})/)
+  if (hms) return parseInt(hms[1]) * 3600 + parseInt(hms[2]) * 60 + parseInt(hms[3])
+  return parseDurationString(timeStr)
+}
+
+function parseDurationString(dur: string | undefined): number | undefined {
+  if (!dur) return undefined
+  // "8m 48s"
+  let total = 0
+  const minMatch = dur.match(/(\d+)\s*m/)
+  if (minMatch) total += parseInt(minMatch[1]) * 60
+  const secMatch = dur.match(/(\d+)\s*s/)
+  if (secMatch) total += parseInt(secMatch[1])
+  return total > 0 ? total : undefined
 }
 
 function normalizeStatusString(status: any): string {
