@@ -73,15 +73,16 @@ function loadReportData(repoName: string): any {
   // 尝试多种文件名格式（优先更新日期，优先带 WSL/Ubuntu 前缀）
   const possibleNames = [
     `verification_report_WSL_${repoName}_20260512.json`,
-    `verification_report_WSL_${repoName}_20260511.json`,
     `verification_report_WSL_${repoName}_20260511_final.json`,
+    `verification_report_WSL_${repoName}_20260511.json`,
     `verification_report_WSL_${repoName}_20260510.json`,
     `verification_report_Ubuntu_${repoName}_20260512.json`,
+    `verification_report_Ubuntu_${repoName}_20260511_final.json`,
     `verification_report_Ubuntu_${repoName}_20260511.json`,
     `verification_report_Ubuntu_${repoName}_20260510.json`,
     `verification_report_${repoName}_20260512.json`,
-    `verification_report_${repoName}_20260511.json`,
     `verification_report_${repoName}_20260511_final.json`,
+    `verification_report_${repoName}_20260511.json`,
     `verification_report_${repoName}_20260510.json`,
     `verification_report_${repoName}.json`,
   ]
