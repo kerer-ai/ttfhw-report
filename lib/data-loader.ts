@@ -145,7 +145,8 @@ function convertReport511LegacyFormat(data: any, repoName?: string): any {
   }
 
   // 转换 final_results -> build_result/ut_stats
-  const finalResults = data.final_results || {}
+  // 兼容不同的键名别名：unit_test->ut, samples/sample_run->sample
+  const finalResults = normalizeFinalResults(data.final_results || {})
   const buildResult = {
     status: normalizeStatusString(finalResults.build?.status),
     build_command: data.document_reading_summary?.build_commands?.value || '',
@@ -155,7 +156,8 @@ function convertReport511LegacyFormat(data: any, repoName?: string): any {
   }
 
   // 聚合 UT 数据（支持多组件 / 命名子对象结构）
-  const utRaw = finalResults.ut || {}
+  // 兼容 ut / unit_test / unittest 等不同键名
+  const utRaw = finalResults.ut || finalResults.unit_test || finalResults.unittest || {}
   const utAgg = aggregateUtStats(utRaw)
 
   const utStats = {
@@ -534,6 +536,16 @@ function parseDurationString(dur: string | undefined): number | undefined {
   return total > 0 ? total : undefined
 }
 
+// 归一化 final_results 键名（兼容 unit_test->ut, samples/sample_run->sample 等别名）
+function normalizeFinalResults(fr: Record<string, any>): Record<string, any> {
+  const result = { ...fr }
+  if (!result.ut && result.unit_test) result.ut = result.unit_test
+  if (!result.ut && result.unittest) result.ut = result.unittest
+  if (!result.sample && result.samples) result.sample = result.samples
+  if (!result.sample && result.sample_run) result.sample = result.sample_run
+  return result
+}
+
 // 通用 UT 统计聚合：处理 flat total/passed/failed、components[]、命名子对象三种结构
 function aggregateUtStats(utRaw: any): { total?: number; passed?: number; failed?: number; suites?: string[] } {
   const KNOWN_META = new Set(['status', 'reason', 'note', 'summary', 'duration_seconds',
@@ -542,7 +554,9 @@ function aggregateUtStats(utRaw: any): { total?: number; passed?: number; failed
     'test_categories', 'test_duration_ms', 'build_mode', 'coverage', 'coverage_note',
     'notes', 'errors', 'execution_time_seconds', 'blocked', 'blocked_tests',
     'blocked_reason', 'passed_tests', 'testing_tools_available',
-    'build_duration_seconds', 'backend', 'pytest_version'])
+    'build_duration_seconds', 'backend', 'pytest_version', 'collected',
+    'import_errors', 'suite_details', 'detail', 'link_errors', 'tests',
+    'build_script_error', 'test_suites', 'skipped', 'success'])  // aliases & common extras
 
   // 1. components[] 数组 (ubs-virt)
   if (Array.isArray(utRaw.components)) {
@@ -555,18 +569,21 @@ function aggregateUtStats(utRaw: any): { total?: number; passed?: number; failed
     }
   }
 
-  // 2. 命名子对象：检测任何值含 {total, passed, failed} 的键 (ubturbo, MindIE-Motor, etc.)
+  // 2. 命名子对象：检测任何值含 {total/collected, passed, failed} 的键
   const subKeys = Object.keys(utRaw).filter(k =>
     !KNOWN_META.has(k) && typeof utRaw[k] === 'object' && utRaw[k] !== null &&
-    !Array.isArray(utRaw[k]) && ('total' in utRaw[k] || 'passed' in utRaw[k] || 'failed' in utRaw[k])
+    !Array.isArray(utRaw[k]) && (
+      'total' in utRaw[k] || 'collected' in utRaw[k] ||
+      'passed' in utRaw[k] || 'failed' in utRaw[k]
+    )
   )
   if (subKeys.length > 0) {
     const subs = subKeys.map(k => utRaw[k])
     return {
-      total: subs.reduce((s: number, c: any) => s + (c.total || 0), 0),
+      total: subs.reduce((s: number, c: any) => s + (c.total || c.collected || 0), 0),
       passed: subs.reduce((s: number, c: any) => s + (c.passed || 0), 0),
       failed: subs.reduce((s: number, c: any) => s + (c.failed || 0), 0),
-      suites: subKeys.map((k, i) => `${k}: ${subs[i]?.passed || 0}/${subs[i]?.total || 0}`),
+      suites: subKeys.map((k, i) => `${k}: ${subs[i]?.passed || 0}/${subs[i]?.total || subs[i]?.collected || 0}`),
     }
   }
 
