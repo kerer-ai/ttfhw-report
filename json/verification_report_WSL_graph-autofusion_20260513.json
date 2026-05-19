@@ -1,0 +1,300 @@
+{
+  "metadata": {
+    "repo_path": "./tmp_src/",
+    "repo_url": "https://gitcode.com/cann/graph-autofusion.git",
+    "start_time": "2026-05-13T16:18:00+08:00",
+    "end_time": "2026-05-13T18:30:00+08:00",
+    "duration_seconds": 7920,
+    "total_steps": 8
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "901G available",
+      "docker_version": "Docker version 29.1.3"
+    },
+    "container_cann": {
+      "os": "Ubuntu 22.04.5 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "cmake_version": "3.22.1",
+      "gcc_version": "11.4.0",
+      "python_version": "3.11.15",
+      "cann_version": "9.0.0-beta.1"
+    },
+    "image_source": {
+      "type": "cann_official_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "selection_reason": "使用华为官方 CANN 开发镜像，预装 CANN Toolkit"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64, aarch64",
+      "source": "docs/build.md - 支持多架构"
+    },
+    "recommended_image": {
+      "value": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "source": "docs/quick_install.md - Docker 部署方式"
+    },
+    "dependencies": {
+      "value": [
+        "CANN Toolkit 9.0.0 (预装于镜像)",
+        "CMake >= 3.16.0",
+        "Python3 >= 3.8.0",
+        "GCC >= 7.3.0",
+        "29 个 Python 包 (requirements-dev.txt)"
+      ],
+      "source": "docs/build.md + docs/quick_install.md"
+    },
+    "build_commands": {
+      "value": "bash build.sh --pkg",
+      "source": "docs/build.md - 第4.3节"
+    },
+    "ut_commands": {
+      "value": "bash build.sh -u 或 pytest tests/ut -m ut",
+      "source": "docs/build.md - 第4.4节 + build.sh"
+    },
+    "st_commands": {
+      "value": "bash build.sh -s",
+      "source": "docs/build.md - 第4.4节"
+    },
+    "sample_commands": {
+      "value": "bash build.sh --run_example",
+      "source": "build.sh --help"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-13T16:18:00+08:00",
+      "step": "1",
+      "action": "克隆仓库",
+      "command": "git clone https://gitcode.com/cann/graph-autofusion.git ./tmp_src/",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-13T16:20:00+08:00",
+      "step": "2",
+      "action": "文档阅读",
+      "command": "Read README.md, CONTRIBUTING.md, CMakeLists.txt, build.sh, docs/build.md, docs/quick_install.md",
+      "success": true,
+      "returncode": 0,
+      "notes": "发现需要 CANN Toolkit，推荐使用官方 Docker 镜像"
+    },
+    {
+      "timestamp": "2026-05-13T16:30:00+08:00",
+      "step": "3",
+      "action": "拉取 CANN 官方镜像",
+      "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-13T16:35:00+08:00",
+      "step": "4",
+      "action": "启动 CANN 容器",
+      "command": "docker run -d --name ttfhw-graph-autofusion-cann -v ./tmp_src:/home/gaf swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "success": true,
+      "returncode": 0,
+      "notes": "CANN 9.0.0-beta.1 预装于容器中"
+    },
+    {
+      "timestamp": "2026-05-13T16:45:00+08:00",
+      "step": "5",
+      "action": "尝试完整构建",
+      "command": "bash build.sh --pkg",
+      "success": false,
+      "returncode": 1,
+      "error": "SkSystemArgs 类型在 CANN 9.0.0 中不存在",
+      "notes": "API 兼容性问题：super_kernel/kernel/sk_entry.asc 使用了 sk::SkSystemArgs，但 CANN 9.0.0 中已移除此类型"
+    },
+    {
+      "timestamp": "2026-05-13T17:00:00+08:00",
+      "step": "6",
+      "action": "安装 Python 依赖",
+      "command": "pip3 install -e /home/gaf/super_kernel[dev]",
+      "success": true,
+      "returncode": 0,
+      "notes": "安装了 superkernel 包及所有开发依赖（pytest, numpy, scipy 等）"
+    },
+    {
+      "timestamp": "2026-05-13T18:00:00+08:00",
+      "step": "7",
+      "action": "运行单元测试",
+      "command": "pytest tests/ut -m ut -v",
+      "success": true,
+      "returncode": 0,
+      "notes": "90 个测试用例全部通过，耗时 1.39 秒"
+    },
+    {
+      "timestamp": "2026-05-13T18:30:00+08:00",
+      "step": "8",
+      "action": "清理容器",
+      "command": "docker stop ttfhw-graph-autofusion-cann && docker rm ttfhw-graph-autofusion-cann",
+      "success": true,
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-13T16:18:00+08:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-13T16:18:00+08:00",
+      "step": "1",
+      "action": "克隆仓库",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-13T16:20:00+08:00",
+      "step": "2",
+      "action": "文档阅读与信息提取",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-13T16:30:00+08:00",
+      "step": "3",
+      "action": "拉取 CANN 官方镜像",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-13T16:35:00+08:00",
+      "step": "4",
+      "action": "启动 CANN 容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-13T16:45:00+08:00",
+      "step": "5",
+      "action": "完整构建尝试",
+      "result": "failed - API 兼容性问题"
+    },
+    {
+      "timestamp": "2026-05-13T17:00:00+08:00",
+      "step": "6",
+      "action": "安装 Python 依赖",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-13T18:00:00+08:00",
+      "step": "7",
+      "action": "运行单元测试",
+      "result": "success - 90/90 passed"
+    },
+    {
+      "timestamp": "2026-05-13T18:30:00+08:00",
+      "step": "end",
+      "action": "验证过程结束",
+      "result": "completed"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "partial_success",
+      "duration_seconds": 300,
+      "c_build": {
+        "status": "failed",
+        "error": "SkSystemArgs 类型不存在于 CANN 9.0.0",
+        "error_file": "super_kernel/kernel/sk_entry.asc:6:65",
+        "root_cause": "CANN API 版本兼容性问题"
+      },
+      "python_package": {
+        "status": "success",
+        "package": "superkernel-0.1.0"
+      },
+      "artifacts": []
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 1.39,
+      "total": 90,
+      "passed": 90,
+      "failed": 0,
+      "failures": [],
+      "test_files": [
+        "tests/ut/test_super_kernel.py",
+        "tests/ut/test_super_kernel_op_infos.py",
+        "tests/ut/test_super_kernel_option_parse.py",
+        "tests/ut/test_super_kernel_sub_op_infos.py"
+      ]
+    },
+    "st": {
+      "status": "not_executed",
+      "duration_seconds": 0,
+      "reason": "ST 测试需要 NPU 硬件设备"
+    },
+    "sample": {
+      "status": "not_executed",
+      "duration_seconds": 0,
+      "reason": "样例运行需要 NPU 硬件设备"
+    }
+  },
+  "documentation_gaps": [
+    {
+      "item": "CANN 版本兼容性说明",
+      "status": "missing",
+      "note": "项目未明确说明支持的 CANN 版本范围，当前代码与 CANN 9.0.0 存在 API 不兼容"
+    },
+    {
+      "item": "Dockerfile",
+      "status": "missing",
+      "note": "项目未提供 Dockerfile，建议参考 docs/quick_install.md 使用官方镜像"
+    }
+  ],
+  "problems_encountered": [
+    {
+      "problem": "标准容器缺少 CANN 依赖",
+      "error_message": "Could NOT find runtime (missing: _INCLUDE_DIR runtime_SHARED_LIBRARY)",
+      "solution": "使用华为官方 CANN 开发镜像",
+      "solution_result": "成功",
+      "source": "docs/quick_install.md"
+    },
+    {
+      "problem": "CANN 9.0.0 API 不兼容",
+      "error_message": "no type named 'SkSystemArgs' in namespace 'sk'",
+      "solution": "跳过 C++ 构建，仅安装 Python 包运行 UT",
+      "solution_result": "UT 成功通过",
+      "root_cause": "项目代码与 CANN 9.0.0 API 不兼容，可能需要使用较低版本的 CANN",
+      "source": "super_kernel/kernel/sk_entry.asc"
+    },
+    {
+      "problem": "Python 包缺少 build 模块",
+      "error_message": "No module named build",
+      "solution": "pip3 install build",
+      "solution_result": "成功",
+      "source": "CANN 镜像预装 Python 环境缺少 build 模块"
+    },
+    {
+      "problem": "setuptools 版本不兼容",
+      "error_message": "No matching distribution found for setuptools<80,>=68",
+      "solution": "pip3 install setuptools==79.0.0",
+      "solution_result": "成功"
+    }
+  ],
+  "conclusion": {
+    "build_status": "partial_success",
+    "python_ut_status": "success",
+    "reason": "C++ 构建（super_kernel/kernel）因 CANN 9.0.0 API 兼容性问题失败，但 Python 单元测试全部通过",
+    "recommendation": [
+      "项目需要明确支持的 CANN 版本范围",
+      "建议添加 CANN 版本兼容性检查",
+      "ST 测试和样例运行需要 NPU 硬件环境"
+    ],
+    "document_quality": {
+      "completeness": "良好",
+      "clarity": "良好",
+      "improvement_suggestions": [
+        "在 README.md 中明确标注支持的 CANN 版本",
+        "添加 API 兼容性说明"
+      ]
+    }
+  }
+}

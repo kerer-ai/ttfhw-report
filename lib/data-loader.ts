@@ -9,7 +9,7 @@ const JSON_DIR = path.join(process.cwd(), 'json')
 export function getAllRepoNames(): string[] {
   const seen = new Map<string, string>() // normalizedKey → originalName
   const entries = fs.readdirSync(JSON_DIR, { withFileTypes: true })
-    .filter(dirent => dirent.isFile() && dirent.name.endsWith('.json'))
+    .filter(dirent => dirent.isFile() && dirent.name.endsWith('.json') && !dirent.name.includes('_summary'))
 
   for (const dirent of entries) {
     const rawName = dirent.name
@@ -70,31 +70,43 @@ export function getRepoDetail(repoName: string): RepoDetail | null {
 }
 
 function loadReportData(repoName: string): any {
-  // 尝试多种文件名格式（优先更新日期，优先带 WSL/Ubuntu 前缀）
-  const possibleNames = [
-    `verification_report_WSL_${repoName}_20260512.json`,
-    `verification_report_WSL_${repoName}_20260511_final.json`,
-    `verification_report_WSL_${repoName}_20260511.json`,
-    `verification_report_WSL_${repoName}_20260510.json`,
-    `verification_report_Ubuntu_${repoName}_20260512.json`,
-    `verification_report_Ubuntu_${repoName}_20260511_final.json`,
-    `verification_report_Ubuntu_${repoName}_20260511.json`,
-    `verification_report_Ubuntu_${repoName}_20260510.json`,
-    `verification_report_${repoName}_20260512.json`,
-    `verification_report_${repoName}_20260511_final.json`,
-    `verification_report_${repoName}_20260511.json`,
-    `verification_report_${repoName}_20260510.json`,
-    `verification_report_${repoName}.json`,
-  ]
+  // 动态扫描 json 目录，找到匹配 repoName 的文件
+  // 优先 WSL/Ubuntu 前缀，优先更新日期
+  const allFiles = fs.readdirSync(JSON_DIR)
+    .filter(f => f.endsWith('.json') && !f.includes('_summary'))
 
-  for (const filename of possibleNames) {
-    const reportPath = path.join(JSON_DIR, filename)
-    if (fs.existsSync(reportPath)) {
-      const rawData = fs.readFileSync(reportPath, 'utf-8')
-      const data = JSON.parse(rawData)
-      // 转换 report-511 格式到标准格式，传入 repoName 作为 fallback
-      return convertReport511Format(data, repoName)
+  const candidates: { file: string; score: number }[] = []
+
+  for (const filename of allFiles) {
+    // 从文件名中提取 repo 名部分，与目标比较
+    const rawName = filename
+      .replace('verification_report_', '')
+      .replace(/^UBSCore-[^_]+_/, '') // strip UBSCore-xxx_ prefix
+      .replace('.json', '')
+      .replace(/_202605\d{2}(?:_\d{6})?$/, '') // date suffix with optional time
+      .replace(/_final$/, '')
+
+    if (normalizeRepoName(rawName).toLowerCase().replace(/[-_]/g, '-') ===
+        normalizeRepoName(repoName).toLowerCase().replace(/[-_]/g, '-')) {
+      // 计算优先级分数：WSL > Ubuntu > 无前缀；日期越新越好
+      let score = 0
+      if (filename.startsWith('verification_report_WSL_')) score += 2000
+      else if (filename.startsWith('verification_report_Ubuntu_')) score += 1000
+
+      const dateMatch = filename.match(/_(\d{8})(?:_\d{6})?\.json$/)
+      if (dateMatch) score += parseInt(dateMatch[1], 10)
+
+      candidates.push({ file: filename, score })
     }
+  }
+
+  candidates.sort((a, b) => b.score - a.score)
+
+  if (candidates.length > 0) {
+    const reportPath = path.join(JSON_DIR, candidates[0].file)
+    const rawData = fs.readFileSync(reportPath, 'utf-8')
+    const data = JSON.parse(rawData)
+    return convertReport511Format(data, repoName)
   }
 
   throw new Error(`Report not found for ${repoName}`)
@@ -115,6 +127,16 @@ function convertReport511Format(data: any, repoName?: string): any {
   // stratovirt 格式（verification_summary 顶级键）
   if (data.verification_summary) {
     return convertStratovirtFormat(data, repoName)
+  }
+
+  // kutacc 格式（verification_status + build_result + test_results）
+  if (data.verification_status && data.build_result && data.test_results) {
+    return convertKutaccFormat(data, repoName)
+  }
+
+  // manifest 格式（build_verification + unit_tests 顶级键）
+  if (data.build_verification && data.unit_tests) {
+    return convertManifestFormat(data, repoName)
   }
 
   // 原有 report-511 格式（metadata 顶级键）
@@ -184,7 +206,7 @@ function convertReport511LegacyFormat(data: any, repoName?: string): any {
   }
 
   // 转换 execution_log -> attempt_log
-  const executionLog = data.execution_log || []
+  const executionLog = data.execution_log || data.build_execution_log || []
   const attempts = executionLog.map((log: any, i: number) => ({
     sequence: i + 1,
     phase: log.step || 'unknown',
@@ -414,6 +436,252 @@ function convertStratovirtFormat(data: any, repoName?: string): any {
   }
 }
 
+// 转换 kutacc 格式（verification_status + build_result + test_results）
+function convertKutaccFormat(data: any, repoName?: string): any {
+  const buildResult = data.build_result || {}
+  const testResults = data.test_results || {}
+  const env = data.environment || {}
+  const conclusion = data.conclusion || {}
+
+  const buildStatus = normalizeStatusString(buildResult.status)
+  const buildDuration = undefined // kutacc doesn't record build time
+
+  // Aggregate UT stats from test_results sub-components
+  const testComponents = Object.entries(testResults)
+    .filter(([, v]) => typeof v === 'object' && v !== null && ('total_tests' in (v as any)))
+    .map(([, v]) => v as any)
+
+  const totalTests = testComponents.reduce((s: number, c: any) => s + (c.total_tests || 0), 0)
+  const passedTests = testComponents.reduce((s: number, c: any) => s + (c.passed_tests || 0), 0)
+  const failedTests = testComponents.reduce((s: number, c: any) => s + (c.failed_tests || 0), 0)
+
+  const allPassed = totalTests > 0 && failedTests === 0
+  const somePassed = passedTests > 0
+  let utStatus: string
+  if (totalTests === 0) utStatus = 'not_run'
+  else if (allPassed) utStatus = 'success'
+  else if (somePassed) utStatus = 'partial_success'
+  else utStatus = 'failed'
+
+  const identity = deriveRepoIdentity({
+    fallbackName: typeof data.repository === 'string' ? data.repository : (repoName || 'kutacc'),
+    repoUrl: `https://gitcode.com/kunpengcompute/${typeof data.repository === 'string' ? data.repository : 'kutacc'}.git`,
+  })
+
+  return {
+    meta: {
+      report_version: '3.0',
+      skill_name: 'ttfhw-verify',
+      generated_at: data.verification_date || 'N/A',
+      generator: 'Claude Code',
+      remote_server: 'local',
+    },
+    repo_info: {
+      name: identity.repoName,
+      url: identity.url || '',
+      branch: 'master',
+    },
+    build_result: {
+      status: buildStatus,
+      build_command: '',
+      error: '',
+      build_duration_seconds: buildDuration,
+      duration_seconds: buildDuration,
+      artifacts: buildResult.installed_binaries?.map((b: string) => ({ name: b })) || (
+        buildResult.output ? [{ name: buildResult.output, sizeBytes: buildResult.size_bytes }] : undefined
+      ),
+    },
+    ut_stats: {
+      ut_status: utStatus,
+      ut_skipped_reason: '',
+      ut_total_count: totalTests,
+      ut_passed_count: passedTests,
+      ut_failed_count: failedTests,
+      total_tests: totalTests,
+      passed: passedTests,
+      failed: failedTests,
+      ut_suite_details: testComponents.map((c: any) => `${c.details || '?'}: ${c.passed_tests || 0}/${c.total_tests || 0}`),
+    },
+    attempt_log: {
+      attempts: [
+        {
+          sequence: 1,
+          phase: 'build',
+          action: '构建',
+          command: '',
+          result: buildStatus === 'success' ? 'success' : 'failed',
+          duration_seconds: 0,
+          output: buildResult.output || '',
+        },
+        ...testComponents.map((c: any, i: number) => ({
+          sequence: i + 2,
+          phase: 'test',
+          action: c.details || `test_${i + 1}`,
+          command: '',
+          result: (c.failed_tests || 0) === 0 ? 'success' : 'partial_success',
+          duration_seconds: 0,
+          output: `${c.passed_tests || 0}/${c.total_tests || 0} passed`,
+        })),
+      ],
+      total_attempts: 1 + testComponents.length,
+    },
+    documentation_checklist: {},
+    hardware_config: {
+      server: env.os || 'unknown',
+      npu_available: false,
+    },
+    overall: {
+      build_status: buildStatus,
+      ut_status: utStatus,
+      sample_status: 'not_run',
+      result: deriveOverallResultSimple(buildStatus, utStatus),
+    },
+    ttfhw_timeline: { total_attempt_duration_seconds: 0 },
+    problems_encountered: [
+      ...(data.workarounds_applied || []).map((w: any) => ({
+        problem: typeof w === 'string' ? w : (w.description || ''),
+        root_cause: '',
+        solution: '',
+        resolved: true,
+      })),
+      ...(data.limitations || []).map((l: any) => ({
+        problem: typeof l === 'string' ? l : (l.description || ''),
+        root_cause: '',
+        solution: '',
+        resolved: false,
+      })),
+    ],
+    __original: data,
+  }
+}
+
+// 转换 manifest 格式（build_verification + unit_tests 顶级键）
+function convertManifestFormat(data: any, repoName?: string): any {
+  const metadata = data.metadata || {}
+  const buildVerification = data.build_verification || {}
+  const unitTests = data.unit_tests || {}
+  const sampleExecution = data.sample_execution || {}
+  const conclusion = data.conclusion || {}
+  const machineSpec = data.machine_spec || {}
+  const docSummary = data.document_reading_summary || {}
+
+  const buildStatus = normalizeStatusString(buildVerification.overall_build_status || conclusion.overall_status)
+  const utStatus = normalizeStatusString(unitTests.status)
+  const sampleStatus = normalizeStatusString(sampleExecution.status)
+  const totalDuration = metadata.duration_seconds || 0
+
+  const identity = deriveRepoIdentity({
+    fallbackName: metadata.repo_name || repoName || 'unknown',
+    repoUrl: metadata.repo_url,
+    repoInfoName: metadata.repo_name,
+    repoInfoUrl: metadata.repo_url,
+  })
+
+  // Build attempts from build_verification sub-steps
+  const buildAttempts: any[] = []
+  let seq = 1
+  for (const [key, val] of Object.entries(buildVerification)) {
+    if (key === 'overall_build_status') continue
+    if (typeof val === 'object' && val !== null && 'status' in val) {
+      const v = val as any
+      buildAttempts.push({
+        sequence: seq++,
+        phase: 'build',
+        action: key,
+        command: '',
+        result: normalizeStatusString(v.status),
+        duration_seconds: v.duration_seconds || 0,
+        output: v.output || v.error || '',
+        error_message: v.error || v.root_cause || '',
+      })
+    }
+  }
+
+  // UT attempt
+  buildAttempts.push({
+    sequence: seq++,
+    phase: 'test',
+    action: 'unit_test',
+    command: '',
+    result: utStatus,
+    duration_seconds: unitTests.test_duration_seconds || 0,
+    output: `${unitTests.passed || 0}/${unitTests.total_tests || 0} passed`,
+  })
+
+  // Sample attempt
+  if (sampleExecution.status && sampleExecution.status !== 'not_attempted') {
+    buildAttempts.push({
+      sequence: seq++,
+      phase: 'sample',
+      action: 'sample',
+      command: '',
+      result: sampleStatus,
+      duration_seconds: sampleExecution.duration_seconds || 0,
+      output: sampleExecution.note || '',
+    })
+  }
+
+  return {
+    meta: {
+      report_version: '3.0',
+      skill_name: 'ttfhw-verify',
+      generated_at: metadata.start_time || 'N/A',
+      generator: 'Claude Code',
+      remote_server: 'local',
+    },
+    repo_info: {
+      name: identity.repoName,
+      url: identity.url || metadata.repo_url || '',
+      branch: 'master',
+    },
+    build_result: {
+      status: buildStatus,
+      build_command: docSummary.build_commands?.value || '',
+      error: '',
+      build_duration_seconds: totalDuration,
+      duration_seconds: totalDuration,
+    },
+    ut_stats: {
+      ut_status: utStatus,
+      ut_skipped_reason: unitTests.details || '',
+      ut_total_count: unitTests.total_tests,
+      ut_passed_count: unitTests.passed,
+      ut_failed_count: unitTests.failed,
+      total_tests: unitTests.total_tests,
+      passed: unitTests.passed || 0,
+      failed: unitTests.failed || 0,
+    },
+    attempt_log: {
+      attempts: buildAttempts,
+      total_attempts: buildAttempts.length,
+    },
+    documentation_checklist: {
+      readme_found: true,
+      build_docs_found: Boolean(docSummary.build_commands),
+      readme_has_quick_start: Boolean(docSummary.sample_commands),
+      readme_has_install_section: Boolean(docSummary.dependencies),
+    },
+    hardware_config: {
+      server: machineSpec.host_machine?.os || 'unknown',
+      npu_available: false,
+    },
+    overall: {
+      build_status: buildStatus,
+      ut_status: utStatus,
+      sample_status: sampleStatus === 'not_attempted' ? 'not_run' : sampleStatus,
+      result: deriveOverallResultSimple(buildStatus, utStatus),
+    },
+    ttfhw_timeline: { total_attempt_duration_seconds: totalDuration },
+    problems_encountered: (data.issues_found || []).map((iss: any) => ({
+      problem: iss.description || iss.type || '',
+      root_cause: iss.impact || '',
+      solution: iss.recommendation || '',
+      resolved: false,
+    })),
+    __original: data,
+  }
+}
+
 function buildOpenEulerExecutionLog(data: any): any[] {
   const log: any[] = []
   const vi = data.verification_info || {}
@@ -541,8 +809,10 @@ function normalizeFinalResults(fr: Record<string, any>): Record<string, any> {
   const result = { ...fr }
   if (!result.ut && result.unit_test) result.ut = result.unit_test
   if (!result.ut && result.unittest) result.ut = result.unittest
+  if (!result.ut && result.unit_tests) result.ut = result.unit_tests
   if (!result.sample && result.samples) result.sample = result.samples
   if (!result.sample && result.sample_run) result.sample = result.sample_run
+  if (!result.sample && result.examples) result.sample = result.examples
   return result
 }
 

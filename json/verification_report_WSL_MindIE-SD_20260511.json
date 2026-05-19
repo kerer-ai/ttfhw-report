@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "/home/<user>/tmp_src",
+    "repo_path": "/home/lrp/tmp_src",
     "repo_url": "https://gitcode.com/Ascend/MindIE-SD.git",
     "repo_name": "MindIE-SD",
     "start_time": "2026-05-11T01:30:00Z",
@@ -70,7 +70,7 @@
     },
     {
       "timestamp": "2026-05-11T01:31:00Z",
-      "command": "docker run -d --name verification-env -v /home/<user>/tmp_src:/workspace -w /workspace ubuntu:24.04 tail -f /dev/null",
+      "command": "docker run -d --name verification-env -v /home/lrp/tmp_src:/workspace -w /workspace ubuntu:24.04 tail -f /dev/null",
       "success": true,
       "output": "Container started successfully",
       "error": "",
@@ -312,7 +312,7 @@
       "problem": "Build failed: 'Can not find toolkit path, please set ASCEND_TOOLKIT_HOME'",
       "command": "bash build/build.sh",
       "error_output": "RuntimeError: Script execution failed: /workspace/build/build_ops.sh",
-      "solution_attempted": "Searched build/build_ops.sh for fallback paths - only checks ASCEND_TOOLKIT_HOME env var, /usr/local/Ascend/ascend-toolkit/latest, and /home/<user>/Ascend/ascend-toolkit/latest. None available on standard Ubuntu.",
+      "solution_attempted": "Searched build/build_ops.sh for fallback paths - only checks ASCEND_TOOLKIT_HOME env var, /usr/local/Ascend/ascend-toolkit/latest, and /home/slave1/Ascend/ascend-toolkit/latest. None available on standard Ubuntu.",
       "solution_found": false,
       "root_cause": "MindIE-SD is designed for Ascend NPU hardware. The CANN toolkit (Ascend Computing Architecture) is required for building custom operators and plugins. The toolkit is only available on systems with Ascend hardware.",
       "source": "build/build_ops.sh lines 19-31, build/build_plugin.sh lines 15-29"

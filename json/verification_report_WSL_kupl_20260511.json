@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "/root/<user>/Documents/<path>/ttfhw_kupl/tmp_src/kupl",
+    "repo_path": "/root/Documents/trae_projects/ttfhw_kupl/tmp_src/kupl",
     "repo_url": "https://gitcode.com/kunpengcompute/kupl.git",
     "start_time": "2026-05-11T11:00:00",
     "end_time": "2026-05-11T11:30:00",
@@ -24,7 +24,7 @@
     },
     "image_source": {
       "type": "backup_image",
-      "source": "internal-registry.example.com/example-org/openeuler22.03_lts_sp3:latest",
+      "source": "swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler22.03_lts_sp3:latest",
       "image_name": "openeuler22.03_lts_sp3:latest"
     }
   },
@@ -77,7 +77,7 @@
     },
     {
       "timestamp": "2026-05-11T11:06:00",
-      "command": "docker pull internal-registry.example.com/example-org/openeuler22.03_lts_sp3:latest",
+      "command": "docker pull swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler22.03_lts_sp3:latest",
       "success": true,
       "output": "Image is up to date",
       "error": "",

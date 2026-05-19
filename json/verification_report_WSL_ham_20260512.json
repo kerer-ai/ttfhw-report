@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "/home/<user>/tmp_src",
+    "repo_path": "/home/lrp/tmp_src",
     "repo_name": "ham",
     "repo_url": "https://gitcode.com/openeuler/ham.git",
     "start_time": "2026-05-12T14:55:00",
@@ -25,7 +25,7 @@
     },
     "image_source": {
       "type": "base_image",
-      "image_name": "internal-registry.example.com/openeuler/openeuler:24.03-lts",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "selection_reason": "openEuler project (RPM spec, yum install instructions in docs) → openEuler 24.03 LTS"
     }
   },
@@ -68,7 +68,7 @@
     {
       "timestamp": "2026-05-12T14:56:00",
       "step": "container_setup",
-      "command": "docker run -d --name ttfhw-ham-env -v /home/<user>/tmp_src:/workspace -w /workspace internal-registry.example.com/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "command": "docker run -d --name ttfhw-ham-env -v /home/lrp/tmp_src:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
       "success": true,
       "output": "Container started: e728144076dd",
       "error": "",
