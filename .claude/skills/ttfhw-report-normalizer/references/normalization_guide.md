@@ -1,174 +1,174 @@
-# JSON Normalization Guide for ttfhw-verify Reports
+# ttfhw-verify 报告 JSON 归一化参考指南
 
-## Template Structure (assets/report_template.json)
+## 模板结构（assets/report_template.json）
 
-The target structure has these top-level keys. Every normalized file MUST contain all of them:
+目标结构包含以下顶级键。每个归一化文件必须全部包含：
 
 ```
-metadata          — repo_name, repo_path, repo_url, start_time, end_time, duration_seconds, total_steps
-machine_spec      — host_machine, container, image_source
+metadata              — repo_name, repo_path, repo_url, start_time, end_time, duration_seconds, total_steps
+machine_spec          — host_machine, container, image_source
 document_reading_summary — architecture, recommended_image, dependencies, build_commands, ut_commands, sample_commands, build_entry, ut_entry
-execution_log[]   — {timestamp, command, success, output, error, returncode, duration_estimate?, note?}
-process_timeline[] — {timestamp, step, action, result, details{}}
-final_results     — build{}, ut{}, sample{}
-documentation_gaps[] — string[]
+execution_log[]       — {timestamp, command, success, output, error, returncode, duration_estimate?, note?}
+process_timeline[]    — {timestamp, step, action, result, details{}}
+final_results         — build{}, ut{}, sample{}
+documentation_gaps[]  — 字符串数组
 problems_encountered[] — {timestamp, problem, solution, source}
-session_export_file — string
+session_export_file   — 字符串
 ```
 
-## Core Principles
+## 核心原则
 
-1. **Do not fabricate data.** Only reorganize existing data. If a value genuinely does not exist anywhere in the source, use "unknown" for strings, 0 for counts, [] for arrays.
-2. **Be flexible with field semantics.** Different formats use different names for the same concept. Map by meaning, not by name.
-3. **Can add extra fields beyond the template, but never remove template fields.**
-4. **Preserve all original data** — extra keys like `cann_environment`, `verification_conclusion`, `recommendations`, `verdict` can coexist with template fields.
-5. **Read each file individually.** Understand its narrative before mapping. Don't blindly apply regex or scripts.
+1. **不捏造数据。** 仅重新组织已有数据。如果源数据中确实不存在某个值，字符串用 `"unknown"`，计数用 `0`，数组用 `[]`。
+2. **灵活理解字段语义。** 不同格式对同一概念使用不同命名。按含义映射，而非按名称机械匹配。
+3. **可增加额外字段，但绝不删除模板字段。**
+4. **保留所有原始数据。** 额外键如 `cann_environment`、`verification_conclusion`、`recommendations`、`verdict` 可与模板字段共存。
+5. **逐个阅读每个文件。** 在映射之前理解其内容叙事。不要盲目应用正则或脚本。
 
-## Source Format Detection
+## 源格式检测
 
-When reading a source JSON, classify by top-level keys:
+读取源 JSON 时，根据顶级键分类：
 
-| Format | Detection Signature | Typical Files |
+| 格式 | 识别特征 | 典型文件 |
 |--------|-------------------|---------------|
-| **legacy** | `metadata` + `final_results` | ~90% of reports |
-| **stratovirt** | `verification_summary` alone, with inner `build_result` + `test_result` | stratovirt |
-| **openEuler** | `verification_info` top-level key | bishengjdk |
-| **manifest** | `build_verification` + `unit_tests` top-level | manifest |
-| **shmem** | `build_results` + `test_execution_results` (no `final_results`) | SHMEM |
+| **legacy** | `metadata` + `final_results` | ~90% 的报告 |
+| **stratovirt** | 仅有 `verification_summary`，内部含 `build_result` + `test_result` | stratovirt |
+| **openEuler** | `verification_info` 顶级键 | bishengjdk |
+| **manifest** | `build_verification` + `unit_tests` 顶级键 | manifest |
+| **shmem** | `build_results` + `test_execution_results`（无 `final_results`） | SHMEM |
 
-## Field Mapping by Source Format
+## 各源格式的字段映射
 
-### 1. Legacy Format (metadata + final_results)
+### 1. Legacy 格式（metadata + final_results）
 
-Already close to template. Key mappings:
+已接近模板。关键映射：
 
-**metadata:**
-- `repo_name` — source from `metadata.repo_name`, or `repo_info.name`, or infer from last segment of `repo_url` (strip `.git`) or `repo_path` (last directory). Example: `https://gitcode.com/cann/amct.git` → `amct`
-- `repo_path` — from `metadata.repo_path`
-- `repo_url` — from `metadata.repo_url`. Clean corrupted URLs (e.g., `gitcodeP3390851com` → `gitcode.com`)
-- `start_time`, `end_time`, `duration_seconds`, `total_steps` — direct mapping
+**metadata：**
+- `repo_name` — 源：`metadata.repo_name`，或 `repo_info.name`，或从 `repo_url` 末尾路径段推断（去掉 `.git`），或从 `repo_path` 最后目录名推断。例如：`https://gitcode.com/cann/amct.git` → `amct`
+- `repo_path` — 来自 `metadata.repo_path`
+- `repo_url` — 来自 `metadata.repo_url`。清理损坏的 URL（如 `gitcodeP3390851com` → `gitcode.com`）
+- `start_time`、`end_time`、`duration_seconds`、`total_steps` — 直接映射
 
-**machine_spec:** Copy as-is. Host machine, container, and image source info is already well-structured.
+**machine_spec：** 直接复制。宿主机、容器和镜像源信息已经结构良好。
 
-**document_reading_summary:**
-- Map existing `architecture`, `recommended_image`, `dependencies`, `build_commands`, `ut_commands`, `sample_commands` directly
-- **build_entry** — use `build_commands` as source, same value
-- **ut_entry** — use `ut_commands` as source, same value
-- If `build_commands.value` is an array, join with ` ; `
+**document_reading_summary：**
+- 直接映射已有的 `architecture`、`recommended_image`、`dependencies`、`build_commands`、`ut_commands`、`sample_commands`
+- **build_entry** — 以 `build_commands` 为来源，值相同
+- **ut_entry** — 以 `ut_commands` 为来源，值相同
+- 如果 `build_commands.value` 是数组，用 ` ; ` 连接
 
-**execution_log / process_timeline:** Copy as-is from source arrays.
+**execution_log / process_timeline：** 从源数组直接复制。
 
-**final_results:**
-- `build.status` — normalize to standard value (see Status Normalization below)
-- `build.duration_seconds` — from `duration_seconds`
-- `build.artifacts` — if array of strings, convert to `[{name, path:"unknown", size:"unknown"}]`. If array of objects, keep structure. If object with counts (e.g., `{driver_libraries: 87}`), convert to `[{type, count}]`.
-- `ut.status` — normalize; source from `ut.status` or `unit_test.status` or `unittest.status`
-- `ut.total/passed/failed` — from `total/passed/failed`, also check `total_tests/passed_tests/failed_tests`, `total_suites/passed_suites/failed_suites`
-- `ut.failures` — from `failures` array or `failed_tests_detail`. Convert strings to `{test_name, reason:"unknown"}`
-- `sample.status` — normalize; source from `sample.status` or `samples.status` or `sample_run.status`
-- `sample.results` — from `results` array
+**final_results：**
+- `build.status` — 归一化为标准值（见下方状态归一化章节）
+- `build.duration_seconds` — 来自 `duration_seconds`
+- `build.artifacts` — 若是字符串数组，转为 `[{name, path:"unknown", size:"unknown"}]`。若是对象数组，保留结构。若是带计数的对象（如 `{driver_libraries: 87}`），转为 `[{type, count}]`
+- `ut.status` — 归一化；源：`ut.status` 或 `unit_test.status` 或 `unittest.status`
+- `ut.total/passed/failed` — 来自 `total/passed/failed`，同时检查 `total_tests/passed_tests/failed_tests`、`total_suites/passed_suites/failed_suites`
+- `ut.failures` — 来自 `failures` 数组或 `failed_tests_detail`。字符串转为 `{test_name, reason:"unknown"}`
+- `sample.status` — 归一化；源：`sample.status` 或 `samples.status` 或 `sample_run.status`
+- `sample.results` — 来自 `results` 数组
 
-**documentation_gaps:** Direct copy. If array of objects, extract `issue` or `description` field.
+**documentation_gaps：** 直接复制。若是对象数组，提取 `issue` 或 `description` 字段。
 
-**problems_encountered:** Map to `{timestamp, problem, solution, source}`. Source fields may be named `issue`/`problem`/`description`, `solution`/`resolution`/`recommendation`, `source`/`location`.
+**problems_encountered：** 映射为 `{timestamp, problem, solution, source}`。源字段可能名为 `issue`/`problem`/`description`、`solution`/`resolution`/`recommendation`、`source`/`location`。
 
-### 2. Stratovirt Format
+### 2. Stratovirt 格式
 
-Only has `verification_summary` top-level. Extract from sub-keys:
+仅有 `verification_summary` 顶级键。从子键提取：
 
-- `metadata.repo_name` → last segment of `verification_summary.repository` (e.g., `.../stratovirt.git` → `stratovirt`)
+- `metadata.repo_name` → `verification_summary.repository` 的末尾路径段（如 `.../stratovirt.git` → `stratovirt`）
 - `metadata.repo_path` → `verification_summary.repository`
 - `metadata.start_time` → `verification_summary.verification_date`
-- `metadata.duration_seconds` → parse `build_result.duration` string ("8m 48s" → 528)
+- `metadata.duration_seconds` → 解析 `build_result.duration` 字符串（"8m 48s" → 528 秒）
 - `machine_spec.host_machine.architecture` → `environment.architecture`
 - `machine_spec.container.os` → `environment.os`
-- `final_results.build.status` → `build_result.status`: "SUCCESS"→"success", else "failed"
-- `final_results.build.artifacts` → from `build_result.output_binary` + `binary_size`
-- `final_results.ut.status` → `test_result.status`: "SUCCESS"→"success", "PARTIAL_FAILURE"→"partial_success"
-- `final_results.ut.total/passed` → from `test_result.total_tests`/`passed_tests`
-- `final_results.ut.failures` → from `test_result.failed_tests` array, with `failure_reason` as reason
-- `final_results.sample` → "not_run" (not tested)
-- `problems_encountered` → from `issues_encountered` array
-- `execution_log` → synthesize from build_result command
-- `process_timeline` → synthesize build and test phases
+- `final_results.build.status` → `build_result.status`："SUCCESS"→"success"，否则 "failed"
+- `final_results.build.artifacts` → 从 `build_result.output_binary` + `binary_size`
+- `final_results.ut.status` → `test_result.status`："SUCCESS"→"success"，"PARTIAL_FAILURE"→"partial_success"
+- `final_results.ut.total/passed` → 来自 `test_result.total_tests`/`passed_tests`
+- `final_results.ut.failures` → 来自 `test_result.failed_tests` 数组，以 `failure_reason` 为失败原因
+- `final_results.sample` → "not_run"（未测试）
+- `problems_encountered` → 来自 `issues_encountered` 数组
+- `execution_log` → 从 build_result 的 command 合成
+- `process_timeline` → 合成构建和测试阶段
 
-### 3. openEuler Format (bishengjdk)
+### 3. openEuler 格式（bishengjdk）
 
-Has `verification_info`, `execution_environment`, `build_execution`, `unit_tests`, `samples`.
+有 `verification_info`、`execution_environment`、`build_execution`、`unit_tests`、`samples`。
 
-- `metadata.repo_name` → from `verification_info.repository`
+- `metadata.repo_name` → 来自 `verification_info.repository`
 - `metadata.start_time` → `verification_info.verification_date`
-- `metadata.duration_seconds` → parse `build_execution.build_time` ("00:09:03" → 543)
+- `metadata.duration_seconds` → 解析 `build_execution.build_time`（"00:09:03" → 543 秒）
 - `machine_spec.container.os` → `execution_environment.os`
 - `machine_spec.image_source.image_name` → `execution_environment.docker_image`
-- `final_results.build.status` → map Chinese: "成功"/"已验证"→"success", "失败"→"failed"
-- `final_results.ut.status` → prioritize `test_results.status` over outer `ut.status`. Map: "通过"→"success"
+- `final_results.build.status` → 映射中文："成功"/"已验证"→"success"，"失败"→"failed"
+- `final_results.ut.status` → 优先使用 `test_results.status` 而非外层的 `ut.status`。映射："通过"→"success"
 - `document_reading_summary.dependencies.value` → `dependency_installation.packages_installed`
-- `document_reading_summary.build_commands.value` → `document_analysis.build_command` or `build_configuration.configure_command`
-- `problems_encountered` → from `issues_and_solutions`
+- `document_reading_summary.build_commands.value` → `document_analysis.build_command` 或 `build_configuration.configure_command`
+- `problems_encountered` → 来自 `issues_and_solutions`
 
-### 4. SHMEM Format
+### 4. SHMEM 格式
 
-Has `metadata`, `machine_spec`, `document_reading_summary` already, plus `build_results` and `test_execution_results`.
+已有 `metadata`、`machine_spec`、`document_reading_summary`，外加 `build_results` 和 `test_execution_results`。
 
-- `final_results.build.status` → from `build_results.core_library.status` (find first component with status)
-- `final_results.build.artifacts` → collect from all `build_results.*.artifacts` and `*.install_package`
-- `final_results.ut.status` → from `test_execution_results.unit_test_run.status`, map: "executed_but_functional_fail"→"partial_success"
-- `final_results.ut.total/passed/failed` → from `unit_test_run.test_summary`
-- `final_results.ut.failures` → from `unit_test_run.failed_tests_detail`
-- `final_results.sample` → from `test_execution_results.example_run`
-- Keep `cann_environment`, `hardware_check` as extra fields
+- `final_results.build.status` → 来自 `build_results.core_library.status`（找到第一个含 status 的组件）
+- `final_results.build.artifacts` → 从所有 `build_results.*.artifacts` 和 `*.install_package` 收集
+- `final_results.ut.status` → 来自 `test_execution_results.unit_test_run.status`，映射："executed_but_functional_fail"→"partial_success"
+- `final_results.ut.total/passed/failed` → 来自 `unit_test_run.test_summary`
+- `final_results.ut.failures` → 来自 `unit_test_run.failed_tests_detail`
+- `final_results.sample` → 来自 `test_execution_results.example_run`
+- 保留 `cann_environment`、`hardware_check` 作为额外字段
 
-### 5. Manifest Format
+### 5. Manifest 格式
 
-Has `metadata`, `machine_spec`, `document_reading_summary`, `build_verification`, `unit_tests`, `sample_execution`.
+有 `metadata`、`machine_spec`、`document_reading_summary`、`build_verification`、`unit_tests`、`sample_execution`。
 
-- `final_results.build.status` → from `build_verification.overall_build_status`. Map: "blocked"→"failed"
-- `final_results.build.blockers` → from `build_verification.blockers`
-- `final_results.ut` → from `unit_tests`. "not_configured"→"not_run"
-- `final_results.sample` → from `sample_execution`. "not_attempted"→"not_run"
-- `execution_log` → synthesize from `build_verification` sub-steps
-- `problems_encountered` → from `issues_found` array. Map: `type`/`description`→`problem`, `recommendation`→`solution`
+- `final_results.build.status` → 来自 `build_verification.overall_build_status`。映射："blocked"→"failed"
+- `final_results.build.blockers` → 来自 `build_verification.blockers`
+- `final_results.ut` → 来自 `unit_tests`。"not_configured"→"not_run"
+- `final_results.sample` → 来自 `sample_execution`。"not_attempted"→"not_run"
+- `execution_log` → 从 `build_verification` 子步骤合成
+- `problems_encountered` → 来自 `issues_found` 数组。映射：`type`/`description`→`problem`，`recommendation`→`solution`
 
-## Status Normalization
+## 状态归一化
 
-Map all status strings to the 5 standard values:
+将所有状态字符串映射为 5 种标准值：
 
-| Standard | Source Patterns |
+| 标准值 | 源数据模式 |
 |----------|----------------|
-| **success** | `success`, `passed`, `通过`, `成功`, `completed`, `completed_success`, `verified`, `已验证`, `SUCCESS` |
-| **failed** | `failed`, `fail`, `failure`, `blocked`, `error`, `unsuccessful`, `失败`, `executed_but_crashed` |
-| **partial_success** | `partial_success`, `partial_failure`, `partial`, `mostly_passed`, `completed_mostly`, `success_with_modifications`, `success_with_workaround`, `success_with_failures`, `executed_but_functional_fail`, `mostly_success`, `PARTIAL_FAILURE` |
-| **not_run** | `not_run`, `skipped`, `not_executed`, `not_attempted`, `not_configured`, `not_applicable`, `not_attempted_container_environment`, `not_tested`, `cannot_verify`, `skipped_npu_required` |
-| **unknown** | Everything else: `ctest_no_tests_found`, `no_tests_available`, `incomplete`, `artifacts_available` — these genuinely lack clear signal |
+| **success** | `success`、`passed`、`通过`、`成功`、`completed`、`completed_success`、`verified`、`已验证`、`SUCCESS` |
+| **failed** | `failed`、`fail`、`failure`、`blocked`、`error`、`unsuccessful`、`失败`、`executed_but_crashed` |
+| **partial_success** | `partial_success`、`partial_failure`、`partial`、`mostly_passed`、`completed_mostly`、`success_with_modifications`、`success_with_workaround`、`success_with_failures`、`executed_but_functional_fail`、`mostly_success`、`PARTIAL_FAILURE` |
+| **not_run** | `not_run`、`skipped`、`not_executed`、`not_attempted`、`not_configured`、`not_applicable`、`not_attempted_container_environment`、`not_tested`、`cannot_verify`、`skipped_npu_required` |
+| **unknown** | 以上均不匹配的：`ctest_no_tests_found`、`no_tests_available`、`incomplete`、`artifacts_available` — 这些确实缺乏明确信号，无法归入上述类别 |
 
-## Common Pitfalls & Fixes
+## 常见问题与修复
 
-### Corrupted JSON
-- **Chinese quotation marks as ASCII `"`**: Replace mid-string bare `"` used as Chinese quotes with Unicode curly quotes `"` (U+201C) and `"` (U+201D)
-- **Junk characters mid-file** (e.g., `P3390851`): Remove the garbage token
-- **Malformed URL** (e.g., `gitcodeP3390851com`): Restore to `gitcode.com` from known patterns
+### JSON 损坏
+- **中文引号变成 ASCII `"`**：JSON 字符串中间用于中文引用的裸 `"` 字符会提前结束字符串。替换为 Unicode 弯引号 `"`（U+201C）和 `"`（U+201D）
+- **文件中的垃圾字符**（如 `P3390851`）：直接删除该垃圾标记
+- **损坏的 URL**（如 `gitcodeP3390851com`）：根据已知模式恢复为 `gitcode.com`
 
-### Missing repo_name
-Infer from multiple sources in priority order:
-1. `metadata.repo_name` (explicit)
-2. `repo_info.name` (standard format)
-3. Last path segment of `repo_url` (strip `.git`): `https://gitcode.com/cann/amct.git` → `amct`
-4. Last path segment of `repo_path`: `/home/.../kudnn` → `kudnn`
-5. If repo_url has appended text (e.g., `url (cloned to /path)`), split on ` (` and use first part
+### 缺少 repo_name
+按优先级从多个来源推断：
+1. `metadata.repo_name`（显式声明）
+2. `repo_info.name`（标准格式）
+3. `repo_url` 的末尾路径段（去掉 `.git`）：`https://gitcode.com/cann/amct.git` → `amct`
+4. `repo_path` 的最后一个目录名：`/home/.../kudnn` → `kudnn`
+5. 如果 repo_url 带有附加文本（如 `url (cloned to /path)`），在 ` (` 处分割，取前一部分
 
-### Missing repo_url
-Source from: `metadata.repo_url` → `repo_info.url` → if local path only, URL stays empty (don't fabricate)
+### 缺少 repo_url
+来源优先级：`metadata.repo_url` → `repo_info.url` → 如果仅有本地路径，URL 留空（不要捏造）
 
-### Artifacts Not an Array
-When `build.artifacts` is an object with counts (not a list):
+### 构建产物不是数组
+当 `build.artifacts` 是带计数的对象（非列表）时：
 ```json
 {"driver_libraries": 87, "system_libraries": 13, "test_executables": 130}
 ```
-Convert to descriptive array:
+转为描述性数组：
 ```json
 [{"type": "driver_libraries", "count": 87}, ...]
 ```
 
-### Duplicate Repos (WSL vs Ubuntu prefix)
-When both `WSL_<repo>` and `Ubuntu_<repo>` files exist for the same repo, prefer WSL (newer/more relevant). If both are same prefix, prefer newer date.
+### 重复仓库（WSL vs Ubuntu 前缀）
+当同一仓库同时存在 `WSL_<repo>` 和 `Ubuntu_<repo>` 两份文件时，优先选 WSL（通常更新/更相关）。同前缀下选日期更新的。

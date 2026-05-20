@@ -1,121 +1,121 @@
 ---
 name: ttfhw-report-normalizer
-description: Normalize ttfhw-verify build verification report JSON files into a unified template structure. This skill should be used when handling JSON files in the json/ directory of the ttfhw-report project, when new verification reports arrive in varying formats, when the data-loader fails to correctly parse repo attributes, or when dashboard displays incorrect statuses. Covers format detection, field mapping, status normalization, and corrupted JSON repair.
+description: 将 ttfhw-verify 构建验证报告的 JSON 文件归一化为统一的模板结构。当处理 json/ 目录下的 JSON 文件、新的验证报告以不同格式到达、data-loader 无法正确解析仓库属性、或仪表盘显示状态不正确时，应使用此技能。覆盖格式检测、字段映射、状态归一化和损坏 JSON 修复。
 ---
 
-# TTFHW Report JSON Normalizer
+# TTFHW 报告 JSON 归一化
 
-Normalize heterogeneous ttfhw-verify build verification reports into a single, consistent JSON structure defined by `assets/report_template.json`.
+将异构的 ttfhw-verify 构建验证报告归一化为 `assets/report_template.json` 定义的统一 JSON 结构。
 
-## When to Use
+## 使用场景
 
-- When new JSON report files are added to the `json/` directory
-- When the dashboard displays incorrect statuses, missing repo names, or broken URLs
-- When a report format is not recognized by the data-loader
-- After a batch of verification runs produces files in varying formats
+- 新的 JSON 报告文件被添加到 `json/` 目录时
+- 仪表盘显示的状态不正确、仓库名缺失或 URL 损坏时
+- 报告格式不被 data-loader 识别时
+- 一批验证运行产生了不同格式的文件后
 
-## Workflow
+## 工作流程
 
-### 1. Read the Template
+### 1. 阅读模板
 
-Read `assets/report_template.json` to understand the target structure. Every normalized file MUST contain all 9 top-level keys:
+阅读 `assets/report_template.json` 理解目标结构。每个归一化后的文件必须包含全部 9 个顶级键：
 
-`metadata`, `machine_spec`, `document_reading_summary`, `execution_log`, `process_timeline`, `final_results` (with `build`/`ut`/`sample`), `documentation_gaps`, `problems_encountered`, `session_export_file`
+`metadata`、`machine_spec`、`document_reading_summary`、`execution_log`、`process_timeline`、`final_results`（含 `build`/`ut`/`sample`）、`documentation_gaps`、`problems_encountered`、`session_export_file`
 
-### 2. Read and Understand Each Source File
+### 2. 逐个阅读并理解源文件
 
-For each JSON file in `json/`, read it individually. Do NOT apply a blind script. Ask:
+对于 `json/` 目录下的每个 JSON 文件，单独阅读。不要用脚本盲目批量处理。思考以下问题：
 
-- What format is this? (Inspect top-level keys)
-- What does each field mean semantically in context?
-- What data maps to template fields, under which names?
-- What is genuinely missing vs. stored under an unexpected key?
+- 这是什么格式？（检查顶级键）
+- 上下文中每个字段语义上代表什么？
+- 哪些数据能映射到模板字段，以什么键名出现？
+- 哪些是真正缺失的，哪些只是存放在意料之外的键名下？
 
-### 3. Detect Format
+### 3. 检测格式
 
-Classify by top-level key signature. Read `references/normalization_guide.md` for the complete detection table and field-by-field mapping for all 5 formats:
+根据顶级键特征分类。完整的格式检测表和逐字段映射见 `references/normalization_guide.md`：
 
-| Format | Signature | Prevalence |
+| 格式 | 识别特征 | 占比 |
 |--------|-----------|------------|
 | legacy | `metadata` + `final_results` | ~90% |
-| stratovirt | `verification_summary` with inner `build_result` | rare |
-| openEuler | `verification_info` | rare |
-| shmem | `build_results` + `test_execution_results` | rare |
-| manifest | `build_verification` + `unit_tests` | rare |
+| stratovirt | 仅有 `verification_summary`，内部含 `build_result` | 极少 |
+| openEuler | `verification_info` 顶级键 | 极少 |
+| shmem | `build_results` + `test_execution_results` | 极少 |
+| manifest | `build_verification` + `unit_tests` 顶级键 | 极少 |
 
-### 4. Map Fields Flexibly
+### 4. 灵活映射字段
 
-Apply semantic understanding, not mechanical key matching:
+基于语义理解进行映射，而非机械的键名匹配：
 
-- **repo_name**: Source from `metadata.repo_name`, then `repo_info.name`, then infer from last segment of `repo_url` (strip `.git`). Example: `https://gitcode.com/cann/amct.git` → `amct`. Never leave as a raw filesystem path.
+- **repo_name**：优先从 `metadata.repo_name`，其次 `repo_info.name`，再次从 `repo_url` 末尾路径段推断（去掉 `.git`）。例如：`https://gitcode.com/cann/amct.git` → `amct`。绝不能保留原始文件系统路径。
 
-- **repo_url**: Check `metadata.repo_url`, `repo_info.url`. Clean corrupted patterns (`gitcodeP3390851com` → `gitcode.com`). Strip appended text (`url (cloned to /path)` → `url`).
+- **repo_url**：检查 `metadata.repo_url`、`repo_info.url`。清理损坏的模式（`gitcodeP3390851com` → `gitcode.com`）。去除附加文本（`url (cloned to /path)` → 仅保留 `url`）。
 
-- **Build status**: Map varied strings to 5 standard values (see Section 5).
+- **构建状态**：将各种字符串映射为 5 种标准值（见第 5 节）。
 
-- **UT fields**: Check multiple key names (`ut`, `unit_test`, `unittest`, `unit_tests`). Check multiple count fields (`total`/`total_tests`/`total_suites`/`collected`).
+- **UT 字段**：检查多个键名（`ut`、`unit_test`、`unittest`、`unit_tests`）。检查多个计数字段（`total`/`total_tests`/`total_suites`/`collected`）。
 
-- **Artifacts**: Can be array of strings, array of objects, or object with counts. Normalize to `[{name, path, size}]` form.
+- **构建产物**：可能是字符串数组、对象数组或带计数的对象。统一归一化为 `[{name, path, size}]` 形式。
 
-- **Problems**: Source arrays may be named `problems_encountered`, `issues_and_solutions`, or `issues_found`. Map fields: `issue`/`description`/`type` → `problem`, `solution`/`resolution`/`recommendation` → `solution`, `source`/`location` → `source`.
+- **问题列表**：源数据数组可能名为 `problems_encountered`、`issues_and_solutions` 或 `issues_found`。字段映射：`issue`/`description`/`type` → `problem`，`solution`/`resolution`/`recommendation` → `solution`，`source`/`location` → `source`。
 
-### 5. Normalize Status Values
+### 5. 归一化状态值
 
-Convert all status strings to lowercase standard values. For the full mapping table, see `references/normalization_guide.md`.
+将所有状态字符串转换为小写标准值。完整映射表见 `references/normalization_guide.md`。
 
-Core mappings:
+核心映射：
 
-| Standard | Source Patterns |
+| 标准值 | 源数据模式 |
 |----------|----------------|
-| `success` | success, passed, 通过, completed, SUCCESS, verified |
-| `failed` | failed, fail, blocked, error, 失败, executed_but_crashed |
-| `partial_success` | partial_success, mostly_passed, success_with_workaround, success_with_failures, PARTIAL_FAILURE, executed_but_functional_fail |
-| `not_run` | not_run, skipped, not_executed, not_attempted, not_configured, not_applicable, not_attempted_container_environment |
-| `unknown` | Only when genuinely no signal: ctest_no_tests_found, no_tests_available |
+| `success` | success、passed、通过、completed、SUCCESS、verified、成功、已验证 |
+| `failed` | failed、fail、blocked、error、unsuccessful、失败、executed_but_crashed |
+| `partial_success` | partial_success、mostly_passed、success_with_workaround、success_with_failures、PARTIAL_FAILURE、executed_but_functional_fail、部分成功 |
+| `not_run` | not_run、skipped、not_executed、not_attempted、not_configured、not_applicable、not_attempted_container_environment |
+| `unknown` | 仅在确实无信号时使用：ctest_no_tests_found、no_tests_available 等 |
 
-### 6. Fix Corrupted Data
+### 6. 修复损坏数据
 
-Common corruptions found in source files:
+源文件中常见的损坏类型：
 
-- **Chinese quotation marks as ASCII `"`**: Mid-string bare `"` used as Chinese quotes breaks JSON. Replace with Unicode `"` (U+201C) and `"` (U+201D).
-- **Junk tokens**: Random strings like `P3390851` inserted mid-file. Remove them.
-- **Corrupted URLs**: `gitcodeP3390851com` → `gitcode.com`; `gitcode9cann` → `gitcode.com/cann`.
-- **Appended text**: `https://url.git (cloned to /path)` → split and keep URL only.
+- **中文引号变成 ASCII `"`**：JSON 字符串中间用于中文引用的裸 `"` 会破坏 JSON 结构。替换为 Unicode 弯引号 `"`（U+201C）和 `"`（U+201D）。
+- **垃圾字符**：文件中部插入的随机字符串（如 `P3390851`）。直接删除。
+- **损坏的 URL**：`gitcodeP3390851com` → `gitcode.com`；`gitcode9cann` → `gitcode.com/cann`。
+- **URL 带附加文本**：`https://url.git (cloned to /path)` → 分割后仅保留 URL 部分。
 
-### 7. Validate
+### 7. 验证
 
-After writing each file, verify:
+写入每个文件后，验证以下内容：
 
-- All 9 template keys present
-- `final_results.build`, `.ut`, `.sample` all exist
-- All status values are one of: `success`, `failed`, `partial_success`, `not_run`, `unknown`
-- `repo_name` is a short name, not a path
-- `repo_url` is a valid URL or empty string
-- File parses as valid JSON
+- 全部 9 个模板键存在
+- `final_results.build`、`.ut`、`.sample` 全部存在
+- 所有状态值为以下之一：`success`、`failed`、`partial_success`、`not_run`、`unknown`
+- `repo_name` 是简短名称，不是路径
+- `repo_url` 是有效 URL 或空字符串
+- 文件是合法的 JSON
 
-### 8. Update data-loader.ts
+### 8. 同步更新 data-loader.ts
 
-After normalizing JSON files, ensure `lib/data-loader.ts` stays in sync:
+归一化 JSON 文件后，确保 `lib/data-loader.ts` 保持一致：
 
-- `normalizeStatus()` is a safety net for edge cases the normalization may have missed
-- `normalizeToSummary()` reads URL from `meta.repo_url` (not just `repoInfo.url`)
-- `getAllRepoNames()` dedup uses same priority as `loadReportData()` (WSL > Ubuntu, newer date > older)
-- Display name comes from `repo_name`, not repo_path
+- `normalizeStatus()` 作为安全网，处理归一化可能遗漏的边界情况
+- `normalizeToSummary()` 从 `meta.repo_url` 读取 URL（不仅仅是 `repoInfo.url`）
+- `getAllRepoNames()` 去重使用与 `loadReportData()` 相同的优先级（WSL > Ubuntu，日期越新越优先）
+- 显示名称使用 `repo_name`，而非 `repo_path`
 
-## Core Rules
+## 核心原则
 
-- **Never fabricate data.** If truly absent, use `"unknown"` (string), `0` (number), `[]` (array).
-- **Never remove template fields.** Can add extras, never delete required ones.
-- **Preserve original context.** Extra keys like `cann_environment`, `verification_conclusion`, `recommendations` coexist with template fields.
-- **Read each file.** Do not blindly script. Understand what the file contains before mapping.
-- **Be conservative with `unknown`.** Only when data is genuinely absent. If `repo_name` can be inferred from `repo_url`, do so.
+- **绝不捏造数据。** 如果数据确实不存在，字符串用 `"unknown"`，数字用 `0`，数组用 `[]`。
+- **绝不删除模板字段。** 可以增加额外字段，但绝不能删除必需的字段。
+- **保留原始上下文。** 额外键如 `cann_environment`、`verification_conclusion`、`recommendations` 可与模板字段共存。
+- **逐个阅读每个文件。** 不要盲目使用脚本。在映射之前理解文件内容。
+- **谨慎使用 `unknown`。** 仅当数据确实不存在时才使用。如果 `repo_name` 能从 `repo_url` 推断，就应该推断出来。
 
-## Resources
+## 资源
 
 ### assets/report_template.json
 
-The canonical template. Contains the complete target structure with example values. All normalized files should match this shape.
+标准模板。包含完整的目标结构及示例值。所有归一化文件应匹配此结构。
 
 ### references/normalization_guide.md
 
-Comprehensive reference covering: format detection table, field-by-field mapping for all 5 source formats, complete status normalization table, common pitfalls and fixes, and artifact format handling.
+详细参考文档，涵盖：格式检测表、全部 5 种源格式的逐字段映射、完整状态归一化对照表、常见陷阱与修复方法、产物格式处理。
