@@ -1,13 +1,12 @@
 {
   "metadata": {
-    "repo_path": "https://gitcode.com/cann/ops-math.git",
     "repo_name": "ops-math",
+    "repo_path": "https://gitcode.com/cann/ops-math.git",
+    "repo_url": "https://gitcode.com/cann/ops-math.git",
     "start_time": "2026-05-12T09:30:00Z",
     "end_time": "2026-05-12T11:35:00Z",
     "duration_seconds": 8100,
-    "total_steps": 11,
-    "verification_type": "WSL Docker Container + CANN Toolkit",
-    "verification_status": "all_success"
+    "total_steps": 11
   },
   "machine_spec": {
     "host_machine": {
@@ -36,34 +35,42 @@
     }
   },
   "document_reading_summary": {
-    "cann_download_url": {
-      "value": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/",
-      "source": "docs/zh/install/quick_install.md - 手动安装章节，文档明确提供下载地址"
+    "architecture": {
+      "source": "unknown",
+      "value": "unknown"
     },
-    "build_only_mode": {
-      "value": "编译态只需要CANN toolkit包，不需要NPU驱动固件",
-      "source": "docs/zh/install/quick_install.md - 编译态vs运行态说明"
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + tests/requirements.txt",
       "value": [
         "CANN toolkit包（编译态必需，文档提供下载地址）",
         "python >= 3.7.0, gcc >= 7.3.0, cmake >= 3.16.0",
         "googletest >= 1.11.0（UT测试需要）",
         "pyyaml, setuptools, wheel, decorator, sympy, attrs, pytest"
-      ],
-      "source": "docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + tests/requirements.txt"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}",
-      "source": "docs/zh/install/compile.md"
+      "source": "docs/zh/install/compile.md",
+      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}"
     },
     "ut_commands": {
-      "value": "bash build.sh -u --[ophost|opapi|opkernel]",
-      "source": "docs/zh/install/compile.md - 本地验证章节"
+      "source": "docs/zh/install/compile.md - 本地验证章节",
+      "value": "bash build.sh -u --[ophost|opapi|opkernel]"
     },
-    "simulator_mode": {
-      "value": "支持CANN Simulator仿真工具，仅支持ascend950芯片",
-      "source": "docs/zh/debug/cann_sim.md"
+    "sample_commands": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "build_entry": {
+      "source": "docs/zh/install/compile.md",
+      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}"
+    },
+    "ut_entry": {
+      "source": "docs/zh/install/compile.md - 本地验证章节",
+      "value": "bash build.sh -u --[ophost|opapi|opkernel]"
     }
   },
   "execution_log": [
@@ -121,6 +128,7 @@
       "duration_seconds": 0.418
     }
   ],
+  "process_timeline": [],
   "final_results": {
     "build": {
       "status": "success",
@@ -141,42 +149,37 @@
     "ut": {
       "status": "success",
       "duration_seconds": 0.658,
-      "gtest_reported_ms": 431,
       "total": 788,
       "passed": 788,
       "failed": 0,
-      "test_suites": 207,
-      "duration_measurement": "time命令测量完整执行时长（含程序启动等开销），googletest报告431ms为纯测试运行时间"
+      "failures": []
     },
     "sample": {
-      "status": "not_executed",
-      "reason": "版本配套问题：master源码需配套master版本CANN toolkit，CANN 9.0.0为发布版本",
-      "note": "文档README.md明确说明版本配套关系"
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": []
     }
   },
   "documentation_gaps": [],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T09:30:00Z",
       "problem": "需要CANN toolkit才能编译",
       "solution": "从文档明确提供的下载地址下载CANN toolkit",
-      "source": "docs/zh/install/quick_install.md",
-      "status": "resolved"
+      "source": "docs/zh/install/quick_install.md"
     },
     {
+      "timestamp": "2026-05-12T09:30:00Z",
       "problem": "样例链接失败",
       "solution": "使用配套版本CANN toolkit（文档已说明版本配套关系）",
-      "source": "README.md版本配套章节",
-      "status": "documented"
+      "source": "README.md版本配套章节"
     }
   ],
-  "key_findings": {
-    "cann_toolkit_download": "文档明确提供下载地址，编译态只需toolkit包",
-    "ut_test_support": "支持googletest单元测试，可在无NPU环境执行ophost UT",
-    "version_compatibility": "文档明确说明版本配套关系：master源码配master版本CANN"
-  },
+  "session_export_file": "unknown",
   "conclusion": {
     "verification_result": "全部验证成功",
     "summary": "ops-math项目完整验证成功：\n1. 文档提供完整CANN toolkit下载地址\n2. cmake初始化成功\n3. add_example算子编译打包成功\n4. UT测试788/788全部通过\n5. 样例运行因版本配套问题未执行（文档已说明配套关系）",
     "recommendation": "文档完整，构建验证成功，无缺失项"
-  }
+  },
+  "verification_conclusion": ""
 }

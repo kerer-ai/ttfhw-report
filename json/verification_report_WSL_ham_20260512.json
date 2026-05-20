@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "repo_path": "/home/lrp/tmp_src",
     "repo_name": "ham",
+    "repo_path": "/home/lrp/tmp_src",
     "repo_url": "https://gitcode.com/openeuler/ham.git",
     "start_time": "2026-05-12T14:55:00",
     "end_time": "2026-05-12T15:02:00",
@@ -31,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "aarch64 (ARM64) only",
-      "source": "ham.spec - ExclusiveArch: %arm64; RPM naming: ham-libs-0.0.1.aarch64.rpm"
+      "source": "ham.spec - ExclusiveArch: %arm64; RPM naming: ham-libs-0.0.1.aarch64.rpm",
+      "value": "aarch64 (ARM64) only"
     },
     "recommended_image": {
-      "value": "openEuler 24.03 LTS",
-      "source": "openEuler project, RPM-based packaging (ham.spec), yum install instructions in doc/User_Guide.md, no Dockerfile found"
+      "source": "openEuler project, RPM-based packaging (ham.spec), yum install instructions in doc/User_Guide.md, no Dockerfile found",
+      "value": "openEuler 24.03 LTS"
     },
     "dependencies": {
+      "source": "CMakeLists.txt (cmake_minimum_required 3.16), cmake/building.cmake (GCC >= 7.3 check), ham.spec (BuildRequires), Developer_Tutorial.md (libboundscheck), .gitmodules (submodules), test/run_dt.sh (lcov, dos2unix)",
       "value": [
         "cmake >= 3.16",
         "gcc >= 7.3 (GNU C/C++)",
@@ -48,20 +49,27 @@
         "mockcpp (git submodule: test/3rdparty/mockcpp) - test only",
         "lcov + genhtml - test coverage only",
         "dos2unix - test script only"
-      ],
-      "source": "CMakeLists.txt (cmake_minimum_required 3.16), cmake/building.cmake (GCC >= 7.3 check), ham.spec (BuildRequires), Developer_Tutorial.md (libboundscheck), .gitmodules (submodules), test/run_dt.sh (lcov, dos2unix)"
+      ]
     },
     "build_commands": {
-      "value": "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j<thread-num>  OR  bash build.sh -t release",
-      "source": "doc/Developer_Tutorial.md - Build HAM section + build.sh"
+      "source": "doc/Developer_Tutorial.md - Build HAM section + build.sh",
+      "value": "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j<thread-num>  OR  bash build.sh -t release"
     },
     "ut_commands": {
-      "value": "git submodule update --init --recursive && bash test/run_dt.sh",
-      "source": "doc/Developer_Tutorial.md - Run test suite section + test/run_dt.sh"
+      "source": "doc/Developer_Tutorial.md - Run test suite section + test/run_dt.sh",
+      "value": "git submodule update --init --recursive && bash test/run_dt.sh"
     },
     "sample_commands": {
-      "value": "无独立可执行样例程序。doc/Developer_Tutorial.md 中仅提供了使用 libham.so 的参考代码示例（dlopen 方式）",
-      "source": "doc/Developer_Tutorial.md - A simple demo section"
+      "source": "doc/Developer_Tutorial.md - A simple demo section",
+      "value": "无独立可执行样例程序。doc/Developer_Tutorial.md 中仅提供了使用 libham.so 的参考代码示例（dlopen 方式）"
+    },
+    "build_entry": {
+      "source": "doc/Developer_Tutorial.md - Build HAM section + build.sh",
+      "value": "mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && make -j<thread-num>  OR  bash build.sh -t release"
+    },
+    "ut_entry": {
+      "source": "doc/Developer_Tutorial.md - Run test suite section + test/run_dt.sh",
+      "value": "git submodule update --init --recursive && bash test/run_dt.sh"
     }
   },
   "execution_log": [
@@ -229,36 +237,12 @@
       "total": 8,
       "passed": 8,
       "failed": 0,
-      "failures": [],
-      "test_suites": [
-        {
-          "name": "TestHam",
-          "tests": 6,
-          "test_names": [
-            "checkRamBlockTask",
-            "HandleIoctl",
-            "startMigrationTask",
-            "migratePagesTask",
-            "stopMigrationTask",
-            "ubturbo_ham_rollback"
-          ]
-        },
-        {
-          "name": "TestHamComm",
-          "tests": 2,
-          "test_names": [
-            "setLogTask",
-            "logFuncTask"
-          ]
-        }
-      ],
-      "notes": "所有 8 个单元测试通过。test/run_dt.sh 脚本因 openEuler 仓库无 lcov 包而返回退出码 127，但 ham_dt 测试二进制文件执行成功 (Result 0, 8 PASSED)。"
+      "failures": []
     },
     "sample": {
-      "status": "not_applicable",
+      "status": "not_run",
       "duration_seconds": 0,
-      "results": [],
-      "notes": "本项目无独立可执行样例程序。doc/Developer_Tutorial.md 中提供了使用 libham.so 的参考代码示例（dlopen 动态加载方式），但仅为集成示例，非独立可运行的样例。"
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -270,16 +254,18 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T14:55:00",
       "problem": "ham library links against /usr/lib64/libboundscheck.so",
-      "error": "cmake 阶段未报错，但 make 链接阶段需要 libboundscheck.so 已存在于 /usr/lib64/",
       "solution": "先构建 3rdparty/libboundscheck 子模块，将其生成的 libboundscheck.so 复制到 /usr/lib64/",
       "source": "src/CMakeLists.txt 第9行: target_link_libraries(ham ... /usr/lib64/libboundscheck.so)"
     },
     {
+      "timestamp": "2026-05-12T14:55:00",
       "problem": "lcov 工具在 openEuler 24.03 LTS 仓库中不可用",
-      "error": "test/run_dt.sh: line 44: lcov: command not found (退出码 127)",
       "solution": "lcov 仅用于测试覆盖率报告生成，不影响实际测试执行。8/8 单元测试全部通过。",
       "source": "test/run_dt.sh 第44行: lcov --d ./ --c --output-file test.info"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

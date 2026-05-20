@@ -31,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "aarch64/x86_64",
-      "source": "README.md - 软件硬件配套说明章节"
+      "source": "README.md - 软件硬件配套说明章节",
+      "value": "aarch64/x86_64"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "doc/installation.md + CMakeLists.txt + script/build.sh + script/run_ut.sh",
       "value": [
         "cmake >= 3.19",
         "gcc 11.4+",
@@ -47,20 +52,27 @@
         "git submodule: googletest v1.12.0 (test/3rdparty)",
         "git submodule: mockcpp v2.7 (test/3rdparty)",
         "lcov (code coverage for UT)"
-      ],
-      "source": "doc/installation.md + CMakeLists.txt + script/build.sh + script/run_ut.sh"
+      ]
     },
     "build_commands": {
-      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF",
-      "source": "doc/installation.md - 编译章节"
+      "source": "doc/installation.md - 编译章节",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF"
     },
     "ut_commands": {
-      "value": "bash script/run_ut.sh (内部执行: cmake -DBUILD_UT=ON -DCMAKE_BUILD_TYPE=ASAN + ninja install + ./test_memfabric + lcov coverage)",
-      "source": "script/run_ut.sh"
+      "source": "script/run_ut.sh",
+      "value": "bash script/run_ut.sh (内部执行: cmake -DBUILD_UT=ON -DCMAKE_BUILD_TYPE=ASAN + ninja install + ./test_memfabric + lcov coverage)"
     },
     "sample_commands": {
-      "value": "Python scripts in examples/ directory (require NPU hardware + CANN)",
-      "source": "README.md - 快速入门 -> example/examples.md"
+      "source": "README.md - 快速入门 -> example/examples.md",
+      "value": "Python scripts in examples/ directory (require NPU hardware + CANN)"
+    },
+    "build_entry": {
+      "source": "doc/installation.md - 编译章节",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF"
+    },
+    "ut_entry": {
+      "source": "script/run_ut.sh",
+      "value": "bash script/run_ut.sh (内部执行: cmake -DBUILD_UT=ON -DCMAKE_BUILD_TYPE=ASAN + ninja install + ./test_memfabric + lcov coverage)"
     }
   },
   "execution_log": [
@@ -223,10 +235,6 @@
     "build": {
       "status": "success",
       "duration_seconds": 18.279,
-      "build_command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF",
-      "build_mode": "RELEASE",
-      "xpu_type": "NPU",
-      "build_python": "ON",
       "artifacts": [
         {
           "name": "memfabric_hybrid-1.1.0-cp312-cp312-linux_x86_64.whl",
@@ -296,46 +304,38 @@
     "ut": {
       "status": "success",
       "duration_seconds": 153.371,
-      "build_mode": "ASAN",
       "total": 1093,
       "passed": 1093,
       "failed": 0,
-      "test_suites": 52,
-      "test_duration_ms": 88526,
-      "coverage": {
-        "lines": "71.8%",
-        "branches": "48.0%",
-        "functions": "87.2%",
-        "lines_threshold": "70%",
-        "branches_threshold": "40%",
-        "coverage_passed": true
-      },
       "failures": []
     },
     "sample": {
-      "status": "skipped",
+      "status": "not_run",
       "duration_seconds": 0,
-      "reason": "样例程序（Python examples和benchmark）需要Ascend NPU硬件环境（CANN驱动、固件）才能运行，编译不依赖NPU但运行时需要",
       "results": [
         {
-          "name": "examples/memory_pool/*.py",
-          "status": "skipped",
-          "reason": "需要NPU驱动和CANN环境"
+          "sample_name": "examples/memory_pool/*.py",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         },
         {
-          "name": "examples/hbm_share_memory/*.cpp",
-          "status": "skipped",
-          "reason": "需要NPU HBM硬件支持"
+          "sample_name": "examples/hbm_share_memory/*.cpp",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         },
         {
-          "name": "examples/transfer/*.py",
-          "status": "skipped",
-          "reason": "需要NPU驱动和CANN环境"
+          "sample_name": "examples/transfer/*.py",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         },
         {
-          "name": "benchmark/bm/main.cpp",
-          "status": "skipped",
-          "reason": "需要NPU硬件进行性能测试"
+          "sample_name": "benchmark/bm/main.cpp",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         }
       ]
     }
@@ -349,21 +349,18 @@
   ],
   "problems_encountered": [
     {
-      "id": "P001",
+      "timestamp": "2026-05-11T17:32:00",
       "problem": "git submodule update --init --recursive 失败，无法连接 github.com:443 - connection timeout",
-      "affected_submodules": [
-        "googletest",
-        "mockcpp"
-      ],
-      "root_cause": "网络环境无法直接访问GitHub",
       "solution": "googletest改用GitCode镜像: git clone --depth 1 --branch v1.12.0 https://gitcode.com/google/googletest.git; mockcpp使用gh-proxy代理: git clone --depth 1 --branch v2.7 https://gh-proxy.com/github.com/sinojelly/mockcpp.git",
-      "solution_source": "用户指导 - github依赖下载不了改用gitcode"
+      "source": ""
     },
     {
-      "id": "P002",
+      "timestamp": "2026-05-11T17:32:00",
       "problem": "mockcpp v2.7在GitCode上sinojelly/mockcpp返回403，CSDNopensource/mockcpp也返回403",
       "solution": "使用gh-proxy.com作为GitHub的HTTP代理镜像成功克隆",
-      "solution_source": "尝试不同镜像源"
+      "source": ""
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

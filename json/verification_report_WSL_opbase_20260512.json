@@ -1,6 +1,8 @@
 {
   "metadata": {
+    "repo_name": "opbase",
     "repo_path": "https://gitcode.com/cann/opbase.git",
+    "repo_url": "https://gitcode.com/cann/opbase.git",
     "start_time": "2026-05-12T07:30:00",
     "end_time": "2026-05-12T08:10:00",
     "duration_seconds": 2400,
@@ -29,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64 / aarch64 (Docker镜像支持 amd64/arm64)",
-      "source": "docs/zh/install/quick_install.md - Docker部署章节"
+      "source": "docs/zh/install/quick_install.md - Docker部署章节",
+      "value": "x86_64 / aarch64 (Docker镜像支持 amd64/arm64)"
     },
     "recommended_image": {
-      "value": "Docker镜像基于Ubuntu 22.04 → 选择 Ubuntu 24.04",
-      "source": "docs/zh/install/quick_install.md - Docker部署章节: ubuntu22.04-py3.10-ops"
+      "source": "docs/zh/install/quick_install.md - Docker部署章节: ubuntu22.04-py3.10-ops",
+      "value": "Docker镜像基于Ubuntu 22.04 → 选择 Ubuntu 24.04"
     },
     "dependencies": {
+      "source": "docs/QUICKSTART.md + docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + version.cmake",
       "value": [
         "python >= 3.7.0",
         "gcc >= 7.3.0",
@@ -49,28 +52,27 @@
         "make",
         "pyyaml (Python依赖)",
         "CANN toolkit >= 8.5 (关键依赖，提供runtime/metadef/bisheng-compiler/asc-devkit/ge-executor)"
-      ],
-      "source": "docs/QUICKSTART.md + docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + version.cmake"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)",
-      "source": "docs/QUICKSTART.md - 联网编译章节"
+      "source": "docs/QUICKSTART.md - 联网编译章节",
+      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)"
     },
     "ut_commands": {
-      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)",
-      "source": "docs/QUICKSTART.md - 执行UT章节"
+      "source": "docs/QUICKSTART.md - 执行UT章节",
+      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)"
     },
     "sample_commands": {
-      "value": "无独立样例程序 (opbase为基础框架库，提供libops_base.so和libnnopbase.so)",
-      "source": "README.md - 项目概述: opbase是CANN算子库依赖的基础框架库"
+      "source": "README.md - 项目概述: opbase是CANN算子库依赖的基础框架库",
+      "value": "无独立样例程序 (opbase为基础框架库，提供libops_base.so和libnnopbase.so)"
     },
     "build_entry": {
-      "value": "bash build.sh",
-      "source": "docs/QUICKSTART.md - 联网编译章节"
+      "source": "docs/QUICKSTART.md - 联网编译章节",
+      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)"
     },
     "ut_entry": {
-      "value": "bash build.sh -u",
-      "source": "docs/QUICKSTART.md - 执行UT章节"
+      "source": "docs/QUICKSTART.md - 执行UT章节",
+      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)"
     }
   },
   "execution_log": [
@@ -301,29 +303,12 @@
       "total": 957,
       "passed": 957,
       "failed": 0,
-      "failures": [],
-      "details": {
-        "nnopbase_utest": {
-          "total": 952,
-          "passed": 952,
-          "failed": 0,
-          "test_suites": 75,
-          "duration_ms": 6295
-        },
-        "op_common_utest": {
-          "total": 5,
-          "passed": 5,
-          "failed": 0,
-          "test_suites": 2,
-          "duration_ms": 0
-        }
-      }
+      "failures": []
     },
     "sample": {
-      "status": "not_applicable",
+      "status": "not_run",
       "duration_seconds": 0,
-      "results": [],
-      "note": "opbase是CANN算子库依赖的基础框架库，不提供独立样例程序"
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -347,5 +332,6 @@
       "source": "运行时发现安装程序需要交互式接受EULA"
     }
   ],
-  "session_export_file": "verification_session_WSL_opbase_20260512.md"
+  "session_export_file": "verification_session_WSL_opbase_20260512.md",
+  "verification_conclusion": ""
 }

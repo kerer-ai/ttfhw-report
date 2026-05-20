@@ -1,6 +1,8 @@
 {
   "metadata": {
+    "repo_name": "ops-nn",
     "repo_path": "https://gitcode.com/cann/ops-nn.git (cloned to /root/workspace/ttfhw-verify-0511/ops-nn-src)",
+    "repo_url": "https://gitcode.com/cann/ops-nn.git",
     "start_time": "2026-05-12T11:42:00",
     "end_time": "2026-05-12T12:20:00",
     "duration_seconds": 2280,
@@ -29,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64 / aarch64（文档声明支持Atlas A2/A3/950系列产品，支持X86和ARM架构）",
-      "source": "README.md - 版本配套章节 + docs/zh/install/quick_install.md - Docker部署章节（提供arm64和amd64镜像）"
+      "source": "README.md - 版本配套章节 + docs/zh/install/quick_install.md - Docker部署章节（提供arm64和amd64镜像）",
+      "value": "x86_64 / aarch64（文档声明支持Atlas A2/A3/950系列产品，支持X86和ARM架构）"
     },
     "recommended_image": {
-      "value": "Docker部署文档推荐Ubuntu系统（cann:8.5.0-910b-ubuntu22.04-py3.10-ops） → 选择 Ubuntu 24.04",
-      "source": "docs/zh/install/quick_install.md - Docker部署章节"
+      "source": "docs/zh/install/quick_install.md - Docker部署章节",
+      "value": "Docker部署文档推荐Ubuntu系统（cann:8.5.0-910b-ubuntu22.04-py3.10-ops） → 选择 Ubuntu 24.04"
     },
     "dependencies": {
+      "source": "docs/zh/install/quick_install.md - 安装基础依赖章节 + install_deps.sh",
       "value": [
         "python >= 3.7.0（建议 <= 3.10）",
         "gcc >= 7.3.0",
@@ -48,28 +51,27 @@
         "googletest（仅UT时依赖，建议 release-1.11.0）",
         "CANN toolkit包（Ascend-cann-toolkit，编译必需）",
         "CANN ops包（运行态依赖，运行样例时需要）"
-      ],
-      "source": "docs/zh/install/quick_install.md - 安装基础依赖章节 + install_deps.sh"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j9",
-      "source": "docs/QUICKSTART.md - 编译运行章节 + docs/zh/install/compile.md - 联网编译章节"
+      "source": "docs/QUICKSTART.md - 编译运行章节 + docs/zh/install/compile.md - 联网编译章节",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j9"
     },
     "ut_commands": {
-      "value": "bash build.sh -u --ophost --ops=add_example（ophost UT）; bash build.sh -u --opapi（opapi UT）; bash build.sh -u --opkernel（opkernel UT）",
-      "source": "docs/zh/install/compile.md - 本地验证章节"
+      "source": "docs/zh/install/compile.md - 本地验证章节",
+      "value": "bash build.sh -u --ophost --ops=add_example（ophost UT）; bash build.sh -u --opapi（opapi UT）; bash build.sh -u --opkernel（opkernel UT）"
     },
     "sample_commands": {
-      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom",
-      "source": "docs/QUICKSTART.md - 快速验证章节 + docs/zh/install/build.md - run_example参数说明"
+      "source": "docs/QUICKSTART.md - 快速验证章节 + docs/zh/install/build.md - run_example参数说明",
+      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom"
     },
     "build_entry": {
-      "value": "bash build.sh（项目根目录构建脚本，封装了cmake/make流程）",
-      "source": "build.sh + CMakeLists.txt"
+      "source": "docs/QUICKSTART.md - 编译运行章节 + docs/zh/install/compile.md - 联网编译章节",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j9"
     },
     "ut_entry": {
-      "value": "bash build.sh -u --ophost（ophost UT入口）",
-      "source": "docs/zh/install/compile.md - 本地验证章节"
+      "source": "docs/zh/install/compile.md - 本地验证章节",
+      "value": "bash build.sh -u --ophost --ops=add_example（ophost UT）; bash build.sh -u --opapi（opapi UT）; bash build.sh -u --opkernel（opkernel UT）"
     }
   },
   "execution_log": [
@@ -372,8 +374,7 @@
       "total": 3,
       "passed": 3,
       "failed": 0,
-      "failures": [],
-      "details": "2个AddExampleTiling测试 + 1个AddExampleInfershape测试全部通过"
+      "failures": []
     },
     "sample": {
       "status": "failed",
@@ -383,7 +384,7 @@
           "sample_name": "test_aclnn_add_example",
           "execution_status": "failed",
           "output_summary": "链接阶段失败：/usr/bin/ld: cannot find -lopapi_math",
-          "failure_reason": "缺少CANN ops包（运行态依赖），需要安装Ascend-cann-910b-ops_9.0.0_linux-x86_64.run（约2.13GB），且最终运行需要NPU硬件设备"
+          "execution_time": "unknown"
         }
       ]
     }
@@ -415,5 +416,6 @@
       "source": "docs/zh/install/quick_install.md - 安装CANN ops包（运行态依赖）章节"
     }
   ],
-  "session_export_file": "verification_session_WSL_ops-nn_20260512.md"
+  "session_export_file": "verification_session_WSL_ops-nn_20260512.md",
+  "verification_conclusion": ""
 }

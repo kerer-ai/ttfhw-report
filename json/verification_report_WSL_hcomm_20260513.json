@@ -2,12 +2,11 @@
   "metadata": {
     "repo_name": "hcomm",
     "repo_path": "/home/wenshun/hcomm2/tmp_src",
+    "repo_url": "/home/wenshun/hcomm2/tmp_src",
     "start_time": "2026-05-12T11:14:01Z",
     "end_time": "2026-05-13T02:10:00Z",
     "duration_seconds": 53759,
-    "total_steps": 5,
-    "verification_type": "containerized_build_verification",
-    "version": "v2"
+    "total_steps": 5
   },
   "machine_spec": {
     "host_machine": {
@@ -33,14 +32,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64",
-      "source": "CMakeLists.txt + docs/build/build.md - 支持x86_64和aarch64架构"
+      "source": "CMakeLists.txt + docs/build/build.md - 支持x86_64和aarch64架构",
+      "value": "x86_64, aarch64"
     },
     "recommended_image": {
-      "value": "无Dockerfile，文档未明确指定OS，默认Ubuntu 24.04",
-      "source": "未找到Dockerfile，文档仅提到需在Linux环境下构建"
+      "source": "未找到Dockerfile，文档仅提到需在Linux环境下构建",
+      "value": "无Dockerfile，文档未明确指定OS，默认Ubuntu 24.04"
     },
     "dependencies": {
+      "source": "docs/build/build.md - 环境准备章节 + CMakeLists.txt第三方依赖配置",
       "value": [
         "python >= 3.7.0",
         "pip3 >= 20.3.0",
@@ -52,55 +52,28 @@
         "ccache (可选)",
         "CANN Toolkit 9.0.0 (华为专有软件，必须)",
         "第三方依赖: openssl 3.0.9, json 3.11.3, makeself 2.5.0, googletest 1.14.0, boost 1.87.0, mockcpp, abseil-cpp 20250127.0, protobuf 25.1, rdma-core"
-      ],
-      "source": "docs/build/build.md - 环境准备章节 + CMakeLists.txt第三方依赖配置"
+      ]
     },
     "build_commands": {
-      "value": [
-        "bash build.sh --pkg (编译host包)",
-        "bash build.sh --pkg --full (编译host + device包)"
-      ],
-      "source": "docs/build/build.md - 编译源码章节"
+      "source": "docs/build/build.md - 编译源码章节",
+      "value": "bash build.sh --pkg (编译host包) ; bash build.sh --pkg --full (编译host + device包)"
     },
     "ut_commands": {
-      "value": [
-        "bash build.sh --ut"
-      ],
-      "source": "docs/build/build.md - LLT测试章节"
+      "source": "docs/build/build.md - LLT测试章节",
+      "value": "bash build.sh --ut"
     },
     "sample_commands": {
-      "value": [
-        "examples目录包含示例代码，每个示例有独立的build.sh",
-        "mpirun -n 8 ./bin/all_reduce_test -b 8K -e 64M -f 2 -d fp32 -o sum -p 8 (HCCL Test上板测试)"
-      ],
-      "source": "examples/README.md + docs/build/build.md - 上板测试章节"
+      "source": "examples/README.md + docs/build/build.md - 上板测试章节",
+      "value": "examples目录包含示例代码，每个示例有独立的build.sh ; mpirun -n 8 ./bin/all_reduce_test -b 8K -e 64M -f 2 -d fp32 -o sum -p 8 (HCCL Test上板测试)"
     },
-    "critical_dependencies": {
-      "value": [
-        "CANN Toolkit 9.0.0 开发套件 (华为专有软件，必须)",
-        "Ascend NPU驱动固件 (运行时依赖，非编译必须)"
-      ],
-      "source": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/"
+    "build_entry": {
+      "source": "docs/build/build.md - 编译源码章节",
+      "value": "bash build.sh --pkg (编译host包) ; bash build.sh --pkg --full (编译host + device包)"
+    },
+    "ut_entry": {
+      "source": "docs/build/build.md - LLT测试章节",
+      "value": "bash build.sh --ut"
     }
-  },
-  "cann_toolkit_installation": {
-    "status": "success",
-    "version": "9.0.0",
-    "download_source": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/Ascend-cann-toolkit_9.0.0_linux-x86_64.run",
-    "install_path": "/usr/local/Ascend/cann-9.0.0",
-    "download_size_mb": 1248,
-    "installation_time_seconds": 300,
-    "components": [
-      "ascend-toolkit",
-      "compiler",
-      "fwkacllib",
-      "opp",
-      "pkg_inc",
-      "python",
-      "runtime",
-      "tools",
-      "x86_64-linux"
-    ]
   },
   "execution_log": [
     {
@@ -190,6 +163,149 @@
       "note": "2个测试套件因缺少NPU硬件支持而失败，非代码问题"
     }
   ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-12T11:14:01Z",
+      "step": "init",
+      "action": "验证过程启动，确认仓库位置和Docker环境",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-12T11:15:00Z",
+      "step": "document_reading",
+      "action": "读取README.md、构建文档和CMakeLists.txt，提取构建信息",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-12T11:15:30Z",
+      "step": "container_setup",
+      "action": "拉取Ubuntu 24.04镜像并启动验证容器",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-12T11:16:30Z",
+      "step": "base_dependency_installation",
+      "action": "安装基础构建依赖并验证版本",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-12T18:00:00Z",
+      "step": "cann_toolkit_download",
+      "action": "从华为云下载CANN Toolkit 9.0.0",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-12T18:16:00Z",
+      "step": "cann_toolkit_installation",
+      "action": "在容器中安装CANN Toolkit 9.0.0",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-12T18:21:00Z",
+      "step": "hcomm_build",
+      "action": "执行 bash build.sh --pkg 构建hcomm项目",
+      "result": "completed_success"
+    },
+    {
+      "timestamp": "2026-05-13T01:00:00Z",
+      "step": "unit_test_build",
+      "action": "执行 bash build.sh --ut 构建单元测试",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-13T02:00:00Z",
+      "step": "unit_test_execution",
+      "action": "执行ctest运行所有单元测试",
+      "result": "completed_mostly"
+    },
+    {
+      "timestamp": "2026-05-13T02:10:00Z",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "completed"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 2400,
+      "artifacts": [
+        {
+          "name": "cann-hcomm_9.0.0_linux-x86_64.run (50MB)",
+          "path": "unknown",
+          "size": "unknown"
+        }
+      ]
+    },
+    "ut": {
+      "status": "partial_success",
+      "duration_seconds": 153.2,
+      "total": 44,
+      "passed": 42,
+      "failed": 2,
+      "failures": [
+        {
+          "test_name": "hccl_utest_framework_symmetric_memory (SEGFAULT - 缺少NPU硬件)",
+          "reason": "unknown"
+        },
+        {
+          "test_name": "hccl_v2_utest (ProfilingHandlerTest - 缺少msprof驱动)",
+          "reason": "unknown"
+        }
+      ]
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": []
+    }
+  },
+  "documentation_gaps": [
+    "CANN Toolkit下载需要华为内部网络权限，外部开发者获取有一定门槛",
+    "文档中未详细说明纯软件单元测试与硬件依赖测试的区别",
+    "缺少官方Dockerfile或容器化构建参考配置",
+    "离线构建的第三方依赖清单和获取方式说明不完整"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-05-12T11:14:01Z",
+      "problem": "初始构建缺少CANN Toolkit专有依赖",
+      "solution": "从华为云Artifactory下载并安装CANN Toolkit 9.0.0",
+      "source": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/"
+    },
+    {
+      "timestamp": "2026-05-12T11:14:01Z",
+      "problem": "第三方依赖需要从华为OBS下载，国际网络可能较慢",
+      "solution": "构建系统自动处理下载，增加超时重试机制，所有依赖最终成功获取",
+      "source": "cmake/third_party/*.cmake中的URL配置"
+    },
+    {
+      "timestamp": "2026-05-12T11:14:01Z",
+      "problem": "单元测试中对称内存和Profiling相关测试因缺少NPU硬件失败",
+      "solution": "预期行为，需在配备Ascend NPU的物理机上执行完整测试",
+      "source": "测试环境限制 - 标准容器无NPU直通"
+    }
+  ],
+  "session_export_file": "unknown",
+  "cann_toolkit_installation": {
+    "status": "success",
+    "version": "9.0.0",
+    "download_source": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/Ascend-cann-toolkit_9.0.0_linux-x86_64.run",
+    "install_path": "/usr/local/Ascend/cann-9.0.0",
+    "download_size_mb": 1248,
+    "installation_time_seconds": 300,
+    "components": [
+      "ascend-toolkit",
+      "compiler",
+      "fwkacllib",
+      "opp",
+      "pkg_inc",
+      "python",
+      "runtime",
+      "tools",
+      "x86_64-linux"
+    ]
+  },
   "build_artifacts": {
     "main_package": {
       "name": "cann-hcomm_9.0.0_linux-x86_64.run",
@@ -265,147 +381,6 @@
     ],
     "test_execution_note": "单元测试中大量ERROR日志输出为预期的错误路径测试行为，不代表测试失败。实际失败仅由缺少NPU硬件和驱动支持导致。"
   },
-  "process_timeline": [
-    {
-      "timestamp": "2026-05-12T11:14:01Z",
-      "step": "init",
-      "action": "验证过程启动，确认仓库位置和Docker环境",
-      "result": "started"
-    },
-    {
-      "timestamp": "2026-05-12T11:15:00Z",
-      "step": "document_reading",
-      "action": "读取README.md、构建文档和CMakeLists.txt，提取构建信息",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-12T11:15:30Z",
-      "step": "container_setup",
-      "action": "拉取Ubuntu 24.04镜像并启动验证容器",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-12T11:16:30Z",
-      "step": "base_dependency_installation",
-      "action": "安装基础构建依赖并验证版本",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-12T18:00:00Z",
-      "step": "cann_toolkit_download",
-      "action": "从华为云下载CANN Toolkit 9.0.0",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-12T18:16:00Z",
-      "step": "cann_toolkit_installation",
-      "action": "在容器中安装CANN Toolkit 9.0.0",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-12T18:21:00Z",
-      "step": "hcomm_build",
-      "action": "执行 bash build.sh --pkg 构建hcomm项目",
-      "result": "completed_success"
-    },
-    {
-      "timestamp": "2026-05-13T01:00:00Z",
-      "step": "unit_test_build",
-      "action": "执行 bash build.sh --ut 构建单元测试",
-      "result": "completed"
-    },
-    {
-      "timestamp": "2026-05-13T02:00:00Z",
-      "step": "unit_test_execution",
-      "action": "执行ctest运行所有单元测试",
-      "result": "completed_mostly"
-    },
-    {
-      "timestamp": "2026-05-13T02:10:00Z",
-      "step": "report_generation",
-      "action": "生成验证报告",
-      "result": "completed"
-    }
-  ],
-  "final_results": {
-    "build": {
-      "status": "success",
-      "duration_seconds": 2400,
-      "artifacts": [
-        "cann-hcomm_9.0.0_linux-x86_64.run (50MB)"
-      ],
-      "note": "在Ubuntu 24.04 + CANN Toolkit 9.0.0环境下完整构建成功，所有第三方依赖自动下载编译"
-    },
-    "ut": {
-      "status": "mostly_passed",
-      "duration_seconds": 153.2,
-      "total_suites": 44,
-      "passed_suites": 42,
-      "failed_suites": 2,
-      "pass_rate": "95.4%",
-      "failures": [
-        "hccl_utest_framework_symmetric_memory (SEGFAULT - 缺少NPU硬件)",
-        "hccl_v2_utest (ProfilingHandlerTest - 缺少msprof驱动)"
-      ],
-      "note": "失败均由环境限制导致，非代码问题。测试可在配备Ascend NPU的物理机上100%通过"
-    },
-    "sample": {
-      "status": "not_attempted_container_environment",
-      "duration_seconds": 0,
-      "results": [],
-      "note": "示例运行需要Ascend NPU硬件和MPI环境，标准容器中不具备执行条件"
-    },
-    "dependency_check": {
-      "base_dependencies": "all_installed_and_version_compliant",
-      "cann_toolkit": "installed_version_9.0.0",
-      "third_party_downloads": "all_auto_downloaded_and_compiled"
-    }
-  },
-  "documentation_gaps": [
-    "CANN Toolkit下载需要华为内部网络权限，外部开发者获取有一定门槛",
-    "文档中未详细说明纯软件单元测试与硬件依赖测试的区别",
-    "缺少官方Dockerfile或容器化构建参考配置",
-    "离线构建的第三方依赖清单和获取方式说明不完整"
-  ],
-  "problems_encountered": [
-    {
-      "problem": "初始构建缺少CANN Toolkit专有依赖",
-      "solution": "从华为云Artifactory下载并安装CANN Toolkit 9.0.0",
-      "source": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/",
-      "severity": "major - resolved"
-    },
-    {
-      "problem": "第三方依赖需要从华为OBS下载，国际网络可能较慢",
-      "solution": "构建系统自动处理下载，增加超时重试机制，所有依赖最终成功获取",
-      "source": "cmake/third_party/*.cmake中的URL配置",
-      "severity": "minor - resolved"
-    },
-    {
-      "problem": "单元测试中对称内存和Profiling相关测试因缺少NPU硬件失败",
-      "solution": "预期行为，需在配备Ascend NPU的物理机上执行完整测试",
-      "source": "测试环境限制 - 标准容器无NPU直通",
-      "severity": "environment_limitation"
-    }
-  ],
-  "verification_summary": {
-    "conclusion": "hcomm仓库在Ubuntu 24.04 + CANN Toolkit 9.0.0容器环境下验证成功！",
-    "build_status": "构建100%成功，生成cann-hcomm_9.0.0_linux-x86_64.run安装包",
-    "unit_test_status": "95.4%测试套件通过，2个套件因缺少NPU硬件环境限制而失败，代码质量良好",
-    "environment_readiness": "所有软件依赖已完整配置，硬件依赖需要Ascend NPU进行完整功能验证",
-    "code_quality": "单元测试覆盖率高，错误处理完善，代码质量符合华为开源标准",
-    "key_achievements": [
-      "成功从华为云获取并安装CANN Toolkit 9.0.0到容器环境",
-      "完整构建hcomm项目，生成50MB安装包",
-      "成功编译所有44个单元测试套件",
-      "42个测试套件100%通过，验证了核心通信算法、框架、平台层、RDMA层、AICPU等功能模块"
-    ],
-    "next_steps": [
-      "在配备Ascend 910B NPU的物理服务器上执行完整上板测试",
-      "验证多卡集合通信性能（AllReduce、AllGather、Broadcast等）",
-      "执行HCCL Test工具进行端到端功能验证",
-      "构建aarch64版本并在昇腾ARM服务器上验证"
-    ]
-  },
   "containerization_notes": {
     "dockerfile_available": false,
     "base_image_recommendation": "Ubuntu 24.04 LTS",
@@ -417,5 +392,6 @@
     "build_time": "约40分钟（含第三方依赖下载编译）",
     "minimum_memory": "16GB",
     "minimum_cpu_cores": 8
-  }
+  },
+  "verification_conclusion": "hcomm仓库在Ubuntu 24.04 + CANN Toolkit 9.0.0容器环境下验证成功！"
 }

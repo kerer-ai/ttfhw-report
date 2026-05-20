@@ -1,13 +1,12 @@
 {
   "metadata": {
-    "repo_path": "/home/wenshun/hccl2/tmp_src",
     "repo_name": "hccl",
+    "repo_path": "/home/wenshun/hccl2/tmp_src",
     "repo_url": "https://gitcode.com/cann/hccl.git",
     "start_time": "2026-05-13T10:27:00+08:00",
     "end_time": "2026-05-13T11:05:00+08:00",
     "duration_seconds": 2280,
-    "total_steps": 6,
-    "version": "v2 - 完整CANN toolkit验证"
+    "total_steps": 6
   },
   "machine_spec": {
     "host_machine": {
@@ -32,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64",
-      "source": "docs/build/build.md - 系统要求，支持两种架构"
+      "source": "docs/build/build.md - 系统要求，支持两种架构",
+      "value": "x86_64, aarch64"
     },
     "recommended_image": {
-      "value": "无明确Dockerfile或操作系统推荐",
-      "source": "未找到Dockerfile，文档仅提及需要CANN toolkit"
+      "source": "未找到Dockerfile，文档仅提及需要CANN toolkit",
+      "value": "无明确Dockerfile或操作系统推荐"
     },
     "dependencies": {
+      "source": "docs/build/build.md - 前置依赖 + CMakeLists.txt",
       "value": [
         "cmake >= 3.16.0",
         "gcc & g++ : 7.3.0 至 13.3.x",
@@ -50,24 +50,27 @@
         "CANN toolkit = 9.0.0 (必需)",
         "makeself = 2.5.0 (打包)",
         "cann-cmake = master-001"
-      ],
-      "source": "docs/build/build.md - 前置依赖 + CMakeLists.txt"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg (编译host包) | bash build.sh --pkg --full (编译host+device包)",
-      "source": "docs/build/build.md - 编译源码"
+      "source": "docs/build/build.md - 编译源码",
+      "value": "bash build.sh --pkg (编译host包) | bash build.sh --pkg --full (编译host+device包)"
     },
     "ut_commands": {
-      "value": "bash build.sh --ut",
-      "source": "docs/build/build.md - LLT测试"
+      "source": "docs/build/build.md - LLT测试",
+      "value": "bash build.sh --ut"
     },
     "sample_commands": {
-      "value": "examples目录包含多种集合通信示例（需CANN运行环境+NPU设备）",
-      "source": "examples/README.md"
+      "source": "examples/README.md",
+      "value": "examples目录包含多种集合通信示例（需CANN运行环境+NPU设备）"
     },
-    "cann_download_source": {
-      "value": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/",
-      "source": "用户提供"
+    "build_entry": {
+      "source": "docs/build/build.md - 编译源码",
+      "value": "bash build.sh --pkg (编译host包) | bash build.sh --pkg --full (编译host+device包)"
+    },
+    "ut_entry": {
+      "source": "docs/build/build.md - LLT测试",
+      "value": "bash build.sh --ut"
     }
   },
   "execution_log": [
@@ -182,7 +185,6 @@
     "build": {
       "status": "success",
       "duration_seconds": 145,
-      "details": "完整构建成功！CANN toolkit 9.0.0 提供了完整的头文件和编译器支持",
       "artifacts": [
         {
           "name": "cann-hccl_9.0.0_linux-x86_64.run",
@@ -212,8 +214,7 @@
           "type": "object_files",
           "description": "AIV架构算子内核文件（bisheng编译器编译）"
         }
-      ],
-      "blockers": []
+      ]
     },
     "ut": {
       "status": "success",
@@ -221,15 +222,12 @@
       "total": 1,
       "passed": 1,
       "failed": 0,
-      "failures": [],
-      "details": "单元测试环境准备测试通过: UtPrepareEnv.hccl_prepare_ut_env (3001ms)",
-      "note": "其他单元测试需在NPU设备环境中执行"
+      "failures": []
     },
     "sample": {
-      "status": "not_tested",
+      "status": "not_run",
       "duration_seconds": 0,
-      "results": [],
-      "note": "样例程序需在NPU设备环境中运行，当前为纯编译环境验证"
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -240,21 +238,13 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-13T10:27:00+08:00",
       "problem": "初始构建缺少CANN toolkit专有头文件(dlog_pub.h等)和ccec/bisheng编译器",
       "solution": "从华为云DevCloud下载完整CANN toolkit 9.0.0并安装到标准路径",
       "source": "用户提供下载地址：https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/"
     }
   ],
-  "cann_toolkit_info": {
-    "version": "9.0.0",
-    "download_size": "1.3GB",
-    "install_path": "/usr/local/Ascend",
-    "components": [
-      "CANN头文件 (include/*.h)",
-      "bisheng编译器 (用于AIV内核编译)",
-      "运行时库文件",
-      "工具链"
-    ]
-  },
-  "conclusion": "HCCL仓库在Ubuntu 24.04 + CANN toolkit 9.0.0环境下完整构建和单元测试均通过！"
+  "session_export_file": "unknown",
+  "conclusion": "HCCL仓库在Ubuntu 24.04 + CANN toolkit 9.0.0环境下完整构建和单元测试均通过！",
+  "verification_conclusion": ""
 }

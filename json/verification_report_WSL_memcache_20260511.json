@@ -2,7 +2,7 @@
   "metadata": {
     "repo_name": "memcache",
     "repo_path": "/workspace/TTFHW3/UBSCore/memcache/tmp_src",
-    "repo_version": "1.1.0",
+    "repo_url": "/workspace/TTFHW3/UBSCore/memcache/tmp_src",
     "start_time": "2026-05-11T13:15:00",
     "end_time": "2026-05-11T13:35:00",
     "duration_seconds": 1200,
@@ -31,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64 (文档中声明支持)",
-      "source": "doc/build.md + README.md - 软件硬件配套说明章节"
+      "source": "doc/build.md + README.md - 软件硬件配套说明章节",
+      "value": "x86_64, aarch64 (文档中声明支持)"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "doc/build.md - 环境准备章节 + CMakeLists.txt + script/run_ut.sh",
       "value": [
         "cmake >= 3.20",
         "gcc >= 11.4",
@@ -44,20 +49,27 @@
         "dos2unix",
         "lcov (UT coverage)",
         "MemFabric_Hybrid (第三方库，通过git submodule引入)"
-      ],
-      "source": "doc/build.md - 环境准备章节 + CMakeLists.txt + script/run_ut.sh"
+      ]
     },
     "build_commands": {
-      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE",
-      "source": "doc/build.md - 编译章节"
+      "source": "doc/build.md - 编译章节",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE"
     },
     "ut_commands": {
-      "value": "bash script/run_ut.sh",
-      "source": "doc/build.md - ut运行章节"
+      "source": "doc/build.md - ut运行章节",
+      "value": "bash script/run_ut.sh"
     },
     "sample_commands": {
-      "value": "python python/test_mmc_start_meta_service_and_simple_test.py (需要安装run包并配置环境变量)",
-      "source": "example/python/README.md"
+      "source": "example/python/README.md",
+      "value": "python python/test_mmc_start_meta_service_and_simple_test.py (需要安装run包并配置环境变量)"
+    },
+    "build_entry": {
+      "source": "doc/build.md - 编译章节",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE"
+    },
+    "ut_entry": {
+      "source": "doc/build.md - ut运行章节",
+      "value": "bash script/run_ut.sh"
     }
   },
   "execution_log": [
@@ -224,23 +236,23 @@
       "total": 154,
       "passed": 154,
       "failed": 0,
-      "test_suites": 27,
-      "coverage_note": "Coverage generation started but geninfo encountered a mismatched exception tag error on /usr/include/c++/13/bits/stl_tree.h:1828. Coverage report generation was not fully completed.",
       "failures": []
     },
     "sample": {
-      "status": "skipped",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": [
         {
-          "name": "Python sample (test_mmc_start_meta_service_and_simple_test.py)",
-          "status": "skipped",
-          "reason": "样例运行需要先安装memfabric_hybrid的run包作为前置依赖。当前验证环境中没有memfabric_hybrid安装，无法完成whl包或run包的安装。样例文档也明确指出需要NPU环境和CANN包配置。"
+          "sample_name": "Python sample (test_mmc_start_meta_service_and_simple_test.py)",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         },
         {
-          "name": "C++ sample (example/cpp/memcache_cpp_test)",
-          "status": "skipped",
-          "reason": "C++样例文档明确指出需要在NPU环境下运行，依赖memfabric_hybrid和memcache_hybrid的run包安装及NPU CANN环境配置。"
+          "sample_name": "C++ sample (example/cpp/memcache_cpp_test)",
+          "execution_status": "skipped",
+          "output_summary": "",
+          "execution_time": "unknown"
         }
       ]
     }
@@ -253,34 +265,42 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "Docker Hub拉取ubuntu:24.04镜像超时",
       "solution": "本地已有缓存镜像，直接使用本地镜像启动容器",
       "source": "本地Docker images列表"
     },
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "pip3安装pybind11时默认源超时",
       "solution": "使用清华大学PyPI镜像源加速安装: pip3 install --break-system-packages pybind11 -i https://pypi.tuna.tsinghua.edu.cn/simple",
       "source": "网络优化"
     },
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "编译并发数需要控制在机器核数60%以内",
       "solution": "设置 MMC_BUILD_JOBS=12 (20核 * 0.6 = 12) 环境变量控制编译并发数",
       "source": "技能文档规范"
     },
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "whl包安装失败: 缺少memfabric-hybrid>=1.1.0依赖",
       "solution": "whl包依赖memfabric-hybrid但PyPI上无此包。跳过样例执行，因为需要完整的run包部署环境",
       "source": "pip安装错误输出"
     },
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "run包安装失败: 预检要求memfabric_hybrid已安装",
       "solution": "run包安装预检检查memfabric_hybrid版本。因验证范围仅覆盖memcache自身构建和测试，不覆盖MemFabric依赖安装，跳过样例",
       "source": "run包安装错误输出"
     },
     {
+      "timestamp": "2026-05-11T13:15:00",
       "problem": "lcov覆盖率报告geninfo遇到 mismatched exception tag 错误",
       "solution": "这是geninfo处理C++13标准库头文件时的已知兼容性问题。UT测试本身全部通过，覆盖率报告不完整不影响测试结果",
       "source": "geninfo输出警告"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

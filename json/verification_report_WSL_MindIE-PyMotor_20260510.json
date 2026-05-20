@@ -1,13 +1,12 @@
 {
   "metadata": {
     "repo_name": "MindIE-PyMotor",
-    "repo_url": "https://gitcode.com/Ascend/MindIE-PyMotor.git",
     "repo_path": "/home/lrp/tmp_src",
+    "repo_url": "https://gitcode.com/Ascend/MindIE-PyMotor.git",
     "start_time": "2026-05-10T17:03:00",
     "end_time": "2026-05-10T17:55:00",
-    "duration_minutes": 52,
-    "total_steps": 4,
-    "os_image": "Ubuntu 24.04"
+    "duration_seconds": 0,
+    "total_steps": 4
   },
   "machine_spec": {
     "host_machine": {
@@ -27,14 +26,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "Python package (platform-independent), targets Ascend NPU hardware for deployment",
-      "source": "README.md + setup.py (python_requires>=3.11)"
+      "source": "README.md + setup.py (python_requires>=3.11)",
+      "value": "Python package (platform-independent), targets Ascend NPU hardware for deployment"
     },
-    "os_selection": {
-      "value": "Ubuntu 24.04 (chosen as default)",
-      "source": "User selection"
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "requirements.txt + setup.py",
       "value": [
         "Python >= 3.11",
         "psutil>=5.9.8",
@@ -58,20 +58,27 @@
         "setproctitle>=1.3.0",
         "confluent_kafka>=2.13.2",
         "transformers>=4.57.6"
-      ],
-      "source": "requirements.txt + setup.py"
+      ]
     },
     "build_commands": {
-      "value": "./build.sh (runs scripts/generate_proto.sh, then python -m pip wheel . --no-deps --use-pep517 -w dist)",
-      "source": "build.sh"
+      "source": "build.sh",
+      "value": "./build.sh (runs scripts/generate_proto.sh, then python -m pip wheel . --no-deps --use-pep517 -w dist)"
     },
     "ut_commands": {
-      "value": "tests/run_tests.sh (or pytest tests/)",
-      "source": "README.md + pytest.ini + tests/run_tests.sh"
+      "source": "README.md + pytest.ini + tests/run_tests.sh",
+      "value": "tests/run_tests.sh (or pytest tests/)"
     },
     "sample_commands": {
-      "value": "examples/ requires NPU hardware and K8s cluster (Atlas 800I A2/A3 servers, Ascend NPU drivers, MindCluster components)",
-      "source": "docs/zh/user_guide/quick_start.md + docs/zh/user_guide/environment_preparation.md"
+      "source": "docs/zh/user_guide/quick_start.md + docs/zh/user_guide/environment_preparation.md",
+      "value": "examples/ requires NPU hardware and K8s cluster (Atlas 800I A2/A3 servers, Ascend NPU drivers, MindCluster components)"
+    },
+    "build_entry": {
+      "source": "build.sh",
+      "value": "./build.sh (runs scripts/generate_proto.sh, then python -m pip wheel . --no-deps --use-pep517 -w dist)"
+    },
+    "ut_entry": {
+      "source": "README.md + pytest.ini + tests/run_tests.sh",
+      "value": "tests/run_tests.sh (or pytest tests/)"
     }
   },
   "execution_log": [
@@ -285,42 +292,26 @@
   "final_results": {
     "build": {
       "status": "success",
+      "duration_seconds": 0,
       "artifacts": [
         {
           "name": "motor-0.1.0-py3-none-any.whl",
           "path": "/workspace/dist/motor-0.1.0-py3-none-any.whl",
           "size": "496K"
         }
-      ],
-      "protobuf_files_generated": [
-        "motor/common/etcd/proto/auth_pb2.py",
-        "motor/common/etcd/proto/auth_pb2_grpc.py",
-        "motor/common/etcd/proto/kv_pb2.py",
-        "motor/common/etcd/proto/kv_pb2_grpc.py",
-        "motor/common/etcd/proto/rpc_pb2.py",
-        "motor/common/etcd/proto/rpc_pb2_grpc.py"
       ]
     },
     "ut": {
       "status": "success",
+      "duration_seconds": 56.22,
       "total": 1035,
       "passed": 1035,
       "failed": 0,
-      "errors": 0,
-      "skipped": 0,
-      "execution_time_seconds": 56.22,
-      "test_modules": [
-        "tests/common/",
-        "tests/controller/",
-        "tests/coordinator/",
-        "tests/engine_server/",
-        "tests/node_manager/"
-      ],
       "failures": []
     },
     "sample": {
-      "status": "not_applicable",
-      "reason": "Examples require Ascend NPU hardware (Atlas 800I A2/A3 servers with NPU drivers) and K8s cluster with MindCluster components (Ascend Docker Runtime, Ascend Device Plugin, Volcano, Ascend Operator). These cannot be emulated in a standard Docker container.",
+      "status": "not_run",
+      "duration_seconds": 0,
       "results": []
     }
   },
@@ -334,29 +325,36 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-10T17:03:00",
       "problem": "Docker Hub pull timeout",
       "solution": "Used locally cached Ubuntu 24.04 image (docker.1ms.run/library/ubuntu:24.04)",
       "source": "Local Docker image cache"
     },
     {
+      "timestamp": "2026-05-10T17:03:00",
       "problem": "pip install from default PyPI index was very slow/timed out from this network location",
       "solution": "Configured Aliyun pip mirror (https://mirrors.aliyun.com/pypi/simple/) which resolved packages at 2-7 MB/s",
       "source": "Network conditions in China"
     },
     {
+      "timestamp": "2026-05-10T17:03:00",
       "problem": "Initial pip install hung with zombie pip processes",
       "solution": "Killed stuck processes, recreated venv, upgraded pip to latest version, installed packages in batches",
       "source": "Manual troubleshooting"
     },
     {
+      "timestamp": "2026-05-10T17:03:00",
       "problem": "tokenizers package download timeout during transformers installation",
       "solution": "pip auto-retried and completed the download on second attempt",
       "source": "pip built-in retry mechanism"
     },
     {
+      "timestamp": "2026-05-10T17:03:00",
       "problem": "Examples/samples cannot be run without NPU hardware and K8s cluster",
       "solution": "Noted as not_applicable - this is a deployment-focused project that requires specific hardware",
       "source": "docs/zh/user_guide/environment_preparation.md - requires npu-smi, kubectl, Ascend Docker Runtime, MindCluster components"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

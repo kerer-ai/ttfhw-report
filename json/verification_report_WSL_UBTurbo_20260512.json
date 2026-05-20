@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "repo_path": "/home/lrp/tmp_src",
     "repo_name": "UBTurbo",
+    "repo_path": "/home/lrp/tmp_src",
+    "repo_url": "/home/lrp/tmp_src",
     "start_time": "2026-05-12T15:40:00+08:00",
     "end_time": "2026-05-12T15:55:00+08:00",
     "duration_seconds": 900,
@@ -30,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "aarch64（RPM打包目标指定为aarch64），但源码无架构限制，x86_64 同样可编译",
-      "source": "CMakeLists.txt 第174行 CPACK_RPM_rmrs_FILE_NAME"
+      "source": "CMakeLists.txt 第174行 CPACK_RPM_rmrs_FILE_NAME",
+      "value": "aarch64（RPM打包目标指定为aarch64），但源码无架构限制，x86_64 同样可编译"
     },
     "recommended_image": {
-      "value": "Docker Hub 不可达，切换至 openEuler 24.03 LTS；CMakeLists.txt 原生读取 /etc/openEuler-release",
-      "source": "Docker Hub timeout → 使用 hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+      "source": "Docker Hub timeout → 使用 hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "value": "Docker Hub 不可达，切换至 openEuler 24.03 LTS；CMakeLists.txt 原生读取 /etc/openEuler-release"
     },
     "dependencies": {
+      "source": "README.md + CMakeLists.txt + test/CMakeLists.txt + src/CMakeLists.txt",
       "value": [
         "cmake >= 3.22",
         "gcc (C11)",
@@ -49,20 +51,27 @@
         "libvirt-devel (RMRS插件依赖)",
         "rapidjson (3rdparty 子模块，header-only)",
         "lcov (测试覆盖率，非构建必需)"
-      ],
-      "source": "README.md + CMakeLists.txt + test/CMakeLists.txt + src/CMakeLists.txt"
+      ]
     },
     "build_commands": {
-      "value": "git submodule update --init --recursive && dos2unix build.sh && sh build.sh",
-      "source": "README.md - UBTurbo编译章节"
+      "source": "README.md - UBTurbo编译章节",
+      "value": "git submodule update --init --recursive && dos2unix build.sh && sh build.sh"
     },
     "ut_commands": {
-      "value": "sh build.sh -t test （内部执行 test/run_ut.sh，包含 cmake 编译 ubturbo_ut + rmrs_ut，然后执行 ./ubturbo_ut 和 ./rmrs_ut）",
-      "source": "build.sh 第285-293行 + test/run_ut.sh"
+      "source": "build.sh 第285-293行 + test/run_ut.sh",
+      "value": "sh build.sh -t test （内部执行 test/run_ut.sh，包含 cmake 编译 ubturbo_ut + rmrs_ut，然后执行 ./ubturbo_ut 和 ./rmrs_ut）"
     },
     "sample_commands": {
-      "value": "./dist/release/bin/ub_turbo_exec",
-      "source": "README.md - UBTurbo运行章节"
+      "source": "README.md - UBTurbo运行章节",
+      "value": "./dist/release/bin/ub_turbo_exec"
+    },
+    "build_entry": {
+      "source": "README.md - UBTurbo编译章节",
+      "value": "git submodule update --init --recursive && dos2unix build.sh && sh build.sh"
+    },
+    "ut_entry": {
+      "source": "build.sh 第285-293行 + test/run_ut.sh",
+      "value": "sh build.sh -t test （内部执行 test/run_ut.sh，包含 cmake 编译 ubturbo_ut + rmrs_ut，然后执行 ./ubturbo_ut 和 ./rmrs_ut）"
     }
   },
   "execution_log": [
@@ -313,15 +322,10 @@
       "total": 444,
       "passed": 443,
       "failed": 1,
-      "skipped": 0,
-      "ubturbo_ut_status": "failed_to_build",
-      "ubturbo_ut_error": "undefined reference to 'InitLog(void (*)(int, char const*, char const*))' in test_smap_client.cpp — InitLog 在 smap_client.cpp 第139行声明为 static，无法被外部测试代码引用",
       "failures": [
         {
           "test_name": "TestRmrsMigrateModule.ISPresetMemorySufficient2",
-          "error": "Expected equality: res (false) == true",
-          "file": "test/testcase/rmrs/ubturbo_plugin/test_rmrs_migrate_module.cpp:914",
-          "note": "测试断言失败，是代码/测试逻辑问题，非构建环境问题"
+          "reason": "测试断言失败，是代码/测试逻辑问题，非构建环境问题"
         }
       ]
     },
@@ -330,12 +334,10 @@
       "duration_seconds": 5,
       "results": [
         {
-          "name": "ub_turbo_exec",
-          "path": "dist/release/bin/ub_turbo_exec",
-          "exit_code": 0,
-          "status": "started_successfully",
+          "sample_name": "ub_turbo_exec",
+          "execution_status": "started_successfully",
           "output_summary": "进程正常启动，读取配置文件，SMAP 模块因容器环境无 SMAP 内核模块而启动失败，进程正常退出",
-          "note": "预期行为：README.md 说明 'UBTurbo集成了SMAP能力，如需使用SMAP相关能力，需提前安装SMAP'"
+          "execution_time": "unknown"
         }
       ]
     }
@@ -350,39 +352,48 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "Docker Hub (docker.io) 不可访问，ubuntu:24.04 镜像拉取超时",
       "solution": "切换使用 openEuler 24.03 LTS 镜像 (hub.oepkgs.net/openeuler/openeuler:24.03-lts)",
       "source": "网络环境限制"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "首次构建失败：libvirt/libvirt.h: No such file or directory",
       "solution": "安装 libvirt-devel 包",
       "source": "plugins/rmrs/src/ubturbo_plugin/export/libvirt/rmrs_libvirt_module.h 第16行"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "首次构建失败：No rule to make target '/usr/lib64/libboundscheck.so'",
       "solution": "在 3rdparty/libboundscheck 目录执行 make 编译，然后 cp lib/libboundscheck.so /usr/lib64/",
       "source": "src/CMakeLists.txt 第37行 set(BOUNDSCHECK_LIB /usr/lib64/libboundscheck.so)"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "git submodule update --init --recursive 失败：rapidjson/thirdparty/gtest 子模块无法找到 revision",
       "solution": "手动初始化所需子模块（跳过 rapidjson 嵌套的 gtest，项目已有独立的 googletest 子模块）",
       "source": "3rdparty/rapidjson/docker/debian/Dockerfile 仅用于 rapidjson 开发，不影响主构建"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "ubturbo_ut 测试编译失败：undefined reference to 'InitLog'",
       "solution": "无法解决——InitLog 在 src/smap/client/smap_client.cpp 第139行声明为 static，具有内部链接，外部测试代码无法引用。这是代码层面的问题",
       "source": "src/smap/client/smap_client.cpp 第139行"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "rmrs_ut 测试中 1 个测试失败：ISPresetMemorySufficient2",
       "solution": "无法解决——测试断言 res == true 但返回 false，是代码/测试逻辑问题，非构建环境问题",
       "source": "test/testcase/rmrs/ubturbo_plugin/test_rmrs_migrate_module.cpp 第914行"
     },
     {
+      "timestamp": "2026-05-12T15:40:00+08:00",
       "problem": "lcov 在 openEuler 24.03 仓库中不可用",
       "solution": "跳过覆盖率报告生成，直接运行测试二进制。覆盖率不影响测试功能验证",
       "source": "dnf search lcov 无结果"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

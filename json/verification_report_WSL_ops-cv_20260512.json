@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "repo_path": "https://gitcode.com/cann/ops-cv.git",
     "repo_name": "ops-cv",
+    "repo_path": "https://gitcode.com/cann/ops-cv.git",
+    "repo_url": "https://gitcode.com/cann/ops-cv.git",
     "start_time": "2026-05-12T12:30:00",
     "end_time": "2026-05-12T12:52:00",
     "duration_seconds": 1320,
@@ -30,18 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64",
-      "source": "文档未明确指定架构要求，默认为x86_64"
+      "source": "文档未明确指定架构要求，默认为x86_64",
+      "value": "x86_64"
     },
     "recommended_image": {
-      "value": "无明确信息 → 默认 Ubuntu 24.04",
-      "source": "未找到Dockerfile或系统推荐信息"
-    },
-    "cann_toolkit_url": {
-      "value": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/",
-      "source": "docs/zh/install/quick_install.md - 场景1章节"
+      "source": "未找到Dockerfile或系统推荐信息",
+      "value": "无明确信息 → 默认 Ubuntu 24.04"
     },
     "dependencies": {
+      "source": "install_deps.sh + requirements.txt",
       "value": [
         "python >= 3.7.0",
         "gcc >= 7.3.0",
@@ -60,24 +58,27 @@
         "decorator",
         "sympy",
         "attrs"
-      ],
-      "source": "install_deps.sh + requirements.txt"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg --soc=ascend910b -j16",
-      "source": "QUICKSTART.md - 编译AddExample算子章节"
+      "source": "QUICKSTART.md - 编译AddExample算子章节",
+      "value": "bash build.sh --pkg --soc=ascend910b -j16"
     },
     "ut_commands": {
-      "value": "cd build/tests/ut/op_host && export BUILD_PATH=/workspace/build && ./cv_op_host_ut",
-      "source": "文档未明确列出UT命令，推导自构建产物和源码分析"
+      "source": "文档未明确列出UT命令，推导自构建产物和源码分析",
+      "value": "cd build/tests/ut/op_host && export BUILD_PATH=/workspace/build && ./cv_op_host_ut"
     },
     "sample_commands": {
-      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom --simulator --soc=ascend950",
-      "source": "QUICKSTART.md - 快速验证章节"
+      "source": "QUICKSTART.md - 快速验证章节",
+      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom --simulator --soc=ascend950"
     },
-    "runtime_dependencies": {
-      "value": "运行样例需要CANN ops包（运行态依赖），编译态仅需toolkit包",
-      "source": "docs/zh/install/quick_install.md - 编译态vs运行态说明"
+    "build_entry": {
+      "source": "QUICKSTART.md - 编译AddExample算子章节",
+      "value": "bash build.sh --pkg --soc=ascend910b -j16"
+    },
+    "ut_entry": {
+      "source": "文档未明确列出UT命令，推导自构建产物和源码分析",
+      "value": "cd build/tests/ut/op_host && export BUILD_PATH=/workspace/build && ./cv_op_host_ut"
     }
   },
   "execution_log": [
@@ -246,10 +247,10 @@
       "duration_seconds": 0,
       "results": [
         {
-          "name": "add_example",
-          "status": "failed",
-          "error": "样例编译链接失败，缺少运行态依赖库（libes_math.so, mmRDLockUnLock等），需要完整CANN ops包环境",
-          "note": "编译态环境（仅toolkit包）无法运行样例，运行样例需要运行态环境（驱动固件+CANN ops包）"
+          "sample_name": "add_example",
+          "execution_status": "failed",
+          "output_summary": "编译态环境（仅toolkit包）无法运行样例，运行样例需要运行态环境（驱动固件+CANN ops包）",
+          "execution_time": "unknown"
         }
       ]
     }
@@ -262,24 +263,30 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T12:30:00",
       "problem": "cmake无法解压json包：Failed to unzip /workspace/build/third_party/pkg/include.zip",
       "solution": "安装unzip包：apt-get install -y unzip",
       "source": "cmake/third_party/json.cmake错误信息"
     },
     {
+      "timestamp": "2026-05-12T12:30:00",
       "problem": "UT测试段错误：Segmentation fault，getenv BUILD_PATH failed",
       "solution": "设置环境变量：export BUILD_PATH=/workspace/build",
       "source": "tests/ut/op_host/test_op_host_main.cpp源码分析"
     },
     {
+      "timestamp": "2026-05-12T12:30:00",
       "problem": "算子包安装失败：缺少libes_math.so运行态依赖",
       "solution": "使用--force参数跳过验证继续安装（仅用于编译态验证）",
       "source": "安装脚本提示信息"
     },
     {
+      "timestamp": "2026-05-12T12:30:00",
       "problem": "样例编译链接失败：大量undefined reference错误",
       "solution": "无法解决，需要完整运行态环境（CANN ops包+驱动固件）",
       "source": "链接器错误信息，文档说明编译态vs运行态区别"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

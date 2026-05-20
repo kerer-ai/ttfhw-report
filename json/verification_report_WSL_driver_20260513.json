@@ -1,7 +1,8 @@
 {
   "metadata": {
-    "repo_path": "/home/wenshun/driver2/tmp_src",
     "repo_name": "driver",
+    "repo_path": "/home/wenshun/driver2/tmp_src",
+    "repo_url": "/home/wenshun/driver2/tmp_src",
     "start_time": "2026-05-13T03:20:00",
     "end_time": "2026-05-13T03:35:00",
     "duration_seconds": 900,
@@ -30,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64",
-      "source": "docs/zh/QUICKSTART.md - 支持x86_64与aarch64架构"
+      "source": "docs/zh/QUICKSTART.md - 支持x86_64与aarch64架构",
+      "value": "x86_64, aarch64"
     },
     "recommended_image": {
-      "value": "文档推荐Ubuntu和openEuler",
-      "source": "docs/zh/QUICKSTART.md - 环境准备章节"
+      "source": "docs/zh/QUICKSTART.md - 环境准备章节",
+      "value": "文档推荐Ubuntu和openEuler"
     },
     "dependencies": {
+      "source": "docs/zh/QUICKSTART.md - 编译环境准备章节",
       "value": [
         "gcc",
         "g++",
@@ -54,20 +56,27 @@
         "elfutils",
         "libelf-dev",
         "googletest (可选，仅UT测试时依赖)"
-      ],
-      "source": "docs/zh/QUICKSTART.md - 编译环境准备章节"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)",
-      "source": "build.sh + docs/zh/QUICKSTART.md"
+      "source": "build.sh + docs/zh/QUICKSTART.md",
+      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)"
     },
     "ut_commands": {
-      "value": "cd test && bash run_test.sh -t",
-      "source": "test/run_test.sh"
+      "source": "test/run_test.sh",
+      "value": "cd test && bash run_test.sh -t"
     },
     "sample_commands": {
-      "value": "需要实际NPU硬件和驱动安装后执行: cd examples/dcmi/dcmi/ && bash run.sh <module> <sub_dir_index>",
-      "source": "examples/README.md"
+      "source": "examples/README.md",
+      "value": "需要实际NPU硬件和驱动安装后执行: cd examples/dcmi/dcmi/ && bash run.sh <module> <sub_dir_index>"
+    },
+    "build_entry": {
+      "source": "build.sh + docs/zh/QUICKSTART.md",
+      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)"
+    },
+    "ut_entry": {
+      "source": "test/run_test.sh",
+      "value": "cd test && bash run_test.sh -t"
     }
   },
   "execution_log": [
@@ -192,8 +201,6 @@
     "build": {
       "status": "success",
       "duration_seconds": 141,
-      "build_mode": "demo",
-      "soc_version": "ascend950",
       "artifacts": [
         {
           "name": "libascend_hal.so",
@@ -261,8 +268,7 @@
           "size": "N/A",
           "type": "kernel_module"
         }
-      ],
-      "artifact_count": 30
+      ]
     },
     "ut": {
       "status": "success",
@@ -270,13 +276,11 @@
       "total": 1,
       "passed": 1,
       "failed": 0,
-      "failures": [],
-      "output_summary": "[UT] Testcase initialize success. [UT] Testcase run start... [UT] Testcase run success."
+      "failures": []
     },
     "sample": {
-      "status": "not_executed",
+      "status": "not_run",
       "duration_seconds": 0,
-      "reason": "样例需要实际NPU硬件和驱动安装，无法在容器环境中执行",
       "results": []
     }
   },
@@ -287,11 +291,13 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-13T03:20:00",
       "problem": "WSL环境内核头文件不匹配：容器中找不到 /lib/modules/6.6.114.1-microsoft-standard-WSL2/build",
       "solution": "安装 generic 内核头文件并创建符号链接: ln -s /usr/src/linux-headers-6.8.0-111-generic /lib/modules/6.6.114.1-microsoft-standard-WSL2/build",
       "source": "WSL容器环境适配"
     }
   ],
+  "session_export_file": "unknown",
   "conclusion": {
     "overall_status": "success",
     "summary": "Driver仓库在Ubuntu 24.04容器环境中构建和单元测试均成功完成。构建生成了30个产物文件，包括用户态动态库和内核模块。单元测试通过。样例需要实际NPU硬件支持，无法在纯容器环境中执行。",
@@ -300,5 +306,6 @@
       "WSL环境下内核模块编译需要创建内核头文件软链接",
       "建议文档中增加WSL开发环境的特殊说明"
     ]
-  }
+  },
+  "verification_conclusion": ""
 }

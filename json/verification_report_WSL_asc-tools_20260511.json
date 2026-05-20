@@ -1,11 +1,12 @@
 {
   "metadata": {
+    "repo_name": "asc-tools",
     "repo_path": "https://gitcode.com/cann/asc-tools.git",
+    "repo_url": "https://gitcode.com/cann/asc-tools.git",
     "start_time": "2026-05-11T18:55:00",
     "end_time": "2026-05-11T19:10:00",
     "duration_seconds": 900,
-    "total_steps": 10,
-    "cann_version": "9.0.0"
+    "total_steps": 10
   },
   "machine_spec": {
     "host_machine": {
@@ -30,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64 / aarch64",
-      "source": "docs/00_quick_start.md"
+      "source": "docs/00_quick_start.md",
+      "value": "x86_64 / aarch64"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "docs/00_quick_start.md - 安装依赖章节",
       "value": [
         "python >= 3.7.0",
         "gcc >= 7.3.0 / g++ >= 7.3.0",
@@ -46,20 +52,27 @@
         "coverage >= 4.5.4（UT依赖）",
         "googletest >= 1.11.0（UT依赖）",
         "lcov >= 1.13（覆盖率依赖）"
-      ],
-      "source": "docs/00_quick_start.md - 安装依赖章节"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg -p <CANN_PATH>",
-      "source": "docs/00_quick_start.md - 编译安装章节"
+      "source": "docs/00_quick_start.md - 编译安装章节",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
     },
     "ut_commands": {
-      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*",
-      "source": "docs/00_quick_start.md - UT测试章节"
+      "source": "docs/00_quick_start.md - UT测试章节",
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
     },
-    "cpudebug_download_url": {
-      "value": "https://container-obsfs-filesystem.obs.cn-north-4.myhuaweicloud.com/package/cann/asc-toolkit-dev/version_compile/master/202603/20260325/ubuntu_x86/cann-asc-tools-cpudebug-deps-lib_release_9.0.0_linux-x86_64.tar.gz",
-      "source": "docs/00_quick_start.md + cmake/third_party/cpudebug.cmake"
+    "sample_commands": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "build_entry": {
+      "source": "docs/00_quick_start.md - 编译安装章节",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_entry": {
+      "source": "docs/00_quick_start.md - UT测试章节",
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
     }
   },
   "execution_log": [
@@ -254,8 +267,7 @@
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": [],
-      "failure_reason": "样例运行需要NPU设备"
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -277,5 +289,6 @@
       "source": "tests/CMakeLists.txt第25行if语句需要TEST_MOD变量"
     }
   ],
-  "session_export_file": "verification_session_WSL_asc-tools_20260511.md"
+  "session_export_file": "verification_session_WSL_asc-tools_20260511.md",
+  "verification_conclusion": ""
 }

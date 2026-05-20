@@ -1,11 +1,12 @@
 {
   "metadata": {
+    "repo_name": "asc-devkit",
     "repo_path": "https://gitcode.com/cann/asc-devkit.git",
+    "repo_url": "https://gitcode.com/cann/asc-devkit.git",
     "start_time": "2026-05-11T17:24:00",
     "end_time": "2026-05-11T18:50:00",
     "duration_seconds": 8160,
-    "total_steps": 12,
-    "cann_version": "9.0.0"
+    "total_steps": 12
   },
   "machine_spec": {
     "host_machine": {
@@ -30,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64 / aarch64（文档支持多架构）",
-      "source": "docs/quick_start.md + README.md - 支持Atlas A2/A3系列产品和Ascend 950PR"
+      "source": "docs/quick_start.md + README.md - 支持Atlas A2/A3系列产品和Ascend 950PR",
+      "value": "x86_64 / aarch64（文档支持多架构）"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "docs/quick_start.md - 依赖检查章节 + cmake/fetch_cann_cmake.cmake + CMakeLists.txt",
       "value": [
         "python >= 3.9.0",
         "gcc >= 7.3.0 / g++ >= 7.3.0（要求gcc与g++版本一致）",
@@ -43,28 +49,27 @@
         "git（构建系统FetchContent需要）",
         "pytest >= 8.0.0（UT测试需要）",
         "coverage >= 4.5.4（覆盖率测试需要）"
-      ],
-      "source": "docs/quick_start.md - 依赖检查章节 + cmake/fetch_cann_cmake.cmake + CMakeLists.txt"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg -p <CANN_PATH>",
-      "source": "docs/quick_start.md - 编译安装章节 + build.sh"
+      "source": "docs/quick_start.md - 编译安装章节 + build.sh",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
     },
     "ut_commands": {
-      "value": "bash build.sh --adv_test -p <CANN_PATH> 或 cmake -B build -DENABLE_TEST=ON && make <test_target>",
-      "source": "docs/quick_start.md - UT验证章节"
+      "source": "docs/quick_start.md - UT验证章节",
+      "value": "bash build.sh --adv_test -p <CANN_PATH> 或 cmake -B build -DENABLE_TEST=ON && make <test_target>"
     },
     "sample_commands": {
-      "value": "examples目录下算子样例，需通过CMake构建并运行（需NPU设备或仿真环境）",
-      "source": "examples/README.md"
+      "source": "examples/README.md",
+      "value": "examples目录下算子样例，需通过CMake构建并运行（需NPU设备或仿真环境）"
     },
-    "cann_download_urls": {
-      "value": [
-        "CANN商用/社区版: https://www.hiascend.com/cann/download",
-        "CANN master: https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/",
-        "CANN master toolkit x86_64: https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/Ascend-cann-toolkit_9.0.0_linux-x86_64.run"
-      ],
-      "source": "docs/quick_start.md - 下载安装CANN包章节"
+    "build_entry": {
+      "source": "docs/quick_start.md - 编译安装章节 + build.sh",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_entry": {
+      "source": "docs/quick_start.md - UT验证章节",
+      "value": "bash build.sh --adv_test -p <CANN_PATH> 或 cmake -B build -DENABLE_TEST=ON && make <test_target>"
     }
   },
   "execution_log": [
@@ -289,10 +294,6 @@
           "path": "build/impl/aicpu_api/libaicpu_api.a",
           "size": "3.9 KB"
         }
-      ],
-      "warnings": [
-        "runtime版本需要9.1但实际是9.0.0",
-        "metadef版本需要9.1但实际是9.0.0"
       ]
     },
     "ut": {
@@ -306,8 +307,7 @@
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": [],
-      "failure_reason": "样例运行需要NPU设备或仿真环境，当前环境无NPU设备"
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -335,5 +335,6 @@
       "source": "Ubuntu 24.04 Python 3.12的外部包管理限制"
     }
   ],
-  "session_export_file": "verification_session_WSL_asc-devkit_20260511.md"
+  "session_export_file": "verification_session_WSL_asc-devkit_20260511.md",
+  "verification_conclusion": ""
 }

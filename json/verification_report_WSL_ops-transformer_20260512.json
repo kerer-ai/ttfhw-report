@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_path": "https://gitcode.com/cann/ops-transformer.git",
     "repo_name": "ops-transformer",
+    "repo_path": "https://gitcode.com/cann/ops-transformer.git",
+    "repo_url": "https://gitcode.com/cann/ops-transformer.git",
     "start_time": "2026-05-12T12:35:00Z",
     "end_time": "2026-05-12T14:51:00Z",
     "duration_seconds": 8160,
-    "total_steps": 6,
-    "verification_type": "WSL Docker Container"
+    "total_steps": 6
   },
   "machine_spec": {
     "host_machine": {
@@ -31,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64 (Atlas A2/A3 series products)",
-      "source": "README.md - Version support section, docs/zh/install/quick_install.md"
+      "source": "README.md - Version support section, docs/zh/install/quick_install.md",
+      "value": "x86_64, aarch64 (Atlas A2/A3 series products)"
     },
     "recommended_image": {
-      "value": "Docker image available: swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10-ops → Ubuntu base",
-      "source": "docs/zh/install/quick_install.md - Docker deployment section"
+      "source": "docs/zh/install/quick_install.md - Docker deployment section",
+      "value": "Docker image available: swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10-ops → Ubuntu base"
     },
     "dependencies": {
+      "source": "README.md + docs/zh/install/quick_install.md + requirements.txt + install_deps.sh",
       "value": [
         "CANN toolkit package (Ascend-cann-toolkit)",
         "python >= 3.7.0 (建议版本 <= 3.10)",
@@ -60,20 +61,27 @@
         "protobuf",
         "psutil",
         "setuptools>=59.0.0"
-      ],
-      "source": "README.md + docs/zh/install/quick_install.md + requirements.txt + install_deps.sh"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>",
-      "source": "docs/zh/install/compile.md - Custom operator package section"
+      "source": "docs/zh/install/compile.md - Custom operator package section",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>"
     },
     "ut_commands": {
-      "value": "bash build.sh -u --ophost --ops=<operator>",
-      "source": "docs/zh/install/compile.md - Local verification section"
+      "source": "docs/zh/install/compile.md - Local verification section",
+      "value": "bash build.sh -u --ophost --ops=<operator>"
     },
     "sample_commands": {
-      "value": "Sample execution requires NPU hardware and CANN ops package",
-      "source": "docs/zh/install/quick_install.md + examples/add_example/README.md"
+      "source": "docs/zh/install/quick_install.md + examples/add_example/README.md",
+      "value": "Sample execution requires NPU hardware and CANN ops package"
+    },
+    "build_entry": {
+      "source": "docs/zh/install/compile.md - Custom operator package section",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>"
+    },
+    "ut_entry": {
+      "source": "docs/zh/install/compile.md - Local verification section",
+      "value": "bash build.sh -u --ophost --ops=<operator>"
     }
   },
   "execution_log": [
@@ -214,9 +222,7 @@
           "path": "/workspace/build_out/cann-ops-transformer-custom_linux-x86_64.run",
           "size": "100MB"
         }
-      ],
-      "operator_compiled": "flash_attention_score",
-      "soc_version": "ascend910b"
+      ]
     },
     "ut": {
       "status": "success",
@@ -224,25 +230,12 @@
       "total": 4,
       "passed": 4,
       "failed": 0,
-      "failures": [],
-      "test_suites": [
-        {
-          "name": "FlashAttentionScoreTiling",
-          "tests": 3,
-          "passed": 3
-        },
-        {
-          "name": "FlashAttentionScoreProto",
-          "tests": 1,
-          "passed": 1
-        }
-      ]
+      "failures": []
     },
     "sample": {
-      "status": "incomplete",
+      "status": "unknown",
       "duration_seconds": 0,
-      "results": [],
-      "reason": "Sample execution requires Ascend NPU hardware and CANN ops package (2.13GB). The runtime dependencies (driver, firmware, ops package) are not available in Docker container without NPU device mapping."
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -253,37 +246,36 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "ASCConfig.cmake not found during cmake configuration",
       "solution": "Downloaded and installed CANN toolkit package (Ascend-cann-toolkit_9.0.0_linux-x86_64.run, 1.3GB) from Huawei cloud mirror",
       "source": "docs/zh/install/quick_install.md mentions CANN toolkit installation requirement"
     },
     {
+      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Permission denied on .run file execution",
       "solution": "chmod +x /tmp/Ascend-cann-toolkit_9.0.0_linux-x86_64.run before running",
       "source": "Standard permission fix"
     },
     {
+      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "packaging Python module not found during build",
       "solution": "pip3 install packaging --break-system-packages",
       "source": "Build script dependency, not listed in requirements.txt"
     },
     {
+      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Build takes ~97 minutes to compile flash_attention_score operator",
       "solution": "This is expected due to kernel compilation for multiple tiling configurations using bisheng compiler",
       "source": "NPU kernel compilation is inherently time-consuming"
     },
     {
+      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Sample execution requires NPU hardware",
       "solution": "Cannot be resolved in Docker container without NPU device. Requires physical Ascend NPU or CANN Simulator",
       "source": "docs/zh/install/quick_install.md - runtime dependencies section"
     }
   ],
-  "summary": {
-    "build_success": true,
-    "ut_success": true,
-    "sample_success": false,
-    "sample_reason": "Requires Ascend NPU hardware",
-    "overall_status": "partial_success",
-    "notes": "ops-transformer repository successfully compiles the flash_attention_score operator and passes all unit tests. Sample execution requires physical Ascend NPU hardware or CANN Simulator which is not available in the Docker container environment. The verification demonstrates that the build and test infrastructure is functional for this CANN operator library."
-  }
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_path": "/mnt/d/code/ttfhw_3/ubs-virt/tmp_src/ubs-virt",
     "repo_name": "ubs-virt",
+    "repo_path": "/mnt/d/code/ttfhw_3/ubs-virt/tmp_src/ubs-virt",
+    "repo_url": "/mnt/d/code/ttfhw_3/ubs-virt/tmp_src/ubs-virt",
     "start_time": "2026-05-13T15:30:00",
     "end_time": "2026-05-13T15:45:00",
     "duration_seconds": 900,
-    "total_steps": 5,
-    "verification_env": "WSL openEuler-24.03 LTS"
+    "total_steps": 5
   },
   "machine_spec": {
     "host_machine": {
@@ -31,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64",
-      "source": "WSL host machine architecture"
+      "source": "WSL host machine architecture",
+      "value": "x86_64"
     },
     "recommended_image": {
-      "value": "Documentation recommends openEuler Linux",
-      "source": "virt-awaresched/docs/build_install/BUILD.md - '推荐在openEuler Linux (ARM64)下执行项目构建'"
+      "source": "virt-awaresched/docs/build_install/BUILD.md - '推荐在openEuler Linux (ARM64)下执行项目构建'",
+      "value": "Documentation recommends openEuler Linux"
     },
     "dependencies": {
+      "source": "ubs-virt.spec + virt-awaresched/docs/build_install/BUILD.md + vcann-rt/CMakeLists.txt",
       "value": [
         "gcc-c++",
         "gcc",
@@ -50,27 +51,41 @@
         "gtest",
         "mockcpp",
         "CANN NPU SDK (for vcann-rt)"
-      ],
-      "source": "ubs-virt.spec + virt-awaresched/docs/build_install/BUILD.md + vcann-rt/CMakeLists.txt"
+      ]
     },
     "build_commands": {
+      "source": "virt-awaresched/build.sh + ubs-virt-ovs/build/build.sh + ubs-virt-enpu/vcann-rt/make_build.sh",
       "value": {
         "virt-awaresched": "bash build.sh",
         "ubs-virt-ovs": "mkdir build && cd build && cmake .. && make -j14",
         "ubs-virt-enpu/vcann-rt": "Requires CANN NPU SDK (ASCEND_HOME_PATH)"
-      },
-      "source": "virt-awaresched/build.sh + ubs-virt-ovs/build/build.sh + ubs-virt-enpu/vcann-rt/make_build.sh"
+      }
     },
     "ut_commands": {
+      "source": "virt-awaresched/docs/test/TEST.md + ubs-virt-ovs/build/run_ut.sh",
       "value": {
         "virt-awaresched": "bash build.sh test",
         "ubs-virt-ovs": "cmake .. -DBUILD_TESTS=ON && make && ./test/virt_ut"
-      },
-      "source": "virt-awaresched/docs/test/TEST.md + ubs-virt-ovs/build/run_ut.sh"
+      }
     },
     "sample_commands": {
-      "value": "Build artifacts are executable binaries (vasctl, vas_daemon, ubs-virt-ovs)",
-      "source": "Component build outputs"
+      "source": "Component build outputs",
+      "value": "Build artifacts are executable binaries (vasctl, vas_daemon, ubs-virt-ovs)"
+    },
+    "build_entry": {
+      "source": "virt-awaresched/build.sh + ubs-virt-ovs/build/build.sh + ubs-virt-enpu/vcann-rt/make_build.sh",
+      "value": {
+        "virt-awaresched": "bash build.sh",
+        "ubs-virt-ovs": "mkdir build && cd build && cmake .. && make -j14",
+        "ubs-virt-enpu/vcann-rt": "Requires CANN NPU SDK (ASCEND_HOME_PATH)"
+      }
+    },
+    "ut_entry": {
+      "source": "virt-awaresched/docs/test/TEST.md + ubs-virt-ovs/build/run_ut.sh",
+      "value": {
+        "virt-awaresched": "bash build.sh test",
+        "ubs-virt-ovs": "cmake .. -DBUILD_TESTS=ON && make && ./test/virt_ut"
+      }
     }
   },
   "execution_log": [
@@ -172,13 +187,6 @@
     "build": {
       "status": "success",
       "duration_seconds": 128,
-      "components_built": [
-        "virt-awaresched",
-        "ubs-virt-ovs"
-      ],
-      "components_skipped": [
-        "ubs-virt-enpu/vcann-rt (requires CANN NPU SDK)"
-      ],
       "artifacts": [
         {
           "component": "virt-awaresched",
@@ -219,61 +227,46 @@
       ]
     },
     "ut": {
-      "status": "mostly_success",
+      "status": "partial_success",
       "duration_seconds": 282,
-      "components_tested": [
-        "virt-awaresched",
-        "ubs-virt-ovs"
-      ],
-      "total_tests": 267,
+      "total": 267,
       "passed": 263,
       "failed": 4,
-      "pass_rate": "98.5%",
       "failures": [
         {
-          "component": "virt-awaresched",
-          "test": "TestVasSecurityManager.testModifyEffectiveCapabilities",
+          "test_name": "unknown",
           "reason": "WSL environment does not fully support Linux capabilities operations that the test expects"
         },
         {
-          "component": "virt-awaresched",
-          "test": "TestVasSecurityManager.testClearCapabilities",
+          "test_name": "unknown",
           "reason": "WSL environment does not fully support Linux capabilities operations that the test expects"
         },
         {
-          "component": "ubs-virt-ovs",
-          "test": "TestLogger.RotateLogFile_SizeNotEnough",
+          "test_name": "unknown",
           "reason": "Likely WSL file system timestamp/permission issue affecting log rotation test"
         },
         {
-          "component": "ubs-virt-ovs",
-          "test": "TestLogger.RotateLogFile_NormalRotate",
+          "test_name": "unknown",
           "reason": "Likely WSL file system timestamp/permission issue affecting log rotation test"
-        }
-      ],
-      "component_results": [
-        {
-          "component": "virt-awaresched",
-          "total": 184,
-          "passed": 182,
-          "failed": 2,
-          "pass_rate": "98.9%"
-        },
-        {
-          "component": "ubs-virt-ovs",
-          "total": 83,
-          "passed": 81,
-          "failed": 2,
-          "pass_rate": "97.6%"
         }
       ]
     },
     "sample": {
-      "status": "artifacts_available",
+      "status": "unknown",
       "duration_seconds": 0,
       "results": [
-        "Build artifacts (vasctl, vas_daemon, ubs-virt-ovs) are executable binaries ready for deployment and testing",
-        "No additional sample programs found in the repository"
+        {
+          "sample_name": "unknown",
+          "execution_status": "unknown",
+          "output_summary": "",
+          "execution_time": "unknown"
+        },
+        {
+          "sample_name": "unknown",
+          "execution_status": "unknown",
+          "output_summary": "",
+          "execution_time": "unknown"
+        }
       ]
     }
   },
@@ -284,38 +277,36 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-13T15:30:00",
       "problem": "Docker openEuler image package repository SSL connection failed",
       "solution": "Switched to using WSL openEuler-24.03 distribution directly which had all build tools pre-installed",
       "source": "Environment adaptation"
     },
     {
+      "timestamp": "2026-05-13T15:30:00",
       "problem": "WSL file system clock skew warning during build",
       "solution": "Non-fatal warning, build completed successfully. This is a known WSL issue with Windows file system time synchronization.",
       "source": "WSL platform limitation"
     },
     {
+      "timestamp": "2026-05-13T15:30:00",
       "problem": "Linux capabilities tests fail in WSL environment",
       "solution": "Expected behavior - WSL does not implement full Linux capabilities subsystem. Tests would pass on native openEuler Linux.",
       "source": "WSL platform limitation"
     },
     {
+      "timestamp": "2026-05-13T15:30:00",
       "problem": "Log rotation tests fail in WSL environment",
       "solution": "Likely WSL file system timestamp/permission issue. Tests would pass on native openEuler Linux.",
       "source": "WSL platform limitation"
     },
     {
+      "timestamp": "2026-05-13T15:30:00",
       "problem": "ubs-virt-enpu/vcann-rt cannot be built without CANN NPU SDK",
       "solution": "Skipped from verification. This component requires special Ascend NPU hardware and software stack not available in general test environments.",
       "source": "Hardware/software dependency"
     }
   ],
-  "summary": {
-    "overall_status": "SUCCESS",
-    "conclusion": "The ubs-virt repository builds and tests successfully in WSL openEuler-24.03 LTS environment. Core components (virt-awaresched, ubs-virt-ovs) build cleanly with high unit test pass rates (98.5% overall). The 4 test failures are due to known WSL platform limitations (Linux capabilities, file system behavior), not code defects. The ubs-virt-enpu/vcann-rt component requires specialized NPU hardware/SDK not present in this environment.",
-    "recommendations": [
-      "Use native openEuler Linux for full capabilities support and 100% test pass rate",
-      "For ubs-virt-enpu/vcann-rt development, set up an environment with Ascend NPU hardware and CANN SDK installed",
-      "Consider adding a top-level build script to build all components in sequence"
-    ]
-  }
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

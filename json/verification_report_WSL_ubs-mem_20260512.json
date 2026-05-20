@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_path": "./tmp_src/ubs-mem",
     "repo_name": "ubs-mem",
+    "repo_path": "./tmp_src/ubs-mem",
+    "repo_url": "./tmp_src/ubs-mem",
     "start_time": "2026-05-12T03:10:00",
     "end_time": "2026-05-12T05:30:00",
     "duration_seconds": 8400,
-    "total_steps": 10,
-    "verification_tool": "ttfhw-verify-pro"
+    "total_steps": 10
   },
   "machine_spec": {
     "host_machine": {
@@ -31,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64 (openEuler 24.03 LTS SP3 or higher recommended)",
-      "source": "README.md - 环境要求章节"
+      "source": "README.md - 环境要求章节",
+      "value": "x86_64 (openEuler 24.03 LTS SP3 or higher recommended)"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "README.md + ubs-mem.spec (buildrequires) + 源码构建",
       "value": [
         "rpm-build",
         "cmake (>= 3.13)",
@@ -50,20 +55,27 @@
         "ubs-comm-devel (从源码构建 hcom)",
         "ubs-comm-lib (从源码构建 hcom)",
         "libasan (UT ASAN 构建所需)"
-      ],
-      "source": "README.md + ubs-mem.spec (buildrequires) + 源码构建"
+      ]
     },
     "build_commands": {
-      "value": "sh build.sh -t release [-p]",
-      "source": "README.md - 构建项目章节"
+      "source": "README.md - 构建项目章节",
+      "value": "sh build.sh -t release [-p]"
     },
     "ut_commands": {
-      "value": "cd test && sh run_dt.sh",
-      "source": "README.md - 开发者测试章节"
+      "source": "README.md - 开发者测试章节",
+      "value": "cd test && sh run_dt.sh"
     },
     "sample_commands": {
-      "value": "未在文档中找到样例执行命令",
-      "source": "README.md - 仅有安装部署外部链接，无本地样例"
+      "source": "README.md - 仅有安装部署外部链接，无本地样例",
+      "value": "未在文档中找到样例执行命令"
+    },
+    "build_entry": {
+      "source": "README.md - 构建项目章节",
+      "value": "sh build.sh -t release [-p]"
+    },
+    "ut_entry": {
+      "source": "README.md - 开发者测试章节",
+      "value": "cd test && sh run_dt.sh"
     }
   },
   "execution_log": [
@@ -245,28 +257,40 @@
   "final_results": {
     "build": {
       "status": "success",
-      "failure_reason": "",
       "duration_seconds": 120,
       "artifacts": [
-        "build/release/output/lib/libubsm_sdk.so",
-        "build/release/output/lib/libubsmd.so",
-        "build/release/output/bin/ubsmd"
+        {
+          "name": "build/release/output/lib/libubsm_sdk.so",
+          "path": "unknown",
+          "size": "unknown"
+        },
+        {
+          "name": "build/release/output/lib/libubsmd.so",
+          "path": "unknown",
+          "size": "unknown"
+        },
+        {
+          "name": "build/release/output/bin/ubsmd",
+          "path": "unknown",
+          "size": "unknown"
+        }
       ]
     },
     "ut": {
-      "status": "partial",
-      "failure_reason": "Test crash (SEGV) at UbsmemCreateRegionTest_LibNotInit_Test: HcomServiceImp::SetHeartBeatOptions dereferences null pointer in custom-built HCOM library. This is an environment limitation - HCOM was built from source without full UB hardware support.",
+      "status": "partial_success",
       "duration_seconds": 300,
       "total": 646,
       "passed": 645,
       "failed": 1,
       "failures": [
-        "UbsmemCreateRegionTest_LibNotInit_Test - SEGV in HcomServiceImp::SetHeartBeatOptions (ASAN detected)"
+        {
+          "test_name": "UbsmemCreateRegionTest_LibNotInit_Test - SEGV in HcomServiceImp::SetHeartBeatOptions (ASAN detected)",
+          "reason": "unknown"
+        }
       ]
     },
     "sample": {
-      "status": "skipped",
-      "failure_reason": "文档中未提供本地样例执行命令",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": []
     }
@@ -280,39 +304,48 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "关键依赖 ubs-comm-devel 缺失：提供了 hcom.h / hcom_service.h 等头文件，但不在标准 openEuler 24.03 LTS-SP2 仓库中",
       "solution": "从 Gitee (openeuler/ubs-comm) 获取源码，使用 cmake -DBUILD_WITH_RDMA=OFF -DBUILD_WITH_SHM=OFF -DBUILD_WITH_SOCK=ON -DBUILD_WITH_SERVICE=ON -DCPU_TYPE=x86_64 构建安装",
       "source": "Gitee 镜像源"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "原始仓库 repo.openeuler.org HTTPS 不可访问（SSL_ERROR_SYSCALL）",
       "solution": "已切换至 mirrors.huaweicloud.com 镜像",
       "source": "手动排查"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "hcom.h API 与 ubs-mem 不兼容：hcom_service.h 缺少 SetCtxStoreCapacity 纯虚方法",
       "solution": "在 hcom_service.h 的 SetQueuePrePostSize 方法后添加 virtual void SetCtxStoreCapacity(uint32_t ctxStoreCap) = 0;",
       "source": "ubs-mem 源码 mxm_com_engine.cpp:271 调用此方法"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "src/common/hcom_adapter 目录不存在（CMakeLists.txt 引用）",
       "solution": "创建空目录 src/common/hcom_adapter/",
       "source": "CMakeLists.txt 第26行"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "UT 编译失败：cannot find -lasan",
       "solution": "安装 libasan: dnf install -y libasan",
       "source": "DNF 包管理器"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "test/3rdparty/googletest 和 mockcpp 子模块为空（非 git clone 方式获取源码）",
       "solution": "使用 git submodule update --init --recursive --depth 1",
       "source": ".gitmodules + run_dt.sh"
     },
     {
+      "timestamp": "2026-05-12T03:10:00",
       "problem": "HcomServiceImp::SetHeartBeatOptions 空指针崩溃（UT 运行时）",
       "solution": "由于 HCOM 是在没有完整 UB 硬件仿真环境下从源码构建的，HcomServiceImp 内部状态不完整。此问题在完整硬件环境中不会出现。",
       "source": "ASAN backtrace - service_imp.cpp:1111"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

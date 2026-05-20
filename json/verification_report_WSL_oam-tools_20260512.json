@@ -1,12 +1,12 @@
 {
   "metadata": {
+    "repo_name": "oam-tools",
     "repo_path": "/mnt/d/ttfhw_0511/oam-tools/tmp_src",
     "repo_url": "https://gitcode.com/cann/oam-tools.git",
     "start_time": "2026-05-12T08:15:00",
     "end_time": "2026-05-12T10:20:00",
     "duration_seconds": 7500,
-    "total_steps": 6,
-    "repo_name": "cann/oam-tools"
+    "total_steps": 6
   },
   "machine_spec": {
     "host_machine": {
@@ -31,14 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64",
-      "source": "README.md - 系统要求章节"
+      "source": "README.md - 系统要求章节",
+      "value": "x86_64, aarch64"
     },
     "recommended_image": {
-      "value": "无明确Dockerfile FROM → 默认 Ubuntu 24.04",
-      "source": "docs/quick_install.md 提及 Ubuntu 22.04 Docker镜像"
+      "source": "docs/quick_install.md 提及 Ubuntu 22.04 Docker镜像",
+      "value": "无明确Dockerfile FROM → 默认 Ubuntu 24.04"
     },
     "dependencies": {
+      "source": "docs/quick_install.md + requirements.txt",
       "value": [
         "cmake >= 3.16.0",
         "gcc >= 7.3.0",
@@ -51,20 +52,27 @@
         "coverage >= 7.10.0 (UT)",
         "pytest-cov (UT)",
         "pytest-mock (UT)"
-      ],
-      "source": "docs/quick_install.md + requirements.txt"
+      ]
     },
     "build_commands": {
-      "value": "bash build.sh [-j<N>]",
-      "source": "README.md - 源码编译章节"
+      "source": "README.md - 源码编译章节",
+      "value": "bash build.sh [-j<N>]"
     },
     "ut_commands": {
-      "value": "bash build.sh -u [--component <name>] [--ut] [--st]",
-      "source": "README.md - 验证章节 + build.sh -h"
+      "source": "README.md - 验证章节 + build.sh -h",
+      "value": "bash build.sh -u [--component <name>] [--ut] [--st]"
     },
     "sample_commands": {
-      "value": "msprof --help (工具验证)",
-      "source": "构建产物验证"
+      "source": "构建产物验证",
+      "value": "msprof --help (工具验证)"
+    },
+    "build_entry": {
+      "source": "README.md - 源码编译章节",
+      "value": "bash build.sh [-j<N>]"
+    },
+    "ut_entry": {
+      "source": "README.md - 验证章节 + build.sh -h",
+      "value": "bash build.sh -u [--component <name>] [--ut] [--st]"
     }
   },
   "execution_log": [
@@ -200,7 +208,6 @@
       "total": 713,
       "passed": 713,
       "failed": 0,
-      "skipped": 76,
       "failures": []
     },
     "sample": {
@@ -208,9 +215,10 @@
       "duration_seconds": 5,
       "results": [
         {
-          "name": "msprof",
-          "status": "success",
-          "output": "Usage信息正常显示，帮助命令执行成功"
+          "sample_name": "msprof",
+          "execution_status": "success",
+          "output_summary": "Usage信息正常显示，帮助命令执行成功",
+          "execution_time": "unknown"
         }
       ]
     }
@@ -222,29 +230,36 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-12T08:15:00",
       "problem": "apt-get update网络超时",
       "solution": "切换到华为镜像源 mirrors.huaweicloud.com",
       "source": "容器网络环境限制"
     },
     {
+      "timestamp": "2026-05-12T08:15:00",
       "problem": "CANN安装需要Python 3.7-3.11，Ubuntu 24.04默认Python 3.12不兼容",
       "solution": "安装Python 3.11: add-apt-repository ppa:deadsnakes/ppa && apt-get install python3.11",
       "source": "init_env.sh错误提示"
     },
     {
+      "timestamp": "2026-05-12T08:15:00",
       "problem": "CMake找不到/usr/local/Ascend/cann/pkg_inc/mmpa",
       "solution": "创建符号链接: ln -sf /usr/local/Ascend/cann/x86_64-linux/include/mmpa /usr/local/Ascend/cann/pkg_inc/mmpa",
       "source": "CMakeLists.txt第36行 find_package(mmpa)"
     },
     {
+      "timestamp": "2026-05-12T08:15:00",
       "problem": "链接器找不到libascend_hal.so (架构不匹配)",
       "solution": "创建正确的符号链接指向x86_64版本: ln -sf $ASCEND_HOME_PATH/x86_64-linux/devlib/linux/x86_64/libascend_hal.so $ASCEND_HOME_PATH/devlib/libascend_hal.so",
       "source": "ld error: skipping incompatible library"
     },
     {
+      "timestamp": "2026-05-12T08:15:00",
       "problem": "ST测试(install/uninstall/upgrade)权限错误",
       "solution": "容器环境中以root运行时的权限检测误报，非代码bug",
       "source": "测试框架权限检测逻辑"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }

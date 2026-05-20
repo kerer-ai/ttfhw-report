@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_url": "https://gitcode.com/cann/pypto.git",
+    "repo_name": "pypto",
     "repo_path": "./tmp_src",
+    "repo_url": "https://gitcode.com/cann/pypto.git",
     "start_time": "2026-05-11T19:51:00",
     "end_time": "2026-05-11T20:30:00",
     "duration_seconds": 2340,
-    "total_steps": 7,
-    "verification_status": "success"
+    "total_steps": 7
   },
   "machine_spec": {
     "host_machine": {
@@ -31,10 +31,15 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "value": "x86_64, aarch64",
-      "source": "docs/install/prepare_environment.md - 环境准备章节"
+      "source": "docs/install/prepare_environment.md - 环境准备章节",
+      "value": "x86_64, aarch64"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
     },
     "dependencies": {
+      "source": "docs/install/prepare_environment.md + docs/install/build_and_install.md + python/requirements.txt",
       "value": [
         "cmake >= 3.16.3",
         "make",
@@ -54,20 +59,27 @@
         "psutil",
         "setproctitle",
         "torch (运行时依赖)"
-      ],
-      "source": "docs/install/prepare_environment.md + docs/install/build_and_install.md + python/requirements.txt"
+      ]
     },
     "build_commands": {
-      "value": "python3 -m pip install . --verbose",
-      "source": "docs/install/build_and_install.md - 常规安装章节"
+      "source": "docs/install/build_and_install.md - 常规安装章节",
+      "value": "python3 -m pip install . --verbose"
     },
     "ut_commands": {
-      "value": "python3 build_ci.py -u --backend cost_model",
-      "source": "build_ci.py --help + docs/install/build_and_install.md"
+      "source": "build_ci.py --help + docs/install/build_and_install.md",
+      "value": "python3 build_ci.py -u --backend cost_model"
     },
     "sample_commands": {
-      "value": "python3 hello_world.py --run_mode=sim",
-      "source": "docs/invocation/examples_invocation.md"
+      "source": "docs/invocation/examples_invocation.md",
+      "value": "python3 hello_world.py --run_mode=sim"
+    },
+    "build_entry": {
+      "source": "docs/install/build_and_install.md - 常规安装章节",
+      "value": "python3 -m pip install . --verbose"
+    },
+    "ut_entry": {
+      "source": "build_ci.py --help + docs/install/build_and_install.md",
+      "value": "python3 build_ci.py -u --backend cost_model"
     }
   },
   "execution_log": [
@@ -241,14 +253,7 @@
           "size": "2255704 bytes",
           "type": "shared_library"
         }
-      ],
-      "tool_versions": {
-        "cmake": "3.28.3",
-        "g++": "13.3.0",
-        "python": "3.12.3",
-        "setuptools": "68.1.2",
-        "pybind11": "3.0.4"
-      }
+      ]
     },
     "ut": {
       "status": "success",
@@ -256,35 +261,29 @@
       "total": 261,
       "passed": 258,
       "failed": 0,
-      "skipped": 3,
-      "failures": [],
-      "backend": "cost_model",
-      "pytest_version": "9.0.3"
+      "failures": []
     },
     "sample": {
       "status": "success",
       "duration_seconds": 110,
       "results": [
         {
-          "name": "hello_world",
-          "path": "examples/00_hello_world/hello_world.py",
-          "status": "passed",
-          "duration_seconds": 4,
-          "output_summary": "Hello world example passed, Output shape: torch.Size([1, 4, 1, 64])"
+          "sample_name": "hello_world",
+          "execution_status": "passed",
+          "output_summary": "Hello world example passed, Output shape: torch.Size([1, 4, 1, 64])",
+          "execution_time": "unknown"
         },
         {
-          "name": "basic_ops",
-          "path": "examples/01_beginner/basic/basic_ops.py",
-          "status": "passed",
-          "duration_seconds": 21,
-          "output_summary": "All 7 examples completed successfully (Tensor creation, Operations, Matrix multiplication, Reduction, Tiling, Transform, Permute)"
+          "sample_name": "basic_ops",
+          "execution_status": "passed",
+          "output_summary": "All 7 examples completed successfully (Tensor creation, Operations, Matrix multiplication, Reduction, Tiling, Transform, Permute)",
+          "execution_time": "unknown"
         },
         {
-          "name": "elementwise_ops",
-          "path": "examples/01_beginner/compute/elementwise_ops.py",
-          "status": "passed",
-          "duration_seconds": 85,
-          "output_summary": "All element-wise tests passed (abs, add, sub, mul, div, pow, exp, log, etc.)"
+          "sample_name": "elementwise_ops",
+          "execution_status": "passed",
+          "output_summary": "All element-wise tests passed (abs, add, sub, mul, div, pow, exp, log, etc.)",
+          "execution_time": "unknown"
         }
       ]
     }
@@ -292,22 +291,24 @@
   "documentation_gaps": [],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-11T19:51:00",
       "problem": "PyTorch 未在文档依赖中明确列出为运行时必需依赖",
       "solution": "通过 pip 安装 torch CPU 版本",
-      "source": "运行时错误信息: ModuleNotFoundError: No module named 'torch'",
-      "severity": "medium"
+      "source": "运行时错误信息: ModuleNotFoundError: No module named 'torch'"
     },
     {
+      "timestamp": "2026-05-11T19:51:00",
       "problem": "pip 安装时需要 --break-system-packages 参数",
       "solution": "使用 pip3 install --break-system-packages 参数安装",
-      "source": "Ubuntu 24.04 PEP 668 外部管理环境限制",
-      "severity": "low"
+      "source": "Ubuntu 24.04 PEP 668 外部管理环境限制"
     },
     {
+      "timestamp": "2026-05-11T19:51:00",
       "problem": "pypto 模块没有 __version__ 属性",
       "solution": "已验证模块可正常导入和使用",
-      "source": "运行时检查",
-      "severity": "low"
+      "source": "运行时检查"
     }
-  ]
+  ],
+  "session_export_file": "unknown",
+  "verification_conclusion": ""
 }
