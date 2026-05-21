@@ -1,11 +1,29 @@
 ---
 name: ttfhw-report-normalizer
-description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归一化为统一模板结构并放入 json/ 目录，然后清理重建项目。当 json-org/ 中有新增的原始 JSON 文件需要归一化、仪表盘缺少最新报告数据、或有新的验证报告到达时，应使用此技能。
+description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归一化为统一模板结构并放入 json/ 目录，然后清理重建项目。支持两种模式：不带参数全量比对 json-org/ 和 json/ 目录，自动识别新增文件并归一化；传递文件名则仅归一化指定文件。当 json-org/ 中有新增的原始 JSON 文件需要归一化、或需要处理特定验证报告时，应使用此技能。
 ---
 
 # TTFHW 报告 JSON 归一化
 
-将 `json-org/` 中新增的原始验证报告，逐个阅读理解后，归一化为 `assets/report_template.json` 定义的统一结构，放入 `json/` 目录，最后清理重建项目。
+将 `json-org/` 中的原始验证报告归一化为统一模板结构，放入 `json/` 目录，最后清理重建项目。
+
+## 调用方式
+
+### 模式一：全量比对（不带参数）
+
+```
+/ttfhw-report-normalizer
+```
+
+对比 `json-org/`（原始）和 `json/`（归一化）两个目录的全部文件，通过仓库标识匹配自动识别新增的原始文件，逐个归一化后放入 `json/`，最后清理旧的静态页面并重新构建。
+
+### 模式二：指定文件（带文件名参数）
+
+```
+/ttfhw-report-normalizer verification_report_WSL_hcomm_20260520.json
+```
+
+仅对 `json-org/` 下指定的**一个**原始文件进行归一化，输出到 `json/` 目录，清理并重新构建。
 
 ## 使用场景
 
@@ -15,20 +33,28 @@ description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归
 
 ## 工作流程
 
-### 1. 检测新增文件
+### 1. 确定待处理文件
 
-对比 `json-org/`（原始）和 `json/`（归一化）两个目录，找出新增文件：
+**全量比对模式（不带参数）：**
 
-- 提取 `json-org/` 中每个文件名去掉 `verification_report_` 前缀和日期后缀后的 **仓库标识**
-- 检查 `json/` 中是否存在同仓库标识的文件
-- 文件名不一致（不同日期、不同命名格式）即视为新增
+对比 `json-org/` 和 `json/` 两个目录，找出所有新增的原始文件：
 
-**检测命令：**
+- 提取每个文件名去掉 `verification_report_` 前缀和日期后缀后的 **仓库标识**
+- 检查 `json/` 中是否存在同仓库标识的归一化文件
+- 文件名不一致（不同日期、不同前缀）即视为新增
+
 ```bash
-ls json-org/ | sed 's/verification_report_//;s/_\d{8}\.json$//;s/\.json$//' | sort > /tmp/org_keys.txt
-ls json/ | sed 's/verification_report_//;s/_\d{8}\.json$//;s/\.json$//' | sort > /tmp/norm_keys.txt
+# 提取仓库标识并比对
+ls json-org/ | sed 's/verification_report_//;s/_\d\{8\}\(_\d\{6\}\)\?\.json$//;s/\.json$//' | sort > /tmp/org_keys.txt
+ls json/ | sed 's/verification_report_//;s/_\d\{8\}\(_\d\{6\}\)\?\.json$//;s/\.json$//' | sort > /tmp/norm_keys.txt
 comm -23 /tmp/org_keys.txt /tmp/norm_keys.txt
 ```
+
+根据输出的仓库标识列表，找到 `json-org/` 中对应的完整文件名，逐个处理。
+
+**指定文件模式（带文件名参数）：**
+
+直接对 `json-org/<filename>` 这一个文件进行处理。
 
 ### 2. 阅读模板
 
