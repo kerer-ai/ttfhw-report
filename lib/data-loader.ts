@@ -184,7 +184,7 @@ function normalizeToDetail(name: string, data: any): RepoDetail {
     imageSelection: normalizeImageSelection(data.machine_spec?.image_source),
     machineSpec: data.machine_spec,
     // Preserve original report-511 fields from __original for detail page raw JSON dump
-    metadata: data.__original?.metadata,
+    metadata: data.metadata,
     executionLog: data.execution_log,
     processTimeline: data.process_timeline,
     finalResults: data.final_results,
