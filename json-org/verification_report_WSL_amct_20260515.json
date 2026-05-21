@@ -317,7 +317,7 @@
     }
   },
   "documentation_gaps": [
-    "CANN Toolkit 是硬性构建前置依赖，但在 README.md 构建说明中不够突出 - 仅在"环境要求"表格中间接提及为"CANN >= 8.5.0"",
+    "CANN Toolkit 是硬性构建前置依赖，但在 README.md 构建说明中不够突出 - 仅在“环境要求”表格中间接提及为“CANN >= 8.5.0”",
     "ccache 被 CANN cmake 系统要求（cann-cmake prepare.cmake 中 ENABLE_CCACHE=TRUE），但未在依赖文档中说明",
     "requirements.txt 中指定 numpy<=1.24.0，与 Python 3.12（Ubuntu 24.04 默认版本）不兼容；版本约束需更新",
     "仓库中未提供 Dockerfile 用于可复现的构建环境",
