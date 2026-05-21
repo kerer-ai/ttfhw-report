@@ -33,8 +33,9 @@ pnpm-debug.log*
 # local/generated verification workspace
 tmp_src/
 
-# local agent workspace
-.claude/
+# local agent workspace (skills/除外，作为项目共享资源)
+.claude/*
+!.claude/skills/
 
 # archived/unused files
 tmp/
