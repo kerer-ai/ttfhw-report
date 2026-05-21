@@ -4,8 +4,8 @@ import { Card } from '@/components/ui/Card'
 import { Badge, StatusBadge } from '@/components/ui/Badge'
 import {
   Clock, Server, Cpu, FileText, Terminal, AlertTriangle,
-  CheckCircle, XCircle, AlertCircle, SkipForward, Package,
-  BookOpen, Wrench, FileSearch, Lightbulb, Info
+  CheckCircle, XCircle, Package,
+  BookOpen, Wrench, FileSearch
 } from 'lucide-react'
 
 export { generateStaticParams }
@@ -22,17 +22,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
     notFound()
   }
 
-  // 获取 report-511 特有数据
   const metadata = detail.metadata
   const machineSpec = detail.machineSpec
   const docSummary = detail.documentReadingSummary
   const executionLog = detail.executionLog || []
   const processTimeline = detail.processTimeline || []
-  const finalResults = detail.finalResults
-  const utStAnalysis = detail.utStAnalysis
   const docGaps = detail.documentationGaps || []
   const problems = detail.problemsEncountered || []
-  const conclusion = detail.conclusion
   const rawData = detail.rawData
 
   const durationMinutes = Math.round(detail.totalDuration / 60)
@@ -212,21 +208,6 @@ export default async function RepoDetailPage({ params }: PageProps) {
         <ProcessTimelineCard items={processTimeline} />
       )}
 
-      {/* UT/ST 分析 */}
-      {utStAnalysis && (
-        <Card>
-          <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
-            <FileSearch className="w-5 h-5 text-indigo-500" />
-            UT/ST 分析
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            {utStAnalysis.torchair_ut && <AnalysisItem title="torchair UT" data={utStAnalysis.torchair_ut} />}
-            {utStAnalysis.torchair_st && <AnalysisItem title="torchair ST" data={utStAnalysis.torchair_st} />}
-            {utStAnalysis.inductor_npu_ext_ut && <AnalysisItem title="inductor_npu_ext UT" data={utStAnalysis.inductor_npu_ext_ut} />}
-          </div>
-        </Card>
-      )}
-
       {/* 文档缺失 */}
       {docGaps.length > 0 && (
         <Card>
@@ -254,43 +235,11 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   {p.resolved ? <CheckCircle className="w-4 h-4 text-green-600" /> : <AlertTriangle className="w-4 h-4 text-amber-600" />}
                   <span className="font-medium">{p.problem}</span>
                 </div>
-                {p.root_cause && <p className="text-sm text-slate-600"><strong>根因:</strong> {p.root_cause}</p>}
                 {p.solution && <p className="text-sm text-slate-600"><strong>方案:</strong> {p.solution}</p>}
                 {p.source && <p className="text-xs text-slate-400"><strong>来源:</strong> {p.source}</p>}
-                {p.attempted_fixes && (
-                  <div className="mt-2 text-xs text-slate-500">
-                    <strong>尝试:</strong>
-                    <ul className="list-disc list-inside">{p.attempted_fixes.map((f, j) => <li key={j}>{f}</li>)}</ul>
-                  </div>
-                )}
               </div>
             ))}
           </div>
-        </Card>
-      )}
-
-      {/* 结论 */}
-      {conclusion && (
-        <Card className="border-2 border-slate-300">
-          <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
-            <Info className="w-5 h-5 text-blue-500" />
-            结论
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-4">
-            <BoolIndicator label="编译成功" value={conclusion.build_success} />
-            <BoolIndicator label="UT可执行" value={conclusion.ut_executable} />
-            <BoolIndicator label="ST可执行" value={conclusion.st_executable} />
-            <BoolIndicator label="运行时可用" value={conclusion.runtime_available} />
-            {conclusion.inductor_ut_executable !== undefined && (
-              <BoolIndicator label="inductor UT" value={conclusion.inductor_ut_executable} />
-            )}
-          </div>
-          {conclusion.summary && (
-            <p className="text-slate-700 leading-relaxed">{conclusion.summary}</p>
-          )}
-          <JsonObjectGrid
-            data={omitKeys(conclusion, ['build_success', 'ut_executable', 'st_executable', 'runtime_available', 'inductor_ut_executable', 'summary'])}
-          />
         </Card>
       )}
 
@@ -310,25 +259,25 @@ export default async function RepoDetailPage({ params }: PageProps) {
 // 子组件
 
 function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<string, any> }) {
-  const build = getBuildOverview(detail, rawData)
-  const ut = getUtOverview(detail, rawData)
-  const sample = getSampleOverview(detail, rawData)
-  const overallDuration = getOverallDuration(detail, rawData)
-  const environment = getEnvironmentOverview(detail, rawData)
+  const build = getBuildOverview(detail)
+  const ut = getUtOverview(detail)
+  const sample = getSampleOverview(detail)
+  const overallDuration = detail.metadata?.duration_seconds ?? detail.totalDuration
+  const envDuration = getEnvDuration(detail, build, ut, sample)
 
   return (
     <div className="grid grid-cols-1 gap-4 xl:grid-cols-5">
       <OverviewCard title="TTFHW整体时长" status={detail.result}>
         <MetricValue value={formatDurationDisplay(overallDuration)} />
-        <OverviewRow label="开始时间" value={detail.metadata?.start_time || rawData?.meta?.generated_at || rawData?.verification_environment?.verification_timestamp} />
+        <OverviewRow label="开始时间" value={detail.metadata?.start_time} />
         <OverviewRow label="结束时间" value={detail.metadata?.end_time} />
-        <OverviewRow label="步骤数" value={detail.metadata?.total_steps ?? rawData?.overall?.total_attempts ?? rawData?.attempt_log?.total_attempts} />
+        <OverviewRow label="步骤数" value={detail.metadata?.total_steps} />
       </OverviewCard>
 
-      <OverviewCard title="环境准备" status={environment.status}>
-        <OverviewRow label="时长" value={formatDurationDisplay(environment.duration)} strong />
-        <OverviewRow label="安装的依赖" value={environment.dependencies} />
-        <OverviewRow label="安装命令" value={environment.commands} code />
+      <OverviewCard title="环境准备" status={envDuration != null && envDuration > 0 ? 'success' : undefined}>
+        <OverviewRow label="时长" value={formatDurationDisplay(envDuration)} strong />
+        <OverviewRow label="安装的依赖" value={detail.documentReadingSummary?.dependencies?.value} />
+        <OverviewRow label="安装命令" value={findCommands(detail.executionLog, ['apt-get', 'pip', 'install', 'dependency', '依赖', 'cann'])} code />
       </OverviewCard>
 
       <OverviewCard title="Build" status={build.status}>
@@ -345,7 +294,7 @@ function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<s
         </div>
         <OverviewRow label="时长" value={formatDurationDisplay(ut.duration)} strong />
         <OverviewRow label="已执行用例通过率" value={ut.passRate} strong />
-        <StatusExplanation status={ut.status} note={ut.note} utDetail={ut.utDetail} />
+        <StatusExplanation status={ut.status} note={ut.note} />
         <OverviewRow label="UT执行命令" value={ut.commands} code />
       </OverviewCard>
 
@@ -357,65 +306,12 @@ function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<s
   )
 }
 
-function getOverallDuration(detail: any, rawData?: Record<string, any>): number | undefined {
-  return firstNumber(
-    detail.metadata?.duration_seconds,
-    diffSeconds(detail.metadata?.start_time, detail.metadata?.end_time),
-    rawData?.metadata?.duration_seconds,
-    diffSeconds(rawData?.metadata?.start_time, rawData?.metadata?.end_time),
-    rawData?.verification_environment?.duration_seconds,
-    rawData?.ttfhw_timeline?.total_ttfhw_seconds,
-    detail.totalDuration,
-  )
-}
-
-function getEnvironmentOverview(detail: any, rawData?: Record<string, any>) {
-  const commands = findCommands(detail.executionLog, ['apt-get', 'pip', 'install', 'dependency', '依赖', 'cann toolkit'])
-  const dependencyStats = rawData?.dependency_stats || {}
-  const finalResults = detail.finalResults || rawData?.final_results || {}
-  const metadataDuration = detail.metadata?.duration_seconds || rawData?.metadata?.duration_seconds
-
-  // 优先从 final_results 计算环境准备时长
-  const finalBuildDuration = finalResults.build?.duration_seconds
-  const finalUtDuration = finalResults.ut?.duration_seconds
-  const finalSampleDuration = finalResults.sample?.duration_seconds
-
-  let duration: number | undefined
-  if (metadataDuration) {
-    if (finalBuildDuration || finalUtDuration || finalSampleDuration) {
-      const envDuration = metadataDuration - (finalBuildDuration ?? 0) - (finalUtDuration ?? 0) - (finalSampleDuration ?? 0)
-      if (envDuration > 0) duration = envDuration
-    } else {
-      // 如果 final_results 没有时长，使用估算的 build/ut/sample 时长计算
-      const estimatedBuild = getBuildOverview(detail, rawData).duration ?? 0
-      const estimatedUt = getUtOverview(detail, rawData).duration ?? 0
-      const estimatedSample = getSampleOverview(detail, rawData).duration ?? 0
-      const envDuration = metadataDuration - estimatedBuild - estimatedUt - estimatedSample
-      if (envDuration > 0) duration = envDuration
-    }
-  }
-
-  // 回退到估算值
-  if (!duration) {
-    duration = firstNumber(
-      rawData?.ttfhw_timeline?.dependency_install_duration_seconds,
-      dependencyStats.install_duration_seconds,
-      estimateEnvironmentPreparationDuration(detail.executionLog || []),
-      estimateEnvironmentPreparationDuration(detail.processTimeline || []),
-      estimatePhaseDuration(detail, ['clone', 'docker_pull', 'container_start', 'deps_install', 'torch_install', 'pull', '启动', 'docker run', 'apt-get', 'pip install', 'install', 'clone', 'container', 'environment', 'setup', '配置', '安装依赖', '依赖', 'cann', 'toolkit', 'download', 'fetch']),
-    )
-  }
-
-  return {
-    status: commands.length > 0 || detail.documentReadingSummary?.dependencies?.value?.length ? 'success' : undefined,
-    duration,
-    dependencies: firstPresent(
-      normalizeInstalledDependencies(dependencyStats),
-      detail.documentReadingSummary?.dependencies?.value,
-      detail.documentReadingSummary?.explicit_dependencies?.value,
-    ),
-    commands,
-  }
+function getEnvDuration(detail: any, build: any, ut: any, sample: any): number | undefined {
+  const metaDuration = detail.metadata?.duration_seconds
+  if (!metaDuration) return undefined
+  const known = (build.duration ?? 0) + (ut.duration ?? 0) + (sample.duration ?? 0)
+  const env = metaDuration - known
+  return env > 0 ? env : undefined
 }
 
 function OverviewCard({ title, status, children }: { title: string; status?: string; children: React.ReactNode }) {
@@ -444,34 +340,14 @@ function MiniMetric({ label, value }: { label: string; value: any }) {
   )
 }
 
-function StatusExplanation({ status, note, utDetail }: { status?: string; note?: string; utDetail?: any }) {
-  if (!note && !status?.toLowerCase().includes('partial') && !utDetail) return null
-
+function StatusExplanation({ status, note }: { status?: string; note?: string }) {
+  if (!note && !status?.toLowerCase().includes('partial')) return null
   return (
     <div className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs leading-5 text-amber-800">
-      {utDetail && (
-        <div className="space-y-1">
-          {utDetail.torchair_ut && (
-            <div className={utDetail.torchair_ut.status === 'success' ? 'text-green-700' : 'text-red-700'}>
-              <span className="font-medium">torchair UT: </span>
-              {utDetail.torchair_ut.status === 'success'
-                ? `通过 (${utDetail.torchair_ut.passed}/${utDetail.torchair_ut.total})`
-                : `失败 - ${utDetail.torchair_ut.reason || utDetail.torchair_ut.build_script_error || '需要 Ascend SDK 环境'}`}
-            </div>
-          )}
-          {utDetail.inductor_npu_ext_ut && (
-            <div className="text-green-700">
-              <span className="font-medium">inductor_npu_ext UT: </span>
-              通过 ({utDetail.inductor_npu_ext_ut.passed}/{utDetail.inductor_npu_ext_ut.total})
-              {utDetail.inductor_npu_ext_ut.note && <span className="text-amber-600"> ({utDetail.inductor_npu_ext_ut.note})</span>}
-            </div>
-          )}
-        </div>
-      )}
-      {!utDetail && status?.toLowerCase().includes('partial') && (
+      {status?.toLowerCase().includes('partial') && (
         <div className="font-medium">状态说明：部分测试通过，部分测试因环境限制未执行或失败。</div>
       )}
-      {note && !utDetail && <div className="mt-1 whitespace-pre-wrap break-words">{note}</div>}
+      {note && <div className="mt-1 whitespace-pre-wrap break-words">{note}</div>}
     </div>
   )
 }
@@ -514,96 +390,47 @@ function renderOverviewValue(value: any, code: boolean, strong: boolean) {
   return <span className={`${strong ? 'font-semibold text-slate-900' : 'text-slate-700'} whitespace-pre-wrap break-words text-sm`}>{displayValue(values[0])}</span>
 }
 
-function getBuildOverview(detail: any, rawData?: Record<string, any>) {
-  const finalBuild = detail.finalResults?.build || rawData?.final_results?.build
-  const buildResult = rawData?.build_result || {}
-  // 规范化状态，与首页一致
-  const rawStatus = finalBuild?.status || detail.buildResult?.status || buildResult.status
+function getBuildOverview(detail: any) {
+  const finalBuild = detail.finalResults?.build || {}
   return {
-    status: normalizeStatusString(rawStatus),
-    duration: firstNumber(
-      finalBuild?.duration_seconds,
-      detail.buildResult?.durationSeconds,
-      buildResult.build_duration_seconds,
-      buildResult.duration_seconds,
-      rawData?.ttfhw_timeline?.build_duration_seconds,
-      estimatePhaseDuration(detail, ['submodule_init', 'configure', 'cmake', 'ci_build', '编译torchair', 'build', 'cmake_configure', 'make', 'build_repo', 'build_tests', 'build_dockerfile', 'build.sh', 'meson', 'ninja', 'bash build', '编译', 'compile', 'gcc', 'g++', 'source.*build']),
-    ),
+    status: normalizeStatusString(finalBuild.status),
+    duration: finalBuild.duration_seconds,
     commands: firstPresent(
-      buildResult.build_commands,
-      buildResult.build_command,
-      buildResult.build_entry?.adapted_command,
-      buildResult.build_entry?.original_command,
       detail.documentReadingSummary?.build_commands?.value,
       detail.documentReadingSummary?.build_entry?.value,
       findCommand(detail.executionLog, ['build']),
     ),
-    artifacts: normalizeArtifactsForDisplay(finalBuild?.artifacts || buildResult.artifacts || detail.buildResult?.artifacts),
+    artifacts: normalizeArtifactsForDisplay(finalBuild.artifacts),
   }
 }
 
-function getUtOverview(detail: any, rawData?: Record<string, any>) {
-  const finalUt = detail.finalResults?.ut || rawData?.final_results?.ut || {}
-  const utStats = rawData?.ut_stats || {}
-  const total = firstNumber(finalUt.total, detail.utStats?.totalTests, utStats.ut_total_count, utStats.total_tests, utStats.test_cases, utStats.tests_total)
-  const passed = firstNumber(finalUt.passed, detail.utStats?.passed, utStats.ut_passed_count, utStats.passed, utStats.tests_passed)
-  const failed = firstNumber(finalUt.failed, detail.utStats?.failed, utStats.ut_failed_count, utStats.failed, utStats.tests_failed)
-  // 规范化状态，与首页一致
-  const rawStatus = finalUt.status || detail.utStats?.status || utStats.ut_status || utStats.status
+function getUtOverview(detail: any) {
+  const finalUt = detail.finalResults?.ut || {}
+  const total = finalUt.total ?? 0
+  const passed = finalUt.passed ?? 0
+  const failed = finalUt.failed ?? 0
   return {
-    status: normalizeStatusString(rawStatus),
+    status: normalizeStatusString(finalUt.status),
     total,
     passed,
     failed,
-    duration: firstNumber(
-      finalUt.duration_seconds,
-      detail.utStats?.durationSeconds,
-      utStats.ut_duration_seconds,
-      utStats.duration_seconds,
-      rawData?.ttfhw_timeline?.ut_duration_seconds,
-      rawData?.ttfhw_timeline?.ut_build_duration_seconds,
-      estimatePhaseDuration(detail, ['ut_script', 'st_script', 'ut_build', '安装wheel包', 'runtime_test', 'inductor_ut', 'inductor_npu_ext', 'ut', 'gtest', 'pytest', 'run_tests', 'test', 'tests', 'unit_test', 'build_tests', 'ctest', 'unittest', 'npu_test', 'run.*test', '测试']),
-    ),
+    duration: finalUt.duration_seconds,
     passRate: formatPassRate(passed, total),
-    note: firstPresent(
-      finalUt.note,
-      finalUt.reason,
-      detail.utStats?.errorSummary,
-      detail.utStats?.errorDetail,
-      utStats.failure_summary,
-      utStats.error_summary,
-      utStats.ut_skipped_reason,
-    ),
+    note: finalUt.note,
     commands: firstPresent(
-      utStats.ut_commands,
-      utStats.commands,
       detail.documentReadingSummary?.ut_commands?.value,
       detail.documentReadingSummary?.ut_entry?.value,
       findCommand(detail.executionLog, ['ut', 'test', 'pytest']),
     ),
-    utDetail: finalUt.torchair_ut || finalUt.inductor_npu_ext_ut ? finalUt : undefined,
   }
 }
 
-function getSampleOverview(detail: any, rawData?: Record<string, any>) {
-  const finalSample = detail.finalResults?.sample || rawData?.final_results?.sample
-  const quickStart = rawData?.quick_start_analysis || {}
-  // 规范化状态，与首页一致
-  const rawStatus = finalSample?.status || quickStart.execution_result?.status
-  const status = normalizeStatusString(rawStatus) || (quickStart.example_runnable === false ? 'not_run' : undefined)
+function getSampleOverview(detail: any) {
+  const finalSample = detail.finalResults?.sample || {}
   return {
-    status,
-    duration: firstNumber(
-      finalSample?.duration_seconds,
-      quickStart.total_duration_seconds,
-      quickStart.duration_seconds,
-      rawData?.ttfhw_timeline?.quick_start_duration_seconds,
-      rawData?.ttfhw_timeline?.example_duration_seconds,
-      estimatePhaseDuration(detail, ['sample', 'example', '示例', '样例', 'dlopen', 'sample', 'example', '样例程序']),
-    ),
+    status: normalizeStatusString(finalSample.status),
+    duration: finalSample.duration_seconds,
     commands: firstPresent(
-      quickStart.example_commands,
-      finalSample?.commands,
       detail.documentReadingSummary?.sample_commands?.value,
       findCommand(detail.executionLog, ['sample', 'example']),
     ),
@@ -611,8 +438,7 @@ function getSampleOverview(detail: any, rawData?: Record<string, any>) {
 }
 
 function findCommand(logs: any[] = [], keywords: string[]): string | undefined {
-  const found = findCommands(logs, keywords)[0]
-  return found
+  return findCommands(logs, keywords)[0]
 }
 
 function findCommands(logs: any[] = [], keywords: string[]): string[] {
@@ -620,176 +446,15 @@ function findCommands(logs: any[] = [], keywords: string[]): string[] {
   const commands = logs.filter(log => {
     const haystack = [log.step, log.command, log.note, log.output].filter(Boolean).join(' ').toLowerCase()
     return lowerKeywords.some(keyword => {
-      // 用词边界匹配，避免 "compute" 匹配 "ut"、"latest" 匹配 "test"
       const re = new RegExp('(^|[^a-z])' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z])')
       return re.test(haystack)
     })
   }).map(log => log.command).filter(Boolean)
-
   return Array.from(new Set(commands))
-}
-
-function normalizeInstalledDependencies(depStats: any): string[] {
-  if (!depStats || typeof depStats !== 'object') return []
-  const values = [
-    depStats.dependencies_installed,
-    depStats.installed_packages,
-    depStats.system_dependencies,
-    depStats.system_dependencies_installed,
-    depStats.build_dependencies,
-    depStats.test_dependencies,
-    depStats.build_system_packages,
-    depStats.compiler_packages,
-    depStats.library_packages,
-  ]
-  const deps = values.flatMap(value => {
-    if (!value || typeof value === 'number') return []
-    const items = Array.isArray(value) ? value : [value]
-    return items.map(item => {
-      if (typeof item === 'string') return item
-      if (item && typeof item === 'object') return item.name || item.package || item.provides || item.url || JSON.stringify(item)
-      return String(item)
-    })
-  })
-
-  return Array.from(new Set(deps.filter(Boolean)))
-}
-
-function estimatePhaseDuration(detail: any, keywords: string[]): number | undefined {
-  return estimateDurationFromEvents(detail.processTimeline || [], keywords, ['step', 'action', 'result', 'command'])
-    ?? estimateDurationFromEvents(detail.executionLog || [], keywords, ['step', 'command', 'output', 'error', 'note', 'action'])
-}
-
-function estimateEnvironmentPreparationDuration(events: any[]): number | undefined {
-  const sortedEvents = events
-    .map((event, index) => ({ event, index, time: Date.parse(event.timestamp || '') }))
-    .filter(item => Number.isFinite(item.time))
-    .sort((a, b) => a.time - b.time)
-
-  if (sortedEvents.length === 0) return undefined
-
-  const cutoffIndex = sortedEvents.findIndex(({ event }) => isPhaseCutoffEvent(event))
-  const cutoffTime = cutoffIndex >= 0 ? sortedEvents[cutoffIndex].time : undefined
-  const installKeywords = [
-    'clone',
-    'docker',
-    'pull',
-    'container',
-    'start',
-    '启动',
-    'deps',
-    'dependency',
-    'dependencies',
-    'apt-get',
-    'apt-get install',
-    'pip install',
-    'install torch',
-    'cann',
-    'cann toolkit',
-    'toolkit',
-    '安装编译依赖',
-    '安装pytorch',
-    '安装依赖',
-    '依赖安装',
-    '安装build dependencies',
-    '环境',
-    'setup',
-    'configure',
-    'git',
-    'safe.directory',
-    'update',
-    'download',
-    'fetch',
-  ]
-
-  const totalSeconds = sortedEvents.reduce((sum, item, index) => {
-    if (cutoffTime !== undefined && item.time >= cutoffTime) return sum
-    if (!matchesEvent(item.event, installKeywords, ['step', 'action', 'command', 'output', 'note'])) return sum
-
-    const nextTime = sortedEvents[index + 1]?.time
-    const endTime = cutoffTime !== undefined && nextTime && nextTime > cutoffTime ? cutoffTime : nextTime
-    if (!endTime || endTime <= item.time) return sum
-    return sum + Math.round((endTime - item.time) / 1000)
-  }, 0)
-
-  return totalSeconds > 0 ? totalSeconds : undefined
-}
-
-function isPhaseCutoffEvent(event: any): boolean {
-  const step = String(event.step || '').toLowerCase()
-  const stepTokens = step.split(/[^a-z0-9]+/).filter(Boolean)
-  if (stepTokens.some(token => ['configure', 'cmake', 'build', 'ut', 'st', 'runtime', 'sample', 'example', 'compile', 'make', 'meson'].includes(token))) return true
-
-  const command = String(event.command || '').trim().toLowerCase()
-  const output = String(event.output || '').trim().toLowerCase()
-
-  return command.startsWith('cmake ')
-    || command.includes('&& cmake')
-    || command.startsWith('cd build && cmake')
-    || command.startsWith('make ')
-    || command.includes('&& make ')
-    || command.startsWith('bash build.sh')
-    || command.includes('./build.sh')
-    || command.includes('build.sh')
-    || command.includes('pytest')
-    || command.includes('unittest')
-    || command.includes('ctest')
-    || command.includes('gtest')
-    || command.startsWith('python3 -c')
-    || command.includes('meson setup')
-    || command.includes('ninja')
-    || output.includes('编译成功')
-    || output.includes('build success')
-    || output.includes('编译完成')
-}
-
-function estimateDurationFromEvents(events: any[], keywords: string[], fields: string[]): number | undefined {
-  const sortedEvents = events
-    .map((event, index) => ({ event, index, time: Date.parse(event.timestamp || '') }))
-    .filter(item => Number.isFinite(item.time))
-    .sort((a, b) => a.time - b.time)
-
-  if (sortedEvents.length === 0) return undefined
-
-  const lowerKeywords = keywords.map(keyword => keyword.toLowerCase())
-  const matchingIndexes = sortedEvents
-    .map((item, index) => matchesEvent(item.event, lowerKeywords, fields) ? index : -1)
-    .filter(index => index >= 0)
-
-  if (matchingIndexes.length === 0) return undefined
-
-  // 累加所有匹配事件的时长（每个事件到下一个事件的间隔）
-  const totalSeconds = matchingIndexes.reduce((sum, matchIndex) => {
-    const start = sortedEvents[matchIndex].time
-    const nextEvent = sortedEvents[matchIndex + 1]
-    if (!nextEvent) return sum
-    const end = nextEvent.time
-    if (end <= start) return sum
-    return sum + Math.round((end - start) / 1000)
-  }, 0)
-
-  return totalSeconds > 0 ? totalSeconds : undefined
-}
-
-function matchesEvent(event: any, lowerKeywords: string[], fields: string[]): boolean {
-  const haystack = fields.map(field => event[field]).filter(Boolean).join(' ').toLowerCase()
-  return lowerKeywords.some(keyword => haystack.includes(keyword))
 }
 
 function firstPresent(...values: any[]): any {
   return values.find(value => value !== undefined && value !== null && value !== '' && (!Array.isArray(value) || value.length > 0))
-}
-
-function firstNumber(...values: any[]): number | undefined {
-  return values.find(value => typeof value === 'number' && Number.isFinite(value))
-}
-
-function diffSeconds(start?: string, end?: string): number | undefined {
-  if (!start || !end) return undefined
-  const startTime = Date.parse(start)
-  const endTime = Date.parse(end)
-  if (!Number.isFinite(startTime) || !Number.isFinite(endTime) || endTime <= startTime) return undefined
-  return Math.round((endTime - startTime) / 1000)
 }
 
 function normalizeArtifactsForDisplay(artifacts: any): string[] {
@@ -1324,37 +989,6 @@ function omitKeys<T extends Record<string, any>>(value: T | undefined, keys: str
   }))
 }
 
-function StatusCard({ title, status }: { title: string; status?: string }) {
-  const getStatusColor = (s?: string) => {
-    if (!s) return 'bg-slate-100 text-slate-600'
-    if (s.includes('success') && !s.includes('partial')) return 'bg-green-100 text-green-700'
-    if (s.includes('partial')) return 'bg-yellow-100 text-yellow-700'
-    if (s.includes('fail') || s.includes('block')) return 'bg-red-100 text-red-700'
-    if (s.includes('skip') || s.includes('not')) return 'bg-slate-100 text-slate-600'
-    return 'bg-slate-100 text-slate-600'
-  }
-
-  return (
-    <div className={`p-3 rounded-lg text-center ${getStatusColor(status)}`}>
-      <div className="text-xs font-medium uppercase">{title}</div>
-      <div className="text-sm font-semibold mt-1">{status || 'N/A'}</div>
-    </div>
-  )
-}
-
-function InfoGrid({ items }: { items: [string, any][] }) {
-  return (
-    <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm">
-      {items.filter(([_, v]) => v !== undefined && v !== null).map(([label, value]) => (
-        <div key={label}>
-          <span className="text-slate-500">{label}: </span>
-          <span className="font-medium">{displayValue(value)}</span>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 const MACHINE_ENV_LABELS: Record<string, string> = {
   architecture: '架构',
   cpu_model: 'CPU 型号',
@@ -1408,101 +1042,3 @@ function MachineEnvItem({ label, value }: { label: string; value: any }) {
   )
 }
 
-function InfoRow({ label, value, source, code }: { label: string; value?: string; source?: string; code?: boolean }) {
-  if (!value) return null
-  return (
-    <div className="text-sm">
-      <span className="text-slate-600 font-medium">{label}: </span>
-      {code ? (
-        <code className="bg-slate-100 px-2 py-0.5 rounded text-xs">{value}</code>
-      ) : (
-        <span>{value}</span>
-      )}
-      {source && <span className="text-xs text-slate-400 ml-2">({source})</span>}
-    </div>
-  )
-}
-
-function ResultDetailCard({ title, status, reason, artifacts, stage, installedCannStats, testDetail, inductorDetail, requiredLibraries, importError }: any) {
-  return (
-    <Card className="p-4">
-      <h3 className="font-medium text-slate-700 mb-2">{title}</h3>
-      <Badge status={status?.includes?.('success') && !status?.includes?.('partial')} size="sm" label={status || 'N/A'} />
-      {reason && <p className="text-sm text-slate-500 mt-2">{reason}</p>}
-      {stage && <p className="text-xs text-slate-400">阶段: {stage}</p>}
-      {artifacts && artifacts.length > 0 && (
-        <div className="mt-2 space-y-1">
-          <span className="text-xs font-medium text-slate-600">产物:</span>
-          {artifacts.map((a: any, i: number) => (
-            <div key={i} className="text-xs bg-slate-50 p-1 rounded">
-              <Package className="w-3 h-3 inline mr-1" />
-              {a.name} {a.size && <span className="text-slate-400">({a.size})</span>}
-            </div>
-          ))}
-        </div>
-      )}
-      {installedCannStats && (
-        <div className="mt-2 text-xs text-slate-500">
-          <span>CANN版本: {installedCannStats.cann_version}</span>
-          {installedCannStats.missing_components && (
-            <div className="text-red-500">缺失组件: {installedCannStats.missing_components.join(', ')}</div>
-          )}
-        </div>
-      )}
-      {testDetail && (
-        <div className="mt-2 p-2 bg-slate-50 rounded text-xs">
-          <div className="font-medium">{testDetail.status}</div>
-          {testDetail.reason && <div className="text-slate-500">{testDetail.reason}</div>}
-          {testDetail.tests && <div className="mt-1">测试: {testDetail.tests.map((t: any) => `${t.name}(${t.status})`).join(', ')}</div>}
-        </div>
-      )}
-      {inductorDetail && (
-        <div className="mt-2 p-2 bg-green-50 rounded text-xs">
-          <div className="font-medium text-green-700">{inductorDetail.status}</div>
-          {inductorDetail.passed && <div>{inductorDetail.passed}/{inductorDetail.total} passed</div>}
-        </div>
-      )}
-      {requiredLibraries && (
-        <div className="mt-2 text-xs">
-          <span className="font-medium">需要的库:</span>
-          <ul className="list-disc list-inside text-slate-500">{requiredLibraries.map((l: string) => <li key={l}>{l}</li>)}</ul>
-        </div>
-      )}
-      {importError && <div className="mt-2 text-xs text-red-500">{importError}</div>}
-    </Card>
-  )
-}
-
-function AnalysisItem({ title, data }: { title: string; data: any }) {
-  return (
-    <div className="p-3 bg-slate-50 rounded-lg">
-      <h4 className="font-medium text-slate-700 mb-2">{title}</h4>
-      <div className="space-y-1 text-sm">
-        {data.location && <div><span className="text-slate-500">位置:</span> {data.location}</div>}
-        {data.type && <div><span className="text-slate-500">类型:</span> {data.type}</div>}
-        {data.can_run_without_ascend !== undefined && (
-          <BoolIndicator label="无需Ascend" value={data.can_run_without_ascend} small />
-        )}
-        {data.method && <div className="text-xs text-blue-600">{data.method}</div>}
-        {data.test_results && <div className="text-xs text-green-600">{data.test_results}</div>}
-        {data.dependencies && (
-          <div className="text-xs">
-            <span className="text-slate-500">依赖:</span>
-            <span className="ml-1">{data.dependencies.join(', ')}</span>
-          </div>
-        )}
-        {data.reason && <div className="text-xs text-slate-400 italic">{data.reason}</div>}
-      </div>
-    </div>
-  )
-}
-
-function BoolIndicator({ label, value, small }: { label: string; value?: boolean; small?: boolean }) {
-  const cls = small ? 'text-xs' : 'text-sm p-2 rounded'
-  return (
-    <div className={`${cls} ${value ? 'text-green-600 bg-green-50' : 'text-red-600 bg-red-50'}`}>
-      {value ? <CheckCircle className="w-3 h-3 inline mr-1" /> : <XCircle className="w-3 h-3 inline mr-1" />}
-      {label}
-    </div>
-  )
-}
