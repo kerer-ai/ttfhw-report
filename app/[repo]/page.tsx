@@ -619,7 +619,11 @@ function findCommands(logs: any[] = [], keywords: string[]): string[] {
   const lowerKeywords = keywords.map(keyword => keyword.toLowerCase())
   const commands = logs.filter(log => {
     const haystack = [log.step, log.command, log.note, log.output].filter(Boolean).join(' ').toLowerCase()
-    return lowerKeywords.some(keyword => haystack.includes(keyword))
+    return lowerKeywords.some(keyword => {
+      // 用词边界匹配，避免 "compute" 匹配 "ut"、"latest" 匹配 "test"
+      const re = new RegExp('(^|[^a-z])' + keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '($|[^a-z])')
+      return re.test(haystack)
+    })
   }).map(log => log.command).filter(Boolean)
 
   return Array.from(new Set(commands))
