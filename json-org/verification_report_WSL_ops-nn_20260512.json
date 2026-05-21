@@ -1,0 +1,419 @@
+{
+  "metadata": {
+    "repo_path": "https://gitcode.com/cann/ops-nn.git (cloned to /root/workspace/ttfhw-verify-0511/ops-nn-src)",
+    "start_time": "2026-05-12T11:42:00",
+    "end_time": "2026-05-12T12:20:00",
+    "duration_seconds": 2280,
+    "total_steps": 18
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "815G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "Ubuntu 24.04.4 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (no limit set)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "ubuntu:24.04",
+      "selection_reason": "Docker部署文档推荐Ubuntu系统（swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10-ops） → 选择 Ubuntu 24.04"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 / aarch64（文档声明支持Atlas A2/A3/950系列产品，支持X86和ARM架构）",
+      "source": "README.md - 版本配套章节 + docs/zh/install/quick_install.md - Docker部署章节（提供arm64和amd64镜像）"
+    },
+    "recommended_image": {
+      "value": "Docker部署文档推荐Ubuntu系统（cann:8.5.0-910b-ubuntu22.04-py3.10-ops） → 选择 Ubuntu 24.04",
+      "source": "docs/zh/install/quick_install.md - Docker部署章节"
+    },
+    "dependencies": {
+      "value": [
+        "python >= 3.7.0（建议 <= 3.10）",
+        "gcc >= 7.3.0",
+        "cmake >= 3.16.0",
+        "pigz >= 2.4（可选，提升打包速度）",
+        "dos2unix",
+        "make",
+        "patch",
+        "googletest（仅UT时依赖，建议 release-1.11.0）",
+        "CANN toolkit包（Ascend-cann-toolkit，编译必需）",
+        "CANN ops包（运行态依赖，运行样例时需要）"
+      ],
+      "source": "docs/zh/install/quick_install.md - 安装基础依赖章节 + install_deps.sh"
+    },
+    "build_commands": {
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j9",
+      "source": "docs/QUICKSTART.md - 编译运行章节 + docs/zh/install/compile.md - 联网编译章节"
+    },
+    "ut_commands": {
+      "value": "bash build.sh -u --ophost --ops=add_example（ophost UT）; bash build.sh -u --opapi（opapi UT）; bash build.sh -u --opkernel（opkernel UT）",
+      "source": "docs/zh/install/compile.md - 本地验证章节"
+    },
+    "sample_commands": {
+      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "source": "docs/QUICKSTART.md - 快速验证章节 + docs/zh/install/build.md - run_example参数说明"
+    },
+    "build_entry": {
+      "value": "bash build.sh（项目根目录构建脚本，封装了cmake/make流程）",
+      "source": "build.sh + CMakeLists.txt"
+    },
+    "ut_entry": {
+      "value": "bash build.sh -u --ophost（ophost UT入口）",
+      "source": "docs/zh/install/compile.md - 本地验证章节"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-12T11:44:00",
+      "command": "git clone https://gitcode.com/cann/ops-nn.git ops-nn-src",
+      "success": true,
+      "output": "Cloning into 'ops-nn-src'... Updating files: 100% (15569/15569), done.",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T11:48:00",
+      "command": "docker pull ubuntu:24.04",
+      "success": true,
+      "output": "Digest: sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b\nStatus: Image is up to date",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T11:49:00",
+      "command": "docker run -d --name ttfhw-ops-nn-env -v /root/workspace/ttfhw-verify-0511/ops-nn-src:/workspace -w /workspace ubuntu:24.04 tail -f /dev/null",
+      "success": true,
+      "output": "37d343facce971b60974da08bb249c4ffdece09c7d7afb05ecfb54f7f6744871",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T11:50:00",
+      "command": "apt-get update && apt-get install -y python3 python3-pip python3-dev gcc g++ cmake make pigz dos2unix patch git wget curl",
+      "success": true,
+      "output": "Python 3.12.3, gcc 13.3.0, cmake 3.28.3, make 4.3, pigz 2.8, dos2unix 7.5.1 installed successfully",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T11:56:00",
+      "command": "pip3 install -r requirements.txt",
+      "success": true,
+      "output": "Successfully installed pyyaml-6.0.3 absl-py-2.4.0 attrs-26.1.0 decorator-5.2.1 jinja2-3.1.6 numpy-1.26.4 protobuf-7.34.1 psutil-7.2.2 scipy-1.17.1 sympy-1.14.0",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T11:57:00",
+      "command": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j9",
+      "success": false,
+      "output": "CMake Error at cmake/dependencies.cmake:75 (find_package): Could not find a package configuration file provided by 'ASC'",
+      "error": "Could not find ASCConfig.cmake - CANN toolkit not installed",
+      "returncode": 1,
+      "note": "首次构建失败，缺少CANN toolkit包（编译必需依赖）"
+    },
+    {
+      "timestamp": "2026-05-12T11:58:00",
+      "command": "wget 'https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260506000325116/Ascend-cann-toolkit_9.0.0_linux-x86_64.run'",
+      "success": true,
+      "output": "Downloaded Ascend-cann-toolkit_9.0.0_linux-x86_64.run (1.3GB)",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T12:04:00",
+      "command": "/tmp/Ascend-cann-toolkit_9.0.0_linux-x86_64.run --install --quiet --force",
+      "success": true,
+      "output": "Toolkit: Ascend-cann-toolkit_9.0.0_linux-x86_64 install success, installed in /usr/local/Ascend",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T12:07:00",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && bash build.sh --pkg --soc=ascend910b --ops=add_example -j9",
+      "success": true,
+      "output": "Self-extractable archive \"cann-ops-nn-custom_linux-x86_64.run\" successfully created.\n[SUCCESS] Build package success!",
+      "error": "",
+      "returncode": 0,
+      "duration_estimate": "3m14s"
+    },
+    {
+      "timestamp": "2026-05-12T12:11:00",
+      "command": "bash build.sh -u --ophost --ops=add_example -j9",
+      "success": true,
+      "output": "[==========] Running 3 tests from 2 test suites.\n[  PASSED  ] 3 tests.",
+      "error": "",
+      "returncode": 0,
+      "duration_estimate": "26s"
+    },
+    {
+      "timestamp": "2026-05-12T12:11:30",
+      "command": "bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "success": false,
+      "output": "fatal error: aclnn_add_example.h: No such file or directory",
+      "error": "缺少aclnn头文件，需要先安装编译好的自定义算子包",
+      "returncode": 1,
+      "note": "样例运行需要先安装自定义算子包"
+    },
+    {
+      "timestamp": "2026-05-12T12:12:00",
+      "command": "./build_out/cann-ops-nn-custom_linux-x86_64.run --force --quiet",
+      "success": true,
+      "output": "SUCCESS - 自定义算子包安装到 /usr/local/Ascend/cann-9.0.0/opp/vendors/custom_nn/",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-12T12:12:30",
+      "command": "bash build.sh --run_example add_example eager cust --vendor_name=custom（安装算子包后重试）",
+      "success": false,
+      "output": "/usr/bin/ld: cannot find -lopapi_math: No such file or directory",
+      "error": "链接阶段缺少libopapi_math.so，需要安装CANN ops包（Ascend-cann-910b-ops，约2.13GB）",
+      "returncode": 1,
+      "note": "样例运行需要CANN ops包（运行态依赖，文档中标注为运行态必需）"
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-12T11:42:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-12T11:44:00",
+      "step": "clone",
+      "action": "克隆ops-nn仓库",
+      "result": "success",
+      "details": {
+        "url": "https://gitcode.com/cann/ops-nn.git",
+        "files": "15569"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:45:00",
+      "step": "document_reading",
+      "action": "阅读README.md获取项目概述",
+      "result": "success",
+      "details": {
+        "found": "CANN算子库，需要NPU驱动+CANN包"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:46:00",
+      "step": "document_reading",
+      "action": "阅读CONTRIBUTING.md获取贡献流程",
+      "result": "success",
+      "details": {
+        "found": "算子开发交付件要求，CI门禁包含编译、UT、冒烟测试"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:47:00",
+      "step": "document_reading",
+      "action": "阅读CMakeLists.txt和docs/zh/install/获取构建依赖",
+      "result": "success",
+      "details": {
+        "found": "cmake>=3.16, gcc>=7.3, python>=3.7, CANN toolkit包必需"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:48:00",
+      "step": "image_selection",
+      "action": "选择基础镜像（依据Docker部署文档推荐Ubuntu系统）",
+      "result": "ubuntu:24.04",
+      "details": {
+        "reason": "Docker部署文档推荐Ubuntu系统 → 选择 Ubuntu 24.04"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:49:00",
+      "step": "container_setup",
+      "action": "启动Docker容器",
+      "result": "success",
+      "details": {
+        "container": "ttfhw-ops-nn-env",
+        "image": "ubuntu:24.04"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:50:00",
+      "step": "dependency_installation",
+      "action": "安装基础依赖（python3, gcc, cmake, make, pigz, dos2unix, patch等）",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-12T11:57:00",
+      "step": "build_attempt_1",
+      "action": "首次构建尝试（无CANN toolkit）",
+      "result": "failed",
+      "details": {
+        "error": "Could not find ASCConfig.cmake"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T11:58:00",
+      "step": "cann_toolkit_download",
+      "action": "下载CANN toolkit包（1.3GB）",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-12T12:04:00",
+      "step": "cann_toolkit_install",
+      "action": "安装CANN toolkit包",
+      "result": "success",
+      "details": {
+        "version": "9.0.0",
+        "path": "/usr/local/Ascend"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:07:00",
+      "step": "build_attempt_2",
+      "action": "构建add_example算子（带CANN toolkit）",
+      "result": "success",
+      "details": {
+        "duration": "3m14s",
+        "artifact": "cann-ops-nn-custom_linux-x86_64.run (2.5MB)"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:11:00",
+      "step": "ut_execution",
+      "action": "执行ophost UT测试",
+      "result": "success",
+      "details": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "duration": "26s"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:11:30",
+      "step": "sample_attempt_1",
+      "action": "首次样例执行尝试（未安装算子包）",
+      "result": "failed",
+      "details": {
+        "error": "aclnn_add_example.h未找到"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:12:00",
+      "step": "custom_pkg_install",
+      "action": "安装自定义算子包",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-12T12:12:30",
+      "step": "sample_attempt_2",
+      "action": "样例执行重试（安装算子包后）",
+      "result": "failed",
+      "details": {
+        "error": "cannot find -lopapi_math（需要CANN ops包，2.13GB，运行态依赖）"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:15:00",
+      "step": "cann_ops_download",
+      "action": "尝试下载CANN ops包（2.13GB）",
+      "result": "timeout",
+      "details": {
+        "note": "下载速度约4MB/s，预计需要8分钟以上，且样例运行仍需NPU硬件"
+      }
+    },
+    {
+      "timestamp": "2026-05-12T12:18:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "success"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 194,
+      "artifacts": [
+        {
+          "name": "cann-ops-nn-custom_linux-x86_64.run",
+          "path": "build_out/cann-ops-nn-custom_linux-x86_64.run",
+          "size": "2.5 MB"
+        },
+        {
+          "name": "libcust_opmaster_rt2.0.so",
+          "path": "build/libcust_opmaster_rt2.0.so",
+          "size": "N/A"
+        },
+        {
+          "name": "liboptiling.so",
+          "path": "build/opp/op_impl/built-in/ai_core/tbe/op_tiling/lib/linux/x86_64/liboptiling.so",
+          "size": "N/A"
+        },
+        {
+          "name": "nn_op_host_ut",
+          "path": "build/tests/ut/op_host/nn_op_host_ut",
+          "size": "N/A"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 26,
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "failures": [],
+      "details": "2个AddExampleTiling测试 + 1个AddExampleInfershape测试全部通过"
+    },
+    "sample": {
+      "status": "failed",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "test_aclnn_add_example",
+          "execution_status": "failed",
+          "output_summary": "链接阶段失败：/usr/bin/ld: cannot find -lopapi_math",
+          "failure_reason": "缺少CANN ops包（运行态依赖），需要安装Ascend-cann-910b-ops_9.0.0_linux-x86_64.run（约2.13GB），且最终运行需要NPU硬件设备"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "CANN toolkit包作为编译必需依赖，在README.md中未直接列出，仅在docs/zh/install/quick_install.md中提到",
+    "CANN ops包作为运行态依赖，在quick_install.md中标注为'仅编译算子可不安装'，但样例运行需要该包，文档对此场景说明不够醒目",
+    "install_deps.sh中pigz安装需要交互确认（read -p），在非交互环境中可能卡住",
+    "样例运行的前置步骤（安装算子包 + 安装CANN ops包 + 设置环境变量）在QUICKSTART.md中有描述，但步骤较分散，容易遗漏",
+    "requirements.txt中numpy<2.0的版本限制未在文档中说明原因"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-05-12T11:57:00",
+      "problem": "首次构建失败：CMake找不到ASCConfig.cmake（CANN toolkit未安装）",
+      "solution": "下载并安装CANN toolkit包（Ascend-cann-toolkit_9.0.0_linux-x86_64.run，1.3GB）",
+      "source": "cmake/dependencies.cmake:62-76 - find_package(ASC REQUIRED) 依赖CANN toolkit"
+    },
+    {
+      "timestamp": "2026-05-12T12:11:30",
+      "problem": "样例执行失败：找不到aclnn_add_example.h头文件",
+      "solution": "安装已编译的自定义算子包（./build_out/cann-ops-nn-custom_linux-x86_64.run）",
+      "source": "docs/QUICKSTART.md - 编译运行章节步骤3：安装AddExample算子包"
+    },
+    {
+      "timestamp": "2026-05-12T12:12:30",
+      "problem": "样例链接失败：cannot find -lopapi_math（缺少CANN ops包中的libopapi_math.so）",
+      "solution": "需要安装CANN ops包（Ascend-cann-910b-ops_9.0.0_linux-x86_64.run，约2.13GB），且最终运行需要NPU硬件",
+      "source": "docs/zh/install/quick_install.md - 安装CANN ops包（运行态依赖）章节"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_ops-nn_20260512.md"
+}
