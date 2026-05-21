@@ -287,10 +287,11 @@ function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<s
       </OverviewCard>
 
       <OverviewCard title="UT" status={ut.status}>
-        <div className="grid grid-cols-3 gap-2">
-          <MiniMetric label="已执行" value={ut.total} />
+        <div className={`grid gap-2 ${ut.skipped > 0 ? 'grid-cols-4' : 'grid-cols-3'}`}>
+          <MiniMetric label="用例总数" value={ut.total} />
           <MiniMetric label="成功" value={ut.passed} />
           <MiniMetric label="失败" value={ut.failed} />
+          {ut.skipped > 0 && <MiniMetric label="跳过" value={ut.skipped} />}
         </div>
         <OverviewRow label="时长" value={formatDurationDisplay(ut.duration)} strong />
         <OverviewRow label="已执行用例通过率" value={ut.passRate} strong />
@@ -409,14 +410,16 @@ function getUtOverview(detail: any) {
   const total = finalUt.total ?? 0
   const passed = finalUt.passed ?? 0
   const failed = finalUt.failed ?? 0
+  const skipped = finalUt.skipped ?? 0
   return {
     status: normalizeStatusString(finalUt.status),
     total,
     passed,
     failed,
+    skipped,
     duration: finalUt.duration_seconds,
     passRate: formatPassRate(passed, total),
-    note: finalUt.note,
+    note: finalUt.note || finalUt.failure_reason,
     commands: firstPresent(
       detail.documentReadingSummary?.ut_commands?.value,
       detail.documentReadingSummary?.ut_entry?.value,
@@ -489,6 +492,7 @@ function formatDurationDisplay(seconds?: number): string | undefined {
 function normalizeStatusString(status?: string): string {
   if (!status) return 'unknown'
   const lower = status.toLowerCase()
+  if (lower === 'skipped') return 'skipped'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'
   if (lower.includes('partial')) return 'partial_success'
   if (lower.includes('fail') || lower.includes('block') || lower.includes('unsuccessful')) return 'failed'
