@@ -63,7 +63,7 @@ session_export_file   — 字符串
 - `build.duration_seconds` — 来自 `duration_seconds`
 - `build.artifacts` — 若是字符串数组，转为 `[{name, path:"unknown", size:"unknown"}]`。若是对象数组，保留结构。若是带计数的对象（如 `{driver_libraries: 87}`），转为 `[{type, count}]`
 - `ut.status` — 归一化；源：`ut.status` 或 `unit_test.status` 或 `unittest.status`
-- `ut.total/passed/failed` — **先查平面字段**：`total`/`passed`/`failed`，同时检查 `total_tests`/`passed_tests`/`failed_tests`、`total_suites`/`passed_suites`/`failed_suites`、`collected`。**如果都为空，遍历命名子组件聚合**（见下方"UT 嵌套子组件处理"）
+- `ut.total/passed/failed` — **先查平面字段**：`total`/`passed`/`failed`，同时检查 `total_tests`/`passed_tests`/`failed_tests`、`total_suites`/`passed_suites`/`failed_suites`、`total_runnable`、`collected`、`total_discovered`。**如果都为空，遍历命名子组件聚合**（见下方"UT 嵌套子组件处理"）
 - `ut.failures` — 来自 `failures` 数组或 `failed_tests_detail`。字符串转为 `{test_name, reason:"unknown"}`
 - `ut.sub_components` — 当 UT 数据来自嵌套子组件时，保留 `{组件名: {total, passed, failed, ...}}` 详情
 - `sample.status` — 归一化；源：`sample.status` 或 `samples.status` 或 `sample_run.status`
@@ -145,10 +145,69 @@ session_export_file   — 字符串
 
 ## 常见问题与修复
 
-### JSON 损坏
-- **中文引号变成 ASCII `"`**：JSON 字符串中间用于中文引用的裸 `"` 字符会提前结束字符串。替换为 Unicode 弯引号 `"`（U+201C）和 `"`（U+201D）
-- **文件中的垃圾字符**（如 `P3390851`）：直接删除该垃圾标记
-- **损坏的 URL**（如 `gitcodeP3390851com`）：根据已知模式恢复为 `gitcode.com`
+### JSON 损坏（重要 — 归一化前必须先修复）
+
+原始 JSON 文件可能因生成工具的缺陷而损坏，无法被 `JSON.parse()` 解析。归一化前必须先修复这些损坏。
+
+#### 类型 1：中文引号变成 ASCII `"`
+
+**症状**：`JSON.parse()` 报 `Expected ',' or ']' after array element`，位置在包含中文引号的文本行。
+
+**原因**：ttfhw-verify 生成报告时，中文文本中的引号（如 "环境要求"、"CANN >= 8.5.0"）被写成 ASCII 双引号 `"`（U+0022），而 JSON 用 `"` 作为字符串定界符，导致字符串被提前截断。
+
+**检测方法**：
+```bash
+node -e "JSON.parse(require('fs').readFileSync('json-org/xxx.json','utf-8'))"
+```
+如果报 `position N (line X column Y)`，阅读对应行，找中文文本中出现的裸 `"`。
+
+**修复方法**：将中文引号对替换为 Unicode 弯引号 `"`（U+201C, LEFT DOUBLE QUOTATION MARK）和 `"`（U+201D, RIGHT DOUBLE QUOTATION MARK）：
+
+```bash
+node -e "
+const fs = require('fs');
+let raw = fs.readFileSync('json-org/file.json', 'utf-8');
+// 定位损坏行，将中文引号的 \" 替换为 Unicode 弯引号
+// 注意保留 JSON 字符串真正的结束 \" 
+// 例：...在\"环境要求\"...提及\"CANN >= 8.5.0\"\"...
+//   → ...在"环境要求"...提及"CANN >= 8.5.0"\"...
+raw = raw.replace('损坏的原文', '修复后的原文');
+JSON.parse(raw); // 验证修复
+fs.writeFileSync('json-org/file.json', raw, 'utf-8');
+"
+```
+
+**关键**：替换时只替换中文引号位置的那几个 `"`，保留 JSON 字符串定界符的 `"`（通常是该行最后一个 `"` 或倒数第几个需要仔细辨认）。
+
+#### 类型 2：文件中的垃圾字符
+
+**症状**：`JSON.parse()` 报 `Expected double-quoted property name`，位置在某个字段中间。
+
+**原因**：报告生成过程中随机字符串（如 `P3390851`）被插入到 JSON 对象中。
+
+**检测方法**：同样用 `JSON.parse()` 试解析，查看错误位置。
+
+**修复方法**：直接删除垃圾标记行：
+
+```bash
+node -e "
+let raw = require('fs').readFileSync('file.json','utf-8');
+raw = raw.replace('     P3390851\r\n', '');  // 整行删除
+JSON.parse(raw);
+"
+```
+
+#### 类型 3：损坏的 URL
+
+**症状**：`repo_url` 字段包含垃圾字符，如 `gitcodeP3390851com`、`gitcode9cann`。
+
+**修复方法**：根据已知模式恢复。GitCode URL 格式为 `https://gitcode.com/<org>/<repo>.git`。结合 `repo_path` 或文件名推断正确的组织名和仓库名。
+
+#### 类型 4：URL 带附加文本
+
+**症状**：`repo_url` 值为 `https://gitcode.com/cann/ops-nn.git (cloned to /path/to/repo)`。
+
+**修复方法**：在 ` (` 处分割，只保留前半部分 URL。
 
 ### 缺少 repo_name
 按优先级从多个来源推断：
@@ -203,7 +262,7 @@ session_export_file   — 字符串
 4. 将子组件详情保留在 `ut.sub_components` 中，格式：`{ "组件名": { total, passed, failed, ... } }`
 
 **常见计数键名变体：**
-- `total`、`total_tests`、`total_suites`、`collected`、`total_sampled`
+- `total`、`total_tests`、`total_suites`、`total_runnable`、`collected`、`total_sampled`、`total_discovered`
 - `passed`、`passed_tests`、`passed_suites`、`passed_sampled`
 - `failed`、`failed_tests`、`failed_suites`、`errors`
 
