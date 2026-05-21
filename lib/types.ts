@@ -67,8 +67,18 @@ export interface ReportMetadata {
 }
 
 export interface MachineSpec {
-  host_machine?: HostMachine;
-  container?: ContainerSpec;
+  host_machine?: Record<string, any>;
+  container?: Record<string, any>;
+  image_source?: {
+    type?: string;
+    image_name?: string;
+    selection_reason?: string;
+    source?: string;
+    [key: string]: any;
+  };
+  npu_hardware_present?: boolean;
+  cann_environment?: Record<string, any>;
+  [key: string]: any;
 }
 
 export interface HostMachine {
