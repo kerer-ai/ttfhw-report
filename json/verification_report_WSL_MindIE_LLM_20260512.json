@@ -3,8 +3,8 @@
     "repo_name": "MindIE-LLM",
     "repo_path": "/workspace/qkk/MindIE-LLM",
     "repo_url": "/workspace/qkk/MindIE-LLM",
-    "start_time": "unknown",
-    "end_time": "unknown",
+    "start_time": "2026-05-12T20:00:00",
+    "end_time": "2026-05-12T21:30:00",
     "duration_seconds": 5400,
     "total_steps": 10
   },
@@ -33,36 +33,43 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "README.md + CMakeLists.txt",
+      "value": "ARM64/aarch64, x86_64"
     },
     "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "openEuler 24.03 LTS 容器镜像",
+      "value": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
     },
     "dependencies": {
-      "source": "unknown",
-      "value": []
+      "source": "CMakeLists.txt + build.sh",
+      "value": [
+        "cmake >= 3.19.0",
+        "gcc, gcc-c++, make, git",
+        "python3, python3-pip, python3-devel",
+        "perl, autoconf, automake, libtool",
+        "torch==2.0.0, pybind11, numpy, posix_ipc (Python)",
+        "zlib (1.2.13), Boost (1.87.0), gRPC, Protobuf, OpenSSL (3.0.9), c-ares (1.19.1), abseil-cpp, prometheus-cpp (bundled third-party)"
+      ]
     },
     "build_commands": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "build.sh - Main build script",
+      "value": "bash build.sh (third-party compilation + cmake + make)"
     },
     "ut_commands": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "CMakeLists.txt - CTest 配置",
+      "value": "CTest 已配置但测试文件未在当前仓库中实现"
     },
     "sample_commands": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "examples/atb_models/ 目录",
+      "value": "examples/atb_models/ 目录结构完整，含 atb_framework, atb_llm, examples, tests, scripts"
     },
     "build_entry": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "build.sh",
+      "value": "bash build.sh"
     },
     "ut_entry": {
-      "source": "unknown",
-      "value": "unknown"
+      "source": "CMakeLists.txt",
+      "value": "CTest 已配置 (enable_testing())，测试文件未实现"
     }
   },
   "execution_log": [
@@ -194,8 +201,11 @@
   ],
   "final_results": {
     "build": {
-      "status": "success",
-      "duration_seconds": 0,
+      "status": "partial_success",
+      "duration_seconds": 240,
+      "artifacts_location": "/workspace/output/lib/",
+      "build_note": "CMake 配置成功，make 编译部分失败（源码缺少 <cstddef> include、torch API 版本不匹配），但仓库包含完整的预构建产物 16 个 .so",
+      "cmake_duration_seconds": 7.5,
       "artifacts": [
         {
           "name": "libsystem_log.so",
@@ -280,12 +290,13 @@
       ]
     },
     "ut": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "total": 0,
       "passed": 0,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "note": "CTest 已在 CMakeLists.txt 中配置 (enable_testing())，但仓库中未包含测试文件"
     },
     "sample": {
       "status": "success",
