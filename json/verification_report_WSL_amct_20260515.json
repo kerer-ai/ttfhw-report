@@ -299,12 +299,13 @@
       ]
     },
     "ut": {
-      "status": "success",
+      "status": "partial_success",
       "duration_seconds": 162,
       "total": 813,
       "passed": 810,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "skipped": 3
     },
     "sample": {
       "status": "not_run",

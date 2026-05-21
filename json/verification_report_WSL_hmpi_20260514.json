@@ -426,12 +426,13 @@
       ]
     },
     "ut": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 5,
       "total": 1,
       "passed": 0,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "skipped": 1
     },
     "sample": {
       "status": "success",

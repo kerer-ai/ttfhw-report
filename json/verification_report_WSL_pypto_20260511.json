@@ -261,7 +261,8 @@
       "total": 261,
       "passed": 258,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "skipped": 3
     },
     "sample": {
       "status": "success",

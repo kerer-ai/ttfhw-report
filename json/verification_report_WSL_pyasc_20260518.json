@@ -260,7 +260,8 @@
       "total": 395,
       "passed": 394,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "skipped": 1
     },
     "sample": {
       "status": "not_run",
