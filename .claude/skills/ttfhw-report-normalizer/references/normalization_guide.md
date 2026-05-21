@@ -63,8 +63,9 @@ session_export_file   — 字符串
 - `build.duration_seconds` — 来自 `duration_seconds`
 - `build.artifacts` — 若是字符串数组，转为 `[{name, path:"unknown", size:"unknown"}]`。若是对象数组，保留结构。若是带计数的对象（如 `{driver_libraries: 87}`），转为 `[{type, count}]`
 - `ut.status` — 归一化；源：`ut.status` 或 `unit_test.status` 或 `unittest.status`
-- `ut.total/passed/failed` — 来自 `total/passed/failed`，同时检查 `total_tests/passed_tests/failed_tests`、`total_suites/passed_suites/failed_suites`
+- `ut.total/passed/failed` — **先查平面字段**：`total`/`passed`/`failed`，同时检查 `total_tests`/`passed_tests`/`failed_tests`、`total_suites`/`passed_suites`/`failed_suites`、`collected`。**如果都为空，遍历命名子组件聚合**（见下方"UT 嵌套子组件处理"）
 - `ut.failures` — 来自 `failures` 数组或 `failed_tests_detail`。字符串转为 `{test_name, reason:"unknown"}`
+- `ut.sub_components` — 当 UT 数据来自嵌套子组件时，保留 `{组件名: {total, passed, failed, ...}}` 详情
 - `sample.status` — 归一化；源：`sample.status` 或 `samples.status` 或 `sample_run.status`
 - `sample.results` — 来自 `results` 数组
 
@@ -172,3 +173,39 @@ session_export_file   — 字符串
 
 ### 重复仓库（WSL vs Ubuntu 前缀）
 当同一仓库同时存在 `WSL_<repo>` 和 `Ubuntu_<repo>` 两份文件时，优先选 WSL（通常更新/更相关）。同前缀下选日期更新的。
+
+### UT 嵌套子组件处理（重要）
+
+部分原始文件的 UT 数据不是平面结构，而是按组件拆分的命名子对象：
+
+```json
+"unit_test": {
+  "status": "success",
+  "hixl_test": { "total": 290, "passed": 290, "failed": 0, "test_suites": 21 },
+  "llm_datadist_test": { "total_sampled": 10, "passed_sampled": 10 }
+}
+```
+
+或：
+
+```json
+"ut": {
+  "status": "FAILED",
+  "nodemanager_test": { "collected": 5, "passed": 0, "failed": 5 },
+  "llt_cpp": { "status": "NOT_RUN" }
+}
+```
+
+**处理方式：**
+1. 先检查 `ut.total`、`ut.passed`、`ut.failed` 等平面字段
+2. 如果平面字段全为 0 或不存在，遍历 `ut` 的子键，找到包含 `total`/`collected`/`passed`/`total_sampled` 等计数的命名子对象
+3. 聚合：`total` = 各子组件 total/collected/total_sampled 之和，`passed` 同理，`failed` = 各子组件 failed/errors 之和
+4. 将子组件详情保留在 `ut.sub_components` 中，格式：`{ "组件名": { total, passed, failed, ... } }`
+
+**常见计数键名变体：**
+- `total`、`total_tests`、`total_suites`、`collected`、`total_sampled`
+- `passed`、`passed_tests`、`passed_suites`、`passed_sampled`
+- `failed`、`failed_tests`、`failed_suites`、`errors`
+
+**已知需要排除的元数据键（不做为子组件）：**
+`status`、`reason`、`note`、`summary`、`duration_seconds`、`failures`、`failure_reason`、`pass_rate`、`skipped`、`test_cases`、`test_suites`、`execution_time_seconds`、`notes`、`errors`、`blocked`、`coverage` 等。

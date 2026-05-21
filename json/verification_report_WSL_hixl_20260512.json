@@ -272,10 +272,33 @@
     "ut": {
       "status": "success",
       "duration_seconds": 10,
-      "total": 0,
-      "passed": 0,
+      "total": 300,
+      "passed": 300,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "sub_components": {
+        "hixl_test": {
+          "total": 290,
+          "passed": 290,
+          "failed": 0,
+          "test_suites": 21,
+          "suite_details": {
+            "ThreadPoolTest": 14,
+            "HccpProxyUt": 3,
+            "HixlEngineUboeTest": 17,
+            "HixlKernelBasicTest": 4,
+            "other_suites": 252
+          }
+        },
+        "llm_datadist_test": {
+          "total_sampled": 10,
+          "passed_sampled": 10,
+          "sampled_tests": {
+            "ChannelManagerUnitTest": "4/4 全部通过",
+            "ChannelMsgHandlerUnitTest": "6/6 全部通过"
+          }
+        }
+      }
     },
     "sample": {
       "status": "not_run",

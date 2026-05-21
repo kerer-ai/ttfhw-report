@@ -234,15 +234,32 @@
     "ut": {
       "status": "partial_success",
       "duration_seconds": 0,
-      "total": 0,
-      "passed": 0,
-      "failed": 0,
+      "total": 68,
+      "passed": 51,
+      "failed": 17,
       "failures": [
         {
-          "test_name": "unknown",
-          "reason": "pytest does not apply the torch_npu mock defined in UT/run.py. The mock is set up in run.py before module imports, but pytest collects and runs tests directly without going through run.py."
+          "test_class": "TestAclGraphConfig",
+          "test_file": "UT/compilation/test_aclgraph_config.py",
+          "error_type": "ModuleNotFoundError",
+          "error_message": "No module named torch_npu",
+          "root_cause": "pytest 未应用 UT/run.py 中的 torch_npu mock"
         }
-      ]
+      ],
+      "sub_components": {
+        "unittest_runner": {
+          "total": 34,
+          "passed": 34,
+          "failed": 0,
+          "status": "all_passed"
+        },
+        "pytest_runner": {
+          "total": 34,
+          "passed": 17,
+          "errors": 17,
+          "status": "partial_failure"
+        }
+      }
     },
     "sample": {
       "status": "not_run",

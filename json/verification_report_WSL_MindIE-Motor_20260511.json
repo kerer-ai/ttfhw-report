@@ -224,10 +224,27 @@
     "ut": {
       "status": "failed",
       "duration_seconds": 0,
-      "total": 0,
+      "total": 5,
       "passed": 0,
-      "failed": 0,
-      "failures": []
+      "failed": 5,
+      "failures": [],
+      "sub_components": {
+        "nodemanager_test": {
+          "collected": 5,
+          "passed": 0,
+          "failed": 5,
+          "import_errors": 6,
+          "failure_reason": "KeyError: tls_crl in cert_utils.py - CertUtil.validate_cert_and_decrypt_password() 未处理缺失的配置键"
+        },
+        "llt_cpp": {
+          "status": "not_run",
+          "reason": "C++ 构建因 msServiceProfiler 依赖问题失败"
+        },
+        "adapter_test": {
+          "status": "not_run",
+          "reason": "未执行"
+        }
+      }
     },
     "sample": {
       "status": "not_run",
