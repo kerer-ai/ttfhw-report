@@ -232,7 +232,7 @@ function buildTimelineFromProcessEntries(entries: any[]): TimelinePhase[] {
       ? Math.round((nextTime - entry._ts) / 1000)
       : 0
 
-    const step = (entry.step || entry.action || '').toLowerCase()
+    const step = String(entry.step || entry.action || '').toLowerCase()
     if (duration === 0 && ['start', 'cleanup', 'report', 'end', 'report_generation'].includes(step)) continue
 
     phases.push({
