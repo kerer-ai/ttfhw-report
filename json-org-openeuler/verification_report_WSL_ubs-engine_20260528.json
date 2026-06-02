@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "repo_path": "./tmp_src/",
+    "repo_url": "https://gitcode.com/openeuler/ubs-engine.git",
+    "start_time": "2026-05-28T12:52:00",
+    "end_time": "2026-05-28T14:10:00",
+    "duration_seconds": 4680,
+    "total_steps": 6
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700",
+      "cpu_cores": 24,
+      "memory": "15Gi",
+      "docker_version": "Docker version 29.4.2, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 24,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "用户明确要求使用openEuler镜像，文档推荐在openEuler Linux下执行项目构建"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 / aarch64 (文档推荐ARM64)",
+      "source": "README.md - 构建项目章节"
+    },
+    "recommended_image": {
+      "value": "openEuler Linux (ARM64) 推荐",
+      "source": "README.md - 构建项目章节"
+    },
+    "dependencies": {
+      "value": [
+        "cmake >= 3.22",
+        "make >= 4.3",
+        "gcc-c++ >= 10.3",
+        "gcc >= 10.3",
+        "glibc-devel >= 2.34",
+        "libstdc++-devel >= 10.3",
+        "systemd-devel >= 249",
+        "libboundscheck >= v1.1",
+        "libxml2-devel >= 2.9",
+        "openssl-devel >= 3.0",
+        "cpp-httplib-devel >= 0.27.0",
+        "rapidjson-devel >= 1.1.0",
+        "ubs-comm-devel >= 1.0.0-15",
+        "numactl-libs >= 2.0",
+        "ninja-build >= 1.10",
+        "libvirt-devel >= 9.0",
+        "git"
+      ],
+      "source": "ubs-engine.spec - BuildRequires"
+    },
+    "build_commands": {
+      "value": "bash build.sh -S (Release构建，带源码编译选项)",
+      "source": "README.md + docs/build_install/构建指导.md"
+    },
+    "ut_commands": {
+      "value": "bash build.sh ut -S (单元测试，带源码编译选项)",
+      "source": "README.md - 开发者测试章节"
+    },
+    "sample_commands": {
+      "value": "样例程序位于 example/ 目录，包含 C/Go/Python 示例，需要 ubse daemon 运行",
+      "source": "example/ 目录结构"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "ubs-comm-devel (hcom)",
+          "install_method": "源码编译 (SOURCE_COMPILING选项)",
+          "note": "由于openEuler版本不是SP3/SP4，需要使用 -S 选项从源码编译hcom"
+        }
+      ],
+      "source": "docs/build_install/构建指导.md + 3rdparty/hcom/CMakeLists.txt"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-28T12:52:00",
+      "step": "仓库克隆",
+      "command": "git clone https://gitcode.com/openeuler/ubs-engine.git ./tmp_src/",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-28T12:53:00",
+      "step": "镜像拉取",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-28T12:54:00",
+      "step": "容器启动",
+      "command": "docker run -d --name ttfhw-ubs-engine-env -v ...:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-28T12:55:00",
+      "step": "镜像源配置",
+      "command": "sed -i 's|https://repo.openeuler.org|http://repo.huaweicloud.com/openeuler|g' /etc/yum.repos.d/openEuler.repo",
+      "success": true,
+      "returncode": 0,
+      "note": "配置华为云镜像源解决网络问题"
+    },
+    {
+      "timestamp": "2026-05-28T12:57:00",
+      "step": "依赖安装",
+      "command": "dnf install -y cmake make gcc gcc-c++ glibc-devel libstdc++-devel systemd-devel libboundscheck libxml2-devel openssl-devel cpp-httplib-devel rapidjson-devel numactl-libs ninja-build bash bc coreutils sudo util-linux-user patch libvirt-devel",
+      "success": true,
+      "returncode": 0,
+      "note": "禁用GPG检查解决key下载问题"
+    },
+    {
+      "timestamp": "2026-05-28T12:58:00",
+      "step": "安装git",
+      "command": "dnf install -y git",
+      "success": true,
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-28T13:00:00",
+      "step": "Release构建",
+      "command": "bash build.sh -S",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 789,
+      "note": "使用SOURCE_COMPILING选项从源码编译hcom"
+    },
+    {
+      "timestamp": "2026-05-28T13:14:00",
+      "step": "单元测试",
+      "command": "bash build.sh ut -S",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 3131,
+      "note": "Debug模式构建并运行测试"
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-28T12:52:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-28T12:52:00",
+      "step": "repo_clone",
+      "action": "克隆仓库",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-28T12:54:00",
+      "step": "container_setup",
+      "action": "启动openEuler容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-28T12:57:00",
+      "step": "dependency_install",
+      "action": "安装构建依赖",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-28T13:00:00",
+      "step": "build",
+      "action": "执行Release构建",
+      "result": "success",
+      "duration_seconds": 789
+    },
+    {
+      "timestamp": "2026-05-28T13:14:00",
+      "step": "unit_test",
+      "action": "执行单元测试",
+      "result": "success",
+      "duration_seconds": 3131
+    },
+    {
+      "timestamp": "2026-05-28T14:10:00",
+      "step": "cleanup",
+      "action": "清理容器",
+      "result": "success"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 789,
+      "artifacts": [
+        {
+          "name": "ubse",
+          "path": "cmake-build-release/bin/ubse",
+          "size": "13MB",
+          "description": "UBSE daemon主程序"
+        },
+        {
+          "name": "ubsectl",
+          "path": "cmake-build-release/bin/ubsectl",
+          "size": "1.1MB",
+          "description": "UBSE控制工具"
+        },
+        {
+          "name": "libubse-client.so",
+          "path": "cmake-build-release/lib/libubse-client.so.1.0.1",
+          "size": "406KB",
+          "description": "客户端SDK共享库"
+        },
+        {
+          "name": "libmempooling.so",
+          "path": "cmake-build-release/lib/libmempooling.so",
+          "size": "3.9MB",
+          "description": "内存池化插件"
+        },
+        {
+          "name": "libvirtagent.so",
+          "path": "cmake-build-release/lib/libvirtagent.so",
+          "size": "1.9MB",
+          "description": "虚拟化代理插件"
+        },
+        {
+          "name": "libucache_plugin.so",
+          "path": "cmake-build-release/lib/libucache_plugin.so",
+          "size": "970KB",
+          "description": "ucache插件"
+        },
+        {
+          "name": "libprocess_mem.so",
+          "path": "cmake-build-release/lib/libprocess_mem.so",
+          "size": "410KB",
+          "description": "进程内存插件"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 3131,
+      "total": 1301,
+      "passed": 1288,
+      "failed": 0,
+      "skipped": 13,
+      "failures": [],
+      "skipped_tests": [
+        "TestEventListener.MpEventSubModuleInitSuccess",
+        "TestFaultNodeModule.ProcessBorrowOutNodeFaultSuccess3",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid1",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid2",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid3",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid4",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidFailed_NotValidBorrowId",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidFailed_NotSameBatch",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidSuccess",
+        "TestMemPoolMigrateHelper.RpcMemBorrowRollback1",
+        "TestMemManager.DataReloadInitFailed",
+        "TestOverCommitFaultMemIdModule.GetRemoteNumaSizeFail1",
+        "TestOverCommitFaultMemIdModule.GetRemoteNumaSizeFail2"
+      ]
+    },
+    "sample": {
+      "status": "skipped",
+      "duration_seconds": 0,
+      "results": [],
+      "reason": "样例程序需要ubse daemon运行才能正常工作，不适合在容器中直接运行"
+    }
+  },
+  "documentation_gaps": [
+    "文档推荐ARM64架构，但x86_64架构下构建也成功",
+    "openEuler 24.03 (LTS) 非SP3/SP4版本时，需要使用-S选项从源码编译hcom，此信息在构建指导文档中说明但不够醒目"
+  ],
+  "problems_encountered": [
+    {
+      "problem": "openEuler官方镜像源网络连接失败",
+      "solution": "配置华为云镜像源",
+      "source": "手动配置"
+    },
+    {
+      "problem": "GPG key下载失败 (502错误)",
+      "solution": "禁用GPG检查 (gpgcheck=0)",
+      "source": "手动配置"
+    },
+    {
+      "problem": "git未安装导致FetchContent失败",
+      "solution": "安装git包",
+      "source": "错误日志分析"
+    },
+    {
+      "problem": "ubs-comm-devel未安装",
+      "solution": "使用-S (SOURCE_COMPILING) 选项从源码编译hcom",
+      "source": "docs/build_install/构建指导.md + 3rdparty/hcom/CMakeLists.txt"
+    }
+  ],
+  "summary": {
+    "overall_status": "success",
+    "build_result": "成功",
+    "ut_result": "成功 (1288/1301通过，13跳过，0失败)",
+    "sample_result": "跳过 (需要daemon运行)",
+    "image_used": "openEuler 24.03 LTS",
+    "key_findings": [
+      "仓库在openEuler 24.03 LTS (x86_64)环境下可成功构建",
+      "单元测试通过率99% (1288/1301)，13个测试被跳过",
+      "构建产物包含主程序、控制工具、SDK库和多个插件",
+      "需要使用-S选项从源码编译hcom依赖"
+    ]
+  }
+}
