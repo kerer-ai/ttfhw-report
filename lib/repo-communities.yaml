@@ -1,0 +1,156 @@
+# TTFHW Repository List
+# Time To First Hello World 验证仓库列表
+# 按社区类型分类
+# 此文件为仓库分类的权威来源
+
+MindIE:
+  description: "MindIE 昇腾AI计算生态"
+  repos:
+    - name: MindIE-Motor
+      url: https://gitcode.com/Ascend/MindIE-Motor.git
+    - name: MindIE-SD
+      url: https://gitcode.com/Ascend/MindIE-SD.git
+    - name: MindIE-PyMotor
+      url: https://gitcode.com/Ascend/MindIE-PyMotor.git
+    - name: MindIE-LLM
+      url: https://gitcode.com/Ascend/MindIE-LLM.git
+
+MindSpeed:
+  description: "MindSpeed 昇腾AI计算生态"
+  repos:
+    - name: MindSpeed
+      url: https://gitcode.com/Ascend/MindSpeed.git
+    - name: MindSpeed-LLM
+      url: https://gitcode.com/Ascend/MindSpeed-LLM.git
+    - name: MindSpeed-MM
+      url: https://gitcode.com/Ascend/MindSpeed-MM.git
+
+pytorch:
+  description: "pytorch 昇腾AI计算生态"
+  repos:
+    - name: pytorch
+      url: https://gitcode.com/Ascend/pytorch.git
+    - name: op-plugin
+      url: https://gitcode.com/Ascend/op-plugin.git
+    - name: torchair
+      url: https://gitcode.com/Ascend/torchair.git
+
+openeuler:
+  description: "openEuler 开源操作系统社区"
+  repos:
+    - name: kernel
+      url: https://gitcode.com/openeuler/kernel.git
+    - name: iSulad
+      url: https://gitcode.com/openeuler/iSulad.git
+    - name: A-Tune
+      url: https://gitcode.com/openeuler/A-Tune.git
+    - name: stratovirt
+      url: https://gitcode.com/openeuler/stratovirt.git
+    - name: bishengjdk-8
+      url: https://gitcode.com/openeuler/bishengjdk-8.git
+
+ubsCore:
+  description: "ubsCore 昇腾AI计算生态"
+  repos:
+    - name: memcache
+      url: https://gitcode.com/Ascend/memcache.git
+    - name: memfabric_hybrid
+      url: https://gitcode.com/Ascend/memfabric_hybrid.git
+    - name: ubs-engine
+      url: https://gitcode.com/openeuler/ubs-engine.git
+    - name: ubs-comm
+      url: https://gitcode.com/openeuler/ubs-comm.git
+    - name: ubs-virt
+      url: https://gitcode.com/openeuler/ubs-virt.git
+    - name: ubs-io
+      url: https://gitcode.com/openeuler/ubs-io.git
+    - name: ubs-mem
+      url: https://gitcode.com/openeuler/ubs-mem.git
+    - name: OmniStateStore
+      url: https://gitcode.com/openeuler/OmniStateStore.git
+    - name: ham
+      url: https://gitcode.com/openeuler/ham.git
+    - name: ubturbo
+      url: https://gitcode.com/openeuler/ubturbo.git
+
+HPCKit:
+  description: "HPCKit 鲲鹏计算生态"
+  repos:
+    - name: kupl
+      url: https://gitcode.com/kunpengcompute/kupl.git
+    - name: kutacc
+      url: https://gitcode.com/kunpengcompute/kutacc.git
+    - name: kudnn
+      url: https://gitcode.com/kunpengcompute/kudnn.git
+    - name: kuqcd
+      url: https://gitcode.com/kunpengcompute/kuqcd.git
+    - name: hmpi
+      url: https://gitcode.com/kunpengcompute/hmpi.git
+    - name: hucx
+      url: https://gitcode.com/kunpengcompute/hucx.git
+    - name: xucg
+      url: https://gitcode.com/kunpengcompute/xucg.git
+
+openubmc:
+  description: "openUBMC BMC管理软件开源社区"
+  repos:
+    - name: libmcpp
+      url: https://gitcode.com/openUBMC/libmcpp.git
+    - name: devmon
+      url: https://gitcode.com/openUBMC/devmon.git
+    - name: libipmi
+      url: https://gitcode.com/openUBMC/libipmi.git
+    - name: component_drivers
+      url: https://gitcode.com/openUBMC/component_drivers.git
+    - name: webui
+      url: https://gitcode.com/openUBMC/webui.git
+    - name: manifest
+      url: https://gitcode.com/openUBMC/manifest.git
+
+cann:
+  description: "CANN Compute Architecture for Neural Networks 昇腾算子库"
+  repos:
+    - name: ops-nn
+      url: https://gitcode.com/cann/ops-nn.git
+    - name: ops-math
+      url: https://gitcode.com/cann/ops-math.git
+    - name: ops-transformer
+      url: https://gitcode.com/cann/ops-transformer.git
+    - name: ops-cv
+      url: https://gitcode.com/cann/ops-cv.git
+    - name: opbase
+      url: https://gitcode.com/cann/opbase.git
+    - name: hixl
+      url: https://gitcode.com/cann/hixl.git
+    - name: shmem
+      url: https://gitcode.com/cann/shmem.git
+    - name: hccl
+      url: https://gitcode.com/cann/hccl.git
+    - name: hcomm
+      url: https://gitcode.com/cann/hcomm.git
+    - name: ge
+      url: https://gitcode.com/cann/ge.git
+    - name: metadef
+      url: https://gitcode.com/cann/metadef.git
+    - name: graph-autofusion
+      url: https://gitcode.com/cann/graph-autofusion.git
+    - name: asc-devkit
+      url: https://gitcode.com/cann/asc-devkit.git
+    - name: asc-tools
+      url: https://gitcode.com/cann/asc-tools.git
+    - name: pto-isa
+      url: https://gitcode.com/cann/pto-isa.git
+    - name: pyasc
+      url: https://gitcode.com/cann/pyasc.git
+    - name: pypto
+      url: https://gitcode.com/cann/pypto.git
+    - name: atvoss
+      url: https://gitcode.com/cann/atvoss.git
+    - name: runtime
+      url: https://gitcode.com/cann/runtime.git
+    - name: driver
+      url: https://gitcode.com/cann/driver.git
+    - name: oam-tools
+      url: https://gitcode.com/cann/oam-tools.git
+    - name: amct
+      url: https://gitcode.com/cann/amct.git

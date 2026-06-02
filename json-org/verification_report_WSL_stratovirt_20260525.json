@@ -1,0 +1,285 @@
+{
+  "metadata": {
+    "repo_name": "stratovirt",
+    "repo_url": "https://gitcode.com/openeuler/stratovirt.git",
+    "repo_version": "2.5.0",
+    "repo_path": "/root/workspace/tmp_src",
+    "verification_start": "2026-05-25T18:44:00+08:00",
+    "verification_end": "2026-05-25T19:40:00+08:00",
+    "duration_seconds": 3360,
+    "total_steps": 7,
+    "verification_environment": "Docker container on WSL2 (Windows Subsystem for Linux)"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel (WSL2 virtualized)",
+      "cpu_cores": 24,
+      "memory": "15Gi",
+      "disk": "1007G",
+      "docker_version": "Docker version 29.4.3, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 24,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "Dockerfile FROM openeuler/openeuler:22.03-lts-sp2, Makefile 使用 yum, 仓库来自 openeuler/stratovirt → 选择 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 和 aarch64",
+      "source": "README.md - 第34-44行, docs/quickstart.ch.md - 第7行"
+    },
+    "recommended_image": {
+      "value": "Dockerfile FROM openeuler/openeuler:22.03-lts-sp2, Makefile 使用 yum → 选择 openEuler 24.03 LTS",
+      "source": "tools/build_stratovirt_static/Dockerfile - 第13行, Makefile - 第17-26行"
+    },
+    "dependencies": {
+      "value": [
+        "rustc >= 1.64.0 (文档声明)",
+        "cargo",
+        "pixman-devel",
+        "libcap-ng-devel",
+        "cyrus-sasl-devel",
+        "pulseaudio",
+        "clang",
+        "gtk3-devel",
+        "libusbx (libusbx-devel)",
+        "alsa-lib-devel",
+        "make",
+        "libcap-devel (Dockerfile中附加)",
+        "libseccomp-devel (Dockerfile中附加)",
+        "musl-devel/musl-gcc (Dockerfile中附加)"
+      ],
+      "source": "Makefile - yum-deps目标 + tools/build_stratovirt_static/Dockerfile"
+    },
+    "build_commands": {
+      "value": "cargo build --workspace --bins --release",
+      "source": "Makefile - build目标, README.md - 第18行 (make build)"
+    },
+    "ut_commands": {
+      "value": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "source": "docs/test.md - 单元测试章节"
+    },
+    "sample_commands": {
+      "value": "./target/release/stratovirt -h / stratovirt-img --help",
+      "source": "README.md - 使用StratoVirt启动虚拟机章节 (启动命令示例)"
+    },
+    "special_dependencies": {
+      "value": [],
+      "source": "未找到特殊依赖 (无 CANN/昇腾 等特殊包需求)"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-25T18:45:00+08:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "description": "拉取 openEuler 24.03 LTS 镜像",
+      "success": true,
+      "output": "镜像已就绪 (sha256:d539e7e1e2d929f7c7264494a83705cc263baff7cd90ac7d4cd90e7aa47b065d)",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T18:46:00+08:00",
+      "command": "docker run -d --name ttfhw-stratovirt-env ...",
+      "description": "启动 openEuler 24.03 LTS 容器",
+      "success": true,
+      "output": "容器 25e8ecb2f8a7 启动成功",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T18:52:00+08:00",
+      "command": "dnf install -y make clang pixman-devel libcap-ng-devel libcap-devel libseccomp-devel cyrus-sasl-devel alsa-lib-devel gtk3-devel libusbx-devel musl-devel",
+      "description": "安装系统构建依赖 (Makefile yum-deps + Dockerfile额外依赖, 使用dnf)",
+      "success": true,
+      "output": "已安装 11 个包及依赖, 总计 113 MB",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T18:50:00+08:00",
+      "command": "dnf install -y rust cargo",
+      "description": "通过 dnf 安装 Rust 1.82.0",
+      "success": true,
+      "output": "Rust 1.82.0 和 Cargo 1.82.0 安装成功",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T18:55:00+08:00",
+      "command": "curl ... | sh -s -- -y (rustup with Tsinghua mirror)",
+      "description": "通过 rustup 升级 Rust (清华镜像源)",
+      "success": true,
+      "output": "Rust 1.95.0 安装成功, 替代了 dnf 的 1.82.0",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T18:58:00+08:00",
+      "command": "cargo build --workspace --bins --release --jobs 14",
+      "description": "构建 StratoVirt (release模式, 14并发)",
+      "success": true,
+      "output": "构建成功, 耗时 21m50s. 产物: stratovirt (93M), stratovirt-img (7.5M). 1个警告: migration/src/protocol.rs:338 unnecessary unsafe block",
+      "returncode": 0,
+      "duration": "21m50.438s"
+    },
+    {
+      "timestamp": "2026-05-25T19:25:00+08:00",
+      "command": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "description": "运行单元测试 (排除 mod_test)",
+      "success": true,
+      "output": "全部通过: 410 passed, 0 failed, 0 ignored. 耗时 1m4.468s",
+      "returncode": 0,
+      "duration": "1m4.468s"
+    },
+    {
+      "timestamp": "2026-05-25T19:30:00+08:00",
+      "command": "stratovirt -h / stratovirt -V / stratovirt-img --help",
+      "description": "执行样例: 运行二进制验证功能",
+      "success": true,
+      "output": "stratovirt 显示帮助和版本信息, stratovirt-img 显示用法说明",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-25T19:40:00+08:00",
+      "command": "docker stop/rm ttfhw-stratovirt-env",
+      "description": "清理验证容器",
+      "success": true,
+      "output": "容器已停止并删除",
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {"timestamp": "2026-05-25T18:44:00+08:00", "step": "clone_repo", "action": "克隆仓库 gitcode.com/openeuler/stratovirt.git", "result": "success"},
+    {"timestamp": "2026-05-25T18:45:00+08:00", "step": "image_selection", "action": "镜像选择: Dockerfile FROM openeuler → openEuler 24.03 LTS", "result": "selected"},
+    {"timestamp": "2026-05-25T18:46:00+08:00", "step": "container_start", "action": "启动 openEuler 24.03 LTS 容器", "result": "success"},
+    {"timestamp": "2026-05-25T18:48:00+08:00", "step": "doc_reading", "action": "阅读 README/文档/构建文件 提取依赖和命令", "result": "complete"},
+    {"timestamp": "2026-05-25T18:52:00+08:00", "step": "system_deps", "action": "安装系统构建依赖 (pixman-devel, libcap-ng-devel, etc.)", "result": "success"},
+    {"timestamp": "2026-05-25T18:55:00+08:00", "step": "rust_install", "action": "安装 Rust 1.95.0 (rustup 清华镜像源)", "result": "success"},
+    {"timestamp": "2026-05-25T18:58:00+08:00", "step": "rust_upgrade", "action": "dnf Rust 1.82.0 不支持 edition2024, 升级到 1.95.0", "result": "success"},
+    {"timestamp": "2026-05-25T18:58:00+08:00", "step": "build_start", "action": "开始构建 cargo build --workspace --bins --release", "result": "started"},
+    {"timestamp": "2026-05-25T19:20:00+08:00", "step": "build_end", "action": "构建完成 (21m50s)", "result": "success"},
+    {"timestamp": "2026-05-25T19:25:00+08:00", "step": "ut_start", "action": "开始单元测试 cargo test --workspace --exclude mod_test", "result": "started"},
+    {"timestamp": "2026-05-25T19:27:00+08:00", "step": "ut_end", "action": "单元测试完成: 410 passed, 0 failed (1m4s)", "result": "success"},
+    {"timestamp": "2026-05-25T19:30:00+08:00", "step": "sample_exec", "action": "样例执行: stratovirt -h / stratovirt -V / stratovirt-img --help", "result": "success"},
+    {"timestamp": "2026-05-25T19:40:00+08:00", "step": "cleanup", "action": "清理容器并生成报告", "result": "complete"}
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 1310.438,
+      "duration_display": "21m50.438s",
+      "warnings": 1,
+      "warning_details": [
+        {
+          "file": "migration/src/protocol.rs",
+          "line": 338,
+          "message": "unnecessary `unsafe` block (unused_unsafe)"
+        }
+      ],
+      "artifacts": [
+        {
+          "name": "stratovirt",
+          "path": "target/release/stratovirt",
+          "size": "93M",
+          "type": "executable"
+        },
+        {
+          "name": "stratovirt-img",
+          "path": "target/release/stratovirt-img",
+          "size": "7.5M",
+          "type": "executable"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 64.468,
+      "duration_display": "1m4.468s",
+      "total": 410,
+      "passed": 410,
+      "failed": 0,
+      "ignored": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "success",
+      "duration_seconds": 0.005,
+      "duration_display": "<1s",
+      "results": [
+        {
+          "command": "./target/release/stratovirt -h",
+          "status": "success",
+          "output": "显示完整帮助信息，包含所有命令行选项和使用说明"
+        },
+        {
+          "command": "./target/release/stratovirt -V",
+          "status": "success",
+          "output": "StratoVirt 2.5.0 commit-id unknown"
+        },
+        {
+          "command": "./target/release/stratovirt-img --help",
+          "status": "success",
+          "output": "显示 disk image utility 用法说明，含 create/info/check/resize/snapshot/convert 子命令"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    {
+      "gap": "README 中最小 Rust 版本要求标注为 1.64.0，但实际编译需要 >= 1.85.0 (因 crate cpufeatures 0.3.0 需要 edition2024 特性)",
+      "severity": "high",
+      "location": "docs/build_guide.ch.md 第8行, docs/build_guide.md 第8行"
+    },
+    {
+      "gap": "Makefile yum-deps 依赖列表不完整: 缺少 libcap-devel、libseccomp-devel、musl-devel (仅在 Dockerfile 中列出)",
+      "severity": "medium",
+      "location": "Makefile 第17-26行 vs tools/build_stratovirt_static/Dockerfile"
+    },
+    {
+      "gap": "Makefile 使用 yum 命令但未提及 dnf; openEuler 24.03 中 yum 仅为 dnf 符号链接",
+      "severity": "low",
+      "location": "Makefile"
+    },
+    {
+      "gap": "测试文档中 'mod test is not fully supported on the x86_64 architecture' 仅在英文版 docs/test.md 提到，中文版 docs/test.md 未说明",
+      "severity": "low",
+      "location": "docs/test.md"
+    },
+    {
+      "gap": "构建指南未说明需要安装 musl-devel 用于 musl 静态链接构建",
+      "severity": "low",
+      "location": "docs/build_guide.ch.md / docs/build_guide.md"
+    }
+  ],
+  "problems_encountered": [
+    {
+      "problem": "Docker Desktop WSL: bind mount 路径不可访问 (docker run -v 挂载 /root/workspace/tmp_src 后容器内 /workspace 为空)",
+      "solution": "使用 `docker cp` 命令将源码复制到容器内，替代 bind mount",
+      "source": "Docker Desktop WSL 后端 VM 隔离限制"
+    },
+    {
+      "problem": "openEuler 24.03 dnf 仓库中的 Rust 版本为 1.82.0，不支持 edition2024 特性，导致 cargo build 失败: 'feature edition2024 is required ... not stabilized in Cargo 1.82.0'",
+      "solution": "通过 rustup 安装 Rust 1.95.0 (使用清华镜像源: RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup)",
+      "source": "cargo 编译错误 + rustup 官方文档"
+    },
+    {
+      "problem": "rustup 默认下载 (sh.rustup.rs) 失败: 'curl: (18) Transferred a partial file' - 网络不稳定导致部分文件传输",
+      "solution": "重试并使用清华镜像源加速下载 (RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup)",
+      "source": "rustup 错误输出 + 网络诊断"
+    },
+    {
+      "problem": "Docker daemon 未运行 (docker.sock 不存在)",
+      "solution": "Docker Desktop 通过代理 socket 可用: 设置 DOCKER_HOST=unix:///mnt/wsl/docker-desktop/shared-sockets/guest-services/docker.proxy.sock",
+      "source": "Docker Desktop WSL 集成配置"
+    },
+    {
+      "problem": "已存在同名容器 ttfhw-stratovirt-env",
+      "solution": "先 docker stop + docker rm 再重新创建",
+      "source": "Docker 错误输出"
+    }
+  ]
+}

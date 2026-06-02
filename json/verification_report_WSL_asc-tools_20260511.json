@@ -1,0 +1,294 @@
+{
+  "metadata": {
+    "repo_name": "asc-tools",
+    "repo_path": "https://gitcode.com/cann/asc-tools.git",
+    "repo_url": "https://gitcode.com/cann/asc-tools.git",
+    "start_time": "2026-05-11T18:55:00",
+    "end_time": "2026-05-11T19:10:00",
+    "duration_seconds": 900,
+    "total_steps": 10
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "817G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "Ubuntu 24.04.4 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (no limit set)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "ubuntu:24.04",
+      "selection_reason": "根据架构自动选择（x86_64 → Ubuntu 24.04）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "docs/00_quick_start.md",
+      "value": "x86_64 / aarch64"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "dependencies": {
+      "source": "docs/00_quick_start.md - 安装依赖章节",
+      "value": [
+        "python >= 3.7.0",
+        "gcc >= 7.3.0 / g++ >= 7.3.0",
+        "cmake >= 3.16.0",
+        "ccache >= 4.6.1（可选）",
+        "CANN toolkit包（必选）",
+        "CANN ops包（可选，样例依赖）",
+        "cpudebug闭源包（必选）",
+        "pytest >= 8.3.2（UT依赖）",
+        "coverage >= 4.5.4（UT依赖）",
+        "googletest >= 1.11.0（UT依赖）",
+        "lcov >= 1.13（覆盖率依赖）"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/00_quick_start.md - 编译安装章节",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_commands": {
+      "source": "docs/00_quick_start.md - UT测试章节",
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
+    },
+    "sample_commands": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "build_entry": {
+      "source": "docs/00_quick_start.md - 编译安装章节",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_entry": {
+      "source": "docs/00_quick_start.md - UT测试章节",
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-11T18:55:00",
+      "command": "docker run -d --name ttfhw-asc-tools-env ubuntu:24.04",
+      "success": true,
+      "output": "Container started",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T18:56:00",
+      "command": "apt-get install -y cmake gcc g++ make python3 python3-pip git wget",
+      "success": true,
+      "output": "Dependencies installed",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T18:58:00",
+      "command": "Install CANN toolkit 9.0.0 (reused from previous download)",
+      "success": true,
+      "output": "Toolkit installed in /usr/local/Ascend",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T19:00:00",
+      "command": "cmake -B build (without cpudebug)",
+      "success": true,
+      "output": "Configuring done",
+      "returncode": 0,
+      "note": "cmake尝试下载cpudebug包但失败（网络问题）"
+    },
+    {
+      "timestamp": "2026-05-11T19:01:00",
+      "command": "make -j9",
+      "success": false,
+      "output": "stub_fun.h: No such file or directory",
+      "error": "缺少cpudebug闭源依赖",
+      "returncode": 1
+    },
+    {
+      "timestamp": "2026-05-11T19:02:00",
+      "command": "wget cpudebug闭源包",
+      "success": true,
+      "output": "Downloaded 6.47MB in 1.0s",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T19:03:00",
+      "command": "tar -xzf cpudebug.tar.gz -C libraries --strip-components 1",
+      "success": true,
+      "output": "stub_fun.h extracted to libraries/lib/include/",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T19:04:00",
+      "command": "cmake -B build && make -j9",
+      "success": true,
+      "output": "Built target cpudebug_*",
+      "returncode": 0,
+      "duration_seconds": 36.5
+    },
+    {
+      "timestamp": "2026-05-11T19:06:00",
+      "command": "pip3 install pytest coverage",
+      "success": true,
+      "output": "pytest 9.0.3, coverage 7.14.0",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T19:08:00",
+      "command": "cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_msobjdump",
+      "success": true,
+      "output": "20 passed in 0.15s",
+      "returncode": 0,
+      "duration_seconds": 0.6
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-11T18:55:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-11T18:56:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T18:58:00",
+      "step": "cann_installation",
+      "action": "安装CANN toolkit（复用）",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T19:00:00",
+      "step": "cmake_config",
+      "action": "cmake配置（无cpudebug）",
+      "result": "partial"
+    },
+    {
+      "timestamp": "2026-05-11T19:01:00",
+      "step": "build_attempt",
+      "action": "构建尝试",
+      "result": "failed",
+      "details": {
+        "error": "缺少stub_fun.h"
+      }
+    },
+    {
+      "timestamp": "2026-05-11T19:02:00",
+      "step": "cpudebug_download",
+      "action": "下载cpudebug闭源包",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T19:03:00",
+      "step": "cpudebug_extract",
+      "action": "解压cpudebug到libraries目录",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T19:04:00",
+      "step": "build",
+      "action": "编译构建",
+      "result": "success",
+      "details": {
+        "duration_seconds": 36.5
+      }
+    },
+    {
+      "timestamp": "2026-05-11T19:06:00",
+      "step": "ut_setup",
+      "action": "安装pytest",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T19:08:00",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "success",
+      "details": {
+        "total": 20,
+        "passed": 20
+      }
+    },
+    {
+      "timestamp": "2026-05-11T19:10:00",
+      "step": "cleanup",
+      "action": "清理容器",
+      "result": "success"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 36.5,
+      "artifacts": [
+        {
+          "name": "libcpudebug.so (ascend310B1)",
+          "path": "build/cpudebug/ascend310B1/libcpudebug.so"
+        },
+        {
+          "name": "libcpudebug.so (ascend950pr_9599)",
+          "path": "build/cpudebug/ascend950pr_9599/libcpudebug.so"
+        },
+        {
+          "name": "libcpudebug.so (ascend910)",
+          "path": "build/cpudebug/ascend910/libcpudebug.so"
+        },
+        {
+          "name": "libcpudebug.so (ascend910B1)",
+          "path": "build/cpudebug/ascend910B1/libcpudebug.so"
+        },
+        {
+          "name": "libcpudebug_acl_stub.so",
+          "path": "build/cpudebug/src/acl_stub/libcpudebug_acl_stub.so"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 0.6,
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": []
+    }
+  },
+  "documentation_gaps": [
+    "cpudebug闭源包下载URL未在README中明确列出，需要从cmake脚本中推断",
+    "TEST_MOD cmake变量设置方式不明确，导致首次UT配置失败",
+    "离线编译场景需要手动下载多个依赖包(msot/mskl/mskpp等)，文档列出但缺少一键下载脚本"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-05-11T19:01:00",
+      "problem": "构建失败：缺少stub_fun.h",
+      "solution": "下载cpudebug闭源包并解压到libraries目录",
+      "source": "cmake/third_party/cpudebug.cmake第31行检查libraries/lib/include/stub_fun.h"
+    },
+    {
+      "timestamp": "2026-05-11T19:08:00",
+      "problem": "cmake UT配置失败：TEST_MOD未设置",
+      "solution": "添加-DTEST_MOD=all参数",
+      "source": "tests/CMakeLists.txt第25行if语句需要TEST_MOD变量"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_asc-tools_20260511.md",
+  "verification_conclusion": ""
+}

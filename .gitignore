@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# production
+build/
+dist/
+
+# TypeScript
+*.tsbuildinfo
+
+# test/coverage
+coverage/
+
+# local env
+.env
+.env*.local
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# editor/system
+.DS_Store
+*.swp
+*:Zone.Identifier
+
+# local/generated verification workspace
+tmp_src/
+
+# local agent workspace (skills/除外，作为项目共享资源)
+.claude/*
+!.claude/skills/
+
+# archived/unused files
+tmp/

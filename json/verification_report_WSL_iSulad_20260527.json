@@ -1,0 +1,251 @@
+{
+  "metadata": {
+    "repo_name": "iSulad",
+    "repo_path": "/home/wangsike/workspace/ttfhw-iSulad/tmp_src/iSulad",
+    "repo_url": "https://gitcode.com/openeuler/iSulad.git",
+    "repo_version": "2.1.6",
+    "start_time": "2026-05-27T02:04:18Z",
+    "end_time": "2026-05-27T02:30:00Z",
+    "duration_seconds": 1542,
+    "total_steps": 35
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G (84G used, 873G available)",
+      "docker_version": "Docker version 29.2.1, build a5c7197"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "Dockerfile FROM centos:7.6.1810（非Ubuntu/openEuler）+ README推荐dnf builddep（openEuler命令）→ 选择 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 (文档提及 ARM 和 X86 性能测试，支持多架构)",
+      "source": "README.md - 性能章节"
+    },
+    "recommended_image": {
+      "value": "文档推荐 openEuler（dnf builddep iSulad.spec）→ 选择 openEuler 24.03 LTS",
+      "source": "README.md - 快速设置章节; README_zh.md - 开发环境设置章节"
+    },
+    "dependencies": {
+      "value": [
+        "cmake >= 2.8",
+        "gcc/g++ (C++11/17 support)",
+        "protobuf >= 3.1.0",
+        "grpc",
+        "libcap (capability.h)",
+        "zlib >= 1.2.8",
+        "yajl >= 2",
+        "libcrypto (openssl)",
+        "libcurl >= 7.4.0",
+        "systemd-devel",
+        "libselinux >= 2.0",
+        "libisula (libisula_libutils)",
+        "libwebsockets",
+        "ncurses",
+        "device-mapper",
+        "libarchive >= 3.4",
+        "libevent >= 2.1.8",
+        "libevhtp >= 1.2.16",
+        "lxc >= 3",
+        "python3, tar, sha256sum, gzip"
+      ],
+      "source": "README.md + cmake/checker.cmake + docs/build_docs/guide/build_guide.md"
+    },
+    "build_commands": {
+      "value": "mkdir build && cd build && cmake .. && make -j$(nproc)",
+      "source": "README.md - 构建章节; build_guide.md"
+    },
+    "ut_commands": {
+      "value": "cmake -DENABLE_UT=ON .. && make -j$(nproc) && ctest -V",
+      "source": "CI/only_build_isulad.sh; CMakeLists.txt (ENABLE_UT option)"
+    },
+    "sample_commands": {
+      "value": "未在文档中找到明确的样例/示例执行命令",
+      "source": "README.md - Operations on containers章节"
+    },
+    "build_entry": {
+      "source": "README.md - 快速设置章节",
+      "value": "mkdir build && cd build && cmake .. && make && make install"
+    },
+    "ut_entry": {
+      "source": "CI/only_build_isulad.sh",
+      "value": "cmake -DENABLE_UT=ON .. && make -j2 && ctest -V"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "lcr",
+          "description": "容器运行时库，提供libisula。需从gitee.com/openeuler/lcr.git源码构建以获取匹配版本的API",
+          "install_method": "git clone + cmake + make install"
+        },
+        {
+          "name": "lxc",
+          "description": "默认容器运行时，需从gitee.com/src-openeuler/lxc.git源码构建或通过dnf安装lxc-devel",
+          "install_method": "dnf install lxc-devel 或 meson + ninja 源码构建"
+        }
+      ],
+      "source": "build_guide.md - 关键依赖源码构建章节; Dockerfile"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-27T02:04:30Z",
+      "command": "git clone git@gitcode.com:openeuler/iSulad.git",
+      "success": true,
+      "output": "Cloning into 'iSulad'...",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:06:00Z",
+      "command": "docker run -d --name ttfhw-iSulad-env -v .../tmp_src:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "b5b9376f86ac...",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:11:00Z",
+      "command": "dnf makecache",
+      "success": true,
+      "output": "Metadata cache created",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:13:00Z",
+      "command": "dnf install -y gcc gcc-c++ cmake make git wget python3",
+      "success": true,
+      "output": "Installed 156 packages including gcc-12.3.1, cmake-3.27.9, etc.",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:16:30Z",
+      "command": "dnf builddep -y iSulad.spec",
+      "success": false,
+      "output": "No matching package to install: 'libisula-devel > 2.1.5-0'",
+      "error": "libisula-devel版本不满足",
+      "returncode": 1
+    },
+    {
+      "timestamp": "2026-05-27T02:17:00Z",
+      "command": "dnf install -y --skip-broken [30+开发包]",
+      "success": true,
+      "output": "安装了libcap-devel, zlib-devel, yajl-devel, openssl-devel, libcurl-devel, systemd-devel, libselinux-devel, protobuf-devel, grpc-devel, gtest-devel等",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:19:30Z",
+      "command": "make -j12 (第一次构建尝试)",
+      "success": false,
+      "output": "isulad-shim编译失败: implicit declaration of function 'isula_fopen'",
+      "error": "libisula 2.1.4 API与iSulad 2.1.6源码不兼容",
+      "returncode": 2
+    },
+    {
+      "timestamp": "2026-05-27T02:22:00Z",
+      "command": "cd /tmp/lcr/build && cmake .. && make -j12 && make install (从源码构建LCR更新libisula)",
+      "success": true,
+      "output": "LCR构建安装成功，更新了libisula库",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-27T02:25:00Z",
+      "command": "make -j12 isulad (仅构建主daemon目标，跳过isulad-shim)",
+      "success": true,
+      "output": "isulad主daemon构建成功 (56MB)",
+      "returncode": 0,
+      "duration_seconds": 42.221
+    },
+    {
+      "timestamp": "2026-05-27T02:26:00Z",
+      "command": "cmake -DENABLE_UT=ON .. (尝试开启单元测试)",
+      "success": false,
+      "output": "include could not find requested file: Dart",
+      "error": "CMake 3.27.9中Dart模块已弃用(CMP0145=NEW)，无法include",
+      "returncode": 1
+    }
+  ],
+  "process_timeline": [
+    {"timestamp": "2026-05-27T02:04:18Z", "step": "start", "action": "验证过程启动", "result": "started"},
+    {"timestamp": "2026-05-27T02:04:30Z", "step": "repo_clone", "action": "克隆iSulad仓库", "result": "success"},
+    {"timestamp": "2026-05-27T02:05:00Z", "step": "document_reading", "action": "阅读README.md和README_zh.md", "result": "success"},
+    {"timestamp": "2026-05-27T02:06:00Z", "step": "container_setup", "action": "拉取openEuler 24.03 LTS镜像并启动容器", "result": "success"},
+    {"timestamp": "2026-05-27T02:10:00Z", "step": "dependency_installation", "action": "安装基础构建工具", "result": "success"},
+    {"timestamp": "2026-05-27T02:16:30Z", "step": "dependency_installation", "action": "尝试dnf builddep iSulad.spec", "result": "failed - libisula-devel版本不满足"},
+    {"timestamp": "2026-05-27T02:19:00Z", "step": "build_attempt_1", "action": "cmake配置 + make构建", "result": "failed - libisula API不兼容"},
+    {"timestamp": "2026-05-27T02:20:30Z", "step": "problem_resolution", "action": "从源码构建LCR更新libisula", "result": "success"},
+    {"timestamp": "2026-05-27T02:25:00Z", "step": "build_partial_success", "action": "构建主isulad daemon（跳过isulad-shim）", "result": "success"},
+    {"timestamp": "2026-05-27T02:26:00Z", "step": "ut_attempt", "action": "尝试启用单元测试", "result": "skipped - CMake Dart模块已废弃"},
+    {"timestamp": "2026-05-27T02:28:00Z", "step": "report_generation", "action": "生成验证报告", "result": "success"}
+  ],
+  "final_results": {
+    "build": {
+      "status": "partial_success",
+      "duration_seconds": 42.221,
+      "details": "主isulad daemon构建成功，isulad-shim因isula_fopen函数缺失构建失败",
+      "artifacts": [
+        {"name": "isulad", "path": "build/src/isulad", "size": "56 MB"},
+        {"name": "libisulad_tools.so", "path": "build/src/libisulad_tools.so", "size": "shared library"},
+        {"name": "libhttpclient.so", "path": "build/src/utils/http/libhttpclient.so", "size": "shared library"},
+        {"name": "libisula_client.so", "path": "build/src/libisula_client.so", "size": "shared library"}
+      ]
+    },
+    "ut": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "failures": [],
+      "details": "无法启用单元测试。CMake 3.27.9中Dart模块已废弃（CMP0145=NEW），iSulad的CMakeLists.txt第85行include(Dart)失败。需将CMakeLists.txt更新为使用CTest代替Dart模块。"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [],
+      "details": "README中未提供独立的样例程序执行命令。isulad是daemon服务，运行需要系统级环境（systemd、内核模块等），无法在容器中简单执行示例。"
+    }
+  },
+  "documentation_gaps": [
+    "README构建命令缺少并发控制说明（-j参数）",
+    "libisula-devel版本要求（>2.1.5-0）无法通过openEuler 24.03 LTS仓库满足，文档未说明需要从源码构建LCR",
+    "README中未列出完整依赖列表，仅提供build_guide链接",
+    "README中无单元测试执行命令，需从CI脚本（CI/only_build_isulad.sh）推断",
+    "README中无独立样例程序说明",
+    "构建指南未提及gitee.com源码仓库在容器中可能无法访问的限制",
+    "CMakeLists.txt依赖已废弃的Dart模块(CMake 3.27+移除此模块)，与openEuler 24.03自带的CMake 3.27.9不兼容"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-05-27T02:16:30Z",
+      "problem": "dnf builddep iSulad.spec失败：libisula-devel > 2.1.5-0无法在openEuler 24.03 LTS仓库中找到",
+      "solution": "手动安装所有可用开发包，然后从gitee.com/openeuler/lcr.git源码构建更新的libisula",
+      "source": "docs/build_docs/guide/build_guide.md"
+    },
+    {
+      "timestamp": "2026-05-27T02:24:00Z",
+      "problem": "isula_fopen函数未定义：iSulad源码调用isula_fopen，但该函数不存在于任何libisula版本",
+      "solution": "isula_fopen是源码缺陷，应替换为fopen（标准C库函数）。isulad-shim的链接失败导致整个make目标失败，但主isulad daemon可单独构建成功。",
+      "source": "未找到官方修复方案 - 这是iSulad源码中的代码缺陷"
+    },
+    {
+      "timestamp": "2026-05-27T02:26:00Z",
+      "problem": "CMake 3.27.9中Dart模块已废弃（CMP0145=NEW），iSulad的CMakeLists.txt include(Dart)失败",
+      "solution": "需将CMakeLists.txt中的include(Dart)替换为include(CTest)",
+      "source": "CMake 3.27 发布说明: Dart模块已弃用"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_iSulad_20260527.md"
+}

@@ -1,0 +1,369 @@
+{
+  "metadata": {
+    "repo_name": "memfabric_hybrid",
+    "repo_path": "/workspace/TTFHW3/UBSCore/memfabric/tmp_src",
+    "repo_url": "https://gitcode.com/Ascend/memfabric_hybrid.git",
+    "start_time": "2026-05-11T17:32:00",
+    "end_time": "2026-05-11T18:50:00",
+    "duration_seconds": 4680,
+    "total_steps": 10
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "Ubuntu 24.04 LTS (Noble Numbat)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (unlimited)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "ubuntu:24.04",
+      "selection_reason": "根据架构自动选择（x86_64 -> Ubuntu 24.04, aarch64 -> openEuler）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "aarch64/x86_64",
+      "source": "README.md - 软件硬件配套说明章节"
+    },
+    "dependencies": {
+      "value": [
+        "cmake >= 3.19",
+        "gcc 11.4+",
+        "g++",
+        "make 4.3 or ninja 1.10.1",
+        "python 3.11.10",
+        "pybind11 2.10.3",
+        "dos2unix",
+        "GLIBC >= 2.28",
+        "git submodule: googletest v1.12.0 (test/3rdparty)",
+        "git submodule: mockcpp v2.7 (test/3rdparty)",
+        "lcov (code coverage for UT)"
+      ],
+      "source": "doc/installation.md + CMakeLists.txt + script/build.sh + script/run_ut.sh"
+    },
+    "build_commands": {
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF",
+      "source": "doc/installation.md - 编译章节"
+    },
+    "ut_commands": {
+      "value": "bash script/run_ut.sh (内部执行: cmake -DBUILD_UT=ON -DCMAKE_BUILD_TYPE=ASAN + ninja install + ./test_memfabric + lcov coverage)",
+      "source": "script/run_ut.sh"
+    },
+    "sample_commands": {
+      "value": "Python scripts in examples/ directory (require NPU hardware + CANN)",
+      "source": "README.md - 快速入门 -> example/examples.md"
+    }
+  },
+  "execution_log": [
+    {
+      "step": 1,
+      "timestamp": "2026-05-11T17:32:00",
+      "action": "clone_repository",
+      "command": "git clone https://gitcode.com/Ascend/memfabric_hybrid.git ./tmp_src/",
+      "success": true,
+      "output": "Cloning into './tmp_src'...",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 2,
+      "timestamp": "2026-05-11T17:32:30",
+      "action": "check_architecture",
+      "command": "uname -m",
+      "success": true,
+      "output": "x86_64",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 3,
+      "timestamp": "2026-05-11T17:32:35",
+      "action": "start_container",
+      "command": "docker run -d --name ttfhw-memfabric-hybrid-env -v ./tmp_src:/workspace -w /workspace ubuntu:24.04 tail -f /dev/null",
+      "success": true,
+      "output": "Container started",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 4,
+      "timestamp": "2026-05-11T17:33:00",
+      "action": "install_dependencies",
+      "command": "apt-get install -y cmake gcc g++ make ninja-build python3 python3-pip python3-dev python3-venv dos2unix git bc lcov wheel",
+      "success": true,
+      "output": "All packages installed successfully",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 5,
+      "timestamp": "2026-05-11T17:33:30",
+      "action": "install_pybind11",
+      "command": "pip3 install pybind11 --break-system-packages -i https://pypi.tuna.tsinghua.edu.cn/simple",
+      "success": true,
+      "output": "Successfully installed pybind11-3.0.4",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 6,
+      "timestamp": "2026-05-11T17:34:00",
+      "action": "init_submodules_github_failed",
+      "command": "git submodule update --init --recursive",
+      "success": false,
+      "output": "",
+      "error": "Failed to connect to github.com port 443 - connection timeout",
+      "returncode": 128,
+      "problem_id": "P001"
+    },
+    {
+      "step": 7,
+      "timestamp": "2026-05-11T17:35:00",
+      "action": "init_submodules_mirrors",
+      "command": "git clone --depth 1 --branch v1.12.0 https://gitcode.com/google/googletest.git test/3rdparty/googletest && git clone --depth 1 --branch v2.7 https://gh-proxy.com/github.com/sinojelly/mockcpp.git test/3rdparty/mockcpp",
+      "success": true,
+      "output": "Both submodules cloned successfully",
+      "error": "",
+      "returncode": 0,
+      "problem_id": "P001"
+    },
+    {
+      "step": 8,
+      "timestamp": "2026-05-11T17:36:00",
+      "action": "full_build_with_python",
+      "command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF",
+      "success": true,
+      "duration_seconds": 18.279,
+      "output": "C++ libraries compiled, whl package built, run package packaged",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 9,
+      "timestamp": "2026-05-11T17:37:00",
+      "action": "unit_test_build_and_run",
+      "command": "bash script/run_ut.sh (ASAN mode, BUILD_UT=ON)",
+      "success": true,
+      "duration_seconds": 153.371,
+      "output": "1093 tests from 52 test suites ran. [PASSED] 1093 tests. Lines: 71.8%, Branches: 48.0%",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "step": 10,
+      "timestamp": "2026-05-11T18:00:00",
+      "action": "cleanup",
+      "command": "docker stop ttfhw-memfabric-hybrid-env && docker rm ttfhw-memfabric-hybrid-env",
+      "success": true,
+      "output": "Container stopped and removed",
+      "error": "",
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-11T17:32:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-11T17:32:00",
+      "step": "doc_reading",
+      "action": "阅读README.md, CMakeLists.txt, doc/installation.md, script/build.sh, script/run_ut.sh, script/build_and_pack_run.sh, script/run_pkg_maker/make_run.sh等文档",
+      "result": "completed - 提取完整构建流程: build_and_pack_run.sh -> build.sh + make_run.sh"
+    },
+    {
+      "timestamp": "2026-05-11T17:32:30",
+      "step": "container_setup",
+      "action": "检测架构x86_64，启动Ubuntu 24.04容器",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-11T17:33:00",
+      "step": "dependency_install",
+      "action": "安装构建依赖: cmake 3.28.3, gcc 13.3.0, ninja, python3 3.12.3, pybind11 3.0.4, dos2unix, lcov等",
+      "result": "completed"
+    },
+    {
+      "timestamp": "2026-05-11T17:34:00",
+      "step": "submodule_init",
+      "action": "初始化git子模块 - GitHub不可达，改用GitCode镜像(googletest)和gh-proxy(mockcpp)",
+      "result": "completed with workaround"
+    },
+    {
+      "timestamp": "2026-05-11T17:36:00",
+      "step": "full_build",
+      "action": "执行标准构建: build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU",
+      "result": "success - 产出whl包 + run包 (18.3s)"
+    },
+    {
+      "timestamp": "2026-05-11T17:37:00",
+      "step": "unit_test",
+      "action": "ASAN模式构建并执行单元测试 + 代码覆盖率",
+      "result": "success - 1093/1093通过，覆盖率达标 (153.4s)"
+    },
+    {
+      "timestamp": "2026-05-11T18:00:00",
+      "step": "cleanup_and_report",
+      "action": "清理容器，生成验证报告",
+      "result": "completed"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 18.279,
+      "build_command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_python ON --xpu_type NPU --build_test OFF --build_hcom OFF",
+      "build_mode": "RELEASE",
+      "xpu_type": "NPU",
+      "build_python": "ON",
+      "artifacts": [
+        {
+          "name": "memfabric_hybrid-1.1.0-cp312-cp312-linux_x86_64.whl",
+          "path": "output/memfabric_hybrid/wheel/memfabric_hybrid-1.1.0-cp312-cp312-linux_x86_64.whl",
+          "size": "2.2M",
+          "type": "whl"
+        },
+        {
+          "name": "memfabric_hybrid-1.1.0_linux_x86_64.run",
+          "path": "output/memfabric_hybrid-1.1.0_linux_x86_64.run",
+          "size": "6.9M",
+          "type": "run"
+        },
+        {
+          "name": "libmf_smem.so",
+          "path": "output/smem/lib64/libmf_smem.so",
+          "size": "75M",
+          "type": "shared_lib"
+        },
+        {
+          "name": "libmf_hybm_core.so",
+          "path": "output/hybm/lib64/libmf_hybm_core.so",
+          "size": "94M",
+          "type": "shared_lib"
+        },
+        {
+          "name": "libacc_tcp_net.so",
+          "path": "output/acc_links/lib64/libacc_tcp_net.so",
+          "size": "22M",
+          "type": "shared_lib"
+        },
+        {
+          "name": "libmf_smem.a",
+          "path": "output/smem/csrc/libmf_smem.a",
+          "size": "56M",
+          "type": "static_lib"
+        },
+        {
+          "name": "libmf_hybm_core.a",
+          "path": "output/hybm/lib64/libmf_hybm_core.a",
+          "size": "175M",
+          "type": "static_lib"
+        },
+        {
+          "name": "libacc_tcp_net.a",
+          "path": "output/acc_links/lib64/libacc_tcp_net.a",
+          "size": "39M",
+          "type": "static_lib"
+        },
+        {
+          "name": "Headers (smem)",
+          "path": "output/smem/include/",
+          "type": "headers"
+        },
+        {
+          "name": "Headers (hybm)",
+          "path": "output/hybm/include/",
+          "type": "headers"
+        },
+        {
+          "name": "Headers (acc_links)",
+          "path": "output/acc_links/include/",
+          "type": "headers"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 153.371,
+      "build_mode": "ASAN",
+      "total": 1093,
+      "passed": 1093,
+      "failed": 0,
+      "test_suites": 52,
+      "test_duration_ms": 88526,
+      "coverage": {
+        "lines": "71.8%",
+        "branches": "48.0%",
+        "functions": "87.2%",
+        "lines_threshold": "70%",
+        "branches_threshold": "40%",
+        "coverage_passed": true
+      },
+      "failures": []
+    },
+    "sample": {
+      "status": "skipped",
+      "duration_seconds": 0,
+      "reason": "样例程序（Python examples和benchmark）需要Ascend NPU硬件环境（CANN驱动、固件）才能运行，编译不依赖NPU但运行时需要",
+      "results": [
+        {
+          "name": "examples/memory_pool/*.py",
+          "status": "skipped",
+          "reason": "需要NPU驱动和CANN环境"
+        },
+        {
+          "name": "examples/hbm_share_memory/*.cpp",
+          "status": "skipped",
+          "reason": "需要NPU HBM硬件支持"
+        },
+        {
+          "name": "examples/transfer/*.py",
+          "status": "skipped",
+          "reason": "需要NPU驱动和CANN环境"
+        },
+        {
+          "name": "benchmark/bm/main.cpp",
+          "status": "skipped",
+          "reason": "需要NPU硬件进行性能测试"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "doc/installation.md中未明确列出apt-get需要安装的系统依赖包名称（cmake, gcc, ninja等）",
+    "文档中推荐的依赖版本（cmake 3.20.x, gcc 11.4+, python 3.11.10）与实际可编译版本存在差异（实际使用gcc 13.3.0, python 3.12, cmake 3.28均编译通过）",
+    "git子模块克隆失败时没有提供备用镜像源说明（GitHub在国内可能不可达）",
+    "build_and_pack_run.sh脚本路径在doc/installation.md中直接给出，但子目录 script/run_pkg_maker/make_run.sh 的脚本未提及",
+    "示例程序执行文档引用路径为 example/examples.md，但实际目录名为 examples/（复数形式）"
+  ],
+  "problems_encountered": [
+    {
+      "id": "P001",
+      "problem": "git submodule update --init --recursive 失败，无法连接 github.com:443 - connection timeout",
+      "affected_submodules": [
+        "googletest",
+        "mockcpp"
+      ],
+      "root_cause": "网络环境无法直接访问GitHub",
+      "solution": "googletest改用GitCode镜像: git clone --depth 1 --branch v1.12.0 https://gitcode.com/google/googletest.git; mockcpp使用gh-proxy代理: git clone --depth 1 --branch v2.7 https://gh-proxy.com/github.com/sinojelly/mockcpp.git",
+      "solution_source": "用户指导 - github依赖下载不了改用gitcode"
+    },
+    {
+      "id": "P002",
+      "problem": "mockcpp v2.7在GitCode上sinojelly/mockcpp返回403，CSDNopensource/mockcpp也返回403",
+      "solution": "使用gh-proxy.com作为GitHub的HTTP代理镜像成功克隆",
+      "solution_source": "尝试不同镜像源"
+    }
+  ]
+}

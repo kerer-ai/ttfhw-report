@@ -1,0 +1,340 @@
+{
+  "metadata": {
+    "repo_name": "asc-devkit",
+    "repo_path": "https://gitcode.com/cann/asc-devkit.git",
+    "repo_url": "https://gitcode.com/cann/asc-devkit.git",
+    "start_time": "2026-05-11T17:24:00",
+    "end_time": "2026-05-11T18:50:00",
+    "duration_seconds": 8160,
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "817G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "Ubuntu 24.04.4 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (no limit set)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "ubuntu:24.04",
+      "selection_reason": "根据架构自动选择（x86_64 → Ubuntu 24.04）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "docs/quick_start.md + README.md - 支持Atlas A2/A3系列产品和Ascend 950PR",
+      "value": "x86_64 / aarch64（文档支持多架构）"
+    },
+    "recommended_image": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "dependencies": {
+      "source": "docs/quick_start.md - 依赖检查章节 + cmake/fetch_cann_cmake.cmake + CMakeLists.txt",
+      "value": [
+        "python >= 3.9.0",
+        "gcc >= 7.3.0 / g++ >= 7.3.0（要求gcc与g++版本一致）",
+        "cmake >= 3.16.0",
+        "CANN toolkit包（必选，强依赖）",
+        "CANN ops包（可选，部分样例编译运行依赖）",
+        "git（构建系统FetchContent需要）",
+        "pytest >= 8.0.0（UT测试需要）",
+        "coverage >= 4.5.4（覆盖率测试需要）"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/quick_start.md - 编译安装章节 + build.sh",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_commands": {
+      "source": "docs/quick_start.md - UT验证章节",
+      "value": "bash build.sh --adv_test -p <CANN_PATH> 或 cmake -B build -DENABLE_TEST=ON && make <test_target>"
+    },
+    "sample_commands": {
+      "source": "examples/README.md",
+      "value": "examples目录下算子样例，需通过CMake构建并运行（需NPU设备或仿真环境）"
+    },
+    "build_entry": {
+      "source": "docs/quick_start.md - 编译安装章节 + build.sh",
+      "value": "bash build.sh --pkg -p <CANN_PATH>"
+    },
+    "ut_entry": {
+      "source": "docs/quick_start.md - UT验证章节",
+      "value": "bash build.sh --adv_test -p <CANN_PATH> 或 cmake -B build -DENABLE_TEST=ON && make <test_target>"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-05-11T17:26:00",
+      "command": "docker pull ubuntu:24.04",
+      "success": true,
+      "output": "Image is up to date for ubuntu:24.04",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T17:27:00",
+      "command": "docker run -d --name ttfhw-asc-devkit-env -v .../tmp_src:/workspace ubuntu:24.04",
+      "success": true,
+      "output": "Container started",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T17:28:00",
+      "command": "apt-get install -y cmake gcc g++ make python3 python3-pip git",
+      "success": true,
+      "output": "cmake 3.28.3, gcc 13.3.0, python3 3.12.3 installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T17:30:00",
+      "command": "cd build && cmake .. (without CANN)",
+      "success": false,
+      "output": "CMake Error: ASCEND_CANN_PACKAGE_PATH does not exist",
+      "error": "CANN包未安装，无法继续构建",
+      "returncode": 1,
+      "note": "确认仓库强依赖CANN包"
+    },
+    {
+      "timestamp": "2026-05-11T17:47:00",
+      "command": "wget CANN toolkit 9.0.0 x86_64 (1.22GB)",
+      "success": true,
+      "output": "Downloaded in 5m27s",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T18:00:00",
+      "command": "Ascend-cann-toolkit_9.0.0_linux-x86_64.run --install --install-path=/usr/local/Ascend --quiet",
+      "success": true,
+      "output": "Toolkit install success, installed in /usr/local/Ascend",
+      "error": "",
+      "returncode": 0,
+      "duration_estimate": "约2分钟"
+    },
+    {
+      "timestamp": "2026-05-11T18:02:00",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && cmake -B build -DASCEND_CANN_PACKAGE_PATH=/usr/local/Ascend/cann -DENABLE_TEST=OFF",
+      "success": true,
+      "output": "Configuring done, Generating done",
+      "error": "",
+      "returncode": 0,
+      "note": "有版本警告：runtime/metadef需要9.1但实际是9.0.0"
+    },
+    {
+      "timestamp": "2026-05-11T18:04:00",
+      "command": "cd build && make -j9",
+      "success": true,
+      "output": "Built target tiling_api, aicpu_api",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 13.6
+    },
+    {
+      "timestamp": "2026-05-11T18:10:00",
+      "command": "pip3 install --break-system-packages pytest coverage",
+      "success": true,
+      "output": "pytest 9.0.3, coverage 7.14.0 installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T18:12:00",
+      "command": "cmake -B build -DASCEND_CANN_PACKAGE_PATH=/usr/local/Ascend/cann -DENABLE_TEST=ON -DTEST_MOD=adv_test",
+      "success": true,
+      "output": "Configuring done (33.8s), 174 tests prepared",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-05-11T18:20:00",
+      "command": "bash build.sh --adv_test -p /usr/local/Ascend/cann -j9",
+      "success": true,
+      "output": "[==========] 174 tests from 7 test suites ran. [  PASSED  ] 174 tests.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 568.8
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-05-11T17:24:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-11T17:26:00",
+      "step": "container_setup",
+      "action": "拉取Ubuntu 24.04镜像并启动容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T17:28:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖 cmake, gcc, g++, make, python3, git",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T17:30:00",
+      "step": "build_attempt",
+      "action": "第一次cmake尝试（无CANN包）",
+      "result": "failed",
+      "details": {
+        "error": "ASCEND_CANN_PACKAGE_PATH does not exist"
+      }
+    },
+    {
+      "timestamp": "2026-05-11T17:34:00",
+      "step": "document_search",
+      "action": "在文档中搜索CANN包下载地址",
+      "result": "success",
+      "details": {
+        "urls_found": [
+          "https://www.hiascend.com/cann/download",
+          "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-05-11T17:47:00",
+      "step": "cann_download",
+      "action": "下载CANN toolkit 9.0.0 x86_64包",
+      "result": "success",
+      "details": {
+        "size": "1.22GB",
+        "duration": "5m27s"
+      }
+    },
+    {
+      "timestamp": "2026-05-11T18:00:00",
+      "step": "cann_installation",
+      "action": "安装CANN toolkit包",
+      "result": "success",
+      "details": {
+        "install_path": "/usr/local/Ascend"
+      }
+    },
+    {
+      "timestamp": "2026-05-11T18:02:00",
+      "step": "cmake_config",
+      "action": "配置cmake（启用CANN包）",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T18:04:00",
+      "step": "build",
+      "action": "编译构建",
+      "result": "success",
+      "details": {
+        "duration_seconds": 13.6,
+        "artifacts": [
+          "libtiling_api.a (3.4M)",
+          "libaicpu_api.a (3.9K)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-05-11T18:10:00",
+      "step": "ut_setup",
+      "action": "安装pytest和coverage",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-11T18:12:00",
+      "step": "ut_config",
+      "action": "配置cmake（启用单元测试）",
+      "result": "success",
+      "details": {
+        "tests_count": 174
+      }
+    },
+    {
+      "timestamp": "2026-05-11T18:20:00",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "success",
+      "details": {
+        "total": 174,
+        "passed": 174,
+        "failed": 0,
+        "duration_seconds": 568.8
+      }
+    },
+    {
+      "timestamp": "2026-05-11T18:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "success"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 13.6,
+      "artifacts": [
+        {
+          "name": "libtiling_api.a",
+          "path": "build/impl/adv_api/tiling/libtiling_api.a",
+          "size": "3.4 MB"
+        },
+        {
+          "name": "libaicpu_api.a",
+          "path": "build/impl/aicpu_api/libaicpu_api.a",
+          "size": "3.9 KB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 568.8,
+      "total": 174,
+      "passed": 174,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": []
+    }
+  },
+  "documentation_gaps": [
+    "git依赖未在README/docs/quick_start.md的依赖检查章节中明确列出",
+    "CANN包下载链接需要华为云账号认证或访问华为内部网络，对社区开发者不够友好",
+    "版本要求不一致：文档标注依赖CANN master（9.0.0），但构建时检查需要runtime/metadef 9.1"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-05-11T17:30:00",
+      "problem": "cmake配置失败：ASCEND_CANN_PACKAGE_PATH不存在",
+      "solution": "从CANN master obs镜像下载toolkit包并安装",
+      "source": "docs/quick_start.md - 下载安装CANN包章节"
+    },
+    {
+      "timestamp": "2026-05-11T17:30:00",
+      "problem": "cmake FetchContent需要git但未安装",
+      "solution": "安装git包",
+      "source": "cmake/fetch_cann_cmake.cmake使用FetchContent_Declare"
+    },
+    {
+      "timestamp": "2026-05-11T18:10:00",
+      "problem": "pip安装pytest失败（PEP 668限制）",
+      "solution": "使用--break-system-packages参数",
+      "source": "Ubuntu 24.04 Python 3.12的外部包管理限制"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_asc-devkit_20260511.md",
+  "verification_conclusion": ""
+}
