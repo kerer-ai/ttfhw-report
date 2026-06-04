@@ -1,0 +1,278 @@
+{
+  "metadata": {
+    "repo_path": "D:/code/ttfhw_4/pto-isa/tmp_src",
+    "repo_url": "https://gitcode.com/cann/pto-isa.git",
+    "start_time": "2026-06-04T02:15:00",
+    "end_time": "2026-06-04T02:30:00",
+    "duration_seconds": 900,
+    "total_steps": 8,
+    "verification_type": "CPU Simulator Build & Test"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700",
+      "cpu_cores": 24,
+      "memory": "15Gi",
+      "disk": "1007G",
+      "docker_version": "Docker version 29.4.2, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 24,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "用户指定使用openEuler 24.03 LTS镜像"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 / AArch64 (CPU), Ascend A2/A3/A5 (NPU)",
+      "source": "README.md - Platform Support章节"
+    },
+    "recommended_image": {
+      "value": "openEuler 24.03 LTS (用户指定)",
+      "source": "用户指令"
+    },
+    "dependencies": {
+      "value": [
+        "Python >= 3.11",
+        "CMake >= 3.16",
+        "C++20 compiler: GCC 13+ or Clang 15+",
+        "numpy >= 1.22.0"
+      ],
+      "source": "docs/getting-started.md - Prerequisites章节"
+    },
+    "build_commands": {
+      "value": "python3 tests/run_cpu.py --clean --verbose",
+      "source": "README.md - Build and Run章节"
+    },
+    "ut_commands": {
+      "value": "python3 tests/run_cpu.py --clean --verbose",
+      "source": "README.md - Build and Run章节"
+    },
+    "sample_commands": {
+      "value": [
+        "python3 tests/run_cpu.py --demo gemm --verbose",
+        "python3 tests/run_cpu.py --demo flash_attn --verbose",
+        "python3 tests/run_cpu.py --demo mla --verbose"
+      ],
+      "source": "README.md - Recommended Examples章节"
+    },
+    "special_dependencies": {
+      "value": [],
+      "source": "CPU路径无需特殊依赖"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-04T02:15:30",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Image is up to date for hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:16:00",
+      "command": "docker run -d --name ttfhw-pto-isa-env ... hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "success": true,
+      "output": "02fa9a4cae14aa6aac861c22395aac7c6eb68ebb1d59d6005be53dc42f6bee9f",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:17:00",
+      "command": "dnf install -y cmake gcc gcc-c++ make",
+      "success": true,
+      "output": "Installed: cmake-3.27.9, gcc-12.3.1, gcc-c++-12.3.1, make-4.4.1",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:18:00",
+      "command": "dnf install -y clang",
+      "success": true,
+      "output": "Installed: clang-17.0.6",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:19:00",
+      "command": "pip3 install numpy",
+      "success": true,
+      "output": "Successfully installed numpy-2.4.6",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:20:00",
+      "command": "python3 tests/run_cpu.py --clean --verbose --cxx=clang++ --cc=clang",
+      "success": true,
+      "output": "All 138 tests passed in 8.42s",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:26:00",
+      "command": "python3 tests/run_cpu.py --demo gemm --verbose --cxx=clang++ --cc=clang",
+      "success": true,
+      "output": "[PASS] demo: gemm (2.64s)",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:26:30",
+      "command": "python3 tests/run_cpu.py --demo flash_attn --verbose --cxx=clang++ --cc=clang",
+      "success": true,
+      "output": "[PASS] demo: flash_attn (2.65s)",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-04T02:26:40",
+      "command": "python3 tests/run_cpu.py --demo mla --verbose --cxx=clang++ --cc=clang",
+      "success": true,
+      "output": "[PASS] demo: mla (2.88s)",
+      "error": "",
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-04T02:15:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-06-04T02:15:30",
+      "step": "container_setup",
+      "action": "拉取openEuler 24.03 LTS镜像",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:16:00",
+      "step": "container_setup",
+      "action": "启动Docker容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:17:00",
+      "step": "dependency_install",
+      "action": "安装cmake, gcc, g++, make",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:18:00",
+      "step": "dependency_install",
+      "action": "安装Clang 17 (GCC 12不满足C++20要求)",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:19:00",
+      "step": "dependency_install",
+      "action": "安装numpy",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:20:00",
+      "step": "build_and_test",
+      "action": "构建并运行CPU模拟器测试",
+      "result": "success - 138 tests passed"
+    },
+    {
+      "timestamp": "2026-06-04T02:26:00",
+      "step": "sample_execution",
+      "action": "运行GEMM demo",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:26:30",
+      "step": "sample_execution",
+      "action": "运行Flash Attention demo",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:26:40",
+      "step": "sample_execution",
+      "action": "运行MLA demo",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-04T02:30:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "success"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 45,
+      "artifacts": [
+        {
+          "name": "CPU ST test binaries",
+          "path": "tests/cpu/st/build/bin/",
+          "count": 138,
+          "total_size": "68M"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 8.42,
+      "total": 138,
+      "passed": 138,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "success",
+      "duration_seconds": 8.17,
+      "results": [
+        {
+          "name": "gemm_demo",
+          "status": "success",
+          "duration_seconds": 2.64,
+          "output": "M=32 K=16 N=32, max_abs_diff=0, gflops=3.43375"
+        },
+        {
+          "name": "flash_attention_demo",
+          "status": "success",
+          "duration_seconds": 2.65,
+          "output": "B=1 H=2 S=64 D=32, max_abs_diff=3.25963e-09, gflops=2.47873"
+        },
+        {
+          "name": "mla_attention_demo",
+          "status": "success",
+          "duration_seconds": 2.88,
+          "output": "B=1 H=2 S=64 D=32 R=16, max_abs_diff=1.90994e-11, gflops=1.7913"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [],
+  "problems_encountered": [
+    {
+      "problem": "GCC 12.3.1 (openEuler默认)不满足C++20要求",
+      "solution": "安装Clang 17.0.6作为替代编译器",
+      "source": "docs/getting-started.md - 明确要求GCC 13+或Clang 15+"
+    },
+    {
+      "problem": "openEuler默认镜像源SSL连接失败",
+      "solution": "配置清华镜像源",
+      "source": "标准镜像源配置"
+    }
+  ],
+  "conclusion": {
+    "overall_status": "SUCCESS",
+    "summary": "pto-isa仓库CPU路径验证完全成功。使用openEuler 24.03 LTS容器，Clang 17编译器，所有138个单元测试通过，3个demo程序（GEMM、Flash Attention、MLA）均成功运行。",
+    "compiler_used": "Clang 17.0.6",
+    "test_framework": "GoogleTest (通过CMake FetchContent自动获取)"
+  }
+}
