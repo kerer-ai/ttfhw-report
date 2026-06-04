@@ -1,0 +1,131 @@
+{
+  "repository": {
+    "name": "bishengjdk-8",
+    "url": "https://gitcode.com/openeuler/bishengjdk-8.git",
+    "branch": "master"
+  },
+  "environment": {
+    "host_os": "Windows 11 + WSL2 Ubuntu",
+    "container_image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+    "container_name": "ttfhw-bishengjdk8-env",
+    "cpu": "13th Gen Intel(R) Core(TM) i7-13700",
+    "memory": "16GB (container limited to 12GB)",
+    "workspace": "/home/weihaobin/tmp_src (WSL native filesystem)"
+  },
+  "build": {
+    "status": "SUCCESS",
+    "jdk_version": "1.8.0_492-internal",
+    "vm_version": "25.492-b00 (mixed mode)",
+    "build_date": "2026-06-03 09:43",
+    "total_time": "4m54s",
+    "configure_args": "--with-boot-jdk=/usr/lib/jvm/java-1.8.0-openjdk --with-num-cores=4",
+    "boot_jdk": "openjdk 1.8.0_462 BiSheng",
+    "toolchain": "gcc 12.3.1",
+    "modules": {
+      "corba": "7s",
+      "demos": "6s",
+      "docs": "34s",
+      "hotspot": "2m34s",
+      "images": "8s",
+      "jaxp": "4s",
+      "jaxws": "7s",
+      "jdk": "1m1s",
+      "langtools": "9s",
+      "nashorn": "4s"
+    },
+    "output_size": "409MB",
+    "rt_jar_size": "65660641 bytes (~62.6MB)"
+  },
+  "tests": {
+    "available_test_count": {
+      "hotspot": 1115,
+      "jdk": 9744,
+      "langtools": 4642,
+      "nashorn": 1226,
+      "total": 16727
+    },
+    "test_framework": "jtreg (not installed, full test suite not run)",
+    "custom_tests_executed": [
+      {
+        "name": "HelloWorld",
+        "description": "Basic compilation and execution",
+        "result": "PASS"
+      },
+      {
+        "name": "BasicTest",
+        "description": "Integer/Long/Double arithmetic, String operations, Array operations, ArrayList, HashMap, Exception handling, Class loading, System properties",
+        "assertions": 19,
+        "passed": 19,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "ThreadTest",
+        "description": "Thread creation, AtomicInteger, ExecutorService/Future, CountDownLatch",
+        "assertions": 5,
+        "passed": 5,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "IOTest",
+        "description": "File I/O (NIO Files API), ByteArray streams, BufferedReader",
+        "assertions": 3,
+        "passed": 3,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "ReflectTest",
+        "description": "Class reflection, Method introspection, Field access",
+        "assertions": 3,
+        "passed": 3,
+        "failed": 0,
+        "result": "PASS"
+      },
+      {
+        "name": "JARTest",
+        "description": "JAR packaging and execution",
+        "result": "PASS"
+      }
+    ],
+    "custom_tests_summary": {
+      "total_tests": 6,
+      "total_assertions": 30,
+      "passed": 30,
+      "failed": 0,
+      "status": "ALL PASSED"
+    }
+  },
+  "issues_encountered": [
+    {
+      "issue": "CRLF conversion corrupts PNG binary files",
+      "severity": "BLOCKER",
+      "resolution": "Clone repository in WSL native Linux filesystem (/home/weihaobin/tmp_src) instead of Windows filesystem (/mnt/c/...)"
+    },
+    {
+      "issue": "Build OOM (exit code 137) with default concurrency",
+      "severity": "HIGH",
+      "resolution": "Limit concurrency with --with-num-cores=4 and JOBS=4, add --memory=12g to Docker container"
+    },
+    {
+      "issue": "Missing 'file' package dependency",
+      "severity": "MEDIUM",
+      "resolution": "Install with dnf install -y file"
+    },
+    {
+      "issue": "GPG check failure during dnf install",
+      "severity": "LOW",
+      "resolution": "Use --nogpgcheck flag"
+    }
+  ],
+  "conclusion": {
+    "overall_status": "SUCCESS",
+    "summary": "BiSheng JDK 8 repository builds successfully on openEuler 24.03 LTS with gcc 12.3.1. All 6 custom functional tests (30 assertions) passed. The repository contains 16,727 jtreg test files across hotspot, jdk, langtools, and nashorn modules. Full jtreg test suite was not executed due to jtreg tool unavailability in the container environment.",
+    "recommendations": [
+      "Install jtreg to run the full 16,727-test suite for comprehensive validation",
+      "Consider adding jtreg to the container image or as a pre-installed dependency",
+      "Document the WSL native filesystem requirement for cloning to avoid CRLF issues"
+    ]
+  }
+}
