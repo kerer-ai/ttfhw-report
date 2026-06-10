@@ -1,0 +1,316 @@
+{
+  "metadata": {
+    "repository_url": "https://gitcode.com/Ascend/pytorch.git",
+    "repo_path": "/home/ttfhw4/pytorch/tmp_src",
+    "branch": "v2.7.1",
+    "commit": "a81f4a55b244ab8e1e36b1726cf7201a83f7a709",
+    "start_time": "2026-06-10T11:13:47+08:00",
+    "end_time": "2026-06-10T13:59:49+08:00",
+    "duration_seconds": 9962,
+    "total_steps": 18,
+    "verification_status": "build_success_ut_and_sample_failed_due_to_missing_cann_runtime"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "/dev/sdd 1007G total, 21G used, 935G available, 3% used",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu4.1",
+      "kernel": "Linux 6.6.87.2-microsoft-standard-WSL2"
+    },
+    "container": {
+      "name": "ttfhw-pytorch-v271-env",
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "gcc": "gcc (GCC) 12.3.1 (openEuler 12.3.1-38.oe2403)",
+      "cmake": "cmake version 3.27.9",
+      "python": "Python 3.11.6",
+      "pip": "pip 23.3.1 from /usr/lib/python3.11/site-packages/pip (python 3.11)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "技能要求必须使用 openEuler 24.03 LTS 镜像进行验证"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 and aarch64 are documented; actual verification used x86_64 WSL host",
+      "source": "README.md lines 19-49; compilation_installation_using_source_code.md lines 97-103"
+    },
+    "recommended_image": {
+      "value": "Documentation recommends building the project Docker image from ci/docker/{arch} or docker/builder/{arch}; validation used required openEuler 24.03 LTS base image instead.",
+      "source": "README.md lines 68-79; docs/zh/installation_guide/compilation_installation_using_source_code.md lines 25-40; skill requirement"
+    },
+    "dependencies": {
+      "value": [
+        "patch",
+        "libjpeg-turbo-devel",
+        "dos2unix",
+        "openblas",
+        "git",
+        "gcc 11.2.0 documented for PyTorch 2.7.1 x86_64",
+        "cmake 3.18.4 documented for PyTorch 2.7.1 x86_64",
+        "pyyaml",
+        "setuptools",
+        "auditwheel",
+        "torch==2.7.1",
+        "triton-ascend==3.2.1",
+        "CANN Toolkit/ops/NNAL and NPU driver/firmware for runtime verification"
+      ],
+      "source": "docs/zh/installation_guide/compilation_installation_using_source_code.md lines 69-119; requirements.txt lines 1-10; docs/zh/installation_guide/preparing_installation.md lines 11-18"
+    },
+    "build_commands": {
+      "value": "bash ci/build.sh --python=3.11 with MAX_JOBS=12",
+      "source": "README.md lines 82-89; docs/zh/installation_guide/compilation_installation_using_source_code.md lines 44-51; concurrency limited to 60% of 20 cores"
+    },
+    "ut_commands": {
+      "value": "python ci/access_control_test.py --all",
+      "source": "test/README.md lines 44-54"
+    },
+    "sample_commands": {
+      "value": "python3 -c \"import torch;import torch_npu; a = torch.randn(3, 4).npu(); print(a + a);\" and quick verification matrix multiply sample",
+      "source": "docs/zh/installation_guide/compilation_installation_using_source_code.md lines 155-184; README.md lines 105-129"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "CANN Toolkit/ops/NNAL and NPU driver/firmware",
+          "download_url": "https://www.hiascend.com/cann",
+          "install_method": "Documentation points to CANN installation documentation and set_env.sh; not installed in this validation container because only source/build validation was possible without Ascend runtime packages and hardware."
+        },
+        {
+          "name": "triton-ascend",
+          "download_url": "https://triton-ascend.osinfra.cn/pypi/simple",
+          "install_method": "pip via requirements.txt extra-index-url"
+        },
+        {
+          "name": "PyTorch CPU wheel index",
+          "download_url": "https://download.pytorch.org/whl/cpu",
+          "install_method": "pip extra-index-url for torch==2.7.1+cpu on x86_64"
+        }
+      ],
+      "source": "README.md lines 13-29; README.md lines 150-162; docs/zh/installation_guide/preparing_installation.md lines 11-18; requirements.txt lines 1-10"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-10T11:13:47+08:00",
+      "command": "docker --version; uname -m; nproc; free -h; df -h /",
+      "success": true,
+      "output_summary": "Docker available; host x86_64, 20 cores, 15Gi memory."
+    },
+    {
+      "timestamp": "2026-06-10T11:14:00+08:00",
+      "command": "git fetch --depth=1 origin v2.7.1 && git checkout v2.7.1",
+      "success": true,
+      "output_summary": "Repository switched to v2.7.1 at a81f4a55b244ab8e1e36b1726cf7201a83f7a709."
+    },
+    {
+      "timestamp": "2026-06-10T11:18:00+08:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output_summary": "openEuler 24.03 LTS image pulled successfully."
+    },
+    {
+      "timestamp": "2026-06-10T11:18:00+08:00",
+      "command": "git submodule update --init --recursive --depth=1",
+      "success": false,
+      "output_summary": "Failed with fatal: Unable to find current revision in submodule path 'third_party/acl_src/runtime'."
+    },
+    {
+      "timestamp": "2026-06-10T11:20:00+08:00",
+      "command": "docker run -d --name ttfhw-pytorch-v271-env -v tmp_src:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output_summary": "Container started successfully."
+    },
+    {
+      "timestamp": "2026-06-10T11:30:00+08:00",
+      "command": "dnf makecache && dnf install ...",
+      "success": false,
+      "output_summary": "Failed due to openEuler source repository metadata timeout."
+    },
+    {
+      "timestamp": "2026-06-10T12:01:00+08:00",
+      "command": "dnf install with --setopt=timeout=180 --setopt=minrate=1 --setopt=retries=10 ...",
+      "success": true,
+      "output_summary": "System build dependencies installed successfully after increasing DNF timeout/retry settings."
+    },
+    {
+      "timestamp": "2026-06-10T12:10:00+08:00",
+      "command": "python3 -m pip install pyyaml setuptools auditwheel wheel numpy==1.23.2 torch==2.7.1+cpu triton-ascend==3.2.1",
+      "success": false,
+      "output_summary": "First attempt timed out downloading triton-ascend; retry exposed numpy conflict: triton-ascend 3.2.1 requires numpy==1.26.4."
+    },
+    {
+      "timestamp": "2026-06-10T12:30:00+08:00",
+      "command": "python3 -m pip install -r requirements.txt",
+      "success": true,
+      "output_summary": "Installed torch-2.7.1+cpu, triton-ascend-3.2.1, numpy-1.26.4 and other dependencies successfully."
+    },
+    {
+      "timestamp": "2026-06-10T13:00:00+08:00",
+      "command": "git fetch runtime refs/keep-around/6cce8b...; git checkout 6cce8b...",
+      "success": true,
+      "output_summary": "Recovered runtime submodule from refs/keep-around after removing stale shallow.lock."
+    },
+    {
+      "timestamp": "2026-06-10T13:05:00+08:00",
+      "command": "MAX_JOBS=12 bash ci/build.sh --python=3.11",
+      "success": false,
+      "output_summary": "Initial build failed because wheel was missing; after installing wheel, build failed because op-plugin was not at expected commit and later because fmt was not at expected commit."
+    },
+    {
+      "timestamp": "2026-06-10T13:20:00+08:00",
+      "command": "git submodule update --init --force --depth=1 for mismatched submodules",
+      "success": true,
+      "output_summary": "Fixed dvm, fmt, googletest, nlohmann, op-plugin and torchair submodules to expected commits."
+    },
+    {
+      "timestamp": "2026-06-10T13:33:00+08:00",
+      "command": "MAX_JOBS=12 bash ci/build.sh --python=3.11",
+      "success": true,
+      "output_summary": "Wheel built successfully: dist/torch_npu-2.7.1.post5+gita81f4a5-cp311-cp311-linux_x86_64.whl. Build duration estimated from artifact timestamps: about 24 minutes."
+    },
+    {
+      "timestamp": "2026-06-10T13:57:00+08:00",
+      "command": "python3 -m pip install --force-reinstall --extra-index-url https://download.pytorch.org/whl/cpu dist/torch_npu-*.whl",
+      "success": true,
+      "output_summary": "Built wheel installed successfully after adding the PyTorch CPU wheel index."
+    },
+    {
+      "timestamp": "2026-06-10T13:58:00+08:00",
+      "command": "cd /tmp && python3 -c 'import torch; import torch_npu; ...'",
+      "success": false,
+      "output_summary": "Import failed: libhccl.so not found. With generated stub libraries in LD_LIBRARY_PATH, import failed: libtensorpipe.so undefined symbol aclGetRecentErrMsg."
+    },
+    {
+      "timestamp": "2026-06-10T13:59:00+08:00",
+      "command": "python3 ci/access_control_test.py --all",
+      "success": false,
+      "output_summary": "UT command failed immediately on import torch_npu due to libtensorpipe.so undefined symbol aclGetRecentErrMsg."
+    }
+  ],
+  "process_timeline": [
+    {"timestamp": "2026-06-10T11:13:47+08:00", "step": "start", "action": "Started repository validation for Ascend/pytorch v2.7.1", "result": "started"},
+    {"timestamp": "2026-06-10T11:14:00+08:00", "step": "branch_checkout", "action": "Checked out v2.7.1", "result": "success"},
+    {"timestamp": "2026-06-10T11:18:00+08:00", "step": "container_setup", "action": "Pulled and started openEuler 24.03 LTS container", "result": "success"},
+    {"timestamp": "2026-06-10T12:01:00+08:00", "step": "system_dependencies", "action": "Installed system dependencies after DNF timeout tuning", "result": "success"},
+    {"timestamp": "2026-06-10T12:30:00+08:00", "step": "python_dependencies", "action": "Installed requirements.txt", "result": "success"},
+    {"timestamp": "2026-06-10T13:20:00+08:00", "step": "submodules", "action": "Recovered/fixed submodules to expected commits", "result": "success_with_manual_recovery"},
+    {"timestamp": "2026-06-10T13:57:00+08:00", "step": "build", "action": "Built torch_npu wheel", "result": "success"},
+    {"timestamp": "2026-06-10T13:58:00+08:00", "step": "sample", "action": "Ran documented import/NPU sample commands", "result": "failed_missing_complete_cann_runtime"},
+    {"timestamp": "2026-06-10T13:59:00+08:00", "step": "ut", "action": "Ran documented non-distributed UT command", "result": "failed_missing_complete_cann_runtime"}
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 1440,
+      "duration_note": "The script duration echo was invalid because shell expansion occurred outside the container; duration estimated from build artifact timestamps 05:33-05:57 inside container.",
+      "command": "MAX_JOBS=12 bash ci/build.sh --python=3.11",
+      "artifacts": [
+        {
+          "name": "torch_npu-2.7.1.post5+gita81f4a5-cp311-cp311-linux_x86_64.whl",
+          "path": "dist/torch_npu-2.7.1.post5+gita81f4a5-cp311-cp311-linux_x86_64.whl",
+          "size": "40M / 41713572 bytes"
+        },
+        {"name": "_C.cpython-311-x86_64-linux-gnu.so", "path": "build/packages/torch_npu/_C.cpython-311-x86_64-linux-gnu.so", "size": "169632 bytes"},
+        {"name": "libgtest.so.1.10.0", "path": "build/lib/libgtest.so.1.10.0", "size": "564248 bytes"},
+        {"name": "libgmock.so.1.10.0", "path": "build/lib/libgmock.so.1.10.0", "size": "162624 bytes"}
+      ]
+    },
+    "ut": {
+      "status": "failed",
+      "duration_seconds": 0,
+      "command": "python3 ci/access_control_test.py --all",
+      "total": 0,
+      "passed": 0,
+      "failed": 1,
+      "failures": [
+        {
+          "name": "UT bootstrap import torch_npu",
+          "reason": "ImportError: /usr/local/lib64/python3.11/site-packages/torch_npu/lib/libtensorpipe.so: undefined symbol: aclGetRecentErrMsg. Without LD_LIBRARY_PATH to stubs, import also failed because libhccl.so was missing."
+        }
+      ]
+    },
+    "sample": {
+      "status": "failed",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "command": "python3 -c \"import torch; import torch_npu; ...\"",
+          "status": "failed",
+          "output_summary": "ImportError: libhccl.so not found; with generated stub libraries, undefined symbol aclGetRecentErrMsg."
+        },
+        {
+          "command": "python3 -c \"import torch; import torch_npu; a = torch.randn(3, 4).npu(); print(a + a);\"",
+          "status": "failed",
+          "output_summary": "Same import failure before NPU operation execution. No Ascend device/CANN runtime was available in the validation container."
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README.md source build instructions refer to branch 2.7.1-7.2.0, while the requested branch was v2.7.1; docs/zh source guide uses v2.7.1-26.0.0 as example, creating ambiguity for exact v2.7.1 branch validation.",
+    "Documentation states gcc 11.2.0 is required for PyTorch 2.7.1 x86_64, but openEuler 24.03 repositories installed gcc 12.3.1; no openEuler 24.03 command for installing gcc 11.2.0 was available in the build instructions used.",
+    "requirements.txt does not list wheel, but setup.py imports wheel.bdist_wheel; build failed until wheel was installed.",
+    "CANN runtime installation is referenced via external documentation and links, but no direct offline package URL or container-ready installation command was present in the repository docs for this validation environment.",
+    "Full UT and installation verification require a complete CANN runtime and NPU hardware; the docs do not provide a CPU-only/stub-only validation path for torch_npu import/tests."
+  ],
+  "problems_encountered": [
+    {
+      "problem": "Docker resources needed to be reset before verification.",
+      "resolution": "With user confirmation, all Docker containers and images were removed; openEuler 24.03 LTS image was pulled fresh.",
+      "source": "User instruction and Docker commands"
+    },
+    {
+      "problem": "Initial clone/submodule work was interrupted and tmp_src contained only partial repository state.",
+      "resolution": "Fetched v2.7.1 with depth=1 and checked out branch explicitly.",
+      "source": "git ls-remote and git fetch output"
+    },
+    {
+      "problem": "DNF source and EPOL repository downloads timed out repeatedly.",
+      "resolution": "Retried with source/debuginfo disabled where possible and used longer DNF timeout/retries/minrate settings. Installation eventually succeeded.",
+      "source": "DNF output: Curl error (28) timeout"
+    },
+    {
+      "problem": "triton-ascend wheel download timed out on first pip attempt.",
+      "resolution": "Retried with longer pip timeout and documented indexes; download succeeded.",
+      "source": "pip output"
+    },
+    {
+      "problem": "Manual numpy==1.23.2 conflicted with triton-ascend==3.2.1 requiring numpy==1.26.4.",
+      "resolution": "Installed strictly from requirements.txt without manual numpy pin; pip resolved numpy==1.26.4.",
+      "source": "requirements.txt and pip resolver output"
+    },
+    {
+      "problem": "third_party/acl_src/runtime submodule could not find current revision after interrupted shallow clone.",
+      "resolution": "Found the commit under refs/keep-around/6cce8b... on the remote, removed stale shallow.lock after checking no git process was running, and checked out the commit manually.",
+      "source": "git ls-remote and git fetch output"
+    },
+    {
+      "problem": "Several submodules were checked out at remote default branch heads rather than main repository expected commits.",
+      "resolution": "Forced submodule updates for dvm, fmt, googletest, nlohmann, op-plugin, and torchair; build progressed after fixes.",
+      "source": "git submodule status and build errors"
+    },
+    {
+      "problem": "Build initially failed with ModuleNotFoundError: No module named 'wheel'.",
+      "resolution": "Installed wheel because setup.py imports wheel.bdist_wheel; build proceeded.",
+      "source": "setup.py line 27 and build output"
+    },
+    {
+      "problem": "Wheel install initially could not resolve torch==2.7.1+cpu because pip only used the configured Tsinghua index.",
+      "resolution": "Retried with README/requirements PyTorch CPU extra index https://download.pytorch.org/whl/cpu; install succeeded.",
+      "source": "README.md lines 25-29 and pip output"
+    },
+    {
+      "problem": "UT and samples failed after wheel installation due to missing complete CANN runtime libraries/symbols.",
+      "resolution": "Tried generated ACL stub libraries via LD_LIBRARY_PATH, but import still failed with undefined symbol aclGetRecentErrMsg. Recorded as runtime dependency gap; no source modification was performed.",
+      "source": "python import output and docs/zh/installation_guide/preparing_installation.md lines 11-18"
+    }
+  ]
+}
