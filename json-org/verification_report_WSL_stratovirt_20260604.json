@@ -159,9 +159,11 @@
     ]
   },
   "metadata": {
-    "duration_seconds": 4058,
+    "duration_seconds": 4658,
     "build_duration_seconds": 3758,
     "env_estimate_seconds": 300,
-    "env_estimate_note": "估算值：容器拉取+dnf安装11+软件包(无实际时间戳)"
+    "env_estimate_note": "估算值：容器拉取+dnf安装11+软件包(无实际时间戳)",
+    "ut_estimate_seconds": 600,
+    "ut_estimate_note": "估算值：410个测试单线程运行(cargo test --test-threads=1)，无实际时间戳"
   }
 }

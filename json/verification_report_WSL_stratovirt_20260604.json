@@ -5,7 +5,7 @@
     "repo_path": "/home/weihaobin/tmp_src",
     "start_time": "",
     "end_time": "",
-    "duration_seconds": 4058,
+    "duration_seconds": 4658,
     "total_steps": 4,
     "verification_environment": "WSL2 Docker (openEuler 24.03 (LTS) container)"
   },
@@ -142,7 +142,7 @@
     },
     "ut": {
       "status": "success",
-      "duration_seconds": 0,
+      "duration_seconds": 600,
       "total": 410,
       "passed": 410,
       "failed": 0,
