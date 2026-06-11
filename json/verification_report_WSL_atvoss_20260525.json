@@ -1,7 +1,6 @@
 {
   "metadata": {
     "repo_name": "atvoss",
-    "repo_path": "/mnt/d/code/ttfhw_0515/atvoss/src",
     "repo_url": "https://gitcode.com/cann/atvoss.git",
     "start_time": "2026-05-25T12:03:00+08:00",
     "end_time": "2026-05-25T12:36:00+08:00",
@@ -51,6 +50,18 @@
       ],
       "source": "docs/quick_start.md - 环境准备章节"
     },
+    "build_entry": {
+      "value": "bash scripts/build.sh -DSOC=ascend950 <target>",
+      "source": "docs/quick_start.md - 编译执行章节"
+    },
+    "ut_entry": {
+      "value": "bash scripts/build.sh -DSOC=ascend950 --host_ut",
+      "source": "docs/quick_start.md - UT测试章节"
+    },
+    "sample_entry": {
+      "value": "bash scripts/build.sh -DSOC=ascend950 --example",
+      "source": "docs/quick_start.md - 编译执行章节"
+    },
     "build_commands": {
       "value": "bash scripts/build.sh -DSOC=ascend950 <target>\n  示例: bash scripts/build.sh -DSOC=ascend950 rms_norm",
       "source": "docs/quick_start.md - 编译执行章节"
@@ -62,14 +73,6 @@
     "sample_commands": {
       "value": "bash scripts/build.sh -DSOC=ascend950 --example\n  单样例: bash scripts/build.sh -DSOC=ascend950 rms_norm\n  执行: ./output/bin/rms_norm --shape=512,3",
       "source": "docs/quick_start.md - 编译执行章节"
-    },
-    "build_entry": {
-      "source": "docs/quick_start.md - 编译执行章节",
-      "value": "bash scripts/build.sh -DSOC=ascend950 <target>"
-    },
-    "ut_entry": {
-      "source": "docs/quick_start.md - UT测试章节",
-      "value": "bash scripts/build.sh -DSOC=ascend950 --host_ut"
     },
     "st_commands": {
       "value": "bash scripts/build.sh -DSOC=ascend950 --st <st_case_name>\n  执行: cannsim record ./output/bin/<name> -s Ascend950 --gen-report",
@@ -92,104 +95,168 @@
   "execution_log": [
     {
       "timestamp": "2026-05-25T12:05:00+08:00",
-      "step": "容器设置",
       "command": "docker run -d --name ttfhw-atvoss-env -v /mnt/d/code/ttfhw_0515/atvoss/src:/workspace -w /workspace ubuntu:24.04 tail -f /dev/null",
       "success": true,
       "output": "Container 216de6f1f1e6 started",
-      "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:06:00+08:00",
-      "step": "安装基础依赖",
       "command": "apt-get update && apt-get install -y python3 python3-dev gcc g++ cmake pigz dos2unix gawk make libgtest-dev wget",
       "success": true,
       "output": "gcc 13.3.0, cmake 3.28.3, Python 3.12.3",
-      "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:08:00+08:00",
-      "step": "下载 CANN Toolkit",
       "command": "wget https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260520000325981/Ascend-cann-toolkit_9.1.0_linux-x86_64.run",
       "success": true,
       "output": "1.37 GB 下载完成，耗时约 16 分钟",
-      "error": "",
       "returncode": 0,
-      "duration_seconds": 985
+      "duration_seconds": 985,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:26:00+08:00",
-      "step": "安装 CANN Toolkit（第1次，失败）",
       "command": "/tmp/Ascend-cann-toolkit.run --install --force --install-path=/usr/local/Ascend --quiet",
       "success": false,
       "output": "",
       "error": "ge-compiler 安装失败: pip3 is not installed",
-      "returncode": 1
+      "returncode": 1,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:31:00+08:00",
-      "step": "修复依赖并重装 CANN Toolkit",
       "command": "apt-get install -y python3-pip && rm -rf /usr/local/Ascend && /tmp/Ascend-cann-toolkit.run --install --force --install-path=/usr/local/Ascend --quiet",
       "success": true,
       "output": "Ascend-cann-toolkit_9.1.0_linux-x86_64 install success",
-      "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:33:00+08:00",
-      "step": "构建样例 rms_norm",
       "command": "ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest bash scripts/build.sh -DSOC=ascend950 rms_norm",
       "success": true,
       "output": "rms_norm built successfully, bisheng compiler used",
-      "error": "",
       "returncode": 0,
-      "duration_seconds": 13.609
+      "duration_seconds": 13.609,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:34:00+08:00",
-      "step": "构建并运行单元测试",
       "command": "ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest bash scripts/build.sh -DSOC=ascend950 --host_ut",
       "success": true,
       "output": "4/4 tests passed",
-      "error": "",
       "returncode": 0,
-      "duration_seconds": 31.184
+      "duration_seconds": 31.184,
+      "details": {}
     },
     {
       "timestamp": "2026-05-25T12:35:00+08:00",
-      "step": "构建全部样例",
       "command": "ASCEND_HOME_PATH=/usr/local/Ascend/ascend-toolkit/latest bash scripts/build.sh -DSOC=ascend950 --example",
       "success": true,
       "output": "abs, muls, rms_norm all built successfully",
-      "error": "",
       "returncode": 0,
-      "duration_seconds": 12.237
+      "duration_seconds": 12.237,
+      "details": {}
     }
   ],
   "process_timeline": [
-    {"timestamp": "2026-05-25T12:03:00+08:00", "step": "start", "action": "验证过程启动", "result": "started"},
-    {"timestamp": "2026-05-25T12:04:00+08:00", "step": "clone", "action": "克隆仓库 https://gitcode.com/cann/atvoss.git", "result": "成功"},
-    {"timestamp": "2026-05-25T12:04:00+08:00", "step": "document_reading", "action": "阅读 README.md, CONTRIBUTING.md, docs/quick_start.md, CMakeLists.txt", "result": "完成信息收集"},
-    {"timestamp": "2026-05-25T12:05:00+08:00", "step": "container_setup", "action": "启动 Ubuntu 24.04.4 LTS 容器", "result": "成功"},
-    {"timestamp": "2026-05-25T12:06:00+08:00", "step": "install_basic_deps", "action": "安装 gcc, cmake, python3 等基础依赖", "result": "成功"},
-    {"timestamp": "2026-05-25T12:08:00+08:00", "step": "download_cann", "action": "下载 CANN Toolkit 9.1.0 (1.37 GB)", "result": "成功，耗时 ~16 分钟"},
-    {"timestamp": "2026-05-25T12:26:00+08:00", "step": "install_cann_attempt1", "action": "安装 CANN Toolkit（第1次）", "result": "失败 - pip3 缺失"},
-    {"timestamp": "2026-05-25T12:31:00+08:00", "step": "fix_and_reinstall_cann", "action": "安装 pip3 并重新安装 CANN Toolkit", "result": "成功"},
-    {"timestamp": "2026-05-25T12:33:00+08:00", "step": "build_example", "action": "编译 rms_norm 样例", "result": "成功 (13.6s)"},
-    {"timestamp": "2026-05-25T12:34:00+08:00", "step": "run_ut", "action": "编译并运行 host 单元测试", "result": "成功 - 4/4 测试通过 (31.2s)"},
-    {"timestamp": "2026-05-25T12:35:00+08:00", "step": "build_all_examples", "action": "编译全部 3 个样例", "result": "成功 (12.2s)"},
-    {"timestamp": "2026-05-25T12:36:00+08:00", "step": "cleanup", "action": "停止并删除容器", "result": "完成"},
-    {"timestamp": "2026-05-25T12:36:00+08:00", "step": "end", "action": "验证过程完成", "result": "completed"}
+    {
+      "timestamp": "2026-05-25T12:03:00+08:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-05-25T12:04:00+08:00",
+      "step": "clone",
+      "action": "克隆仓库 https://gitcode.com/cann/atvoss.git",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:04:00+08:00",
+      "step": "document_reading",
+      "action": "阅读 README.md, CONTRIBUTING.md, docs/quick_start.md, CMakeLists.txt",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:05:00+08:00",
+      "step": "container_setup",
+      "action": "启动 Ubuntu 24.04.4 LTS 容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:06:00+08:00",
+      "step": "install_basic_deps",
+      "action": "安装 gcc, cmake, python3 等基础依赖",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:08:00+08:00",
+      "step": "download_cann",
+      "action": "下载 CANN Toolkit 9.1.0 (1.37 GB)",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:26:00+08:00",
+      "step": "install_cann_attempt1",
+      "action": "安装 CANN Toolkit（第1次）",
+      "result": "failed"
+    },
+    {
+      "timestamp": "2026-05-25T12:31:00+08:00",
+      "step": "fix_and_reinstall_cann",
+      "action": "安装 pip3 并重新安装 CANN Toolkit",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:33:00+08:00",
+      "step": "build_example",
+      "action": "编译 rms_norm 样例",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:34:00+08:00",
+      "step": "run_ut",
+      "action": "编译并运行 host 单元测试",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:35:00+08:00",
+      "step": "build_all_examples",
+      "action": "编译全部 3 个样例",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-05-25T12:36:00+08:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "success"
+    }
   ],
   "final_results": {
     "build": {
       "status": "success",
       "duration_seconds": 12.237,
       "artifacts": [
-        {"name": "abs", "path": "output/bin/abs", "size": "389K"},
-        {"name": "muls", "path": "output/bin/muls", "size": "388K"},
-        {"name": "rms_norm", "path": "output/bin/rms_norm", "size": "394K"}
+        {
+          "name": "abs",
+          "path": "output/bin/abs",
+          "size": "389K"
+        },
+        {
+          "name": "muls",
+          "path": "output/bin/muls",
+          "size": "388K"
+        },
+        {
+          "name": "rms_norm",
+          "path": "output/bin/rms_norm",
+          "size": "394K"
+        }
       ],
       "compiler": "bisheng (Clang 15.0.5 based)",
       "npu_arch": "dav-3510 (Ascend 950)"
@@ -213,9 +280,9 @@
       "duration_seconds": 0,
       "note": "样例为 Ascend NPU 算子程序，需 NPU 硬件或仿真器才能执行。当前环境为 x86_64 Docker 容器（编译态），无 NPU 设备。3 个样例均编译成功，但无法运行。",
       "results": [
-        {"name": "abs", "build": "success", "execute": "not_run - 无 NPU 设备"},
-        {"name": "muls", "build": "success", "execute": "not_run - 无 NPU 设备"},
-        {"name": "rms_norm", "build": "success", "execute": "not_run - 无 NPU 设备"}
+        {"name": "abs", "build": "success", "execute": "skipped - 无 NPU 设备"},
+        {"name": "muls", "build": "success", "execute": "skipped - 无 NPU 设备"},
+        {"name": "rms_norm", "build": "success", "execute": "skipped - 无 NPU 设备"}
       ]
     },
     "st": {
@@ -224,7 +291,7 @@
     }
   },
   "documentation_gaps": [
-    "README.md 和 docs/quick_start.md 中 CANN Toolkit 下载链接以文字描述方式提供（'单击下载链接'），未直接给出完整 URL",
+    "README.md 和 docs/quick_start.md 中 CANN Toolkit 下载链接以文字描述方式提供（\"单击下载链接\"），未直接给出完整 URL",
     "quick_start.md 中 pip3 依赖未在依赖列表中明确列出（CANN Toolkit 安装脚本需要 pip3）",
     "Python 版本建议 <= 3.10，但 Ubuntu 24.04 默认 Python 3.12.3，实测可用",
     "文档未提及 Ubuntu 24.04 上的已知兼容性问题",

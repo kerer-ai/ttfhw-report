@@ -1,12 +1,13 @@
 {
   "metadata": {
     "repo_name": "MindSpeed-LLM",
-    "repo_path": "https://gitcode.com/Ascend/MindSpeed-LLM.git",
     "repo_url": "https://gitcode.com/Ascend/MindSpeed-LLM.git",
     "start_time": "2026-05-14T20:39:00",
     "end_time": "2026-05-15T00:30:00",
     "duration_seconds": 13860,
-    "total_steps": 5
+    "total_steps": 5,
+    "verification_type": "build_only",
+    "note": "构建验证（无NPU环境，跳过运行时测试）"
   },
   "machine_spec": {
     "host_machine": {
@@ -31,15 +32,14 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "Dockerfile 第29-38行 - 支持x86_64和aarch64架构",
-      "value": "x86_64 和 aarch64（ARM）"
+      "value": "x86_64 和 aarch64（ARM）",
+      "source": "Dockerfile 第29-38行 - 支持x86_64和aarch64架构"
     },
     "recommended_image": {
-      "source": "Dockerfile 第9行 ARG OS=openeuler24.03，支持openeuler/ubuntu切换",
-      "value": "openEuler 24.03 LTS（默认）或 Ubuntu 22.04"
+      "value": "openEuler 24.03 LTS（默认）或 Ubuntu 22.04",
+      "source": "Dockerfile 第9行 ARG OS=openeuler24.03，支持openeuler/ubuntu切换"
     },
     "dependencies": {
-      "source": "requirements.txt + setup.py + docs/zh/pytorch/training/install_guide.md",
       "value": [
         "Python >= 3.10",
         "PyTorch 2.7.1",
@@ -56,28 +56,27 @@
         "triton-ascend（昇腾专用）",
         "MindSpeed 26.0.0_core_r0.12.1",
         "Megatron-LM core_v0.12.1"
-      ]
+      ],
+      "source": "requirements.txt + setup.py + docs/zh/pytorch/training/install_guide.md"
     },
     "build_commands": {
-      "source": "docs/zh/pytorch/training/install_guide.md 第99-102行",
-      "value": "pip install -r requirements.txt && pip install -e ."
+      "value": "pip install -r requirements.txt && pip install -e .",
+      "source": "docs/zh/pytorch/training/install_guide.md 第99-102行"
     },
     "ut_commands": {
-      "source": "tests/README.md + tests/run_coverage.sh",
-      "value": "pytest tests/ut/"
+      "value": "pytest tests/ut/",
+      "source": "tests/README.md + tests/run_coverage.sh"
     },
     "sample_commands": {
-      "source": "README.md + 项目根目录脚本文件",
-      "value": "训练脚本位于 examples/ 目录，如 pretrain_gpt.py"
+      "value": "训练脚本位于 examples/ 目录，如 pretrain_gpt.py",
+      "source": "README.md + 项目根目录脚本文件"
     },
-    "build_entry": {
-      "source": "docs/zh/pytorch/training/install_guide.md 第99-102行",
-      "value": "pip install -r requirements.txt && pip install -e ."
+    "special_requirements": {
+      "value": "需要昇腾NPU硬件和CANN软件栈",
+      "source": "setup.py 第54-78行 - 编译NPU扩展需要ASCEND_TOOLKIT_HOME环境变量"
     },
-    "ut_entry": {
-      "source": "tests/README.md + tests/run_coverage.sh",
-      "value": "pytest tests/ut/"
-    }
+    "build_entry": "pip install -r requirements.txt && pip install -e .",
+    "ut_entry": "pytest tests/ut/"
   },
   "execution_log": [
     {
@@ -86,7 +85,8 @@
       "success": true,
       "output": "仓库克隆成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T20:40:00",
@@ -94,7 +94,8 @@
       "success": true,
       "output": "容器启动成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T20:45:00",
@@ -102,7 +103,8 @@
       "success": true,
       "output": "系统依赖安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T21:00:00",
@@ -110,7 +112,8 @@
       "success": true,
       "output": "PyTorch 2.7.1 CPU版本安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T21:15:00",
@@ -118,7 +121,8 @@
       "success": true,
       "output": "torch_npu 2.7.1.post4安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T21:30:00",
@@ -126,7 +130,8 @@
       "success": true,
       "output": "MindSpeed 0.12.1安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T22:00:00",
@@ -134,7 +139,8 @@
       "success": true,
       "output": "Megatron-LM core_v0.12.1克隆成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T22:30:00",
@@ -142,7 +148,8 @@
       "success": false,
       "output": "大部分依赖安装成功",
       "error": "triton-ascend 包在PyPI上不可用（昇腾专用依赖）",
-      "returncode": 1
+      "returncode": 1,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T23:00:00",
@@ -150,7 +157,8 @@
       "success": true,
       "output": "mindspeed_llm 26.0.0.dev0 安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T23:30:00",
@@ -158,7 +166,8 @@
       "success": false,
       "output": "导入失败",
       "error": "ImportError: libhccl.so: cannot open shared object file - 需要CANN环境",
-      "returncode": 1
+      "returncode": 1,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -166,49 +175,57 @@
       "timestamp": "2026-05-14T20:39:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started"
+      "result": "started",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T20:40:00",
       "step": "document_reading",
       "action": "读取README.md、Dockerfile、requirements.txt、setup.py等文档",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T20:50:00",
       "step": "container_setup",
       "action": "启动Ubuntu 24.04容器，安装系统依赖",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T21:15:00",
       "step": "pytorch_install",
       "action": "安装PyTorch 2.7.1和torch_npu",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T22:00:00",
       "step": "mindspeed_install",
       "action": "克隆并安装MindSpeed和Megatron-LM",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T23:00:00",
       "step": "mindspeed_llm_install",
       "action": "安装MindSpeed-LLM包",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-14T23:30:00",
       "step": "runtime_test",
       "action": "测试运行时导入",
-      "result": "failed - 需要NPU环境"
+      "result": "failed - 需要NPU环境",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T00:30:00",
       "step": "end",
       "action": "验证过程结束",
-      "result": "completed_with_limitations"
+      "result": "completed_with_limitations",
+      "details": {}
     }
   ],
   "final_results": {
@@ -234,7 +251,8 @@
           "type": "Python package (copied)",
           "version": "core_v0.12.1"
         }
-      ]
+      ],
+      "note": "构建成功，但运行时需要昇腾NPU硬件和CANN软件栈"
     },
     "ut": {
       "status": "not_run",
@@ -242,39 +260,46 @@
       "total": 0,
       "passed": 0,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "note": "单元测试需要NPU环境，在无NPU环境中跳过"
     },
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "note": "样例运行需要NPU环境，在无NPU环境中跳过"
     }
   },
   "documentation_gaps": [
-    "requirements.txt中的triton-ascend依赖在PyPI上不可用，需要说明安装来源",
-    "文档未说明如何在非NPU环境中进行构建验证或开发测试",
-    "安装文档提到需要CANN，但未详细说明具体版本要求和安装步骤"
+    "triton-ascend依赖说明: requirements.txt中的triton-ascend依赖在PyPI上不可用，需要说明安装来源",
+    "非NPU环境构建指南: 文档未说明如何在非NPU环境中进行构建验证或开发测试",
+    "CANN安装前置条件: 安装文档提到需要CANN，但未详细说明具体版本要求和安装步骤"
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-14T20:39:00",
       "problem": "triton-ascend包无法安装",
+      "error": "ERROR: No matching distribution found for triton-ascend",
       "solution": "从requirements.txt中移除该依赖（昇腾专用，无NPU环境不需要）",
       "source": "PyPI无此包，需要从昇腾源安装"
     },
     {
-      "timestamp": "2026-05-14T20:39:00",
       "problem": "torch_npu导入失败",
+      "error": "ImportError: libhccl.so: cannot open shared object file",
       "solution": "需要安装CANN软件栈并设置环境变量",
       "source": "torch_npu依赖CANN库"
     },
     {
-      "timestamp": "2026-05-14T20:39:00",
       "problem": "GitHub克隆超时",
+      "error": "Megatron-LM从github.com克隆超时",
       "solution": "使用gitcode.com镜像站点克隆",
       "source": "网络问题"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "conclusions": {
+    "build_success": true,
+    "runtime_ready": false,
+    "npu_required": true,
+    "summary": "MindSpeed-LLM仓库在无NPU环境中可以完成Python包的构建安装，但运行时需要昇腾NPU硬件和CANN软件栈。构建产物mindspeed_llm包（版本26.0.0.dev0）已成功安装。文档中关于非NPU环境的构建指南有所缺失，triton-ascend依赖的安装来源需要补充说明。"
+  },
+  "session_export_file": ""
 }

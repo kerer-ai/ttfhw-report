@@ -1,0 +1,363 @@
+{
+  "metadata": {
+    "repo_name": "stratovirt",
+    "repo_url": "https://gitcode.com/openeuler/stratovirt.git",
+    "repo_path": "/home/weihaobin/tmp_src",
+    "start_time": "",
+    "end_time": "",
+    "duration_seconds": 3758,
+    "total_steps": 4,
+    "verification_environment": "WSL2 Docker (openEuler 24.03 (LTS) container)"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700",
+      "cpu_cores": "",
+      "memory": "16GB",
+      "disk": "",
+      "docker_version": ""
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": "",
+      "memory": "8GB"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": ""
+    }
+  },
+  "document_reading_summary": {
+    "build_commands": {
+      "value": "cargo build --workspace --bins --release -j 8",
+      "source": "unknown"
+    },
+    "ut_commands": {
+      "value": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "source": "unknown"
+    },
+    "build_entry": {
+      "value": "cargo build --workspace --bins --release -j 8",
+      "source": "unknown"
+    },
+    "ut_entry": {
+      "value": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "source": "unknown"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "",
+      "step": "install_deps",
+      "command": "dnf install -y rust (rustup 1.96.0) cargo (1.96.0) git pixman-devel libcap-ng-devel cyrus-sasl-devel clang gtk3-devel libusbx alsa-lib-devel make",
+      "success": true,
+      "output": "Installed 273 packages",
+      "error": "",
+      "returncode": 0,
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "configure_cargo_mirror",
+      "command": "Configure cargo mirror: https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git",
+      "success": true,
+      "output": "Cargo mirror configured",
+      "error": "",
+      "returncode": 0,
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "build",
+      "command": "cargo build --workspace --bins --release -j 8",
+      "success": true,
+      "output": "Binary generated: target/release/stratovirt (92MB)",
+      "error": "",
+      "returncode": 0,
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "unit_test",
+      "command": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "success": true,
+      "output": "410 tests passed, 0 failed",
+      "error": "",
+      "returncode": 0,
+      "details": {}
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started",
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "container_setup",
+      "action": "拉取镜像 hub.oepkgs.net/openeuler/openeuler:24.03-lts 并启动容器",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "build",
+      "action": "执行构建: cargo build --workspace --bins --release -j 8",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "ut_execution",
+      "action": "执行单元测试: 410 passed, 0 failed",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "success",
+      "details": {}
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 3758,
+      "artifacts": [
+        {
+          "name": "stratovirt",
+          "path": "target/release/stratovirt",
+          "size": "92MB",
+          "build_status": "success"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 0,
+      "total": 410,
+      "passed": 410,
+      "failed": 0,
+      "sub_components": [
+        {
+          "name": "acpi",
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "address_space",
+          "total": 28,
+          "passed": 28,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "boot_loader",
+          "total": 27,
+          "passed": 27,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "cpu",
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "devices",
+          "total": 64,
+          "passed": 64,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "hisysevent",
+          "total": 10,
+          "passed": 10,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "hypervisor",
+          "total": 64,
+          "passed": 64,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "machine",
+          "total": 9,
+          "passed": 9,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "machine_manager",
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "migration",
+          "total": 5,
+          "passed": 5,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "pci",
+          "total": 24,
+          "passed": 24,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "util",
+          "total": 50,
+          "passed": 50,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "virtio",
+          "total": 62,
+          "passed": 62,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "vfio",
+          "total": 4,
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "ozone",
+          "total": 27,
+          "passed": 27,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        },
+        {
+          "name": "doc-tests",
+          "total": 14,
+          "passed": 14,
+          "failed": 0,
+          "skipped": 0,
+          "status": "success"
+        }
+      ]
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "summary": "mod_test requires KVM hardware virtualization support (unavailable in Docker container) and STRATOVIRT_BINARY/VIRTIOFSD_BINARY environment variables",
+      "results": []
+    }
+  },
+  "documentation_gaps": [
+    {
+      "gap": "dnf-installed Rust 1.82.0 does not support edition2024 feature"
+    },
+    {
+      "gap": "Container missing git, cargo cannot update crate index"
+    },
+    {
+      "gap": "crates.io rate limiting blocks crate downloads"
+    },
+    {
+      "gap": "Tuna mirror intermittent timeouts during crate download"
+    },
+    {
+      "gap": "RPM database corruption after killing stuck dnf process"
+    },
+    {
+      "gap": "rustup download failure from static.rust-lang.org (HTTP/2 PROTOCOL_ERROR)"
+    }
+  ],
+  "problems_encountered": [
+    {
+      "problem": "dnf-installed Rust 1.82.0 does not support edition2024 feature",
+      "cause": "",
+      "solution": "Remove dnf Rust packages, install Rust 1.96.0 via rustup with tuna mirror (RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup)",
+      "source": "",
+      "severity": "BLOCKER"
+    },
+    {
+      "problem": "Container missing git, cargo cannot update crate index",
+      "cause": "",
+      "solution": "Install git via dnf install -y git",
+      "source": "",
+      "severity": "BLOCKER"
+    },
+    {
+      "problem": "crates.io rate limiting blocks crate downloads",
+      "cause": "",
+      "solution": "Configure cargo mirror to tuna: replace-with = \"tuna\", registry = \"https://mirrors.tuna.tsinghua.edu.cn/git/crates.io-index.git\"",
+      "source": "",
+      "severity": "HIGH"
+    },
+    {
+      "problem": "Tuna mirror intermittent timeouts during crate download",
+      "cause": "",
+      "solution": "Cargo automatic retry mechanism handled all timeouts successfully",
+      "source": "",
+      "severity": "MEDIUM"
+    },
+    {
+      "problem": "RPM database corruption after killing stuck dnf process",
+      "cause": "",
+      "solution": "Recreate Docker container from scratch",
+      "source": "",
+      "severity": "MEDIUM"
+    },
+    {
+      "problem": "rustup download failure from static.rust-lang.org (HTTP/2 PROTOCOL_ERROR)",
+      "cause": "",
+      "solution": "Use tuna mirror for rustup: RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup",
+      "source": "",
+      "severity": "MEDIUM"
+    }
+  ],
+  "session_export_file": "",
+  "conclusion": {
+    "overall_status": "SUCCESS",
+    "summary": "StratoVirt 2.5.0 repository builds successfully on openEuler 24.03 LTS with Rust 1.96.0. All 410 unit tests across 16 modules passed with 0 failures. The binary (92MB) was generated successfully. Integration tests (mod_test) were skipped due to KVM hardware virtualization requirement unavailable in Docker container environment.",
+    "recommendations": [
+      "Run integration tests (mod_test) on bare-metal or KVM-enabled host for full validation",
+      "Pre-install git in the container image to avoid cargo index update failures",
+      "Use rustup (not dnf) for Rust toolchain to ensure edition2024 compatibility",
+      "Pre-configure cargo mirror in container image to avoid crates.io rate limiting",
+      "Consider increasing container memory limit for faster parallel compilation"
+    ]
+  }
+}

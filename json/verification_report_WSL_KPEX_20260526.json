@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_name": "KPEX",
     "repo_path": "/root/workspace/tmp_src_kep/kunpeng-extension-for-pytorch",
+    "repo_name": "Kunpeng Extension for PyTorch (KPEX)",
     "repo_url": "https://gitcode.com/kunpengcompute/kunpeng-extension-for-pytorch.git",
     "start_time": "2026-05-26T14:00:00",
     "end_time": "2026-05-26T16:50:00",
     "duration_seconds": 10200,
-    "total_steps": 5,
+    "total_steps": 11,
     "verification_type": "WSL_Docker_ARM64_Emulation"
   },
   "machine_spec": {
@@ -65,12 +65,12 @@
       "source": "README.md - 目录结构章节 (examples 目录存在但无运行说明)"
     },
     "build_entry": {
-      "source": "README.md - 源码编译安装章节",
-      "value": "CFLAGS=\"-stdlib=libstdc++ -lstdc++\" KPEX_BUILD_TYPE=release HMPI_ROOT=<path> KUTACC_ROOT=<path> KUPL_ROOT=<path> KUDNN_ROOT=<path> pip install --root-user-action=ignore --no-build-isolation --editable ."
+      "value": "CFLAGS=\"-stdlib=libstdc++ -lstdc++\" KPEX_BUILD_TYPE=release HMPI_ROOT=<path> KUTACC_ROOT=<path> KUPL_ROOT=<path> KUDNN_ROOT=<path> pip install --root-user-action=ignore --no-build-isolation --editable .",
+      "source": "README.md - 源码编译安装章节"
     },
     "ut_entry": {
-      "source": "README.md - 运行与验证章节",
-      "value": "import kpex (Python 命令行中无报错即验证成功)"
+      "value": "import kpex (Python 命令行中无报错即验证成功)",
+      "source": "README.md - 运行与验证章节"
     },
     "special_dependencies": {
       "value": [
@@ -97,27 +97,34 @@
   "execution_log": [
     {
       "timestamp": "2026-05-26T14:00:00",
+      "step": "clone_repo",
       "command": "git clone https://gitcode.com/kunpengcompute/kunpeng-extension-for-pytorch.git",
       "success": true,
       "output": "Cloning into '/root/workspace/tmp_src_kep/kunpeng-extension-for-pytorch'... done",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T14:02:00",
+      "step": "start_container",
       "command": "docker run -d --name ttfhw-kep-env --platform linux/arm64 -v /root/workspace/tmp_src_kep:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "Container started (852e3b1723fb)",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T14:05:00",
+      "step": "install_base_deps",
       "command": "dnf install -y python3 python3-pip gcc-g++ make",
       "success": true,
       "output": "Python 3.11.6, pip 23.3.1, GCC 12.3.1 installed",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T14:25:00",
+      "step": "install_pytorch_pypi",
       "command": "pip install torch (PyPI + 清华镜像 + 阿里云镜像)",
       "success": false,
       "output": "多次尝试均超时 (QEMU ARM64 模拟下下载极慢, ReadTimeoutError)",
@@ -126,48 +133,61 @@
     },
     {
       "timestamp": "2026-05-26T14:35:00",
+      "step": "search_pytorch_dnf",
       "command": "dnf search pytorch → 发现 openEuler 仓库有 python3-pytorch.aarch64 2.1.2",
       "success": true,
       "output": "python3-pytorch 2.1.2-4.oe2403 可用",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T14:45:00",
+      "step": "install_pytorch_dnf",
       "command": "dnf install -y python3-pytorch.aarch64 (57M)",
       "success": true,
       "output": "PyTorch 2.1.0a0 安装成功 (import torch 正常)",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T15:00:00",
+      "step": "build_kpex_attempt_1",
       "command": "KPEX pip install attempt 1 (无 ninja/wheel)",
       "success": false,
+      "output": "",
       "error": "ninja not found + invalid command 'bdist_wheel'",
       "returncode": 1
     },
     {
       "timestamp": "2026-05-26T15:10:00",
+      "step": "install_ninja_wheel",
       "command": "dnf install -y ninja-build && pip install wheel",
       "success": true,
       "output": "ninja 1.11.1, wheel 0.47.0 installed",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T15:15:00",
+      "step": "build_kpex_attempt_2",
       "command": "KPEX pip install attempt 2 (含 ninja/wheel, 无 Python.h)",
       "success": false,
+      "output": "",
       "error": "kutacc.h: No such file or directory (8 files)\nkudnn.hpp: No such file or directory (3 files)\nPython.h: No such file or directory (kpex.cpp)",
       "returncode": 1
     },
     {
       "timestamp": "2026-05-26T15:25:00",
+      "step": "install_python_devel",
       "command": "dnf install -y python3-devel (修复 Python.h)",
       "success": true,
       "output": "python3-devel 3.11.6 installed",
+      "error": "",
       "returncode": 0
     },
     {
       "timestamp": "2026-05-26T15:30:00",
+      "step": "build_kpex_attempt_3",
       "command": "KPEX pip install attempt 3 (最终: 含所有可安装依赖, 无 HPCKit)",
       "success": false,
       "output": "0/12 文件编译成功",
@@ -177,17 +197,17 @@
     }
   ],
   "process_timeline": [
-    {"timestamp": "2026-05-26T14:00:00", "step": "clone", "action": "克隆仓库到 /root/workspace/tmp_src_kep/", "result": "success"},
-    {"timestamp": "2026-05-26T14:02:00", "step": "container_start", "action": "启动 openEuler 24.03 ARM64 容器 ttfhw-kep-env", "result": "success"},
-    {"timestamp": "2026-05-26T14:05:00", "step": "install_base", "action": "安装 Python, pip, GCC, make", "result": "success"},
-    {"timestamp": "2026-05-26T14:25:00", "step": "pytorch_pip_fail", "action": "pip install torch (PyPI/清华/阿里云均超时)", "result": "failed - QEMU 网络慢"},
-    {"timestamp": "2026-05-26T14:35:00", "step": "pytorch_dnf_found", "action": "发现 openEuler 仓库有 PyTorch 2.1.2", "result": "found"},
-    {"timestamp": "2026-05-26T14:45:00", "step": "pytorch_install", "action": "dnf install python3-pytorch (57M, 含依赖 500M+)", "result": "success"},
-    {"timestamp": "2026-05-26T15:00:00", "step": "build_attempt_1", "action": "KPEX build (缺少 ninja/wheel)", "result": "failed"},
-    {"timestamp": "2026-05-26T15:10:00", "step": "install_ninja_wheel", "action": "安装 ninja-build + wheel", "result": "success"},
-    {"timestamp": "2026-05-26T15:15:00", "step": "build_attempt_2", "action": "KPEX build (缺少 Python.h + HPCKit)", "result": "failed - kutacc.h/kudnn.hpp/Python.h"},
-    {"timestamp": "2026-05-26T15:25:00", "step": "install_python_devel", "action": "安装 python3-devel 修复 Python.h", "result": "success"},
-    {"timestamp": "2026-05-26T15:30:00", "step": "build_attempt_3_final", "action": "KPEX build (所有可安装依赖就绪, 缺 HPCKit)", "result": "failed - 0/12 文件编译, 100% 被 HPCKit 阻塞"}
+    {"timestamp": "2026-05-26T14:00:00", "step": "clone", "action": "克隆仓库到 /root/workspace/tmp_src_kep/", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T14:02:00", "step": "container_start", "action": "启动 openEuler 24.03 ARM64 容器 ttfhw-kep-env", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T14:05:00", "step": "install_base", "action": "安装 Python, pip, GCC, make", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T14:25:00", "step": "pytorch_pip_fail", "action": "pip install torch (PyPI/清华/阿里云均超时)", "result": "failed - QEMU 网络慢", "details": {}},
+    {"timestamp": "2026-05-26T14:35:00", "step": "pytorch_dnf_found", "action": "发现 openEuler 仓库有 PyTorch 2.1.2", "result": "found", "details": {}},
+    {"timestamp": "2026-05-26T14:45:00", "step": "pytorch_install", "action": "dnf install python3-pytorch (57M, 含依赖 500M+)", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T15:00:00", "step": "build_attempt_1", "action": "KPEX build (缺少 ninja/wheel)", "result": "failed", "details": {}},
+    {"timestamp": "2026-05-26T15:10:00", "step": "install_ninja_wheel", "action": "安装 ninja-build + wheel", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T15:15:00", "step": "build_attempt_2", "action": "KPEX build (缺少 Python.h + HPCKit)", "result": "failed - kutacc.h/kudnn.hpp/Python.h", "details": {}},
+    {"timestamp": "2026-05-26T15:25:00", "step": "install_python_devel", "action": "安装 python3-devel 修复 Python.h", "result": "success", "details": {}},
+    {"timestamp": "2026-05-26T15:30:00", "step": "build_attempt_3_final", "action": "KPEX build (所有可安装依赖就绪, 缺 HPCKit)", "result": "failed - 0/12 文件编译, 100% 被 HPCKit 阻塞", "details": {}}
   ],
   "final_results": {
     "build": {
@@ -268,29 +288,39 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-05-26T15:30:00",
       "problem": "C++ 源码无条件依赖 HPCKit 头文件 (kutacc.h, kudnn.hpp, kupl.h)",
       "solution": "无法解决 - 必须从 https://www.hikunpeng.com/developer/hpc/hpckit-download 下载安装 HPCKit (需注册登录)。HPCKit 为鲲鹏专有闭源软件",
+      "source": "HPCKit 缺失",
       "severity": "blocking",
       "affected_files": "12/12 源文件 (100%)"
     },
     {
+      "timestamp": "2026-05-26T14:25:00",
       "problem": "PyTorch pip install 超时 (QEMU ARM64 模拟下网络极慢, PyPI 包约 200M+)",
       "solution": "使用 openEuler 仓库的 python3-pytorch 2.1.0a0 替代 (dnf install)",
+      "source": "网络限制",
       "severity": "resolved"
     },
     {
+      "timestamp": "2026-05-26T15:15:00",
       "problem": "Python.h 缺失 → kpex.cpp 编译失败",
       "solution": "dnf install python3-devel",
+      "source": "缺少开发包",
       "severity": "resolved"
     },
     {
+      "timestamp": "2026-05-26T15:00:00",
       "problem": "ninja 未安装 → pip install 回退到 distutils 并报 bdist_wheel 错误",
       "solution": "dnf install ninja-build && pip install wheel",
+      "source": "缺少构建工具",
       "severity": "resolved"
     },
     {
+      "timestamp": "2026-05-26T15:30:00",
       "problem": "PyTorch 版本不匹配: 系统装的是 2.1.0a0, 文档要求 v2.5.0 (含 HPCKit 补丁编译)",
       "solution": "无法确定版本差异是否影响构建 - 构建在到达 PyTorch API 调用前已被 HPCKit 头文件阻塞",
+      "source": "版本兼容性",
       "severity": "unknown"
     }
   ],

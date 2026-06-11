@@ -29,21 +29,6 @@
       "selection_reason": "默认使用 Ubuntu 24.04，配合手动安装的 CANN Toolkit 9.1.0"
     }
   },
-  "cann_installation": {
-    "toolkit": {
-      "name": "Ascend-cann-toolkit_9.1.0_linux-x86_64.run",
-      "size": "1.37 GB",
-      "install_path": "/usr/local/Ascend",
-      "status": "success"
-    },
-    "ops": {
-      "name": "Ascend-cann-910b-ops_9.1.0_linux-x86_64.run",
-      "size": "2.14 GB",
-      "install_path": "/usr/local/Ascend",
-      "status": "success"
-    },
-    "download_url": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260520000325981/"
-  },
   "document_reading_summary": {
     "architecture": {
       "value": "x86_64, aarch64",
@@ -76,14 +61,8 @@
       "value": "bash build.sh -s",
       "source": "docs/zh/build.md - 4.4 测试验证章节"
     },
-    "build_entry": {
-      "source": "docs/zh/build.md - 4.3 编译章节",
-      "value": "bash build.sh --pkg 或 cmake .. && make"
-    },
-    "ut_entry": {
-      "source": "docs/zh/build.md - 4.4 测试验证章节",
-      "value": "bash build.sh -u --module=<module> --impl=<py|cpp>"
-    }
+    "build_entry": "bash build.sh --pkg 或 cmake .. && make",
+    "ut_entry": "bash build.sh -u --module=<module> --impl=<py|cpp>"
   },
   "execution_log": [
     {
@@ -92,7 +71,8 @@
       "success": true,
       "output": "仓库成功克隆",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T10:50:00",
@@ -100,7 +80,8 @@
       "success": true,
       "output": "下载 1.37 GB 完成",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T11:00:00",
@@ -108,7 +89,8 @@
       "success": true,
       "output": "下载 2.14 GB 完成",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T11:10:00",
@@ -116,7 +98,8 @@
       "success": true,
       "output": "CANN Toolkit 安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T11:15:00",
@@ -124,7 +107,8 @@
       "success": true,
       "output": "CANN ops 安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T11:20:00",
@@ -132,7 +116,8 @@
       "success": true,
       "output": "CMake 配置成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T11:30:00",
@@ -140,7 +125,8 @@
       "success": true,
       "output": "构建成功，生成 superkernel wheel 和 autofuse 库",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T12:00:00",
@@ -148,7 +134,8 @@
       "success": true,
       "output": "90 passed in 3.56s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-23T13:00:00",
@@ -156,55 +143,121 @@
       "success": true,
       "output": "812 tests passed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     }
   ],
   "process_timeline": [
-    {"timestamp": "2026-05-23T10:43:00", "step": "start", "action": "验证过程启动", "result": "started"},
-    {"timestamp": "2026-05-23T10:45:00", "step": "clone", "action": "克隆仓库", "result": "success"},
-    {"timestamp": "2026-05-23T10:50:00", "step": "download_cann", "action": "下载 CANN Toolkit 和 ops", "result": "success"},
-    {"timestamp": "2026-05-23T11:10:00", "step": "install_cann", "action": "安装 CANN 软件包", "result": "success"},
-    {"timestamp": "2026-05-23T11:20:00", "step": "cmake_configure", "action": "CMake 配置", "result": "success"},
-    {"timestamp": "2026-05-23T11:30:00", "step": "build", "action": "编译构建", "result": "success"},
-    {"timestamp": "2026-05-23T12:00:00", "step": "python_ut", "action": "运行 Python UT", "result": "success - 90 passed"},
-    {"timestamp": "2026-05-23T13:00:00", "step": "cpp_ut", "action": "运行 C++ UT", "result": "success - 812 passed"},
-    {"timestamp": "2026-05-23T13:30:00", "step": "end", "action": "验证完成", "result": "all tests passed"}
+    {
+      "timestamp": "2026-05-23T10:43:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T10:45:00",
+      "step": "clone",
+      "action": "克隆仓库",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T10:50:00",
+      "step": "download_cann",
+      "action": "下载 CANN Toolkit 和 ops",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T11:10:00",
+      "step": "install_cann",
+      "action": "安装 CANN 软件包",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T11:20:00",
+      "step": "cmake_configure",
+      "action": "CMake 配置",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T11:30:00",
+      "step": "build",
+      "action": "编译构建",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T12:00:00",
+      "step": "python_ut",
+      "action": "运行 Python UT",
+      "result": "success - 90 passed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T13:00:00",
+      "step": "cpp_ut",
+      "action": "运行 C++ UT",
+      "result": "success - 812 passed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-05-23T13:30:00",
+      "step": "end",
+      "action": "验证完成",
+      "result": "all tests passed",
+      "details": {}
+    }
   ],
   "final_results": {
     "build": {
       "status": "success",
       "duration_seconds": 1800,
       "artifacts": [
-        {"name": "superkernel-0.1.0-py3-none-any.whl", "path": "super_kernel/"},
-        {"name": "libascendsk.so", "path": "unknown"},
-        {"name": "pyautofuse 模块", "path": "unknown"},
-        {"name": "aihac_codegen 库", "path": "unknown"}
+        {
+          "name": "super_kernel/superkernel-0.1.0-py3-none-any.whl"
+        },
+        {
+          "name": "libascendsk.so"
+        },
+        {
+          "name": "pyautofuse 模块"
+        },
+        {
+          "name": "aihac_codegen 库"
+        }
       ]
     },
     "ut": {
-      "status": "success",
       "total": 902,
       "passed": 902,
       "failed": 0,
-      "duration_seconds": 4.441,
-      "failures": [],
-      "sub_components": {
-        "python_ut": {
-          "total": 90,
-          "passed": 90,
-          "failed": 0,
-          "duration_seconds": 3.56
-        },
-        "cpp_ut": {
+      "sub_components": [
+        {
+          "name": "cpp_ut",
           "total": 812,
           "passed": 812,
           "failed": 0,
           "duration_seconds": 0.881
+        },
+        {
+          "name": "python_ut",
+          "total": 90,
+          "passed": 90,
+          "failed": 0,
+          "duration_seconds": 3.56
         }
-      }
+      ],
+      "status": "success",
+      "duration_seconds": 0,
+      "failures": []
     },
     "sample": {
       "status": "not_run",
+      "results": [],
       "reason": "样例运行需要 NPU 设备支持"
     }
   },
@@ -212,37 +265,25 @@
   "problems_encountered": [
     {
       "problem": "CMake 初始找不到 CANN runtime",
-      "error_message": "Could NOT find runtime (missing: _INCLUDE_DIR...)",
       "solution": "设置 ASCEND_INSTALL_PATH=/usr/local/Ascend/cann-9.1.0",
       "source": "CMakeLists.txt 要求设置 ASCEND_INSTALL_PATH",
+      "error_message": "Could NOT find runtime (missing: _INCLUDE_DIR...)",
       "resolution_status": "已解决"
     },
     {
       "problem": "Python build 模块缺失",
-      "error_message": "No module named build",
       "solution": "pip3 install build wheel setuptools",
       "source": "构建 superkernel wheel 需要",
+      "error_message": "No module named build",
       "resolution_status": "已解决"
     },
     {
       "problem": "Python externally-managed-environment 错误",
-      "error_message": "This environment is externally managed",
       "solution": "创建 Python 虚拟环境运行测试",
       "source": "Ubuntu 24.04 的 PEP 668 限制",
+      "error_message": "This environment is externally managed",
       "resolution_status": "已解决"
     }
   ],
-  "special_notes": {
-    "cann_version": "9.1.0",
-    "cann_install_path": "/usr/local/Ascend/cann-9.1.0",
-    "build_tools_versions": {
-      "cmake": "3.28.3",
-      "python": "3.12.3",
-      "gcc": "13.3.0"
-    },
-    "verification_conclusion": "项目在安装 CANN Toolkit 9.1.0 和 ops 9.1.0 后可成功构建和测试",
-    "python_ut_result": "90 passed in 3.56s",
-    "cpp_ut_result": "812 tests from 34 test suites ran (881 ms total), all passed"
-  },
   "session_export_file": ""
 }

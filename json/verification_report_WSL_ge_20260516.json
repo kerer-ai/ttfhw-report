@@ -31,15 +31,14 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "docs/build.md - Section 4.3",
-      "value": "x86_64, aarch64"
+      "value": "x86_64, aarch64",
+      "source": "docs/build.md - Section 4.3"
     },
     "recommended_image": {
-      "source": "scripts/env/Dockerfile + docs/quick_install.md",
-      "value": "Dockerfile FROM ubuntu:18.04 (outdated) -> docs recommend Ubuntu 22.04 -> selected Ubuntu 24.04"
+      "value": "Dockerfile FROM ubuntu:18.04 (outdated) -> docs recommend Ubuntu 22.04 -> selected Ubuntu 24.04",
+      "source": "scripts/env/Dockerfile + docs/quick_install.md"
     },
     "dependencies": {
-      "source": "docs/build.md + requirements.txt + CMakeLists.txt",
       "value": [
         "GCC >= 7.3.x",
         "Python3 >= 3.9.x",
@@ -56,28 +55,23 @@
         "perl",
         "graph-easy (optional)",
         "CANN Toolkit (required)"
-      ]
+      ],
+      "source": "docs/build.md + requirements.txt + CMakeLists.txt"
     },
     "build_commands": {
-      "source": "docs/build.md - Section 4.3",
-      "value": "bash build.sh --ge_compiler -j<N>"
+      "value": "bash build.sh --ge_compiler -j<N>",
+      "source": "docs/build.md - Section 4.3"
     },
     "ut_commands": {
-      "source": "docs/build.md - Section 4.4",
-      "value": "bash tests/run_test.sh --ut=ge_common"
+      "value": "bash tests/run_test.sh --ut=ge_common",
+      "source": "docs/build.md - Section 4.4"
     },
     "sample_commands": {
-      "source": "examples/README.md + docs/quick_install.md",
-      "value": "NPU device required for sample execution"
+      "value": "NPU device required for sample execution",
+      "source": "examples/README.md + docs/quick_install.md"
     },
-    "build_entry": {
-      "source": "docs/build.md - Section 4.3",
-      "value": "bash build.sh --ge_compiler -j<N>"
-    },
-    "ut_entry": {
-      "source": "docs/build.md - Section 4.4",
-      "value": "bash tests/run_test.sh --ut=ge_common"
-    }
+    "build_entry": "bash build.sh --ge_compiler -j<N>",
+    "ut_entry": "bash tests/run_test.sh --ut=ge_common"
   },
   "execution_log": [
     {
@@ -86,7 +80,8 @@
       "success": true,
       "output": "Cloned 13056 files",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T14:50:00",
@@ -94,7 +89,8 @@
       "success": true,
       "output": "Image ready",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T14:52:00",
@@ -102,7 +98,8 @@
       "success": true,
       "output": "Container started",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T15:40:00",
@@ -110,7 +107,8 @@
       "success": true,
       "output": "30 checks passed - Environment ready for compilation",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T16:12:00",
@@ -118,7 +116,8 @@
       "success": true,
       "output": "Build completed in 239m53s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-16T02:05:00",
@@ -126,7 +125,8 @@
       "success": true,
       "output": "UT compilation completed, 2 test executables generated",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-16T06:43:00",
@@ -134,7 +134,8 @@
       "success": true,
       "output": "60 tests passed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-16T06:44:00",
@@ -142,7 +143,8 @@
       "success": true,
       "output": "1 test passed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -150,37 +152,43 @@
       "timestamp": "2026-05-15T14:47:00",
       "step": "start",
       "action": "Clone repository",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T14:50:00",
       "step": "container_setup",
       "action": "Start Docker container with Ubuntu 24.04",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T15:40:00",
       "step": "verify_env",
       "action": "Run environment check script",
-      "result": "30/30 checks passed"
+      "result": "30/30 checks passed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T16:12:00",
       "step": "build",
       "action": "Build ge-compiler package",
-      "result": "success (239m53s)"
+      "result": "success (239m53s)",
+      "details": {}
     },
     {
       "timestamp": "2026-05-16T02:05:00",
       "step": "ut_compile",
       "action": "Compile UT tests",
-      "result": "success (2 executables generated)"
+      "result": "success (2 executables generated)",
+      "details": {}
     },
     {
       "timestamp": "2026-05-16T06:43:00",
       "step": "ut_run",
       "action": "Run UT tests",
-      "result": "61/61 tests passed"
+      "result": "61/61 tests passed",
+      "details": {}
     }
   ],
   "final_results": {
@@ -196,17 +204,33 @@
       ]
     },
     "ut": {
-      "status": "success",
-      "duration_seconds": 0,
       "total": 61,
       "passed": 61,
       "failed": 0,
+      "sub_components": [
+        {
+          "test_name": "ut_libgraph",
+          "total": 60,
+          "passed": 60,
+          "failed": 0,
+          "duration_seconds": 1.573
+        },
+        {
+          "test_name": "ut_sc_check",
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "duration_seconds": 1.252
+        }
+      ],
+      "status": "success",
+      "duration_seconds": 0,
       "failures": []
     },
     "sample": {
       "status": "not_run",
-      "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "note": "Sample execution requires NPU device which is not available in container environment"
     }
   },
   "documentation_gaps": [
@@ -216,30 +240,25 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-15T14:47:00",
       "problem": "CANN Toolkit download failed with version 9.0.0",
       "solution": "Found latest version 9.1.0 from repository listing and downloaded correct file",
       "source": "CANN repository directory listing"
     },
     {
-      "timestamp": "2026-05-15T14:47:00",
       "problem": "Git safe.directory error during build",
       "solution": "Added git config --global --add safe.directory '*' to container",
       "source": "Git error message"
     },
     {
-      "timestamp": "2026-05-15T14:47:00",
       "problem": "pip timeout when installing Python packages",
       "solution": "Used Tsinghua mirror (https://pypi.tuna.tsinghua.edu.cn/simple)",
       "source": "Network troubleshooting"
     },
     {
-      "timestamp": "2026-05-15T14:47:00",
       "problem": "UT test compilation was interrupted when container was stopped",
       "solution": "Restarted container, reinstalled dependencies, and continued UT compilation",
       "source": "Container lifecycle management"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

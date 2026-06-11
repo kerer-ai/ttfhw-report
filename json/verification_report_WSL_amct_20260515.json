@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_name": "amct",
     "repo_path": "./tmp_src/",
     "repo_url": "https://gitcode.com/cann/amct.git",
     "start_time": "2026-05-15T06:55:00",
     "end_time": "2026-05-15T08:10:00",
     "duration_seconds": 4500,
-    "total_steps": 8
+    "total_steps": 8,
+    "repo_name": "amct"
   },
   "machine_spec": {
     "host_machine": {
@@ -71,14 +71,8 @@
       "value": "python3 examples/amct_pytorch/minmax/*.py（需要 NPU 硬件、torch_npu 和模型下载）",
       "source": "examples/README.md; examples/amct_pytorch/minmax/README_CN.md"
     },
-    "build_entry": {
-      "source": "README.md - 安装&验证章节; AGENTS.md - 构建命令章节; docs/build.md",
-      "value": "bash build.sh --pkg"
-    },
-    "ut_entry": {
-      "source": "AGENTS.md - 单元测试章节; docs/build.md - 本地验证章节",
-      "value": "bash build.sh -u"
-    }
+    "build_entry": "bash build.sh --pkg",
+    "ut_entry": "bash build.sh -u"
   },
   "execution_log": [
     {
@@ -87,7 +81,8 @@
       "success": true,
       "output": "仓库克隆成功，大小 18M",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:58:00",
@@ -95,7 +90,8 @@
       "success": true,
       "output": "镜像已在本地可用",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:58:30",
@@ -103,7 +99,8 @@
       "success": true,
       "output": "容器启动成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:59:00",
@@ -111,7 +108,8 @@
       "success": true,
       "output": "所有包安装完成。GCC 13.3.0, CMake 3.28.3, Python 3.12.3",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:01:00",
@@ -119,7 +117,8 @@
       "success": false,
       "output": "构建失败：找不到 securec.h，CANN Toolkit 未安装（ASCEND_HOME_PATH 为空）",
       "error": "fatal error: securec.h: No such file or directory - CANN Toolkit 是硬性前置依赖，但文档中不够突出",
-      "returncode": 2
+      "returncode": 2,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:10:00",
@@ -127,7 +126,8 @@
       "success": true,
       "output": "CANN Toolkit 9.0.0 安装到 /usr/local/Ascend",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:25:00",
@@ -135,7 +135,8 @@
       "success": false,
       "output": "构建失败：protobuf 构建中出现 CCACHE_PROGRAM-NOTFOUND 错误",
       "error": "CANN cmake 系统要求 ccache，但未安装且未在依赖文档中说明",
-      "returncode": 2
+      "returncode": 2,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:30:00",
@@ -143,7 +144,8 @@
       "success": true,
       "output": "ccache 4.9.1 安装完成",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:32:00",
@@ -151,7 +153,8 @@
       "success": true,
       "output": "构建成功！生成 cann-amct_9.0.0_linux-x86_64.tar.gz（6.7M）",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:52:00",
@@ -159,7 +162,8 @@
       "success": true,
       "output": "所有 Python 测试依赖安装完成。注意：numpy<=1.24.0 与 Python 3.12 不兼容，改装 numpy 2.4.4",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:55:00",
@@ -167,7 +171,8 @@
       "success": true,
       "output": "运行 813 个测试，耗时 141.676s，通过（跳过=2，预期失败=1）",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:00:00",
@@ -175,7 +180,8 @@
       "success": true,
       "output": "amct-pytorch 1.1.0 安装成功",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:01:00",
@@ -183,7 +189,8 @@
       "success": true,
       "output": "AMCT 导入成功，所有 API 可用（quantize, convert, algorithm_register 等）",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:05:00",
@@ -191,7 +198,8 @@
       "success": true,
       "output": "容器已清理",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -199,85 +207,99 @@
       "timestamp": "2026-05-15T06:55:00",
       "step": "start",
       "action": "验证流程启动",
-      "result": "已启动"
+      "result": "已启动",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:55:00",
       "step": "clone_repo",
       "action": "克隆 https://gitcode.com/cann/amct.git 到 ./tmp_src/",
-      "result": "成功"
+      "result": "成功",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:56:00",
       "step": "document_reading",
       "action": "阅读 README.md、AGENTS.md、docs/build.md、docs/quick_install.md、CMakeLists.txt、build.sh、requirements.txt、setup.py、install_graph.sh",
-      "result": "完成"
+      "result": "完成",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:58:00",
       "step": "container_setup",
       "action": "启动 Ubuntu 24.04 Docker 容器并挂载仓库目录",
-      "result": "成功"
+      "result": "成功",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T06:59:00",
       "step": "dependency_install",
       "action": "安装 build-essential、cmake、gcc、g++、make、python3、python3-pip、python3-dev、git、wget、curl、patch",
-      "result": "成功"
+      "result": "成功",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:01:00",
       "step": "build_attempt_1",
       "action": "第一次构建尝试，未安装 CANN Toolkit",
-      "result": "失败 - 缺少 securec.h，ASCEND_HOME_PATH 为空"
+      "result": "失败 - 缺少 securec.h，ASCEND_HOME_PATH 为空",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:10:00",
       "step": "cann_install",
       "action": "下载并安装 CANN Toolkit 9.0.0（下载 1.4G，安装到 /usr/local/Ascend）",
-      "result": "成功"
+      "result": "成功",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:25:00",
       "step": "build_attempt_2",
       "action": "第二次构建尝试，有 CANN 但无 ccache",
-      "result": "失败 - CCACHE_PROGRAM-NOTFOUND"
+      "result": "失败 - CCACHE_PROGRAM-NOTFOUND",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:30:00",
       "step": "ccache_install",
       "action": "安装 ccache 包",
-      "result": "成功"
+      "result": "成功",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:32:00",
       "step": "build_attempt_3",
       "action": "第三次构建尝试，CANN + ccache 均已就绪",
-      "result": "成功 - 构建耗时 2分30秒"
+      "result": "成功 - 构建耗时 2分30秒",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T07:55:00",
       "step": "unit_test",
       "action": "通过 bash build.sh -u 运行单元测试",
-      "result": "成功 - 813 个测试，通过（跳过=2，预期失败=1）"
+      "result": "成功 - 813 个测试，通过（跳过=2，预期失败=1）",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:01:00",
       "step": "sample_verification",
       "action": "安装 amct_pytorch 包并验证导入；样例需要 NPU 硬件",
-      "result": "部分成功 - 导入正常，样例因无 NPU 无法运行"
+      "result": "部分成功 - 导入正常，样例因无 NPU 无法运行",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:05:00",
       "step": "cleanup",
       "action": "Docker 容器已停止并删除",
-      "result": "完成"
+      "result": "完成",
+      "details": {}
     },
     {
       "timestamp": "2026-05-15T08:10:00",
       "step": "end",
       "action": "验证流程完成",
-      "result": "完成"
+      "result": "完成",
+      "details": {}
     }
   ],
   "final_results": {
@@ -304,9 +326,9 @@
       "total": 813,
       "passed": 810,
       "failed": 0,
-      "failures": [],
       "skipped": 2,
-      "expected_failures": 1
+      "expected_failures": 1,
+      "failures": []
     },
     "sample": {
       "status": "not_run",
@@ -336,47 +358,40 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "构建失败：找不到 securec.h（CANN Toolkit 未安装）",
       "solution": "从 https://ascend-cann.obs.cn-north-4.myhuaweicloud.com/CANN/20260131_newest/Ascend-cann-toolkit_9.0.0_linux-x86_64.run 下载并安装 CANN Toolkit 9.0.0，使用 --quiet --force 参数",
       "source": "docs/quick_install.md 提及 CANN 安装；CMakeLists.txt 引用 ASCEND_HOME_PATH"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "构建失败：protobuf 构建中出现 CCACHE_PROGRAM-NOTFOUND 错误",
       "solution": "安装 ccache 包（apt-get install ccache）",
       "source": "cann-cmake prepare.cmake 默认设置 ENABLE_CCACHE=TRUE，将 CMAKE_C_COMPILER_LAUNCHER 设为 ccache"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "单元测试失败：ModuleNotFoundError: No module named 'numpy'",
       "solution": "安装 numpy 包；注意：requirements.txt 指定 numpy<=1.24.0 与 Python 3.12 不兼容，改装 numpy 2.4.4",
       "source": "requirements.txt 列出 numpy>=1.19.2,<=1.24.0"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "单元测试失败：ModuleNotFoundError: No module named 'transformers'",
       "solution": "安装 transformers 和 pyyaml 包",
       "source": "requirements.txt 列出 transformers==5.5.4；deepseekv3_attention_quant_module.py 从 transformers.cache_utils 导入"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "单元测试失败：ModuleNotFoundError: No module named 'onnx'",
       "solution": "安装 onnx、onnxruntime 和 protobuf 包",
       "source": "requirements.txt 列出 onnx==1.16.1、onnxruntime==1.20.0、protobuf==3.20.3"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "AMCT 在工作区目录下导入失败（源码遮蔽了已安装的包）",
       "solution": "从其他目录（cd /tmp）运行导入，避免 Python 从本地源码目录而非已安装包导入",
       "source": "Python 模块解析优先级 - 本地 amct_pytorch/ 目录优先于 pip 安装的包"
     },
     {
-      "timestamp": "2026-05-15T06:55:00",
       "problem": "样例无法在仅 CPU 的 Docker 环境中运行（需要 NPU 硬件和 torch_npu）",
       "solution": "改为验证包导入和 API 可用性；完整样例执行需要配备 NPU 的环境",
       "source": "examples/amct_pytorch/*/README_CN.md 列出 torch_npu 为前置条件"
     }
   ],
-  "session_export_file": "unknown"
+  "session_export_file": ""
 }

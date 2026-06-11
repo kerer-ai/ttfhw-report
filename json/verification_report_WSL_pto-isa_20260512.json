@@ -1,12 +1,12 @@
 {
   "metadata": {
     "repo_name": "pto-isa",
-    "repo_path": "https://gitcode.com/cann/pto-isa.git",
     "repo_url": "https://gitcode.com/cann/pto-isa.git",
     "start_time": "2026-05-12T02:27:00+08:00",
     "end_time": "2026-05-12T02:35:00+08:00",
     "duration_seconds": 480,
-    "total_steps": 6
+    "total_steps": 6,
+    "verification_type": "CPU Simulator (cross-platform validation)"
   },
   "machine_spec": {
     "host_machine": {
@@ -31,15 +31,10 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "README.md - Platform Support章节, docs/getting-started.md - Prerequisites章节",
-      "value": "x86_64 / AArch64 (CPU Simulator), Ascend A2/A3/A5 (NPU)"
-    },
-    "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+      "value": "x86_64 / AArch64 (CPU Simulator), Ascend A2/A3/A5 (NPU)",
+      "source": "README.md - Platform Support章节, docs/getting-started.md - Prerequisites章节"
     },
     "dependencies": {
-      "source": "docs/getting-started.md - Prerequisites章节 + tests/cpu/st/CMakeLists.txt (GTest FetchContent)",
       "value": [
         "Git",
         "Python >= 3.11",
@@ -48,28 +43,12 @@
         "numpy >= 1.22.0",
         "Ninja (optional, for faster builds)",
         "GoogleTest 1.14.0 (NPU path, fetched automatically for CPU path)"
-      ]
+      ],
+      "source": "docs/getting-started.md - Prerequisites章节 + tests/cpu/st/CMakeLists.txt (GTest FetchContent)"
     },
-    "build_commands": {
-      "source": "README.md - Build and Run章节, docs/getting-started.md - Run CPU Simulator章节",
-      "value": "python3 tests/run_cpu.py --clean --verbose"
-    },
-    "ut_commands": {
-      "source": "README.md - Build and Run章节, docs/getting-started.md - Run CPU Simulator章节",
-      "value": "python3 tests/run_cpu.py --clean --verbose (runs all CPU ST tests); python3 tests/run_cpu.py --testcase <testcase> (single testcase)"
-    },
-    "sample_commands": {
-      "source": "README.md - Build and Run章节, docs/getting-started.md - Run CPU Simulator章节",
-      "value": "python3 tests/run_cpu.py --demo gemm --verbose; python3 tests/run_cpu.py --demo flash_attn --verbose; python3 tests/run_cpu.py --demo mla --verbose"
-    },
-    "build_entry": {
-      "source": "README.md - Build and Run章节, docs/getting-started.md - Run CPU Simulator章节",
-      "value": "python3 tests/run_cpu.py --clean --verbose"
-    },
-    "ut_entry": {
-      "source": "README.md - Build and Run章节, docs/getting-started.md - Run CPU Simulator章节",
-      "value": "python3 tests/run_cpu.py --clean --verbose (runs all CPU ST tests); python3 tests/run_cpu.py --testcase <testcase> (single testcase)"
-    }
+    "build_entry": "python3 tests/run_cpu.py --clean --verbose",
+    "ut_entry": "python3 tests/run_cpu.py --clean --verbose (runs all CPU ST tests); python3 tests/run_cpu.py --testcase <testcase> (single testcase)",
+    "sample_entry": "python3 tests/run_cpu.py --demo gemm --verbose; python3 tests/run_cpu.py --demo flash_attn --verbose; python3 tests/run_cpu.py --demo mla --verbose"
   },
   "execution_log": [
     {
@@ -207,23 +186,26 @@
       "duration_seconds": 49.154,
       "artifacts": [
         {
-          "name": "CPU ST test binaries (93 executables)",
-          "path": "tests/cpu/st/build/bin/",
+          "type": "CPU ST test binaries",
           "count": 105,
+          "path": "tests/cpu/st/build/bin/",
           "description": "包含93个PTO指令的CPU Simulator单元测试可执行文件"
         },
         {
-          "name": "gemm_demo",
+          "type": "gemm_demo",
+          "count": 1,
           "path": "demos/cpu/gemm_demo/build/gemm_demo",
           "description": "GEMM性能演示程序"
         },
         {
-          "name": "flash_attention_demo",
+          "type": "flash_attention_demo",
+          "count": 1,
           "path": "demos/cpu/flash_attention_demo/build/flash_attention_demo",
           "description": "Flash Attention演示程序"
         },
         {
-          "name": "mla_attention_demo",
+          "type": "mla_attention_demo",
+          "count": 1,
           "path": "demos/cpu/mla_attention_demo/build/mla_attention_demo",
           "description": "MLA Attention演示程序"
         }
@@ -235,29 +217,136 @@
       "total": 93,
       "passed": 93,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "test_cases": [
+        "hashfind",
+        "mgather",
+        "mscatter",
+        "setgetval",
+        "tabs",
+        "tadd",
+        "taddc",
+        "tadds",
+        "taddsc",
+        "tand",
+        "tands",
+        "targreduceop",
+        "taxpy",
+        "tbroadcast",
+        "tci",
+        "tcmp",
+        "tcmps",
+        "tcolexpand",
+        "tcolexpandop",
+        "tcolmax",
+        "tcolmin",
+        "tcolsum",
+        "tconcat",
+        "tcvt",
+        "tdequant",
+        "tdiv",
+        "tdivs",
+        "texp",
+        "texpands",
+        "textract",
+        "tfillpad",
+        "tflashattn",
+        "tfmod",
+        "tfmods",
+        "tgather",
+        "tgatherb",
+        "tget",
+        "tget_async",
+        "tget_scale_addr",
+        "thistogram",
+        "timg2col",
+        "tinsert",
+        "tload",
+        "tloadconv",
+        "tlog",
+        "tlrelu",
+        "tmatmul",
+        "tmatmul_layout",
+        "tmax",
+        "tmaxs",
+        "tmin",
+        "tmins",
+        "tmov",
+        "tmrgsort",
+        "tmul",
+        "tmuls",
+        "tneg",
+        "tnot",
+        "tnotify",
+        "tor",
+        "tors",
+        "tpartadd",
+        "tpartmax",
+        "tpartmin",
+        "tprefetch",
+        "tprelu",
+        "tpushpop",
+        "tput",
+        "tput_async",
+        "tquant",
+        "trandom",
+        "trecip",
+        "treduce",
+        "trelu",
+        "trem",
+        "trems",
+        "treshape",
+        "trowexpand",
+        "trowexpandop",
+        "trowmax",
+        "trowmin",
+        "trowprod",
+        "trowsum",
+        "trsqrt",
+        "tscatter",
+        "tsel",
+        "tsels",
+        "tshl",
+        "tshls",
+        "tshr",
+        "tshrs",
+        "tsort32",
+        "tsqrt",
+        "tstore",
+        "tsub",
+        "tsubc",
+        "tsubs",
+        "tsubsc",
+        "tsubview",
+        "ttest",
+        "ttrans",
+        "ttri",
+        "twait",
+        "txor",
+        "txors"
+      ]
     },
     "sample": {
       "status": "success",
       "duration_seconds": 9.63,
       "results": [
         {
-          "sample_name": "GEMM demo",
-          "execution_status": "success",
-          "output_summary": "gemm_demo: M=32 K=16 N=32, max_abs_diff=0, perf: avg_ms=0.0303591 matmul_flops=32768 gflops=1.07935",
-          "execution_time": "unknown"
+          "name": "GEMM demo",
+          "status": "success",
+          "duration_seconds": 2.69,
+          "output_summary": "gemm_demo: M=32 K=16 N=32, max_abs_diff=0, perf: avg_ms=0.0303591 matmul_flops=32768 gflops=1.07935"
         },
         {
-          "sample_name": "Flash Attention demo",
-          "execution_status": "success",
-          "output_summary": "flash_attention_demo: B=1 H=2 S=64 D=32 (non-causal), max_abs_diff=1.86265e-09, verify_allclose passed, perf: avg_ms=1.11819 gflops=0.93774",
-          "execution_time": "unknown"
+          "name": "Flash Attention demo",
+          "status": "success",
+          "duration_seconds": 3.31,
+          "output_summary": "flash_attention_demo: B=1 H=2 S=64 D=32 (non-causal), max_abs_diff=1.86265e-09, verify_allclose passed, perf: avg_ms=1.11819 gflops=0.93774"
         },
         {
-          "sample_name": "MLA Attention demo",
-          "execution_status": "success",
-          "output_summary": "mla_attention_demo: B=1 H=2 S=64 D=32 R=16, max_abs_diff=1.81899e-11, verify_allclose passed, perf: avg_ms=1.31029 gflops=0.800262",
-          "execution_time": "unknown"
+          "name": "MLA Attention demo",
+          "status": "success",
+          "duration_seconds": 3.81,
+          "output_summary": "mla_attention_demo: B=1 H=2 S=64 D=32 R=16, max_abs_diff=1.81899e-11, verify_allclose passed, perf: avg_ms=1.31029 gflops=0.800262"
         }
       ]
     }
@@ -265,12 +354,11 @@
   "documentation_gaps": [],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T02:27:00+08:00",
-      "problem": "",
-      "solution": "",
-      "source": ""
+      "problem": "Python venv内安装numpy失败（pip无法找到numpy包）",
+      "solution": "使用系统级apt安装python3-numpy代替venv内pip安装",
+      "source": "Ubuntu 24.04容器内pip网络访问限制",
+      "impact": "无功能影响，系统级numpy 1.26.4满足>=1.22.0要求"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

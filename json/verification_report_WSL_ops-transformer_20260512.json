@@ -1,7 +1,6 @@
 {
   "metadata": {
     "repo_name": "ops-transformer",
-    "repo_path": "https://gitcode.com/cann/ops-transformer.git",
     "repo_url": "https://gitcode.com/cann/ops-transformer.git",
     "start_time": "2026-05-12T12:35:00Z",
     "end_time": "2026-05-12T14:51:00Z",
@@ -31,15 +30,14 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "README.md - Version support section, docs/zh/install/quick_install.md",
-      "value": "x86_64, aarch64 (Atlas A2/A3 series products)"
+      "value": "x86_64, aarch64 (Atlas A2/A3 series products)",
+      "source": "README.md - Version support section, docs/zh/install/quick_install.md"
     },
     "recommended_image": {
-      "source": "docs/zh/install/quick_install.md - Docker deployment section",
-      "value": "Docker image available: swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10-ops → Ubuntu base"
+      "value": "Docker image available: swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10-ops → Ubuntu base",
+      "source": "docs/zh/install/quick_install.md - Docker deployment section"
     },
     "dependencies": {
-      "source": "README.md + docs/zh/install/quick_install.md + requirements.txt + install_deps.sh",
       "value": [
         "CANN toolkit package (Ascend-cann-toolkit)",
         "python >= 3.7.0 (建议版本 <= 3.10)",
@@ -61,28 +59,23 @@
         "protobuf",
         "psutil",
         "setuptools>=59.0.0"
-      ]
+      ],
+      "source": "README.md + docs/zh/install/quick_install.md + requirements.txt + install_deps.sh"
     },
     "build_commands": {
-      "source": "docs/zh/install/compile.md - Custom operator package section",
-      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>"
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>",
+      "source": "docs/zh/install/compile.md - Custom operator package section"
     },
     "ut_commands": {
-      "source": "docs/zh/install/compile.md - Local verification section",
-      "value": "bash build.sh -u --ophost --ops=<operator>"
+      "value": "bash build.sh -u --ophost --ops=<operator>",
+      "source": "docs/zh/install/compile.md - Local verification section"
     },
     "sample_commands": {
-      "source": "docs/zh/install/quick_install.md + examples/add_example/README.md",
-      "value": "Sample execution requires NPU hardware and CANN ops package"
+      "value": "Sample execution requires NPU hardware and CANN ops package",
+      "source": "docs/zh/install/quick_install.md + examples/add_example/README.md"
     },
-    "build_entry": {
-      "source": "docs/zh/install/compile.md - Custom operator package section",
-      "value": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>"
-    },
-    "ut_entry": {
-      "source": "docs/zh/install/compile.md - Local verification section",
-      "value": "bash build.sh -u --ophost --ops=<operator>"
-    }
+    "build_entry": "bash build.sh --pkg --soc=ascend910b --ops=<operator_list>",
+    "ut_entry": "bash build.sh -u --ophost --ops=<operator>"
   },
   "execution_log": [
     {
@@ -91,7 +84,8 @@
       "success": true,
       "output": "Container started successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:36:30Z",
@@ -99,7 +93,8 @@
       "success": true,
       "output": "Dependencies installed successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:45:00Z",
@@ -107,7 +102,8 @@
       "success": true,
       "output": "Python dependencies installed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:50:00Z",
@@ -115,7 +111,8 @@
       "success": true,
       "output": "Downloaded CANN toolkit (1.3GB)",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T13:00:00Z",
@@ -123,7 +120,8 @@
       "success": true,
       "output": "CANN toolkit installed to /usr/local/Ascend/cann-9.0.0",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T13:12:00Z",
@@ -132,7 +130,8 @@
       "output": "Build completed successfully, generated cann-ops-transformer-custom_linux-x86_64.run (100MB)",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 5820
+      "duration_seconds": 5820,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T14:50:27Z",
@@ -141,7 +140,8 @@
       "output": "4 tests from 2 test suites ran. [PASSED] 4 tests.",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 21
+      "duration_seconds": 21,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -149,67 +149,78 @@
       "timestamp": "2026-05-12T12:35:00Z",
       "step": "start",
       "action": "Verification process started",
-      "result": "started"
+      "result": "started",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:36:00Z",
       "step": "container_setup",
       "action": "Docker container launched with Ubuntu 24.04",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:36:30Z",
       "step": "dependency_install",
       "action": "System dependencies installed (cmake, gcc, make, python3, etc.)",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:45:00Z",
       "step": "python_deps",
       "action": "Python dependencies installed from requirements.txt",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T12:50:00Z",
       "step": "cann_download",
       "action": "CANN toolkit package downloaded (1.3GB)",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T13:00:00Z",
       "step": "cann_install",
       "action": "CANN toolkit installed",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T13:12:00Z",
       "step": "build_start",
       "action": "Build started for flash_attention_score operator",
-      "result": "started"
+      "result": "started",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T14:49:00Z",
       "step": "build_complete",
       "action": "Build completed, package generated",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T14:50:27Z",
       "step": "ut_start",
       "action": "Unit tests started",
-      "result": "started"
+      "result": "started",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T14:50:48Z",
       "step": "ut_complete",
       "action": "Unit tests completed - 4 passed",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T14:51:00Z",
       "step": "verification_complete",
       "action": "Verification process completed",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     }
   ],
   "final_results": {
@@ -226,16 +237,29 @@
     },
     "ut": {
       "status": "success",
-      "duration_seconds": 21,
       "total": 4,
       "passed": 4,
       "failed": 0,
+      "duration_seconds": 21,
+      "sub_components": {
+        "FlashAttentionScoreTiling": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0
+        },
+        "FlashAttentionScoreProto": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0
+        }
+      },
       "failures": []
     },
     "sample": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "failure_reason": "Sample execution requires Ascend NPU hardware and CANN ops package (2.13GB). The runtime dependencies (driver, firmware, ops package) are not available in Docker container without NPU device mapping."
     }
   },
   "documentation_gaps": [
@@ -246,36 +270,30 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "ASCConfig.cmake not found during cmake configuration",
       "solution": "Downloaded and installed CANN toolkit package (Ascend-cann-toolkit_9.0.0_linux-x86_64.run, 1.3GB) from Huawei cloud mirror",
       "source": "docs/zh/install/quick_install.md mentions CANN toolkit installation requirement"
     },
     {
-      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Permission denied on .run file execution",
       "solution": "chmod +x /tmp/Ascend-cann-toolkit_9.0.0_linux-x86_64.run before running",
       "source": "Standard permission fix"
     },
     {
-      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "packaging Python module not found during build",
       "solution": "pip3 install packaging --break-system-packages",
       "source": "Build script dependency, not listed in requirements.txt"
     },
     {
-      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Build takes ~97 minutes to compile flash_attention_score operator",
       "solution": "This is expected due to kernel compilation for multiple tiling configurations using bisheng compiler",
       "source": "NPU kernel compilation is inherently time-consuming"
     },
     {
-      "timestamp": "2026-05-12T12:35:00Z",
       "problem": "Sample execution requires NPU hardware",
       "solution": "Cannot be resolved in Docker container without NPU device. Requires physical Ascend NPU or CANN Simulator",
       "source": "docs/zh/install/quick_install.md - runtime dependencies section"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

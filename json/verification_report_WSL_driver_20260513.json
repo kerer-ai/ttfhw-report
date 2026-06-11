@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_name": "driver",
     "repo_path": "/home/wenshun/driver2/tmp_src",
-    "repo_url": "",
+    "repo_name": "driver",
     "start_time": "2026-05-13T03:20:00",
     "end_time": "2026-05-13T03:35:00",
     "duration_seconds": 900,
-    "total_steps": 5
+    "total_steps": 5,
+    "repo_url": ""
   },
   "machine_spec": {
     "host_machine": {
@@ -31,15 +31,14 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "docs/zh/QUICKSTART.md - 支持x86_64与aarch64架构",
-      "value": "x86_64, aarch64"
+      "value": "x86_64, aarch64",
+      "source": "docs/zh/QUICKSTART.md - 支持x86_64与aarch64架构"
     },
     "recommended_image": {
-      "source": "docs/zh/QUICKSTART.md - 环境准备章节",
-      "value": "文档推荐Ubuntu和openEuler"
+      "value": "文档推荐Ubuntu和openEuler",
+      "source": "docs/zh/QUICKSTART.md - 环境准备章节"
     },
     "dependencies": {
-      "source": "docs/zh/QUICKSTART.md - 编译环境准备章节",
       "value": [
         "gcc",
         "g++",
@@ -56,28 +55,23 @@
         "elfutils",
         "libelf-dev",
         "googletest (可选，仅UT测试时依赖)"
-      ]
+      ],
+      "source": "docs/zh/QUICKSTART.md - 编译环境准备章节"
     },
     "build_commands": {
-      "source": "build.sh + docs/zh/QUICKSTART.md",
-      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)"
+      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)",
+      "source": "build.sh + docs/zh/QUICKSTART.md"
     },
     "ut_commands": {
-      "source": "test/run_test.sh",
-      "value": "cd test && bash run_test.sh -t"
+      "value": "cd test && bash run_test.sh -t",
+      "source": "test/run_test.sh"
     },
     "sample_commands": {
-      "source": "examples/README.md",
-      "value": "需要实际NPU硬件和驱动安装后执行: cd examples/dcmi/dcmi/ && bash run.sh <module> <sub_dir_index>"
+      "value": "需要实际NPU硬件和驱动安装后执行: cd examples/dcmi/dcmi/ && bash run.sh <module> <sub_dir_index>",
+      "source": "examples/README.md"
     },
-    "build_entry": {
-      "source": "build.sh + docs/zh/QUICKSTART.md",
-      "value": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)"
-    },
-    "ut_entry": {
-      "source": "test/run_test.sh",
-      "value": "cd test && bash run_test.sh -t"
-    }
+    "build_entry": "bash build.sh --pkg --soc=<chip_type> (支持ascend910b, ascend910_93, ascend950)",
+    "ut_entry": "cd test && bash run_test.sh -t"
   },
   "execution_log": [
     {
@@ -86,7 +80,8 @@
       "success": true,
       "output": "Image is up to date for ubuntu:24.04",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:21:00",
@@ -94,7 +89,8 @@
       "success": true,
       "output": "Container started successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:22:00",
@@ -102,7 +98,8 @@
       "success": true,
       "output": "Package list updated successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:23:00",
@@ -110,7 +107,8 @@
       "success": true,
       "output": "All dependencies installed successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:25:00",
@@ -118,7 +116,8 @@
       "success": true,
       "output": "Symlink created to workaround WSL kernel headers mismatch",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:26:00",
@@ -126,7 +125,8 @@
       "success": true,
       "output": "Build completed successfully. Generated multiple .so and .ko files. Build time: 2m21.406s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:30:00",
@@ -134,7 +134,8 @@
       "success": true,
       "output": "Googletest installed successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:31:00",
@@ -142,7 +143,8 @@
       "success": true,
       "output": "[UT] Testcase initialize success. [UT] Testcase run start... [UT] Testcase run success. Total time: 0m0.441s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-13T03:32:00",
@@ -150,7 +152,8 @@
       "success": true,
       "output": "Samples require actual NPU hardware and driver installation, cannot run in container environment",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -201,6 +204,8 @@
     "build": {
       "status": "success",
       "duration_seconds": 141,
+      "build_mode": "demo",
+      "soc_version": "ascend950",
       "artifacts": [
         {
           "name": "libascend_hal.so",
@@ -268,7 +273,8 @@
           "size": "N/A",
           "type": "kernel_module"
         }
-      ]
+      ],
+      "artifact_count": 30
     },
     "ut": {
       "status": "success",
@@ -276,11 +282,13 @@
       "total": 1,
       "passed": 1,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "output_summary": "[UT] Testcase initialize success. [UT] Testcase run start... [UT] Testcase run success."
     },
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
+      "reason": "样例需要实际NPU硬件和驱动安装，无法在容器环境中执行",
       "results": []
     }
   },
@@ -291,21 +299,15 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-13T03:20:00",
       "problem": "WSL环境内核头文件不匹配：容器中找不到 /lib/modules/6.6.114.1-microsoft-standard-WSL2/build",
       "solution": "安装 generic 内核头文件并创建符号链接: ln -s /usr/src/linux-headers-6.8.0-111-generic /lib/modules/6.6.114.1-microsoft-standard-WSL2/build",
       "source": "WSL容器环境适配"
+    },
+    {
+      "problem": "[CONCLUSION] Overall: success. Driver仓库在Ubuntu 24.04容器环境中构建和单元测试均成功完成。构建生成了30个产物文件，包括用户态动态库和内核模块。单元测试通过。样例需要实际NPU硬件支持，无法在纯容器环境中执行。",
+      "solution": "Recommendations: 建议在支持虚拟化的物理机上进行完整功能验证; WSL环境下内核模块编译需要创建内核头文件软链接; 建议文档中增加WSL开发环境的特殊说明",
+      "source": "verification conclusion"
     }
   ],
-  "session_export_file": "unknown",
-  "conclusion": {
-    "overall_status": "success",
-    "summary": "Driver仓库在Ubuntu 24.04容器环境中构建和单元测试均成功完成。构建生成了30个产物文件，包括用户态动态库和内核模块。单元测试通过。样例需要实际NPU硬件支持，无法在纯容器环境中执行。",
-    "recommendations": [
-      "建议在支持虚拟化的物理机上进行完整功能验证",
-      "WSL环境下内核模块编译需要创建内核头文件软链接",
-      "建议文档中增加WSL开发环境的特殊说明"
-    ]
-  },
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

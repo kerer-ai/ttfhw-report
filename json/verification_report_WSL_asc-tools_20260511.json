@@ -1,7 +1,6 @@
 {
   "metadata": {
     "repo_name": "asc-tools",
-    "repo_path": "https://gitcode.com/cann/asc-tools.git",
     "repo_url": "https://gitcode.com/cann/asc-tools.git",
     "start_time": "2026-05-11T18:55:00",
     "end_time": "2026-05-11T19:10:00",
@@ -31,15 +30,10 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "docs/00_quick_start.md",
-      "value": "x86_64 / aarch64"
-    },
-    "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+      "value": "x86_64 / aarch64",
+      "source": "docs/00_quick_start.md"
     },
     "dependencies": {
-      "source": "docs/00_quick_start.md - 安装依赖章节",
       "value": [
         "python >= 3.7.0",
         "gcc >= 7.3.0 / g++ >= 7.3.0",
@@ -52,27 +46,28 @@
         "coverage >= 4.5.4（UT依赖）",
         "googletest >= 1.11.0（UT依赖）",
         "lcov >= 1.13（覆盖率依赖）"
-      ]
-    },
-    "build_commands": {
-      "source": "docs/00_quick_start.md - 编译安装章节",
-      "value": "bash build.sh --pkg -p <CANN_PATH>"
-    },
-    "ut_commands": {
-      "source": "docs/00_quick_start.md - UT测试章节",
-      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
-    },
-    "sample_commands": {
-      "source": "unknown",
-      "value": "unknown"
+      ],
+      "source": "docs/00_quick_start.md - 安装依赖章节"
     },
     "build_entry": {
-      "source": "docs/00_quick_start.md - 编译安装章节",
-      "value": "bash build.sh --pkg -p <CANN_PATH>"
+      "value": "bash build.sh --pkg -p <CANN_PATH>",
+      "source": "docs/00_quick_start.md - 编译安装章节"
     },
     "ut_entry": {
-      "source": "docs/00_quick_start.md - UT测试章节",
-      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*"
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*",
+      "source": "docs/00_quick_start.md - UT测试章节"
+    },
+    "build_commands": {
+      "value": "bash build.sh --pkg -p <CANN_PATH>",
+      "source": "docs/00_quick_start.md - 编译安装章节"
+    },
+    "ut_commands": {
+      "value": "bash build.sh -t 或 cmake -B build -DENABLE_TEST=ON -DTEST_MOD=all && make tikcpp_utest_*",
+      "source": "docs/00_quick_start.md - UT测试章节"
+    },
+    "cpudebug_download_url": {
+      "value": "https://container-obsfs-filesystem.obs.cn-north-4.myhuaweicloud.com/package/cann/asc-toolkit-dev/version_compile/master/202603/20260325/ubuntu_x86/cann-asc-tools-cpudebug-deps-lib_release_9.0.0_linux-x86_64.tar.gz",
+      "source": "docs/00_quick_start.md + cmake/third_party/cpudebug.cmake"
     }
   },
   "execution_log": [
@@ -81,21 +76,24 @@
       "command": "docker run -d --name ttfhw-asc-tools-env ubuntu:24.04",
       "success": true,
       "output": "Container started",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T18:56:00",
       "command": "apt-get install -y cmake gcc g++ make python3 python3-pip git wget",
       "success": true,
       "output": "Dependencies installed",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T18:58:00",
       "command": "Install CANN toolkit 9.0.0 (reused from previous download)",
       "success": true,
       "output": "Toolkit installed in /usr/local/Ascend",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:00:00",
@@ -103,7 +101,8 @@
       "success": true,
       "output": "Configuring done",
       "returncode": 0,
-      "note": "cmake尝试下载cpudebug包但失败（网络问题）"
+      "note": "cmake尝试下载cpudebug包但失败（网络问题）",
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:01:00",
@@ -111,21 +110,24 @@
       "success": false,
       "output": "stub_fun.h: No such file or directory",
       "error": "缺少cpudebug闭源依赖",
-      "returncode": 1
+      "returncode": 1,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:02:00",
       "command": "wget cpudebug闭源包",
       "success": true,
       "output": "Downloaded 6.47MB in 1.0s",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:03:00",
       "command": "tar -xzf cpudebug.tar.gz -C libraries --strip-components 1",
       "success": true,
       "output": "stub_fun.h extracted to libraries/lib/include/",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:04:00",
@@ -133,14 +135,16 @@
       "success": true,
       "output": "Built target cpudebug_*",
       "returncode": 0,
-      "duration_seconds": 36.5
+      "duration_seconds": 36.5,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:06:00",
       "command": "pip3 install pytest coverage",
       "success": true,
       "output": "pytest 9.0.3, coverage 7.14.0",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-11T19:08:00",
@@ -148,7 +152,8 @@
       "success": true,
       "output": "20 passed in 0.15s",
       "returncode": 0,
-      "duration_seconds": 0.6
+      "duration_seconds": 0.6,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -267,7 +272,8 @@
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "failure_reason": "样例运行需要NPU设备"
     }
   },
   "documentation_gaps": [
@@ -277,18 +283,15 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-11T19:01:00",
       "problem": "构建失败：缺少stub_fun.h",
       "solution": "下载cpudebug闭源包并解压到libraries目录",
       "source": "cmake/third_party/cpudebug.cmake第31行检查libraries/lib/include/stub_fun.h"
     },
     {
-      "timestamp": "2026-05-11T19:08:00",
       "problem": "cmake UT配置失败：TEST_MOD未设置",
       "solution": "添加-DTEST_MOD=all参数",
       "source": "tests/CMakeLists.txt第25行if语句需要TEST_MOD变量"
     }
   ],
-  "session_export_file": "verification_session_WSL_asc-tools_20260511.md",
-  "verification_conclusion": ""
+  "session_export_file": "verification_session_WSL_asc-tools_20260511.md"
 }

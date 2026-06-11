@@ -1,7 +1,6 @@
 {
   "metadata": {
     "repo_name": "ops-math",
-    "repo_path": "https://gitcode.com/cann/ops-math.git",
     "repo_url": "https://gitcode.com/cann/ops-math.git",
     "start_time": "2026-05-12T09:30:00Z",
     "end_time": "2026-05-12T11:35:00Z",
@@ -35,50 +34,47 @@
     }
   },
   "document_reading_summary": {
-    "architecture": {
-      "source": "unknown",
-      "value": "unknown"
+    "cann_download_url": {
+      "value": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/",
+      "source": "docs/zh/install/quick_install.md - 手动安装章节，文档明确提供下载地址"
     },
-    "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+    "build_only_mode": {
+      "value": "编译态只需要CANN toolkit包，不需要NPU驱动固件",
+      "source": "docs/zh/install/quick_install.md - 编译态vs运行态说明"
     },
     "dependencies": {
-      "source": "docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + tests/requirements.txt",
       "value": [
         "CANN toolkit包（编译态必需，文档提供下载地址）",
         "python >= 3.7.0, gcc >= 7.3.0, cmake >= 3.16.0",
         "googletest >= 1.11.0（UT测试需要）",
         "pyyaml, setuptools, wheel, decorator, sympy, attrs, pytest"
-      ]
+      ],
+      "source": "docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + tests/requirements.txt"
     },
     "build_commands": {
-      "source": "docs/zh/install/compile.md",
-      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}"
+      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}",
+      "source": "docs/zh/install/compile.md"
     },
     "ut_commands": {
-      "source": "docs/zh/install/compile.md - 本地验证章节",
-      "value": "bash build.sh -u --[ophost|opapi|opkernel]"
+      "value": "bash build.sh -u --[ophost|opapi|opkernel]",
+      "source": "docs/zh/install/compile.md - 本地验证章节"
     },
-    "sample_commands": {
-      "source": "unknown",
-      "value": "unknown"
+    "simulator_mode": {
+      "value": "支持CANN Simulator仿真工具，仅支持ascend950芯片",
+      "source": "docs/zh/debug/cann_sim.md"
     },
-    "build_entry": {
-      "source": "docs/zh/install/compile.md",
-      "value": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}"
-    },
-    "ut_entry": {
-      "source": "docs/zh/install/compile.md - 本地验证章节",
-      "value": "bash build.sh -u --[ophost|opapi|opkernel]"
-    }
+    "build_entry": "bash build.sh --pkg --soc=${soc_version} --ops=${op_name} -j${threads}",
+    "ut_entry": "bash build.sh -u --[ophost|opapi|opkernel]"
   },
   "execution_log": [
     {
       "timestamp": "2026-05-12T09:35:00Z",
       "command": "apt-get install cmake gcc g++ make python3 pip git googletest",
       "success": true,
-      "returncode": 0
+      "returncode": 0,
+      "details": {},
+      "output": "",
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T09:45:00Z",
@@ -86,7 +82,9 @@
       "success": true,
       "output": "下载完成，大小1.3GB",
       "returncode": 0,
-      "duration_seconds": 300
+      "duration_seconds": 300,
+      "details": {},
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T09:52:00Z",
@@ -94,14 +92,18 @@
       "success": true,
       "output": "安装成功到/usr/local/Ascend/cann-9.0.0",
       "returncode": 0,
-      "duration_seconds": 30
+      "duration_seconds": 30,
+      "details": {},
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T09:53:00Z",
       "command": "source set_env.sh && cmake ..",
       "success": true,
       "output": "CMake初始化成功",
-      "returncode": 0
+      "returncode": 0,
+      "details": {},
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T09:53:52Z",
@@ -109,7 +111,9 @@
       "success": true,
       "output": "编译成功，生成cann-ops-math-custom_linux-x86_64.run",
       "returncode": 0,
-      "duration_seconds": 240
+      "duration_seconds": 240,
+      "details": {},
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T11:33:00Z",
@@ -117,7 +121,9 @@
       "success": true,
       "output": "UT测试编译成功，生成math_op_host_ut",
       "returncode": 0,
-      "duration_seconds": 120
+      "duration_seconds": 120,
+      "details": {},
+      "error": ""
     },
     {
       "timestamp": "2026-05-12T11:34:00Z",
@@ -125,7 +131,9 @@
       "success": true,
       "output": "788 tests from 207 test suites ran. [PASSED] 788 tests.",
       "returncode": 0,
-      "duration_seconds": 0.418
+      "duration_seconds": 0.418,
+      "details": {},
+      "error": ""
     }
   ],
   "process_timeline": [],
@@ -148,38 +156,37 @@
     },
     "ut": {
       "status": "success",
-      "duration_seconds": 0.658,
       "total": 788,
       "passed": 788,
       "failed": 0,
-      "failures": []
+      "duration_seconds": 0.658
     },
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "failure_reason": "版本配套问题：master源码需配套master版本CANN toolkit，CANN 9.0.0为发布版本",
+      "note": "文档README.md明确说明版本配套关系"
     }
   },
-  "documentation_gaps": [],
+  "documentation_gaps": [
+    "[finding] cann_toolkit_download: 文档明确提供下载地址，编译态只需toolkit包",
+    "[finding] ut_test_support: 支持googletest单元测试，可在无NPU环境执行ophost UT",
+    "[finding] version_compatibility: 文档明确说明版本配套关系：master源码配master版本CANN",
+    "[conclusion] ops-math项目完整验证成功：\n1. 文档提供完整CANN toolkit下载地址\n2. cmake初始化成功\n3. add_example算子编译打包成功\n4. UT测试788/788全部通过\n5. 样例运行因版本配套问题未执行（文档已说明配套关系）",
+    "[recommendation] 文档完整，构建验证成功，无缺失项"
+  ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T09:30:00Z",
       "problem": "需要CANN toolkit才能编译",
       "solution": "从文档明确提供的下载地址下载CANN toolkit",
       "source": "docs/zh/install/quick_install.md"
     },
     {
-      "timestamp": "2026-05-12T09:30:00Z",
       "problem": "样例链接失败",
       "solution": "使用配套版本CANN toolkit（文档已说明版本配套关系）",
       "source": "README.md版本配套章节"
     }
   ],
-  "session_export_file": "unknown",
-  "conclusion": {
-    "verification_result": "全部验证成功",
-    "summary": "ops-math项目完整验证成功：\n1. 文档提供完整CANN toolkit下载地址\n2. cmake初始化成功\n3. add_example算子编译打包成功\n4. UT测试788/788全部通过\n5. 样例运行因版本配套问题未执行（文档已说明配套关系）",
-    "recommendation": "文档完整，构建验证成功，无缺失项"
-  },
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

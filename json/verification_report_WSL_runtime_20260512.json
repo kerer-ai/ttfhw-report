@@ -1,12 +1,13 @@
 {
   "metadata": {
     "repo_name": "runtime",
-    "repo_path": "https://gitcode.com/cann/runtime.git",
     "repo_url": "https://gitcode.com/cann/runtime.git",
+    "repo_path": "/root/workspace/ttfhw-verify-0511/tmp_src",
     "start_time": "2026-05-12T05:50:00",
     "end_time": "2026-05-12T07:30:00",
     "duration_seconds": 6600,
-    "total_steps": 9
+    "total_steps": 9,
+    "verification_environment": "WSL2 Docker (Ubuntu 24.04.4 LTS container)"
   },
   "machine_spec": {
     "host_machine": {
@@ -31,15 +32,10 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "README.md - 开源第三方软件依赖表格中提及x86_64与aarch64",
-      "value": "x86_64 / aarch64"
-    },
-    "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+      "value": "x86_64 / aarch64",
+      "source": "README.md - 开源第三方软件依赖表格中提及x86_64与aarch64"
     },
     "dependencies": {
-      "source": "README.md - 安装基础依赖章节 + install_deps.sh + cmake/fetch_cann_cmake.cmake",
       "value": [
         "python >= 3.7.0",
         "pip3",
@@ -52,27 +48,28 @@
         "make",
         "git (隐含依赖，cmake FetchContent需要)",
         "CANN toolkit包 (README环境部署章节要求安装)"
-      ]
+      ],
+      "source": "README.md - 安装基础依赖章节 + install_deps.sh + cmake/fetch_cann_cmake.cmake"
     },
     "build_commands": {
-      "source": "README.md - 环境变量配置章节 + 编译runtime包章节",
-      "value": "source /usr/local/Ascend/cann/set_env.sh && export CMAKE_TLS_VERIFY=0 && bash build.sh -j9"
+      "value": "source /usr/local/Ascend/cann/set_env.sh && export CMAKE_TLS_VERIFY=0 && bash build.sh -j9",
+      "source": "README.md - 环境变量配置章节 + 编译runtime包章节"
     },
     "ut_commands": {
-      "source": "README.md - 本地验证章节 + tests/build_ut.sh",
-      "value": "source /usr/local/Ascend/cann/set_env.sh && bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -j9"
+      "value": "source /usr/local/Ascend/cann/set_env.sh && bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -j9",
+      "source": "README.md - 本地验证章节 + tests/build_ut.sh"
     },
     "sample_commands": {
-      "source": "example/README.md - 使用方式章节",
-      "value": "source ${install_root}/cann/set_env.sh && export ASCEND_INSTALL_PATH=${install_root}/cann && export SOC_VERSION=${ascend_name} && cd example/<sample_dir> && bash run.sh (需NPU驱动+固件+CANN toolkit)"
+      "value": "source ${install_root}/cann/set_env.sh && export ASCEND_INSTALL_PATH=${install_root}/cann && export SOC_VERSION=${ascend_name} && cd example/<sample_dir> && bash run.sh (需NPU驱动+固件+CANN toolkit)",
+      "source": "example/README.md - 使用方式章节"
     },
     "build_entry": {
-      "source": "README.md - 环境变量配置章节 + 编译runtime包章节",
-      "value": "source /usr/local/Ascend/cann/set_env.sh && export CMAKE_TLS_VERIFY=0 && bash build.sh -j9"
+      "value": "source /usr/local/Ascend/cann/set_env.sh && export CMAKE_TLS_VERIFY=0 && bash build.sh -j9",
+      "source": "README.md - 环境变量配置章节 + 编译runtime包章节"
     },
     "ut_entry": {
-      "source": "README.md - 本地验证章节 + tests/build_ut.sh",
-      "value": "source /usr/local/Ascend/cann/set_env.sh && bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -j9"
+      "value": "source /usr/local/Ascend/cann/set_env.sh && bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -j9",
+      "source": "README.md - 本地验证章节 + tests/build_ut.sh"
     }
   },
   "execution_log": [
@@ -82,7 +79,9 @@
       "success": true,
       "output": "Fetched 37.9 MB in 24s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "apt_update",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:53:00",
@@ -90,7 +89,9 @@
       "success": true,
       "output": "All packages installed successfully",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "apt_install",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:55:00",
@@ -98,7 +99,9 @@
       "success": true,
       "output": "gcc 9.5.0, g++ 9.5.0",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "gcc_setup",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:56:00",
@@ -106,7 +109,9 @@
       "success": true,
       "output": "Downloaded CANN toolkit 9.0.0 x86_64 (1.3G)",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "download_cann",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:00:00",
@@ -114,7 +119,9 @@
       "success": true,
       "output": "Toolkit: Ascend-cann-toolkit_9.0.0_linux-x86_64 install success, installed in /usr/local/Ascend",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "install_cann",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:05:00",
@@ -122,7 +129,9 @@
       "success": true,
       "output": "ASCEND_HOME_PATH=/usr/local/Ascend/cann-9.0.0",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "step": "source_cann_env",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:06:00",
@@ -130,7 +139,9 @@
       "success": false,
       "output": "nlohmann/json.hpp: No such file or directory - third_party dependencies incomplete",
       "error": "nlohmann/json.hpp not found, JSON_SOURCE=JSON_SOURCE-NOTFOUND in CMakeCache",
-      "returncode": 2
+      "returncode": 2,
+      "step": "build",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:30:00",
@@ -139,7 +150,9 @@
       "output": "Build success, generated cann-npu-runtime_9.0.0_linux-x86_64.run (with host+device)",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 389
+      "duration_seconds": 389,
+      "step": "build",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:00:00",
@@ -148,7 +161,9 @@
       "output": "982 tests from 13 test suites ran. [PASSED] 982 tests.",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 181
+      "duration_seconds": 181,
+      "step": "unit_test",
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -156,67 +171,78 @@
       "timestamp": "2026-05-12T05:50:00",
       "step": "start",
       "action": "克隆仓库到tmp_src",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:50:30",
       "step": "document_reading",
       "action": "阅读README.md完整文档，提取环境部署、构建、测试信息",
-      "result": "completed"
+      "result": "completed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:51:00",
       "step": "container_setup",
       "action": "拉取ubuntu:24.04镜像并启动容器ttfhw-runtime-env",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:52:00",
       "step": "base_dep_install",
       "action": "安装README基础依赖: python3, pip3, gcc-9, g++-9, cmake, ccache, autoconf, gperf, libtool, make, git, wget",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T05:56:00",
       "step": "cann_toolkit_install",
       "action": "按README环境部署章节下载并安装CANN toolkit 9.0.0 (1.3G)",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:05:00",
       "step": "env_setup",
       "action": "按README环境变量配置章节执行source /usr/local/Ascend/cann/set_env.sh",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:06:00",
       "step": "build_attempt_1",
       "action": "首次bash build.sh构建失败 - 未source环境变量导致third_party依赖不完整(nlohmann/json.hpp缺失)",
-      "result": "failed - env not sourced, deps incomplete"
+      "result": "failed - env not sourced, deps incomplete",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T06:30:00",
       "step": "build_attempt_2",
       "action": "清理后source环境变量再bash build.sh构建成功，耗时6m28s，包含host+device构建",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:00:00",
       "step": "ut_test",
       "action": "执行acl模块UT测试，982个用例全部通过，耗时3m1s",
-      "result": "success - 982/982 passed"
+      "result": "success - 982/982 passed",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:15:00",
       "step": "sample_skipped",
       "action": "样例运行跳过 - 需要昇腾NPU硬件+驱动+固件环境（README明确说明样例依赖NPU设备）",
-      "result": "skipped - NPU hardware not available"
+      "result": "skipped - NPU hardware not available",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:20:00",
       "step": "cleanup",
       "action": "停止并删除容器ttfhw-runtime-env",
-      "result": "success"
+      "result": "success",
+      "details": {}
     }
   ],
   "final_results": {
@@ -264,39 +290,43 @@
       "duration_seconds": 0,
       "results": [
         {
-          "sample_name": "example样例",
-          "execution_status": "skipped",
-          "output_summary": "",
-          "execution_time": "unknown"
+          "name": "example样例",
+          "status": "skipped",
+          "reason": "需要昇腾NPU硬件及CANN驱动/固件环境，Docker容器中不具备运行条件。README明确说明样例依赖NPU设备，仅编译runtime包可跳过驱动安装。"
         }
       ]
     }
   },
   "documentation_gaps": [
-    "git未在README.md基础依赖列表中列出，但cmake FetchContent需要git来克隆cann-cmake，属于隐含依赖",
-    "README环境部署章节中CANN toolkit安装使用.run包，需要交互式确认EULA，文档未提及--quiet参数用于非交互式安装",
-    "样例运行所需的前置条件（NPU驱动+固件+CANN toolkit）在README中提及但未给出无NPU设备时的替代验证方案"
+    {
+      "gap": "git未在README.md基础依赖列表中列出，但cmake FetchContent需要git来克隆cann-cmake，属于隐含依赖"
+    },
+    {
+      "gap": "README环境部署章节中CANN toolkit安装使用.run包，需要交互式确认EULA，文档未提及--quiet参数用于非交互式安装"
+    },
+    {
+      "gap": "样例运行所需的前置条件（NPU驱动+固件+CANN toolkit）在README中提及但未给出无NPU设备时的替代验证方案"
+    }
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T05:50:00",
       "problem": "首次构建失败：未按README完整流程执行，跳过了CANN toolkit安装和环境变量配置步骤，导致nlohmann/json.hpp缺失、third_party依赖不完整",
+      "cause": "",
       "solution": "严格按照README环境部署章节，先安装CANN toolkit包，再source set_env.sh配置环境变量，最后执行bash build.sh",
       "source": "README.md - 环境部署章节明确要求安装CANN toolkit包和配置环境变量"
     },
     {
-      "timestamp": "2026-05-12T05:50:00",
       "problem": "CANN toolkit .run包安装需要交互式确认EULA，在Docker容器非交互环境下无法完成",
+      "cause": "",
       "solution": "使用--quiet参数跳过EULA交互确认：./Ascend-cann-toolkit_9.0.0_linux-x86_64.run --install --quiet",
       "source": "run包--help输出中说明--quiet参数用于非交互式安装，表示接受EULA"
     },
     {
-      "timestamp": "2026-05-12T05:50:00",
       "problem": "样例无法运行：需要昇腾NPU硬件和CANN驱动/固件环境",
+      "cause": "",
       "solution": "跳过样例验证，记录为硬件环境不足。README明确说明'若仅编译runtime包，可跳过驱动安装'，样例运行依赖NPU设备",
       "source": "example/README.md明确说明需要先完成固件、驱动和CANN软件包安装"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

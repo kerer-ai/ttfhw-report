@@ -293,7 +293,7 @@
     }
   },
   "documentation_gaps": [
-    "README.md 和 docs/quick_start.md 中 CANN Toolkit 下载链接以文字描述方式提供（"单击下载链接"），未直接给出完整 URL",
+    "README.md 和 docs/quick_start.md 中 CANN Toolkit 下载链接以文字描述方式提供（“单击下载链接”），未直接给出完整 URL",
     "quick_start.md 中 pip3 依赖未在依赖列表中明确列出（CANN Toolkit 安装脚本需要 pip3）",
     "Python 版本建议 <= 3.10，但 Ubuntu 24.04 默认 Python 3.12.3，实测可用",
     "文档未提及 Ubuntu 24.04 上的已知兼容性问题",

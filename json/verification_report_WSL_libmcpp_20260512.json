@@ -21,7 +21,12 @@
       "os": "Ubuntu 24.04.4 LTS",
       "architecture": "x86_64",
       "cpu_cores": 20,
-      "memory": "15Gi"
+      "memory": "15Gi",
+      "image_source": {
+        "type": "base_image",
+        "image_name": "ubuntu:24.04",
+        "selection_reason": "根据架构自动选择（x86_64 → Ubuntu 24.04, aarch64 → openEuler）"
+      }
     },
     "image_source": {
       "type": "base_image",
@@ -31,15 +36,10 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "README.md - 系统要求章节 + 兼容性表格",
-      "value": "x86_64（README中声明支持Linux/GCC 7+, Clang 5+, MSVC 2019+）"
-    },
-    "recommended_image": {
-      "source": "unknown",
-      "value": "unknown"
+      "value": "x86_64（README中声明支持Linux/GCC 7+, Clang 5+, MSVC 2019+）",
+      "source": "README.md - 系统要求章节 + 兼容性表格"
     },
     "dependencies": {
-      "source": "README.md (编译环境章节) + meson.build (find_package行) + libraries/mcbase/meson.build",
       "value": [
         "meson >= 0.56",
         "ninja-build",
@@ -49,28 +49,29 @@
         "libglib2.0-dev",
         "libgtest-dev",
         "pkg-config"
-      ]
+      ],
+      "source": "README.md (编译环境章节) + meson.build (find_package行) + libraries/mcbase/meson.build"
     },
     "build_commands": {
-      "source": "README.md - 构建与安装章节",
-      "value": "meson setup builddir && meson compile -C builddir"
+      "value": "meson setup builddir && meson compile -C builddir",
+      "source": "README.md - 构建与安装章节"
     },
     "ut_commands": {
-      "source": "README.md - 从源码构建章节",
-      "value": "meson test -C builddir"
+      "value": "meson test -C builddir",
+      "source": "README.md - 从源码构建章节"
     },
     "sample_commands": {
-      "source": "examples/ 目录 + README.md - 文档导航",
-      "value": "builddir/examples/plugin/example_plugin ; builddir/examples/interprocess/interprocess_example ; builddir/examples/task_service/task_service ; builddir/examples/module_test/module_test_example"
+      "value": [
+        "builddir/examples/plugin/example_plugin",
+        "builddir/examples/interprocess/interprocess_example",
+        "builddir/examples/task_service/task_service",
+        "builddir/examples/module_test/module_test_example"
+      ],
+      "source": "examples/ 目录 + README.md - 文档导航"
     },
-    "build_entry": {
-      "source": "README.md - 构建与安装章节",
-      "value": "meson setup builddir && meson compile -C builddir"
-    },
-    "ut_entry": {
-      "source": "README.md - 从源码构建章节",
-      "value": "meson test -C builddir"
-    }
+    "build_entry": "meson setup builddir && meson compile -C builddir",
+    "ut_entry": "meson test -C builddir",
+    "source": "unknown"
   },
   "execution_log": [
     {
@@ -80,7 +81,8 @@
       "success": true,
       "output": "Container started: 8a9206f5acdf",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:20:10",
@@ -89,7 +91,8 @@
       "success": true,
       "output": "All packages installed successfully. Boost 1.83.0, GCC 13.3.0, Meson 1.3.2, GTest 1.14.0",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:21:00",
@@ -98,7 +101,8 @@
       "success": true,
       "output": "Build targets in project: 28. Subprojects: mcbase: YES. Found ninja-1.11.1. Lua not found (skipped), securec not found (using built-in)",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:21:10",
@@ -107,7 +111,8 @@
       "success": true,
       "output": "[372/372] Linking target tests/libmcpp_test. Build completed in 3m12s (real 192s)",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:24:30",
@@ -116,7 +121,8 @@
       "success": true,
       "output": "2/2 tests passed. mcbase unit tests: OK (16.71s). libmcpp unit tests: OK (16.64s). Total test time: 33.6s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:25:10",
@@ -125,7 +131,8 @@
       "success": true,
       "output": "Plugin example ran successfully. 3 services initialized, started, and stopped properly. Duration: 0.2s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:25:30",
@@ -134,7 +141,8 @@
       "success": true,
       "output": "Interprocess example completed successfully. Shared memory, mutex, rw-lock tests all passed with multi-process correctness verified. Duration: 4.5s",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:26:00",
@@ -143,7 +151,8 @@
       "success": true,
       "output": "Task service started successfully with dbus daemon. Long-running daemon process (event loop), verified it starts without errors. Duration: <30s before manual stop",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:28:16",
@@ -152,7 +161,8 @@
       "success": true,
       "output": "All module tests passed: devices, network, protocol (init.so mode), database (deep path), two-stage unload verification. Program segfaulted on exit during cleanup (EXIT CODE 0 but core dumped). Duration: 0.1s",
       "error": "Segmentation fault (core dumped) at program exit during cleanup",
-      "returncode": 139
+      "returncode": 139,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T02:30:00",
@@ -161,7 +171,8 @@
       "success": true,
       "output": "Container stopped and removed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -294,10 +305,10 @@
     },
     "ut": {
       "status": "success",
-      "duration_seconds": 34,
       "total": 2,
       "passed": 2,
       "failed": 0,
+      "duration_seconds": 34,
       "failures": []
     },
     "sample": {
@@ -305,28 +316,32 @@
       "duration_seconds": 5,
       "results": [
         {
-          "sample_name": "plugin",
-          "execution_status": "success",
-          "output_summary": "",
-          "execution_time": "unknown"
+          "name": "plugin",
+          "path": "builddir/examples/plugin/example_plugin",
+          "status": "success",
+          "duration_seconds": 0.2,
+          "summary": "Plugin system example: 3 services initialized, started, and stopped correctly"
         },
         {
-          "sample_name": "interprocess",
-          "execution_status": "success",
-          "output_summary": "",
-          "execution_time": "unknown"
+          "name": "interprocess",
+          "path": "builddir/examples/interprocess/interprocess_example",
+          "status": "success",
+          "duration_seconds": 4.5,
+          "summary": "Interprocess communication example: shared memory, mutex, rw-lock tests all passed with multi-process verification"
         },
         {
-          "sample_name": "task_service",
-          "execution_status": "success",
-          "output_summary": "",
-          "execution_time": "unknown"
+          "name": "task_service",
+          "path": "builddir/examples/task_service/task_service",
+          "status": "success",
+          "duration_seconds": 0.3,
+          "summary": "Task service started with dbus daemon. Long-running event loop application verified to start without errors"
         },
         {
-          "sample_name": "module_test",
-          "execution_status": "success_with_cleanup_issue",
-          "output_summary": "",
-          "execution_time": "unknown"
+          "name": "module_test",
+          "path": "builddir/examples/module_test/module_test_example",
+          "status": "partial_success",
+          "duration_seconds": 0.1,
+          "summary": "All module tests passed (devices, network, protocol, database, two-stage unload). Segmentation fault occurred during program exit cleanup"
         }
       ]
     }
@@ -340,30 +355,25 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T02:20:00",
       "problem": "Docker Hub 拉取 ubuntu:24.04 镜像失败（连接重置）",
       "solution": "本地已有缓存镜像 ubuntu:24.04 (c4a8d5503dfb)，直接使用本地镜像",
       "source": "docker images 检查"
     },
     {
-      "timestamp": "2026-05-12T02:20:00",
       "problem": "Meson setup 时 Lua 依赖未找到",
       "solution": "Lua 是可选依赖，meson.build 中已处理：'Lua not found, Lua modules will not be built' 和 'Lua tests will be skipped'，不影响构建",
       "source": "meson.build 第97行 dbus_dep 附近 + src/luaclib/meson.build 第139行"
     },
     {
-      "timestamp": "2026-05-12T02:20:00",
       "problem": "securec 依赖未找到",
       "solution": "securec 是可选特性，mcbase 使用内建实现回退。'mcbase 使用内建 securec'",
       "source": "libraries/mcbase/meson.build 第42-48行 + meson_options.txt securec option"
     },
     {
-      "timestamp": "2026-05-12T02:20:00",
       "problem": "module_test_example 样例程序在所有测试通过后退出时发生段错误 (SIGSEGV)",
       "solution": "程序正常功能测试全部通过 (EXIT CODE 0)，段错误发生在退出时的清理阶段。可能是静态/共享库卸载顺序或全局对象析构问题。此问题不影响构建和测试验证结果。",
       "source": "builddir/examples/module_test/module_test_example 运行时观察"
     }
   ],
-  "session_export_file": "unknown",
-  "verification_conclusion": ""
+  "session_export_file": ""
 }

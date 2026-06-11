@@ -1,7 +1,6 @@
 {
   "metadata": {
     "repo_name": "opbase",
-    "repo_path": "https://gitcode.com/cann/opbase.git",
     "repo_url": "https://gitcode.com/cann/opbase.git",
     "start_time": "2026-05-12T07:30:00",
     "end_time": "2026-05-12T08:10:00",
@@ -31,15 +30,14 @@
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "docs/zh/install/quick_install.md - Docker部署章节",
-      "value": "x86_64 / aarch64 (Docker镜像支持 amd64/arm64)"
+      "value": "x86_64 / aarch64 (Docker镜像支持 amd64/arm64)",
+      "source": "docs/zh/install/quick_install.md - Docker部署章节"
     },
     "recommended_image": {
-      "source": "docs/zh/install/quick_install.md - Docker部署章节: ubuntu22.04-py3.10-ops",
-      "value": "Docker镜像基于Ubuntu 22.04 → 选择 Ubuntu 24.04"
+      "value": "Docker镜像基于Ubuntu 22.04 → 选择 Ubuntu 24.04",
+      "source": "docs/zh/install/quick_install.md - Docker部署章节: ubuntu22.04-py3.10-ops"
     },
     "dependencies": {
-      "source": "docs/QUICKSTART.md + docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + version.cmake",
       "value": [
         "python >= 3.7.0",
         "gcc >= 7.3.0",
@@ -52,28 +50,23 @@
         "make",
         "pyyaml (Python依赖)",
         "CANN toolkit >= 8.5 (关键依赖，提供runtime/metadef/bisheng-compiler/asc-devkit/ge-executor)"
-      ]
+      ],
+      "source": "docs/QUICKSTART.md + docs/zh/install/quick_install.md + install_deps.sh + requirements.txt + version.cmake"
     },
     "build_commands": {
-      "source": "docs/QUICKSTART.md - 联网编译章节",
-      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)"
+      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)",
+      "source": "docs/QUICKSTART.md - 联网编译章节"
     },
     "ut_commands": {
-      "source": "docs/QUICKSTART.md - 执行UT章节",
-      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)"
+      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)",
+      "source": "docs/QUICKSTART.md - 执行UT章节"
     },
     "sample_commands": {
-      "source": "README.md - 项目概述: opbase是CANN算子库依赖的基础框架库",
-      "value": "无独立样例程序 (opbase为基础框架库，提供libops_base.so和libnnopbase.so)"
+      "value": "无独立样例程序 (opbase为基础框架库，提供libops_base.so和libnnopbase.so)",
+      "source": "README.md - 项目概述: opbase是CANN算子库依赖的基础框架库"
     },
-    "build_entry": {
-      "source": "docs/QUICKSTART.md - 联网编译章节",
-      "value": "bash build.sh (联网编译) 或 bash build.sh --cann_3rd_lib_path=${cann_3rd_lib_path} (离线编译)"
-    },
-    "ut_entry": {
-      "source": "docs/QUICKSTART.md - 执行UT章节",
-      "value": "bash build.sh -u (编译并执行所有UT) 或 bash build.sh -u --noexec (仅编译UT)"
-    }
+    "build_entry": "bash build.sh",
+    "ut_entry": "bash build.sh -u"
   },
   "execution_log": [
     {
@@ -82,7 +75,8 @@
       "success": true,
       "output": "Cloning into 'tmp_src'... done.",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:32:00",
@@ -90,7 +84,8 @@
       "success": true,
       "output": "24.04: Pulling from library/ubuntu\nDigest: sha256:c4a8d5503dfb2a3eb8ab5f807da5bc69a85730fb49b5cfca2330194ebcc41c7b\nStatus: Image is up to date",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:33:00",
@@ -98,7 +93,8 @@
       "success": true,
       "output": "Container started: e0ed6e42e36e",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:34:00",
@@ -106,7 +102,8 @@
       "success": true,
       "output": "gcc 13.3.0, g++ 13.3.0, cmake 3.28.3, python3 3.12.3, make 4.3 installed",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:36:00",
@@ -114,7 +111,8 @@
       "success": true,
       "output": "Successfully installed pyyaml-6.0.3",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:37:00",
@@ -122,7 +120,8 @@
       "success": false,
       "output": "CMake Error: Check opbase build dependencies failed!\nversion.info does not exist for: runtime, metadef, bisheng-compiler, asc-devkit, ge-executor",
       "error": "CANN toolkit未安装，/usr/local/Ascend/cann/share/info/下缺少依赖包的version.info文件",
-      "returncode": 1
+      "returncode": 1,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:40:00",
@@ -130,7 +129,8 @@
       "success": true,
       "output": "Downloaded CANN toolkit 9.0.0 (1.3GB)",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:43:00",
@@ -138,7 +138,8 @@
       "success": true,
       "output": "Toolkit: Ascend-cann-toolkit_9.0.0_linux-x86_64 install success, installed in /usr/local/Ascend",
       "error": "",
-      "returncode": 0
+      "returncode": 0,
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:50:00",
@@ -147,7 +148,8 @@
       "output": "ops_base build success!\nSelf-extractable archive cann-opbase_9.0.0_linux-x86_64.run successfully created.",
       "error": "",
       "returncode": 0,
-      "duration_estimate": "5m3.9s"
+      "duration_estimate": "5m3.9s",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:56:00",
@@ -156,7 +158,8 @@
       "output": "nnopbase_utest: 952 tests from 75 test suites ran, 952 PASSED\nop_common_utest: 5 tests from 2 test suites ran, 5 PASSED\nExecute ops_base_ut successful.",
       "error": "",
       "returncode": 0,
-      "duration_estimate": "6m24.9s"
+      "duration_estimate": "6m24.9s",
+      "details": {}
     }
   ],
   "process_timeline": [
@@ -164,13 +167,15 @@
       "timestamp": "2026-05-12T07:30:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started"
+      "result": "started",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:31:00",
       "step": "clone",
       "action": "克隆opbase仓库",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:32:00",
@@ -216,7 +221,8 @@
       "timestamp": "2026-05-12T07:34:00",
       "step": "dependency_installation",
       "action": "安装构建依赖(gcc, g++, cmake, make, python3, pigz, patch, dos2unix, git, wget)",
-      "result": "success"
+      "result": "success",
+      "details": {}
     },
     {
       "timestamp": "2026-05-12T07:37:00",
@@ -262,7 +268,8 @@
       "timestamp": "2026-05-12T08:05:00",
       "step": "report_generation",
       "action": "生成验证报告",
-      "result": "success"
+      "result": "success",
+      "details": {}
     }
   ],
   "final_results": {
@@ -299,16 +306,29 @@
     },
     "ut": {
       "status": "success",
-      "duration_seconds": 384.9,
       "total": 957,
       "passed": 957,
       "failed": 0,
+      "duration_seconds": 384.9,
+      "sub_components": {
+        "nnopbase_utest": {
+          "total": 952,
+          "passed": 952,
+          "failed": 0
+        },
+        "op_common_utest": {
+          "total": 5,
+          "passed": 5,
+          "failed": 0
+        }
+      },
       "failures": []
     },
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": []
+      "results": [],
+      "note": "opbase是CANN算子库依赖的基础框架库，不提供独立样例程序"
     }
   },
   "documentation_gaps": [
@@ -320,18 +340,17 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-05-12T07:37:00",
       "problem": "首次构建失败：CANN build dependencies未找到（runtime, metadef, bisheng-compiler, asc-devkit, ge-executor的version.info文件不存在）",
       "solution": "从华为云镜像仓库下载并安装CANN toolkit 9.0.0 (Ascend-cann-toolkit_9.0.0_linux-x86_64.run)，安装到/usr/local/Ascend目录",
-      "source": "docs/zh/install/quick_install.md - 手动安装章节提供了CANN toolkit下载链接; version.cmake中定义了构建依赖: runtime >=8.5, metadef >=8.5, bisheng-compiler >=8.5, asc-devkit >=8.5, ge-executor >=8.5"
+      "source": "docs/zh/install/quick_install.md - 手动安装章节提供了CANN toolkit下载链接; version.cmake中定义了构建依赖: runtime >=8.5, metadef >=8.5, bisheng-compiler >=8.5, asc-devkit >=8.5, ge-executor >=8.5",
+      "timestamp": "2026-05-12T07:37:00"
     },
     {
-      "timestamp": "2026-05-12T07:40:00",
       "problem": "CANN toolkit安装包需要接受EULA协议，--force参数无效",
       "solution": "使用 yes | 命令管道自动接受EULA协议完成安装",
-      "source": "运行时发现安装程序需要交互式接受EULA"
+      "source": "运行时发现安装程序需要交互式接受EULA",
+      "timestamp": "2026-05-12T07:40:00"
     }
   ],
-  "session_export_file": "verification_session_WSL_opbase_20260512.md",
-  "verification_conclusion": ""
+  "session_export_file": "verification_session_WSL_opbase_20260512.md"
 }
