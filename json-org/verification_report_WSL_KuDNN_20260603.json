@@ -375,5 +375,11 @@
       "提供 GoogleTest 的国内镜像下载链接",
       "考虑提供预编译的 Docker 镜像加速验证流程"
     ]
+  },
+  "timing_estimate": {
+    "build_duration_seconds": 3780,
+    "build_note": "从metadata.end_time(13:10)减去最后执行步骤(12:07)推算：63min cmake配置+编译(ARM64交叉编译)",
+    "ut_duration_seconds": 0,
+    "ut_note": "not_run - 构建仅部分成功，UT未执行"
   }
 }

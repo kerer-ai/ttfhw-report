@@ -303,7 +303,7 @@
   "final_results": {
     "build": {
       "status": "partial_success",
-      "duration_seconds": 0,
+      "duration_seconds": 3780,
       "note": "在 QEMU AArch64 仿真环境下，包含 SVE/SVE2/SME 指令的代码编译极为缓慢。cmake 配置阶段完全成功，编译无错误。在实际 Kunpeng 920 硬件上预期可正常完成编译。",
       "artifacts": [
         {
