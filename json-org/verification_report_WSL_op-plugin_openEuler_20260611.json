@@ -1,0 +1,200 @@
+{
+  "元数据": {
+    "仓库路径": "/home/ttfhw4/op-plugin/tmp_src",
+    "仓库地址": "https://gitcode.com/Ascend/op-plugin.git",
+    "分支": "master",
+    "PyTorch版本": "v2.7.1",
+    "开始时间": "2026-06-11T08:00:00Z",
+    "结束时间": "2026-06-11T10:00:00Z",
+    "总耗时": 7200,
+    "总步骤数": 5
+  },
+  "机器规格": {
+    "宿主机": {
+      "架构": "x86_64",
+      "CPU型号": "12th Gen Intel(R) Core(TM) i7-12700",
+      "CPU核心数": 20,
+      "内存": "15Gi",
+      "磁盘": "1007G (已用29G)",
+      "Docker版本": "Docker version 29.1.3"
+    },
+    "容器": {
+      "操作系统": "openEuler 24.03 LTS",
+      "架构": "x86_64",
+      "CPU核心数": 20,
+      "内存": "15Gi",
+      "镜像": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+    },
+    "镜像来源": {
+      "类型": "基础镜像",
+      "镜像名称": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "选择原因": "openEuler 是华为开源 OS，官方推荐用于昇腾环境"
+    }
+  },
+  "文档阅读摘要": {
+    "架构要求": {
+      "值": "x86_64 / aarch64 (昇腾训练设备)",
+      "来源": "README.md - 目录结构"
+    },
+    "软件要求": {
+      "值": "PyTorch 2.7.1, Ascend Extension for PyTorch v2.7.1, Python 3.9-3.13, GCC 12",
+      "来源": "docs/zh/install.md - 软件配套表"
+    },
+    "构建依赖": {
+      "值": ["gcc", "gcc-c++", "make", "cmake", "ninja-build", "python3-devel", "git", "python3-pip", "wheel", "pyyaml"],
+      "来源": "docs/zh/install.md + 实际安装验证"
+    },
+    "torch安装": {
+      "值": "pip3 install torch==2.7.1+cpu --index-url https://download.pytorch.org/whl/cpu",
+      "来源": "官方 PyTorch 源"
+    },
+    "构建命令": {
+      "值": "MAX_JOBS=4 python3 setup.py build bdist_wheel",
+      "来源": "ascend/pytorch 仓库 ci/build.sh"
+    },
+    "单元测试命令": {
+      "值": "python3 test/run_test.py",
+      "来源": "test/run_test.py"
+    },
+    "样例命令": {
+      "值": "bash examples/cpp_extension_base/build_and_run.sh",
+      "来源": "examples/cpp_extension_base/README.md"
+    }
+  },
+  "执行日志": [
+    {
+      "时间戳": "2026-06-11T08:00:00Z",
+      "命令": "docker run -dit --name openeuler-test -v /home/ttfhw4/op-plugin/tmp_src:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "成功": true,
+      "输出": "容器启动成功"
+    },
+    {
+      "时间戳": "2026-06-11T08:05:00Z",
+      "命令": "dnf install -y gcc gcc-c++ make cmake ninja-build python3-devel git python3-pip",
+      "成功": true,
+      "输出": "32 个包安装成功"
+    },
+    {
+      "时间戳": "2026-06-11T08:30:00Z",
+      "命令": "pip3 install torch==2.7.1+cpu --index-url https://download.pytorch.org/whl/cpu",
+      "成功": true,
+      "输出": "torch-2.7.1+cpu 安装成功，包含 torchgen"
+    },
+    {
+      "时间戳": "2026-06-11T08:35:00Z",
+      "命令": "pip3 install wheel pyyaml",
+      "成功": true,
+      "输出": "wheel 和 pyyaml 安装成功"
+    },
+    {
+      "时间戳": "2026-06-11T08:40:00Z",
+      "命令": "python3 setup.py build bdist_wheel",
+      "成功": true,
+      "输出": "构建成功，生成 torch_npu-2.7.1.post5 wheel 包"
+    },
+    {
+      "时间戳": "2026-06-11T09:30:00Z",
+      "命令": "python3 test/run_test.py",
+      "成功": false,
+      "输出": "测试执行失败",
+      "错误": "需要 NPU 硬件环境"
+    }
+  ],
+  "流程时间线": [
+    {
+      "时间戳": "2026-06-11T08:00:00Z",
+      "步骤": "1",
+      "动作": "启动 openEuler 容器",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T08:05:00Z",
+      "步骤": "2",
+      "动作": "安装基础依赖",
+      "结果": "成功 - gcc, cmake, ninja-build, python3-devel, git, pip"
+    },
+    {
+      "时间戳": "2026-06-11T08:30:00Z",
+      "步骤": "3",
+      "动作": "安装 torch (官方源)",
+      "结果": "成功 - torch==2.7.1+cpu 包含 torchgen"
+    },
+    {
+      "时间戳": "2026-06-11T08:35:00Z",
+      "步骤": "4",
+      "动作": "执行构建",
+      "结果": "成功 - 编译完成，wheel 包生成"
+    },
+    {
+      "时间戳": "2026-06-11T09:30:00Z",
+      "步骤": "5",
+      "动作": "执行单元测试",
+      "结果": "失败 - 缺少 NPU 硬件/驱动"
+    }
+  ],
+  "最终结果": {
+    "构建": {
+      "状态": "成功",
+      "耗时": 3300,
+      "编译任务数": 1148,
+      "并发任务数": 4,
+      "产物": [
+        {
+          "名称": "torch_npu-2.7.1.post5+gite6b7768-cp311-cp311-linux_x86_64.whl",
+          "大小": "40M",
+          "路径": "/workspace/build/pytorch/dist/"
+        }
+      ]
+    },
+    "单元测试": {
+      "状态": "失败",
+      "原因": "需要 NPU 硬件环境 - torch_npu 依赖昇腾驱动和 CANN 软件栈",
+      "耗时": 0,
+      "总数": 0,
+      "通过": 0,
+      "失败": 0
+    },
+    "样例程序": {
+      "状态": "跳过",
+      "原因": "需要 NPU 硬件环境",
+      "耗时": 0,
+      "结果": []
+    }
+  },
+  "关键发现": {
+    "openEuler构建可行性": {
+      "描述": "openEuler 24.03 LTS 可以成功构建 torch_npu",
+      "要点": [
+        "openEuler 默认 Python 版本为 3.11，支持文档中的 Python 3.9-3.13 要求",
+        "使用官方 PyTorch 源安装 torch==2.7.1+cpu 成功，包含 torchgen 模块",
+        "需要手动安装 gcc, cmake, ninja-build, wheel, pyyaml 等构建依赖",
+        "构建时使用 MAX_JOBS=4 限制并发避免 OOM"
+      ]
+    },
+    "torch安装源": {
+      "官方 PyTorch 源": "download.pytorch.org/whl/cpu - 可用",
+      "国内镜像源": "pypi.tuna.tsinghua.edu.cn - 无 +cpu 版本",
+      "华为云镜像": "mirrors.huaweicloud.com - 无 +cpu 版本"
+    },
+    "UT失败原因": {
+      "直接原因": "ImportError: libhccl.so: cannot open shared object file",
+      "根本原因": "容器中没有安装 CANN (Compute Architecture for Neural Networks) 软件",
+      "错误堆栈": "torch_npu/npu/utils.py:11 - import torch_npu._C -> libhccl.so 缺失",
+      "CANN作用": "昇腾计算架构，提供 NPU 驱动和 HCCL 集合通信库",
+      "CANN获取": "需从昇腾官网下载: https://www.hiascend.com/document/detail/zh/canncommercial/900/softwareinst/instg/instg_0000.html"
+    }
+  },
+  "文档缺失": [
+    "README 未说明 CANN 软件的下载地址",
+    "未提供 openEuler 镜像的 pip 源配置方法",
+    "未说明如何获取 CANN 软件"
+  ],
+  "验证结论": {
+    "可构建": true,
+    "原因": "openEuler 24.03 LTS + 官方 PyTorch 源可以成功构建 torch_npu wheel 包",
+    "可测试": false,
+    "原因": "缺少 CANN 软件和 NPU 驱动，无法运行单元测试",
+    "建议": "如需执行 UT，需在配备昇腾 NPU 的服务器上进行，或使用华为提供的完整环境镜像",
+    "文档完整性": "部分缺失 - CANN 下载链接未在文档中提供"
+  }
+}
