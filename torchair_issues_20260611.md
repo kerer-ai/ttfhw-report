@@ -24,20 +24,37 @@ make torchair -j8
 
 ---
 
-### 1.2 PyTorch 安装方式未说明
+### 1.2 PyTorch 安装问题
 
 **问题描述：**
 configure.py 第13行要求 `torch >= 2.1`，但 README 中未说明如何安装 PyTorch。
 
-**实际发现：**
-- 执行 `pip install torch` 默认下载带 CUDA 的完整版本（约 2-4 GB）
-- 在无 GPU 环境下应使用 CPU-only 版本
+**实际发现的问题：**
 
-**建议：** 在 README 中增加 PyTorch 安装说明，建议使用：
+1. **CUDA 版本 vs CPU 版本**
+   - 执行 `pip install torch` 默认下载带 CUDA 的完整版本（约 2-4 GB）
+   - 在无 GPU 环境下应使用 CPU-only 版本
+   - 用户容易下载错误版本，浪费时间
+
+2. **官方源下载失败**
+   - `https://download.pytorch.org/whl/cpu` 在国内网络可能访问缓慢或失败
+   - 需要使用国内镜像源（如清华源 `https://pypi.tuna.tsinghua.edu.cn/simple/`）
+
+3. **国内源缺少 +cpu 版本**
+   - 清华源等国内镜像源同步 PyPI 官方包
+   - 但 **PyTorch CPU-only 版本不在 PyPI**，而是在 `download.pytorch.org`
+   - 直接使用清华源安装 torch 只会得到 CUDA 版本（因为只有 CUDA 版本在 PyPI）
+
+**解决方案：**
 ```bash
-# CPU-only 版本
+# 方式一：直接使用 PyTorch 官方 CPU 版本（推荐）
 pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+# 方式二：使用国内源 + PyTorch 官方 CPU 版本（网络慢时可能失败）
+pip install torch -i https://pypi.tuna.tsinghua.edu.cn/simple/ --extra-index-url https://download.pytorch.org/whl/cpu
 ```
+
+**建议：** 在 README 中增加 PyTorch 安装说明，明确说明：
 
 ---
 
@@ -67,8 +84,9 @@ pip install torch --index-url https://download.pytorch.org/whl/cpu
 | 2 | python3-devel 依赖说明 | 新用户可能编译失败 | 高 |
 | 3 | wheel 包依赖说明 | 新用户可能编译失败 | 高 |
 | 4 | gcc/g++ 依赖说明 | 新用户可能编译失败 | 中 |
-| 5 | PyTorch CPU-only 安装说明 | 下载时间过长/浪费资源 | 中 |
-| 6 | 环境变量 ASCEND_SDK_PATH 说明 | 配置不清晰 | 中 |
+| 5 | PyTorch CPU-only 安装说明 | 默认下载 CUDA 版本（2-4GB），浪费时间 | 高 |
+| 6 | PyTorch +cpu 版本不在 PyPI 的说明 | 国内源无法安装 CPU 版本 | 高 |
+| 7 | 环境变量 ASCEND_SDK_PATH 说明 | 配置不清晰 | 中 |
 
 ---
 
@@ -91,11 +109,21 @@ dnf install -y cmake gcc-c++ make git python3-devel python3-pip
 ```
 
 #### Python 依赖
+
+**重要：PyTorch CPU-only 版本不在 PyPI 官方源！**
+
+- PyTorch 默认包在 PyPI（约 2-4 GB，包含 CUDA）
+- PyTorch CPU-only 版本在 `download.pytorch.org`（约 200-500 MB）
+- 国内镜像源只同步 PyPI，不会包含 CPU-only 版本
+
 ```shell
-# 安装 PyTorch (CPU-only，适用于无 GPU 环境)
+# 安装 PyTorch (CPU-only，适用于无 GPU 环境) - 推荐方式
 pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-# 或安装带 CUDA 版本 (适用于有 GPU 环境)
+# 如需指定版本（如 torch 2.1）
+pip install torch==2.1.0+cpu --index-url https://download.pytorch.org/whl/cpu
+
+# 安装带 CUDA 版本 (适用于有 GPU 环境)
 pip install torch
 ```
 
