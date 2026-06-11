@@ -337,7 +337,8 @@
           "status": "not_run",
           "reason": "需要CANN/Ascend环境"
         }
-      }
+      },
+      "duration_seconds": 240
     },
     "ut": {
       "status": "partial_success",
@@ -377,7 +378,8 @@
           "status": "not_run",
           "reason": "需要CANN/Ascend环境"
         }
-      }
+      },
+      "duration_seconds": 840
     },
     "sample": {
       "status": "not_run",

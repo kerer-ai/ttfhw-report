@@ -39,10 +39,53 @@
     },
     "dependencies": {
       "value": {
-        "ubs-virt-ovs": ["cmake", "make", "gcc-c++", "gcc", "libasan", "libasan-static", "glibc-devel", "libstdc++-devel", "systemd-devel", "libboundscheck", "libxml2-devel", "numactl-libs", "bash", "bc", "coreutils", "sudo", "util-linux-user", "ninja-build"],
-        "virt-awaresched": ["gcc-c++", "gcc", "cmake", "make", "patch", "libvirt-devel", "libboundscheck"],
-        "virt-optimizer": ["git >= 2.33.0", "cmake >= 3.22.0", "make >= 4.3", "gcc >= 10.3.1", "g++ >= 10.3.1", "rapidjson-devel >= 0.8.1", "bpftool >= 12.0.1", "libbpf >= 0.8.1", "libbpf-devel >= 0.8.1", "clang >= 12.0.1", "tar >= 1.34", "rpm-build >= 4.18.2"],
-        "ubs-virt-enpu": ["CANN (Ascend) - ASCEND_HOME_PATH", "ENPU_ASCEND_DRIVER_PATH"]
+        "ubs-virt-ovs": [
+          "cmake",
+          "make",
+          "gcc-c++",
+          "gcc",
+          "libasan",
+          "libasan-static",
+          "glibc-devel",
+          "libstdc++-devel",
+          "systemd-devel",
+          "libboundscheck",
+          "libxml2-devel",
+          "numactl-libs",
+          "bash",
+          "bc",
+          "coreutils",
+          "sudo",
+          "util-linux-user",
+          "ninja-build"
+        ],
+        "virt-awaresched": [
+          "gcc-c++",
+          "gcc",
+          "cmake",
+          "make",
+          "patch",
+          "libvirt-devel",
+          "libboundscheck"
+        ],
+        "virt-optimizer": [
+          "git >= 2.33.0",
+          "cmake >= 3.22.0",
+          "make >= 4.3",
+          "gcc >= 10.3.1",
+          "g++ >= 10.3.1",
+          "rapidjson-devel >= 0.8.1",
+          "bpftool >= 12.0.1",
+          "libbpf >= 0.8.1",
+          "libbpf-devel >= 0.8.1",
+          "clang >= 12.0.1",
+          "tar >= 1.34",
+          "rpm-build >= 4.18.2"
+        ],
+        "ubs-virt-enpu": [
+          "CANN (Ascend) - ASCEND_HOME_PATH",
+          "ENPU_ASCEND_DRIVER_PATH"
+        ]
       },
       "source": "各组件spec文件和BUILD.md"
     },
@@ -67,7 +110,10 @@
           "name": "CANN (华为昇腾AI处理器软件栈)",
           "required_by": "ubs-virt-enpu (vcann-rt)",
           "install_method": "需要从昇腾社区下载安装",
-          "environment_variables": ["ASCEND_HOME_PATH", "ENPU_ASCEND_DRIVER_PATH"],
+          "environment_variables": [
+            "ASCEND_HOME_PATH",
+            "ENPU_ASCEND_DRIVER_PATH"
+          ],
           "status": "未在容器中安装"
         }
       ],
@@ -158,34 +204,122 @@
     }
   ],
   "process_timeline": [
-    {"timestamp": "2026-06-02T11:54:00", "step": "start", "action": "验证过程启动", "result": "started"},
-    {"timestamp": "2026-06-02T11:56:00", "step": "clone", "action": "克隆仓库", "result": "success"},
-    {"timestamp": "2026-06-02T11:57:00", "step": "container", "action": "启动Docker容器", "result": "success"},
-    {"timestamp": "2026-06-02T12:00:00", "step": "dependencies", "action": "安装构建依赖", "result": "success"},
-    {"timestamp": "2026-06-02T12:02:00", "step": "build_vsched", "action": "构建 virt-awaresched", "result": "success"},
-    {"timestamp": "2026-06-02T12:04:00", "step": "build_ovs", "action": "构建 ubs-virt-ovs", "result": "success"},
-    {"timestamp": "2026-06-02T12:05:00", "step": "build_optimizer", "action": "构建 virt-optimizer", "result": "success"},
-    {"timestamp": "2026-06-02T12:06:00", "step": "test_vsched", "action": "运行 virt-awaresched 测试", "result": "partial_success"},
-    {"timestamp": "2026-06-02T12:10:00", "step": "test_ovs", "action": "运行 ubs-virt-ovs 测试", "result": "success"},
-    {"timestamp": "2026-06-02T12:20:00", "step": "cleanup", "action": "清理容器", "result": "success"}
+    {
+      "timestamp": "2026-06-02T11:54:00",
+      "step": "start",
+      "action": "验证过程启动",
+      "result": "started"
+    },
+    {
+      "timestamp": "2026-06-02T11:56:00",
+      "step": "clone",
+      "action": "克隆仓库",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T11:57:00",
+      "step": "container",
+      "action": "启动Docker容器",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:00:00",
+      "step": "dependencies",
+      "action": "安装构建依赖",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:02:00",
+      "step": "build_vsched",
+      "action": "构建 virt-awaresched",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:04:00",
+      "step": "build_ovs",
+      "action": "构建 ubs-virt-ovs",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:05:00",
+      "step": "build_optimizer",
+      "action": "构建 virt-optimizer",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:06:00",
+      "step": "test_vsched",
+      "action": "运行 virt-awaresched 测试",
+      "result": "partial_success"
+    },
+    {
+      "timestamp": "2026-06-02T12:10:00",
+      "step": "test_ovs",
+      "action": "运行 ubs-virt-ovs 测试",
+      "result": "success"
+    },
+    {
+      "timestamp": "2026-06-02T12:20:00",
+      "step": "cleanup",
+      "action": "清理容器",
+      "result": "success"
+    }
   ],
   "final_results": {
     "build": {
       "status": "success",
       "components": {
-        "ubs-virt-ovs": {"status": "success", "duration_seconds": 60},
-        "virt-awaresched": {"status": "success", "duration_seconds": 130.44},
-        "virt-optimizer": {"status": "success", "duration_seconds": 120},
-        "ubs-virt-enpu": {"status": "skipped", "reason": "需要CANN/Ascend环境"}
+        "ubs-virt-ovs": {
+          "status": "success",
+          "duration_seconds": 60
+        },
+        "virt-awaresched": {
+          "status": "success",
+          "duration_seconds": 130.44
+        },
+        "virt-optimizer": {
+          "status": "success",
+          "duration_seconds": 120
+        },
+        "ubs-virt-enpu": {
+          "status": "skipped",
+          "reason": "需要CANN/Ascend环境"
+        }
       },
       "artifacts": [
-        {"name": "vas_daemon", "path": "/workspace/virt-awaresched/build/bin/vas_daemon", "size": "741KB"},
-        {"name": "vasctl", "path": "/workspace/virt-awaresched/build/bin/vasctl", "size": "688KB"},
-        {"name": "ubs-virt-ovs", "path": "/workspace/ubs-virt-ovs/build/src/ubs-virt-ovs"},
-        {"name": "ubs-opt", "path": "/workspace/virt-optimizer/build/release/src/client/ubs-opt", "size": "392KB"},
-        {"name": "ubs-opt-guard", "path": "/workspace/virt-optimizer/build/release/src/server/ubs-opt-guard", "size": "392KB"},
-        {"name": "ubs-opt-tuner", "path": "/workspace/virt-optimizer/build/release/src/optimizer/ubs-opt-tuner", "size": "585KB"},
-        {"name": "ubs-optimizer RPM", "path": "/root/rpmbuild/RPMS/x86_64/ubs-optimizer-0.1.0-k5.1.x86_64.rpm"}
+        {
+          "name": "vas_daemon",
+          "path": "/workspace/virt-awaresched/build/bin/vas_daemon",
+          "size": "741KB"
+        },
+        {
+          "name": "vasctl",
+          "path": "/workspace/virt-awaresched/build/bin/vasctl",
+          "size": "688KB"
+        },
+        {
+          "name": "ubs-virt-ovs",
+          "path": "/workspace/ubs-virt-ovs/build/src/ubs-virt-ovs"
+        },
+        {
+          "name": "ubs-opt",
+          "path": "/workspace/virt-optimizer/build/release/src/client/ubs-opt",
+          "size": "392KB"
+        },
+        {
+          "name": "ubs-opt-guard",
+          "path": "/workspace/virt-optimizer/build/release/src/server/ubs-opt-guard",
+          "size": "392KB"
+        },
+        {
+          "name": "ubs-opt-tuner",
+          "path": "/workspace/virt-optimizer/build/release/src/optimizer/ubs-opt-tuner",
+          "size": "585KB"
+        },
+        {
+          "name": "ubs-optimizer RPM",
+          "path": "/root/rpmbuild/RPMS/x86_64/ubs-optimizer-0.1.0-k5.1.x86_64.rpm"
+        }
       ]
     },
     "ut": {
@@ -267,5 +401,10 @@
       "ubs-virt-enpu 需要 CANN 硬件环境，无法在标准容器中验证",
       "建议修复 Windows 换行符问题以提高跨平台兼容性"
     ]
+  },
+  "timing_estimate": {
+    "build_duration_seconds": 240,
+    "ut_duration_seconds": 840,
+    "note": "从执行日志时间戳推断：build(12:02-12:06), UT(12:06-12:20)"
   }
 }
