@@ -44,22 +44,70 @@
       "total_passed": 410,
       "total_failed": 0,
       "modules": {
-        "acpi": { "tests": 16, "result": "PASS" },
-        "address_space": { "tests": 28, "result": "PASS" },
-        "boot_loader": { "tests": 27, "result": "PASS" },
-        "cpu": { "tests": 4, "result": "PASS" },
-        "devices": { "tests": 64, "result": "PASS" },
-        "hisysevent": { "tests": 10, "result": "PASS" },
-        "hypervisor": { "tests": 64, "result": "PASS" },
-        "machine": { "tests": 9, "result": "PASS" },
-        "machine_manager": { "tests": 2, "result": "PASS" },
-        "migration": { "tests": 5, "result": "PASS" },
-        "pci": { "tests": 24, "result": "PASS" },
-        "util": { "tests": 50, "result": "PASS" },
-        "virtio": { "tests": 62, "result": "PASS" },
-        "vfio": { "tests": 4, "result": "PASS" },
-        "ozone": { "tests": 27, "result": "PASS" },
-        "doc-tests": { "tests": 14, "result": "PASS" }
+        "acpi": {
+          "tests": 16,
+          "result": "PASS"
+        },
+        "address_space": {
+          "tests": 28,
+          "result": "PASS"
+        },
+        "boot_loader": {
+          "tests": 27,
+          "result": "PASS"
+        },
+        "cpu": {
+          "tests": 4,
+          "result": "PASS"
+        },
+        "devices": {
+          "tests": 64,
+          "result": "PASS"
+        },
+        "hisysevent": {
+          "tests": 10,
+          "result": "PASS"
+        },
+        "hypervisor": {
+          "tests": 64,
+          "result": "PASS"
+        },
+        "machine": {
+          "tests": 9,
+          "result": "PASS"
+        },
+        "machine_manager": {
+          "tests": 2,
+          "result": "PASS"
+        },
+        "migration": {
+          "tests": 5,
+          "result": "PASS"
+        },
+        "pci": {
+          "tests": 24,
+          "result": "PASS"
+        },
+        "util": {
+          "tests": 50,
+          "result": "PASS"
+        },
+        "virtio": {
+          "tests": 62,
+          "result": "PASS"
+        },
+        "vfio": {
+          "tests": 4,
+          "result": "PASS"
+        },
+        "ozone": {
+          "tests": 27,
+          "result": "PASS"
+        },
+        "doc-tests": {
+          "tests": 14,
+          "result": "PASS"
+        }
       }
     },
     "integration_tests": {
@@ -109,5 +157,11 @@
       "Pre-configure cargo mirror in container image to avoid crates.io rate limiting",
       "Consider increasing container memory limit for faster parallel compilation"
     ]
+  },
+  "metadata": {
+    "duration_seconds": 4058,
+    "build_duration_seconds": 3758,
+    "env_estimate_seconds": 300,
+    "env_estimate_note": "估算值：容器拉取+dnf安装11+软件包(无实际时间戳)"
   }
 }
