@@ -2,9 +2,9 @@
   "metadata": {
     "repo_name": "bishengjdk-8",
     "repo_url": "https://gitcode.com/openeuler/bishengjdk-8.git",
-    "start_time": "2026-06-03T09:43:00",
-    "end_time": "2026-06-03T09:47:54",
-    "duration_seconds": 294,
+    "start_time": "2026-06-03T09:30:00+08:00",
+    "end_time": "2026-06-03T09:52:00+08:00",
+    "duration_seconds": 1320,
     "total_steps": 8
   },
   "machine_spec": {
@@ -190,8 +190,14 @@
       "boot_jdk": "openjdk 1.8.0_462 BiSheng",
       "toolchain": "gcc 12.3.1",
       "artifacts": [
-        {"name": "jdk binary", "path": "build/linux-x86_64-normal-server-release/images/j2sdk-image"},
-        {"name": "rt.jar", "path": "build/linux-x86_64-normal-server-release/images/j2sdk-image/jre/lib/rt.jar"}
+        {
+          "name": "jdk binary",
+          "path": "build/linux-x86_64-normal-server-release/images/j2sdk-image"
+        },
+        {
+          "name": "rt.jar",
+          "path": "build/linux-x86_64-normal-server-release/images/j2sdk-image/jre/lib/rt.jar"
+        }
       ],
       "modules": {
         "corba": "7s",
@@ -217,12 +223,48 @@
       "assertions_failed": 0,
       "note": "Full jtreg test suite (16,727 tests across hotspot/jdk/langtools/nashorn) not executed due to jtreg tool unavailability in container. Custom functional tests cover basic compilation, arithmetic, collections, threading, I/O, reflection, and JAR packaging.",
       "test_results": [
-        {"name": "HelloWorld", "description": "Basic compilation and execution", "status": "passed"},
-        {"name": "BasicTest", "description": "Integer/Long/Double arithmetic, String operations, Array operations, ArrayList, HashMap, Exception handling, Class loading, System properties", "assertions": 19, "passed": 19, "failed": 0, "status": "passed"},
-        {"name": "ThreadTest", "description": "Thread creation, AtomicInteger, ExecutorService/Future, CountDownLatch", "assertions": 5, "passed": 5, "failed": 0, "status": "passed"},
-        {"name": "IOTest", "description": "File I/O (NIO Files API), ByteArray streams, BufferedReader", "assertions": 3, "passed": 3, "failed": 0, "status": "passed"},
-        {"name": "ReflectTest", "description": "Class reflection, Method introspection, Field access", "assertions": 3, "passed": 3, "failed": 0, "status": "passed"},
-        {"name": "JARTest", "description": "JAR packaging and execution", "status": "passed"}
+        {
+          "name": "HelloWorld",
+          "description": "Basic compilation and execution",
+          "status": "passed"
+        },
+        {
+          "name": "BasicTest",
+          "description": "Integer/Long/Double arithmetic, String operations, Array operations, ArrayList, HashMap, Exception handling, Class loading, System properties",
+          "assertions": 19,
+          "passed": 19,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "name": "ThreadTest",
+          "description": "Thread creation, AtomicInteger, ExecutorService/Future, CountDownLatch",
+          "assertions": 5,
+          "passed": 5,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "name": "IOTest",
+          "description": "File I/O (NIO Files API), ByteArray streams, BufferedReader",
+          "assertions": 3,
+          "passed": 3,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "name": "ReflectTest",
+          "description": "Class reflection, Method introspection, Field access",
+          "assertions": 3,
+          "passed": 3,
+          "failed": 0,
+          "status": "passed"
+        },
+        {
+          "name": "JARTest",
+          "description": "JAR packaging and execution",
+          "status": "passed"
+        }
       ],
       "failures": []
     },
