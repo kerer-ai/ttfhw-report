@@ -39,15 +39,27 @@
     },
     "依赖项": {
       "值": [
-        "cmake >= 3.14",
-        "gcc/g++",
-        "make",
-        "Python 3.9-3.12",
-        "PyTorch >= 2.1",
-        "python3-devel",
-        "git"
+        "cmake >= 3.14 (文档来源: CMakeLists.txt 第1行 cmake_minimum_required)",
+        "gcc/g++ (文档来源: README.md 构建命令 make torchair + build.sh 使用 g++)",
+        "make (文档来源: README.md 构建命令 make torchair)",
+        "Python 3.9-3.12 (文档来源: README.md 版本配套表)",
+        "PyTorch >= 2.1 (文档来源: README.md 版本配套表 + configure.py 第13行 _COMPAT_TORCH_VERSION)",
+        "git (文档来源: README.md 克隆命令 git clone)",
+        "python3-devel (编译发现: CMakeLists.txt find_package(Python3) 需要Python.h，文档未列出)",
+        "wheel (编译发现: CMakeLists.txt 使用 setup.py bdist_wheel，文档未列出)",
+        "numpy (运行时发现: torchair/ge/_ge_graph.py 导入 numpy，文档未列出)"
       ],
-      "来源": "README.md + CMakeLists.txt + CONTRIBUTING.md"
+      "来源": {
+        "cmake": "CMakeLists.txt 第1行: cmake_minimum_required(VERSION 3.14)",
+        "gcc/g++": "README.md 构建命令 + build.sh 第144行使用 g++",
+        "make": "README.md 第71-72行: make torchair -j8",
+        "Python版本": "README.md 第151-161行版本配套表",
+        "PyTorch版本": "README.md 版本配套表 + configure.py 第13行",
+        "git": "README.md 第21-22行: git clone",
+        "python3-devel": "CMakeLists.txt find_package(Python3) 编译时报错发现，README未明确列出",
+        "wheel": "CMakeLists.txt 第99行 setup.py bdist_wheel，README未列出",
+        "numpy": "torchair/ge/_ge_graph.py 导入时报错发现，README未列出"
+      }
     },
     "构建命令": {
       "值": "mkdir build && cd build && cmake .. && make torchair -j8",
@@ -345,8 +357,10 @@
   },
   "文档缺失": [
     "CANN SDK 下载链接未在文档中提供",
-    "python3-devel 依赖未在 README 中明确列出",
-    "wheel 包依赖未在 README 中明确列出"
+    "python3-devel 依赖未在 README 中明确列出（CMakeLists.txt find_package(Python3) 需要，但 README 构建章节未说明）",
+    "wheel 包依赖未在 README 中明确列出（CMakeLists.txt setup.py bdist_wheel 需要，但 README 构建章节未说明）",
+    "numpy 依赖未在 README 中明确列出（torchair/ge/_ge_graph.py 需要，但 README 依赖章节未说明）",
+    "build.sh 中使用 g++ 但 README 未明确列出 gcc/g++ 作为构建依赖"
   ],
   "遇到的问题": [
     {
