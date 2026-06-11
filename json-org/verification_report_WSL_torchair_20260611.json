@@ -1,0 +1,387 @@
+{
+  "元数据": {
+    "仓库路径": "https://gitcode.com/Ascend/torchair.git",
+    "仓库名称": "torchair",
+    "开始时间": "2026-06-11T04:09:00",
+    "结束时间": "2026-06-11T05:15:00",
+    "持续时间_秒": 3960,
+    "总步骤数": 8
+  },
+  "机器规格": {
+    "宿主机": {
+      "架构": "x86_64",
+      "CPU型号": "Intel Xeon",
+      "CPU核心数": 20,
+      "内存": "15Gi",
+      "磁盘": "未知",
+      "Docker版本": "Docker version 29.1.3"
+    },
+    "容器": {
+      "操作系统": "openEuler 24.03 LTS",
+      "架构": "x86_64",
+      "CPU核心数": 20,
+      "内存": "15Gi"
+    },
+    "镜像来源": {
+      "类型": "基础镜像",
+      "镜像名称": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "选择原因": "仓库为昇腾NPU相关项目，openEuler是官方推荐的Linux发行版"
+    }
+  },
+  "文档阅读摘要": {
+    "架构": {
+      "值": "x86_64 / aarch64 (昇腾 NPU)",
+      "来源": "README.md - 支持的型号章节"
+    },
+    "推荐镜像": {
+      "值": "openEuler (文档推荐用于昇腾环境)",
+      "来源": "README.md - 安装与卸载章节"
+    },
+    "依赖项": {
+      "值": [
+        "cmake >= 3.14 (文档来源: CMakeLists.txt 第1行 cmake_minimum_required)",
+        "gcc/g++ (文档来源: README.md 构建命令 make torchair + build.sh 使用 g++)",
+        "make (文档来源: README.md 构建命令 make torchair)",
+        "Python 3.9-3.12 (文档来源: README.md 版本配套表)",
+        "PyTorch >= 2.1 (文档来源: README.md 版本配套表 + configure.py 第13行 _COMPAT_TORCH_VERSION)",
+        "git (文档来源: README.md 克隆命令 git clone)",
+        "python3-devel (编译发现: CMakeLists.txt find_package(Python3) 需要Python.h，文档未列出)",
+        "wheel (编译发现: CMakeLists.txt 使用 setup.py bdist_wheel，文档未列出)",
+        "numpy (运行时发现: torchair/ge/_ge_graph.py 导入 numpy，文档未列出)"
+      ],
+      "来源": {
+        "cmake": "CMakeLists.txt 第1行: cmake_minimum_required(VERSION 3.14)",
+        "gcc/g++": "README.md 构建命令 + build.sh 第144行使用 g++",
+        "make": "README.md 第71-72行: make torchair -j8",
+        "Python版本": "README.md 第151-161行版本配套表",
+        "PyTorch版本": "README.md 版本配套表 + configure.py 第13行",
+        "git": "README.md 第21-22行: git clone",
+        "python3-devel": "CMakeLists.txt find_package(Python3) 编译时报错发现，README未明确列出",
+        "wheel": "CMakeLists.txt 第99行 setup.py bdist_wheel，README未列出",
+        "numpy": "torchair/ge/_ge_graph.py 导入时报错发现，README未列出"
+      }
+    },
+    "构建命令": {
+      "值": "mkdir build && cd build && cmake .. && make torchair -j8",
+      "来源": "README.md - 编译章节"
+    },
+    "单元测试命令": {
+      "值": "./build.sh -u (需要 ASCEND_SDK_PATH 环境变量)",
+      "来源": "CONTRIBUTING.md - CI编译章节"
+    },
+    "样例命令": {
+      "值": "python quick_test.py (需要 NPU 环境)",
+      "来源": "README.md - 快速上手章节"
+    },
+    "特殊依赖": {
+      "值": [
+        {
+          "名称": "CANN (昇腾软件栈)",
+          "下载链接": "未在文档中找到",
+          "安装方式": "需要从昇腾社区下载",
+          "备注": "可选，用于CPU调试和完整功能验证"
+        }
+      ],
+      "来源": "README.md - 安装章节"
+    }
+  },
+  "执行日志": [
+    {
+      "时间戳": "2026-06-11T04:09:00",
+      "命令": "git clone https://gitcode.com/Ascend/torchair.git",
+      "成功": true,
+      "输出": "Cloning into '.'... done.",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:10:00",
+      "命令": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "成功": true,
+      "输出": "镜像已是最新版本",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:11:00",
+      "命令": "docker run -d --name ttfhw-torchair-env ...",
+      "成功": true,
+      "输出": "容器已启动",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:15:00",
+      "命令": "dnf update -y",
+      "成功": true,
+      "输出": "升级 2 个包",
+      "错误": "仓库密钥超时 (不影响结果)",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:20:00",
+      "命令": "dnf install -y cmake gcc-c++ make python3 python3-pip git",
+      "成功": true,
+      "输出": "安装完成!",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:22:00",
+      "命令": "pip3 install torch --index-url https://download.pytorch.org/whl/cpu",
+      "成功": true,
+      "输出": "成功安装 torch-2.12.0+cpu",
+      "错误": "初始使用清华源下载失败（默认安装带CUDA版本过大）",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:25:00",
+      "命令": "git submodule update --init --recursive",
+      "成功": true,
+      "输出": "子模块已检出",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:26:00",
+      "命令": "TARGET_PYTHON_PATH=/usr/bin/python3 NO_ASCEND_SDK=1 bash configure",
+      "成功": true,
+      "输出": "配置完成",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:27:00",
+      "命令": "cmake ..",
+      "成功": true,
+      "输出": "配置完成 (0.5秒)",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:28:00",
+      "命令": "make torchair -j12",
+      "成功": false,
+      "输出": "错误: Python.h 未找到",
+      "错误": "缺少 python3-devel",
+      "返回码": 2
+    },
+    {
+      "时间戳": "2026-06-11T04:45:00",
+      "命令": "dnf install -y python3-devel",
+      "成功": true,
+      "输出": "已安装 python3-devel-3.11.6",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:46:00",
+      "命令": "rm -rf build && configure && mkdir build && cmake ..",
+      "成功": true,
+      "输出": "配置完成",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:47:00",
+      "命令": "make torchair -j12",
+      "成功": false,
+      "输出": "C++ 编译成功但 Python wheel 打包失败",
+      "错误": "错误: 无效命令 'bdist_wheel'",
+      "返回码": 2
+    },
+    {
+      "时间戳": "2026-06-11T04:50:00",
+      "命令": "pip3 install wheel",
+      "成功": true,
+      "输出": "已安装 wheel-0.47.0",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:51:00",
+      "命令": "make torchair -j12",
+      "成功": true,
+      "输出": "[100%] 已构建目标 torchair",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:52:00",
+      "命令": "pip3 install torchair-0.1-py3-none-any.whl",
+      "成功": true,
+      "输出": "已安装 torchair-0.1",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:53:00",
+      "命令": "pip3 install numpy",
+      "成功": true,
+      "输出": "已安装 numpy-2.4.6",
+      "错误": "",
+      "返回码": 0
+    },
+    {
+      "时间戳": "2026-06-11T04:55:00",
+      "命令": "python3 -c 'import torchair'",
+      "成功": false,
+      "输出": "",
+      "错误": "导入错误: libge_runner.so: 无法打开共享对象文件",
+      "返回码": 1
+    },
+    {
+      "时间戳": "2026-06-11T04:56:00",
+      "命令": "docker stop ttfhw-torchair-env && docker rm ttfhw-torchair-env",
+      "成功": true,
+      "输出": "",
+      "错误": "",
+      "返回码": 0
+    }
+  ],
+  "过程时间线": [
+    {
+      "时间戳": "2026-06-11T04:09:00",
+      "步骤": "开始",
+      "操作": "验证过程启动",
+      "结果": "已启动"
+    },
+    {
+      "时间戳": "2026-06-11T04:09:00",
+      "步骤": "克隆",
+      "操作": "克隆仓库",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:10:00",
+      "步骤": "容器设置",
+      "操作": "启动 openEuler 容器",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:15:00",
+      "步骤": "依赖安装",
+      "操作": "安装系统依赖",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:22:00",
+      "步骤": "PyTorch安装",
+      "操作": "安装 PyTorch CPU-only",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:25:00",
+      "步骤": "子模块",
+      "操作": "初始化 git 子模块",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:26:00",
+      "步骤": "配置",
+      "操作": "运行 configure 脚本",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:47:00",
+      "步骤": "构建",
+      "操作": "编译 torchair",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:52:00",
+      "步骤": "安装",
+      "操作": "安装 torchair wheel",
+      "结果": "成功"
+    },
+    {
+      "时间戳": "2026-06-11T04:55:00",
+      "步骤": "样例",
+      "操作": "运行样例程序",
+      "结果": "跳过 - 需要 CANN SDK"
+    },
+    {
+      "时间戳": "2026-06-11T04:56:00",
+      "步骤": "清理",
+      "操作": "清理容器",
+      "结果": "成功"
+    }
+  ],
+  "最终结果": {
+    "构建": {
+      "状态": "成功",
+      "持续时间_秒": 74.88,
+      "产物": [
+        {
+          "名称": "torchair-0.1-py3-none-any.whl",
+          "路径": "/workspace/build/dist/dist/torchair-0.1-py3-none-any.whl",
+          "大小": "1848798 字节 (1.8 MB)"
+        },
+        {
+          "名称": "_torchair.so",
+          "路径": "/workspace/build/dist/torchair/core/_torchair.so",
+          "大小": "?"
+        },
+        {
+          "名称": "_npu_graph_executor.so",
+          "路径": "/workspace/build/dist/torchair/core/_npu_graph_executor.so",
+          "大小": "?"
+        },
+        {
+          "名称": "_npu_utils.so",
+          "路径": "/workspace/build/dist/torchair/core/_npu_utils.so",
+          "大小": "?"
+        },
+        {
+          "名称": "_abi_compat_ge_apis.so",
+          "路径": "/workspace/build/dist/torchair/core/_abi_compat_ge_apis.so",
+          "大小": "?"
+        }
+      ]
+    },
+    "单元测试": {
+      "状态": "跳过",
+      "持续时间_秒": 0,
+      "原因": "UT测试需要 CANN SDK (ASCEND_SDK_PATH 未设置)",
+      "总数": 0,
+      "通过": 0,
+      "失败": 0,
+      "失败详情": []
+    },
+    "样例": {
+      "状态": "跳过",
+      "持续时间_秒": 0,
+      "原因": "运行样例需要 CANN SDK (昇腾软件栈)",
+      "结果": []
+    }
+  },
+  "文档缺失": [
+    "CANN SDK 下载链接未在文档中提供",
+    "python3-devel 依赖未在 README 中明确列出（CMakeLists.txt find_package(Python3) 需要，但 README 构建章节未说明）",
+    "wheel 包依赖未在 README 中明确列出（CMakeLists.txt setup.py bdist_wheel 需要，但 README 构建章节未说明）",
+    "numpy 依赖未在 README 中明确列出（torchair/ge/_ge_graph.py 需要，但 README 依赖章节未说明）",
+    "build.sh 中使用 g++ 但 README 未明确列出 gcc/g++ 作为构建依赖"
+  ],
+  "遇到的问题": [
+    {
+      "问题": "使用清华源安装 PyTorch 时，默认下载带 CUDA 的大版本（2-4GB），下载时间过长",
+      "解决方案": "改用 PyTorch CPU-only 版本 (https://download.pytorch.org/whl/cpu)，只需 192MB",
+      "来源": "用户反馈"
+    },
+    {
+      "问题": "缺少 python3-devel 导致 Python.h 头文件找不到",
+      "解决方案": "安装 python3-devel 包",
+      "来源": "CMakeLists.txt 中 find_package(Python3) 需要开发头文件"
+    },
+    {
+      "问题": "缺少 wheel 包导致 Python wheel 打包失败",
+      "解决方案": "安装 wheel 包",
+      "来源": "CMakeLists.txt 中使用 setup.py bdist_wheel 命令"
+    },
+    {
+      "问题": "torchair 运行时需要 CANN SDK (昇腾软件栈)，未在容器中安装",
+      "解决方案": "根据文档说明，CANN SDK 需要从昇腾社区下载安装，在无 NPU 环境下无法完全运行",
+      "来源": "README.md - 快速上手章节"
+    }
+  ]
+}

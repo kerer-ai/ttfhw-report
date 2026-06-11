@@ -1,0 +1,332 @@
+{
+  "metadata": {
+    "repo_path": "https://gitcode.com/cann/ops-cv.git",
+    "repo_name": "ops-cv",
+    "start_time": "2026-06-03T15:24:57+08:00",
+    "end_time": "2026-06-03T15:59:17+08:00",
+    "duration_seconds": 2060,
+    "total_steps": 11,
+    "verification_date": "2026-06-03",
+    "repo_url": "https://gitcode.com/cann/ops-cv.git"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 12,
+      "memory": "11Gi",
+      "disk": "/dev/sdd 1007G total, 161G used, 795G avail",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 12,
+      "memory": "11Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "按技能要求固定使用 openEuler 24.03 LTS 基础镜像进行验证"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 / aarch64",
+      "source": "docs/zh/install/quick_install.md - Docker部署章节"
+    },
+    "environment_prerequisite": {
+      "value": "先完成 NPU 驱动、固件、Ascend-cann-toolkit 和 Ascend-cann-ops 安装；运行态还需设备映射和环境变量",
+      "source": "README.md 第22-24行；docs/zh/install/quick_install.md 第3-4、11-12、171-194行"
+    },
+    "recommended_image": {
+      "value": "文档推荐预装 CANN 的 AscendHub Ubuntu 22.04 Docker 镜像，而不是纯 openEuler 基础镜像",
+      "source": "docs/QUICKSTART.md 第7-9行；docs/zh/install/quick_install.md 第16-18、52-67行"
+    },
+    "dependencies": {
+      "value": [
+        "python >= 3.7.0 (建议 <= 3.10)",
+        "gcc/g++ >= 7.3.0",
+        "cmake >= 3.16.0",
+        "make",
+        "pigz (可选)",
+        "dos2unix",
+        "patch",
+        "googletest (仅 UT 依赖)",
+        "git",
+        "findutils",
+        "procps-ng"
+      ],
+      "source": "docs/zh/install/quick_install.md 第132-165行；install_deps.sh；requirements.txt"
+    },
+    "python_dependencies": {
+      "value": [
+        "pyyaml",
+        "absl-py>=2.0.0",
+        "jinja2>=3.1.0",
+        "numpy<2.0",
+        "setuptools>=59.0.0",
+        "wheel>=0.37.0",
+        "decorator",
+        "sympy",
+        "attrs"
+      ],
+      "source": "requirements.txt"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "Ascend-cann-toolkit",
+          "download_url": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260528120328736/Ascend-cann-toolkit_9.1.0_linux-x86_64.run",
+          "install_method": ".run 安装包",
+          "size": "1.44 GB"
+        },
+        {
+          "name": "Ascend-cann-910b-ops",
+          "download_url": "https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260528120328736/Ascend-cann-910b-ops_9.1.0_linux-x86_64.run",
+          "install_method": ".run 安装包",
+          "size": "2.2 GB"
+        }
+      ],
+      "source": "docs/zh/install/quick_install.md 第97-124行；master 下载目录 20260528120328736"
+    },
+    "build_commands": {
+      "value": "bash build.sh --pkg --soc=${soc_version} --ops=add_example -j16",
+      "source": "docs/QUICKSTART.md 第44-54行；docs/zh/install/build.md 第18-24行"
+    },
+    "ut_commands": {
+      "value": "bash build.sh -u --ophost --soc=${soc_version} --ops=add_example",
+      "source": "docs/zh/install/build.md 第41-43行；build.sh --help"
+    },
+    "sample_commands": {
+      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "source": "docs/QUICKSTART.md 第89-97行；docs/zh/install/build.md 第56-63行"
+    },
+    "build_entry": {
+      "source": "docs/QUICKSTART.md 第44-54行；docs/zh/install/build.md 第18-24行",
+      "value": "bash build.sh --pkg --soc=${soc_version} --ops=add_example -j16"
+    },
+    "ut_entry": {
+      "source": "docs/zh/install/build.md 第41-43行；build.sh --help",
+      "value": "bash build.sh -u --ophost --soc=${soc_version} --ops=add_example"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-03T15:24:57+08:00",
+      "command": "git clone --depth 1 https://gitcode.com/cann/ops-cv.git tmp_src_ops_cv",
+      "success": true,
+      "output": "仓库克隆成功，HEAD 提交 ea00fb8",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-03T15:26:00+08:00",
+      "command": "docker run -d --name ttfhw-ops-cv-env -v /root/workspace/ttfhw-verify-euler/tmp_src_ops_cv:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "openEuler 24.03 LTS 容器启动成功",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-03T15:27:00+08:00",
+      "command": "dnf install -y python3-pip gcc gcc-c++ cmake make pigz dos2unix patch gtest gtest-devel git findutils procps-ng",
+      "success": true,
+      "output": "文档所列基础依赖安装成功；googletest 在 openEuler 中映射为 gtest/gtest-devel",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-03T15:28:00+08:00",
+      "command": "pip3 install -r requirements.txt",
+      "success": true,
+      "output": "Python 依赖安装成功",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-03T15:30:00+08:00",
+      "command": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
+      "success": false,
+      "output": "-- Search libs under install path /usr/local/Ascend/latest",
+      "error": "CMake Error at cmake/dependencies.cmake:82 (find_package): Could not find package ASC",
+      "returncode": 1,
+      "duration_seconds": 5.42
+    },
+    {
+      "timestamp": "2026-06-03T15:39:00+08:00",
+      "command": "curl -L -o Ascend-cann-toolkit_9.1.0_linux-x86_64.run https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master/20260528120328736/Ascend-cann-toolkit_9.1.0_linux-x86_64.run",
+      "success": true,
+      "output": "文档入口可解析出 master 目录下的真实 toolkit 包名，下载完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 593
+    },
+    {
+      "timestamp": "2026-06-03T15:50:11+08:00",
+      "command": "/tmp/Ascend-cann-toolkit_9.1.0_linux-x86_64.run --quiet --install",
+      "success": true,
+      "output": "Ascend-cann-toolkit 9.1.0 安装成功；安装器提示 driver 未安装，需要额外挂载驱动路径",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 95
+    },
+    {
+      "timestamp": "2026-06-03T15:52:13+08:00",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
+      "success": true,
+      "output": "成功生成 cann-ops-cv-custom-linux.x86_64.run",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 181.16
+    },
+    {
+      "timestamp": "2026-06-03T15:55:57+08:00",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && bash build.sh -u --ophost --soc=ascend910b --ops=add_example -j7",
+      "success": false,
+      "output": "UT 已进入真实编译阶段，不再是环境依赖缺失",
+      "error": "examples/add_example/tests/ut/op_host/test_add_example_tiling.cpp:55 调用 gert::TilingContextPara 构造函数参数不匹配，tests/ut/common/tiling_context_faker.h 中无对应签名",
+      "returncode": 2,
+      "duration_seconds": 28.84
+    },
+    {
+      "timestamp": "2026-06-03T15:55:28+08:00",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "success": false,
+      "output": "样例路径已推进到“Start compile and run examples file”阶段",
+      "error": "本轮未完成自定义算子包安装与驱动映射，样例未完成最终运行验证",
+      "returncode": 1,
+      "duration_seconds": 4.27
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-03T15:24:57+08:00",
+      "step": "start",
+      "action": "克隆仓库并阅读入口文档",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:26:00+08:00",
+      "step": "container_setup",
+      "action": "启动 openEuler 24.03 LTS 容器",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:27:00+08:00",
+      "step": "deps_install",
+      "action": "安装基础构建依赖",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:30:00+08:00",
+      "step": "initial_build",
+      "action": "首次执行 AddExample 打包构建",
+      "result": "失败，缺少 ASC CMake package"
+    },
+    {
+      "timestamp": "2026-06-03T15:39:00+08:00",
+      "step": "toolkit_download",
+      "action": "根据文档下载 CANN toolkit 包",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:50:11+08:00",
+      "step": "toolkit_install",
+      "action": "安装 Ascend-cann-toolkit 9.1.0",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:52:13+08:00",
+      "step": "build",
+      "action": "再次执行 AddExample 打包构建",
+      "result": "成功"
+    },
+    {
+      "timestamp": "2026-06-03T15:55:57+08:00",
+      "step": "ut",
+      "action": "执行 UT 构建",
+      "result": "失败，暴露源码级签名不匹配"
+    },
+    {
+      "timestamp": "2026-06-03T15:55:28+08:00",
+      "step": "sample",
+      "action": "执行样例编译运行",
+      "result": "已进入运行流程入口，但未完成最终运行验证"
+    },
+    {
+      "timestamp": "2026-06-03T15:59:17+08:00",
+      "step": "cleanup",
+      "action": "生成报告并清理容器",
+      "result": "成功"
+    }
+  ],
+  "problems_encountered": [
+    {
+      "problem": "openEuler 仓库中没有名为 googletest 的包 (文档提到 googletest，但 dnf 包名不同)",
+      "solution": "按发行版实际包名安装 gtest 与 gtest-devel",
+      "source": "",
+      "status": "resolved"
+    },
+    {
+      "problem": "纯基础镜像缺少 CANN toolkit 提供的 ASC CMake package (cmake/dependencies.cmake:82 的 find_package(ASC REQUIRED ...) 初次失败)",
+      "solution": "根据文档下载并安装 Ascend-cann-toolkit 9.1.0 后解决",
+      "source": "",
+      "status": "resolved"
+    },
+    {
+      "problem": "UT 源码与测试公共桩接口不匹配 (test_add_example_tiling.cpp 中 TilingContextPara 构造参数与 tiling_context_faker.h 定义不匹配)",
+      "solution": "未解决；这是仓库当前源码/测试兼容性问题",
+      "source": "",
+      "status": "unresolved"
+    },
+    {
+      "problem": "容器内没有驱动和昇腾设备节点 (toolkit 安装器提示 driver 未安装，样例最终运行未能完成硬件态验证)",
+      "solution": "未解决；当前验证环境未按文档中的 Docker 设备映射方式启动",
+      "source": "",
+      "status": "unresolved"
+    }
+  ],
+  "documentation_gaps": [
+    "Docker 章节只给了预装 CANN 的 Ubuntu 22.04 AscendHub 镜像，没有纯 openEuler 基础镜像的完整方案 — 在技能要求固定使用 openEuler 24.03 LTS 时，需要额外自行解析文档下载入口并手动安装 toolkit",
+    "手动安装章节只给下载入口和命令模板，没有直接列出当前 master 对应的具体目录和包名 — 需要额外探测目录 20260528120328736 才能得到可执行下载链接",
+    "UT 文档没有给出像 AddExample 这样可直接执行的最小验证命令，只能结合 build.sh --help 推断 — 增加验证路径选择成本",
+    "文档写的是 googletest，未说明 openEuler 下对应 gtest/gtest-devel — 在 openEuler 上需要人工判断包名映射"
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 181.16,
+      "artifacts": [
+        {
+          "name": "cann-ops-cv-custom-linux.x86_64.run",
+          "path": "/workspace/build_out/",
+          "size": "约 8 MB 打包内容"
+        }
+      ],
+      "soc_version": "ascend910b",
+      "op_name": "add_example",
+      "note": "安装 toolkit 并 source set_env.sh 后构建成功"
+    },
+    "ut": {
+      "status": "failed",
+      "duration_seconds": 28.84,
+      "total": 0,
+      "passed": 0,
+      "failed": 1,
+      "note": "已进入 UT 真实编译阶段，失败原因是 AddExample tiling UT 与公共测试桩接口不匹配",
+      "failure_stage": "compile",
+      "failure_reason": "test_add_example_tiling.cpp 调用的 gert::TilingContextPara 构造签名与 tiling_context_faker.h 不一致"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 4.27,
+      "executed": false,
+      "note": "样例路径已进入“Start compile and run examples file”阶段，但本轮未在保留产物的前提下完成自定义算子包安装与硬件态运行验证",
+      "failure_stage": "runtime_preparation"
+    },
+    "overall_status": "partial_success",
+    "summary": "根据文档下载并安装 Ascend-cann-toolkit 9.1.0 后，ops-cv 在 openEuler 24.03 LTS 容器中可以成功构建 AddExample 自定义算子包；UT 不再卡在环境依赖，而是暴露出 examples/add_example/tests/ut/op_host/test_add_example_tiling.cpp 与 tests/ut/common/tiling_context_faker.h 之间的源码级接口不匹配；sample 已推进到运行入口，但由于本轮未完成自定义包安装闭环和驱动/设备映射，未完成最终运行验证。"
+  },
+  "session_export_file": ""
+}
