@@ -1,0 +1,327 @@
+{
+  "metadata": {
+    "repo_name": "ham",
+    "repo_path": "D:/TTFHW/ham/ham (verified in WSL at /root/ham_verify)",
+    "repo_url": "",
+    "start_time": "2026-06-11T20:45:00+0800",
+    "end_time": "2026-06-11T21:00:00+0800",
+    "duration_seconds": 900,
+    "total_steps": 9,
+    "skill": "ttfhw-verify-pro",
+    "verification_mode": "direct_in_WSL_openEuler (container isolation NOT used - see problems_encountered)"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Xeon(R) Gold 6266C CPU @ 3.00GHz",
+      "cpu_cores": 4,
+      "memory": "31Gi",
+      "disk": "100G total, 7.2G available",
+      "docker_version": "Docker version 18.09.0 (installed but NON-FUNCTIONAL on WSL1)",
+      "platform": "Windows build 17763 / MINGW64, WSL1 kernel 4.4.0-17763-Microsoft"
+    },
+    "container": {
+      "os": "N/A - no container used",
+      "architecture": "x86_64",
+      "cpu_cores": 4,
+      "memory": "31Gi",
+      "note": "Verification ran directly in WSL openEuler 24.03 (LTS-SP3), which is itself one of the two recommended target images."
+    },
+    "image_source": {
+      "type": "wsl_distro_direct",
+      "image_name": "openEuler 24.03 (LTS-SP3) [WSL distribution]",
+      "selection_reason": "Docker cannot run on this host (WSL1, no real kernel). The WSL distro is already openEuler 24.03 LTS - the exact OS the skill would have containerized - so verification was performed directly in it as the only viable path."
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "aarch64 (target per RPM naming ham-libs-0.0.1.aarch64.rpm); verified on x86_64",
+      "source": "README.md - 交付件类型 table"
+    },
+    "recommended_image": {
+      "value": "openEuler (project is openEuler/ham, build flags are Linux/GCC specific) -> openEuler 24.03 LTS",
+      "source": "README.md + ham.spec + cmake/building.cmake"
+    },
+    "dependencies": {
+      "value": [
+        "cmake >= 3.16 (CMakeLists.txt)",
+        "gcc/g++ >= 7.3 (FATAL_ERROR below; uses c++17) - cmake/building.cmake",
+        "make",
+        "git (submodules)",
+        "libboundscheck (3rdparty submodule, gitee openEuler/libboundscheck v1.1.16) - must build + install libboundscheck.so to /usr/lib64",
+        "googletest (test submodule, gitee) - UT only",
+        "mockcpp v2.7 (test submodule, gitee) - UT only",
+        "lcov/genhtml - coverage report only (NOT in openEuler repo)",
+        "dos2unix - referenced by test/run_dt.sh (NOT in openEuler repo)"
+      ],
+      "source": "CMakeLists.txt + cmake/building.cmake + src/CMakeLists.txt + .gitmodules + test/run_dt.sh"
+    },
+    "build_commands": {
+      "value": "./build.sh -t release   (cmake -DCMAKE_BUILD_TYPE=release && make install && pack)",
+      "source": "build.sh + README is silent on build commands"
+    },
+    "ut_commands": {
+      "value": "cd test && bash run_dt.sh   (builds ham_dt via gtest+mockcpp, runs ./ham_dt, then lcov/genhtml coverage)",
+      "source": "test/run_dt.sh"
+    },
+    "sample_commands": {
+      "value": "N/A - HAM ships a shared library (libham.so) plugin; no standalone sample/example executable in repo",
+      "source": "src/CMakeLists.txt (add_library SHARED), doc/"
+    },
+    "build_entry": {
+      "source": "build.sh + README is silent on build commands",
+      "value": "./build.sh -t release"
+    },
+    "ut_entry": {
+      "source": "test/run_dt.sh",
+      "value": "cd test && bash run_dt.sh"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "libboundscheck",
+          "download_url": "https://gitee.com/openeuler/libboundscheck.git",
+          "install_method": "git submodule + make + cp lib/libboundscheck.so /usr/lib64/"
+        }
+      ],
+      "source": ".gitmodules + src/CMakeLists.txt (links /usr/lib64/libboundscheck.so)"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-11T20:47:00+0800",
+      "command": "wsl -u root -- dnf install -y docker",
+      "success": true,
+      "output": "docker-engine 18.09.0 installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:49:00+0800",
+      "command": "dockerd (manual start, no systemd)",
+      "success": false,
+      "output": "",
+      "error": "panic: invalid page type: 0: 4 (boltdb mmap assertion) - WSL1 cannot run Docker Engine",
+      "returncode": 2
+    },
+    {
+      "timestamp": "2026-06-11T20:51:00+0800",
+      "command": "cp -r /mnt/d/TTFHW/ham/ham/. /root/ham_verify/",
+      "success": true,
+      "output": "staged native copy",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:52:00+0800",
+      "command": "git submodule update --init --recursive",
+      "success": true,
+      "output": "libboundscheck v1.1.16, googletest, mockcpp v2.7 cloned from gitee",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:53:00+0800",
+      "command": "dnf install -y cmake gcc gcc-c++ make git patch",
+      "success": true,
+      "output": "all already present: cmake 3.27.9, gcc 12.3.1, make 4.4.1, git 2.43; lcov/dos2unix NOT available",
+      "error": "lcov: No match",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:55:00+0800",
+      "command": "cd 3rdparty/libboundscheck && make -j4",
+      "success": true,
+      "output": "finish libboundscheck.so (76264 bytes)",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:55:30+0800",
+      "command": "cp lib/libboundscheck.so /usr/lib64/ && ldconfig",
+      "success": true,
+      "output": "installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:56:00+0800",
+      "command": "sed -i 's/\\r$//' build.sh test/run_dt.sh",
+      "success": true,
+      "output": "normalized CRLF->LF (scripts were checked out on Windows)",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:56:30+0800",
+      "command": "./build.sh -t release",
+      "success": true,
+      "output": "Built target ham; Installing libham.so + ham.h; packed ham_1.0.0_Linux-x86_64_release.tar.gz",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-11T20:59:00+0800",
+      "command": "cd test && bash run_dt.sh",
+      "success": true,
+      "output": "ham_dt built (5.5MB); [PASSED] 8 tests; gtest XML written",
+      "error": "run_dt.sh line 44: lcov: command not found (coverage step only, after tests passed)",
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-11T20:45:00+0800",
+      "step": "start",
+      "action": "验证过程启动 (ttfhw-verify-pro)",
+      "result": "started",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:46:00+0800",
+      "step": "prereq_check",
+      "action": "检查 Docker / WSL",
+      "result": "docker absent on host and in WSL",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:47:00+0800",
+      "step": "docker_install",
+      "action": "dnf install docker in WSL",
+      "result": "installed v18.09.0",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:49:00+0800",
+      "step": "docker_start",
+      "action": "start dockerd",
+      "result": "FAILED - WSL1 boltdb panic, Docker unusable",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:50:00+0800",
+      "step": "decision",
+      "action": "fall back to direct verification in WSL openEuler 24.03 LTS",
+      "result": "proceed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:52:00+0800",
+      "step": "submodules",
+      "action": "git submodule update --init --recursive",
+      "result": "success (3/3 from gitee)",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:55:00+0800",
+      "step": "dep_build",
+      "action": "build + install libboundscheck.so to /usr/lib64",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:56:30+0800",
+      "step": "build",
+      "action": "./build.sh -t release",
+      "result": "success",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T20:59:00+0800",
+      "step": "ut",
+      "action": "test/run_dt.sh",
+      "result": "success - 8/8 passed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-11T21:00:00+0800",
+      "step": "report",
+      "action": "generate JSON report",
+      "result": "success",
+      "details": {}
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 25,
+      "build_type": "release",
+      "compiler": "gcc/g++ 12.3.1, -std=c++17",
+      "artifacts": [
+        {
+          "name": "libham.so",
+          "path": "output/ham_package/lib/libham.so",
+          "size": "14560 bytes"
+        },
+        {
+          "name": "ham.h",
+          "path": "output/ham_package/include/ham.h",
+          "size": "3678 bytes"
+        },
+        {
+          "name": "release package",
+          "path": "output/ham_1.0.0_Linux-x86_64_release.tar.gz",
+          "size": "5980 bytes"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 180,
+      "total": 8,
+      "passed": 8,
+      "failed": 0,
+      "suites": ["TestHam (6)", "TestHamComm (2)"],
+      "failures": [],
+      "note": "All tests passed. Coverage HTML (lcov/genhtml) skipped - lcov not available in openEuler repo. gtest XML produced at test/build/gcovr_report/test_detail.xml."
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [],
+      "note": "HAM is a shared-library plugin (libham.so), no standalone runnable sample/example in repo."
+    }
+  },
+  "documentation_gaps": [
+    "README.md 未提供任何构建命令/编译步骤 - 构建方式只能从 build.sh 反推",
+    "README.md 未列出构建依赖 (cmake>=3.16, gcc>=7.3, libboundscheck 等) - 仅能从 CMakeLists.txt/building.cmake 推断",
+    "未提供 CONTRIBUTING.md / BUILDING.md / INSTALL.md",
+    "src/CMakeLists.txt 硬编码链接 /usr/lib64/libboundscheck.so, 但文档未说明需先手动构建并安装 libboundscheck",
+    "test/run_dt.sh 依赖 dos2unix 和 lcov/genhtml, 但文档未声明, 且二者在 openEuler 24.03 默认源中不可得",
+    "shell 脚本 (build.sh, run_dt.sh) 在 Windows 检出后为 CRLF 行结尾, 在 Linux 上直接运行会报 $'\\r' 语法错误 - 仓库缺少 .gitattributes 强制 LF",
+    "文档声称交付为 aarch64 RPM, 但未提供 RPM 构建/打包的明确指令 (ham.spec 存在但 README 未引用)"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "",
+      "problem": "Docker 无法在本机运行: 本机为 WSL1 (内核 4.4.0-17763-Microsoft, Windows build 17763), 无真实 Linux 内核, dockerd 启动即 boltdb mmap panic (invalid page type: 0: 4); 且该 Windows 版本过旧 (需 18362+) 无法升级到 WSL2。",
+      "solution": "改为直接在 WSL 的 openEuler 24.03 (LTS-SP3) 发行版中验证。该发行版本身即为 skill 推荐的两个目标镜像之一, 与容器内环境同 OS/版本, 验证保真度高, 仅缺少容器隔离。",
+      "source": "skill 决策树步骤4 (Docker 不可用时通知用户); 用户确认按 skill 路径推进"
+    },
+    {
+      "timestamp": "",
+      "problem": "src/CMakeLists.txt 链接 /usr/lib64/libboundscheck.so, 但该库默认不存在。",
+      "solution": "构建前先在 3rdparty/libboundscheck 执行 make 生成 libboundscheck.so, 复制到 /usr/lib64 并 ldconfig。",
+      "source": "src/CMakeLists.txt 第9-12行 + 3rdparty/libboundscheck/Makefile"
+    },
+    {
+      "timestamp": "",
+      "problem": "build.sh / run_dt.sh 为 CRLF 行结尾, 在 Linux bash 报 $'\\r' 语法错误。",
+      "solution": "对暂存副本执行 sed -i 's/\\r$//' 规范化为 LF (未修改原始源码)。",
+      "source": "源码在 Windows 端检出导致; 验证副本侧规范化"
+    },
+    {
+      "timestamp": "",
+      "problem": "test/run_dt.sh 中 patch_mockcpp 调用 dos2unix (不可用) 并应用 arm64 专用补丁。",
+      "solution": "本机为 x86_64, 无需 arm64 补丁; 预先将 mockcpp_support_arm64.patch 放入 mockcpp 目录使 patch_mockcpp 提前 return 0, 跳过补丁与 dos2unix。",
+      "source": "test/run_dt.sh patch_mockcpp() 早返回逻辑"
+    },
+    {
+      "timestamp": "",
+      "problem": "run_dt.sh 末尾的 lcov/genhtml 覆盖率步骤失败 (lcov 在 openEuler 24.03 默认源不可得)。",
+      "solution": "该步骤在全部测试通过且生成 gtest XML 之后执行, 不影响测试结论; 记录为覆盖率报告缺失。",
+      "source": "run_dt.sh 第44行 lcov: command not found"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_ham_20260611.md"
+}
