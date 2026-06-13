@@ -1,0 +1,230 @@
+{
+  "元数据": {
+    "仓库地址": "https://gitcode.com/Ascend/MindSpeed-MM.git",
+    "本地源码路径": "/home/ttfhw4/mindspeed-mm/tmp_src",
+    "远程源码路径": "s30067059@192.168.9.121:/home/s30067059/mindspeed-mm-verify/tmp_src",
+    "容器名称": "ttfhw-mindspeed-mm-env",
+    "开始时间": "2026-06-13T10:45:00+08:00",
+    "结束时间": "2026-06-13T09:07:00+00:00",
+    "说明": "本报告为 MindSpeed-MM 仓库在远程 192.168.9.121 上使用官方 openEuler 24.03 镜像进行安装、单元测试和样例验证的中文说明版。"
+  },
+  "执行机器规格": {
+    "宿主机": {
+      "执行机器": "192.168.9.121",
+      "架构": "aarch64",
+      "CPU核数": 256,
+      "内存": "2.0Ti",
+      "根分区": "/dev/mapper/openeuler-root 69G 62G 3.6G 95% /",
+      "home分区": "/dev/mapper/openeuler-home 11T 4.2T 5.7T 43% /home",
+      "Docker版本": "Docker version 18.09.0, build 4d60db4",
+      "NPU": "8 张 910B4，npu-smi 25.5.1，Health 均为 OK"
+    },
+    "容器": {
+      "操作系统": "openEuler 24.03 (LTS-SP2)",
+      "架构": "aarch64",
+      "可见CPU核数": 256,
+      "可见内存": "2.0Ti",
+      "Python版本": "Python 3.11.14",
+      "pip版本": "pip 26.0.1",
+      "Ascend路径": [
+        "/usr/local/Ascend/ascend-toolkit",
+        "/usr/local/Ascend/cann",
+        "/usr/local/Ascend/cann-9.0.0",
+        "/usr/local/Ascend/driver",
+        "/usr/local/Ascend/firmware",
+        "/usr/local/Ascend/nnal"
+      ]
+    },
+    "镜像来源": {
+      "类型": "仓库官方提供镜像",
+      "镜像名称": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "镜像ID": "fca520f737e4",
+      "镜像大小": "19.4GB",
+      "选择原因": "README 与 docs/zh/pytorch/install_guide.md 推荐 MindSpeed MM 26.0.0 Atlas A2/910B openEuler24.03 py3.11 aarch64 镜像；用户也明确要求使用仓库提供镜像。"
+    }
+  },
+  "文档阅读摘要": {
+    "架构要求": {
+      "值": "官方当前提供 openEuler 24.03 + aarch64 镜像；Dockerfile 声明支持 x86_64 与 aarch64。",
+      "来源": "docker/Dockerfile；docker/OVERVIEW.zh.md；docs/zh/pytorch/install_guide.md"
+    },
+    "官方安装方式": {
+      "镜像安装": "使用官方 mindspeed-mm 镜像，容器中已预装 CANN、PyTorch、torch_npu、基础环境。",
+      "源码安装": "文档要求额外获取 Megatron-LM，拷贝 megatron 目录到 MindSpeed-MM；再获取并安装 MindSpeed；最后 pip install -e . 安装 MindSpeed-MM。",
+      "来源": "docs/zh/pytorch/install_guide.md"
+    },
+    "构建命令": {
+      "值": "pip install -e .",
+      "来源": "docs/zh/pytorch/install_guide.md"
+    },
+    "单元测试命令": {
+      "值": "pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
+      "来源": "tests/ut 目录与 pytest 配置；README 未提供统一 UT 命令。"
+    },
+    "样例命令": {
+      "值": "mm-convert --help",
+      "来源": "pyproject.toml 中 project.scripts 定义了 mm-convert 入口。"
+    },
+    "特殊依赖": [
+      {
+        "名称": "CANN",
+        "版本": "9.0.0，官方镜像内置",
+        "安装方式": "通过官方 MindSpeed-MM 容器镜像预装；运行前需 source /usr/local/Ascend/cann/set_env.sh。"
+      },
+      {
+        "名称": "NPU驱动和固件",
+        "安装方式": "宿主机安装后按文档挂载到容器。"
+      },
+      {
+        "名称": "Megatron-LM",
+        "版本": "core_v0.12.1",
+        "安装方式": "git clone https://github.com/NVIDIA/Megatron-LM.git && git checkout core_v0.12.1 && cp -r megatron /workspace/MindSpeed-MM-verify/"
+      },
+      {
+        "名称": "MindSpeed",
+        "版本": "26.0.0_core_r0.12.1 / package version 0.12.1",
+        "安装方式": "git clone https://gitcode.com/Ascend/MindSpeed.git && git checkout 26.0.0_core_r0.12.1 && pip install -r requirements.txt && pip install -e ."
+      }
+    ]
+  },
+  "执行日志": [
+    {
+      "步骤": "拉取官方镜像",
+      "命令": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "结果": "成功",
+      "说明": "镜像 ID fca520f737e4，大小约 19.4GB。"
+    },
+    {
+      "步骤": "停止已有容器",
+      "命令": "docker stop dist_67 dist_45 dist_01 dist_23",
+      "结果": "成功",
+      "说明": "按用户要求先停止运行中的 dist 容器。"
+    },
+    {
+      "步骤": "创建验证容器",
+      "命令": "docker run -dit --ipc=host --network host --privileged ... 官方镜像 /bin/bash",
+      "结果": "成功",
+      "说明": "容器名称 ttfhw-mindspeed-mm-env，挂载 Ascend 驱动、固件、npu-smi 和源码目录。"
+    },
+    {
+      "步骤": "验证 NPU 可见性",
+      "命令": "npu-smi info",
+      "结果": "成功",
+      "说明": "8 张 910B4 均可见，Health 均为 OK。"
+    },
+    {
+      "步骤": "source Ascend 环境并验证 torch_npu",
+      "命令": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && python -c \"import torch; import torch_npu\"",
+      "结果": "成功",
+      "说明": "torch 版本 2.7.1+cpu，torch_npu 版本 2.7.1.post4。此前未 source 时导入失败，source 后已确认正常。"
+    },
+    {
+      "步骤": "安装 MindSpeed-MM",
+      "命令": "pip install -e .",
+      "结果": "成功",
+      "耗时秒": 785.105,
+      "说明": "安装 mindspeed-mm-0.1 成功；镜像预配置的 Ascend PyPI 源存在证书过期告警，但主华为云 PyPI 源可用。"
+    },
+    {
+      "步骤": "安装 Megatron-LM",
+      "命令": "git clone https://github.com/NVIDIA/Megatron-LM.git && git checkout core_v0.12.1 && cp -r megatron /workspace/MindSpeed-MM-verify/",
+      "结果": "成功",
+      "说明": "仓库本身不自带 megatron 目录，按官方安装指导额外获取并拷贝。"
+    },
+    {
+      "步骤": "安装 MindSpeed",
+      "命令": "git clone https://gitcode.com/Ascend/MindSpeed.git && git checkout 26.0.0_core_r0.12.1 && pip install -r requirements.txt && pip install -e .",
+      "结果": "成功",
+      "说明": "安装 mindspeed-0.12.1 成功；安装过程中 numpy 降级到 1.26.0，scipy 调整到 1.16.3。"
+    },
+    {
+      "步骤": "复测模块导入",
+      "命令": "python -c \"import megatron, mindspeed, torch_npu\"",
+      "结果": "成功",
+      "说明": "Megatron-LM、MindSpeed、torch_npu 均可正常导入。"
+    },
+    {
+      "步骤": "运行全量 UT",
+      "命令": "pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
+      "结果": "部分通过",
+      "耗时秒": 113.981,
+      "说明": "安装 Megatron-LM 和 MindSpeed 后，全量 UT 结果为 506 passed, 19 failed, 2 skipped。"
+    },
+    {
+      "步骤": "8卡可见复跑 chunkloss 单测",
+      "命令": "export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 && pytest -q tests/ut/loss/test_chunkloss.py -s --tb=short",
+      "结果": "失败",
+      "耗时秒": 52.827,
+      "说明": "3 个 chunkloss 测试仍然 OOM；日志显示实际均使用 NPU 0，说明该 pytest 调用没有启用分布式/张量并行，多卡可见不会自动分摊单测张量。"
+    },
+    {
+      "步骤": "样例 smoke",
+      "命令": "mm-convert --help",
+      "结果": "成功",
+      "耗时秒": 13.761,
+      "说明": "命令行入口可运行并输出 converter 子命令列表。"
+    }
+  ],
+  "最终结果": {
+    "构建安装": {
+      "状态": "成功",
+      "说明": "官方镜像启动成功；MindSpeed-MM、Megatron-LM、MindSpeed 均按官方指导安装完成。"
+    },
+    "环境验证": {
+      "状态": "成功",
+      "说明": "source Ascend 环境变量后 torch_npu 可正常导入；8 张 NPU 可见且健康。"
+    },
+    "单元测试": {
+      "状态": "部分成功",
+      "安装Megatron前": "61 passed, 32 failed, 39 errors",
+      "安装Megatron和MindSpeed后": "506 passed, 19 failed, 2 skipped",
+      "剩余失败原因": [
+        "缺少 /home/ci_resource 下的 CI 数据、模型和 checkpoint 资源。",
+        "部分 text encoder / tokenizer 测试依赖本地模型路径或 HuggingFace repo 配置，当前环境未提供。",
+        "test_chunkloss.py 在单进程 pytest 下实际使用 NPU 0，触发单卡 OOM；8卡可见也不会自动进行张量分片。"
+      ]
+    },
+    "样例": {
+      "状态": "成功",
+      "说明": "mm-convert --help 可正常运行。"
+    }
+  },
+  "文档缺失或不完整项": [
+    "README 未提供仓库级统一 UT 命令，需要从 tests 目录和 pytest 配置推断。",
+    "官方镜像文档说明镜像包含基础环境，但完整 UT 仍需按源码安装指导额外获取 Megatron-LM 和 MindSpeed。",
+    "全量 UT 依赖 /home/ci_resource 资源，但公开文档未说明该资源如何获取。",
+    "chunkloss 单测需要较大 NPU 显存，且普通 pytest 方式不会自动使用 8 卡并行；文档未说明该类测试的推荐执行方式。"
+  ],
+  "遇到的问题和处理": [
+    {
+      "问题": "未 source Ascend 环境时 torch_npu 导入失败。",
+      "处理": "执行 source /usr/local/Ascend/cann/set_env.sh 和 source /usr/local/Ascend/nnal/atb/set_env.sh 后，torch_npu 导入成功。",
+      "结论": "应在报告中记录为需要 source 环境变量，而不是确定的镜像/驱动不匹配。"
+    },
+    {
+      "问题": "仓库不自带 megatron，导致全量 UT 大量失败。",
+      "处理": "按官方文档获取 Megatron-LM core_v0.12.1 并拷贝 megatron 目录到 MindSpeed-MM。",
+      "结论": "问题解决，导入 megatron 成功，全量 UT 从 61 passed 提升到 506 passed。"
+    },
+    {
+      "问题": "缺少 MindSpeed 模块。",
+      "处理": "按官方文档获取 MindSpeed 26.0.0_core_r0.12.1 并 pip install -e .。",
+      "结论": "mindspeed 可正常导入。"
+    },
+    {
+      "问题": "全量 UT 剩余 19 个失败。",
+      "处理": "归类为 CI 资源缺失、模型/checkpoint 缺失、HuggingFace/model path 配置缺失、chunkloss 单卡 OOM。",
+      "结论": "剩余失败主要是资源和执行方式问题，不是基础安装失败。"
+    },
+    {
+      "问题": "8卡可见后 chunkloss 仍 OOM。",
+      "处理": "设置 ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 单独复跑 chunkloss。",
+      "结论": "测试仍在 NPU 0 上分配大张量，普通 pytest 未启用分布式/张量并行，记录为单卡问题。"
+    },
+    {
+      "问题": "Ascend PyPI 镜像源证书过期。",
+      "处理": "pip 自动跳过该源并从 repo.huaweicloud.com 下载依赖。",
+      "结论": "有告警但未阻断安装。"
+    }
+  ]
+}
