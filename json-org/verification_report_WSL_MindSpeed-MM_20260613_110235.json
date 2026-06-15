@@ -1,0 +1,523 @@
+{
+  "metadata": {
+    "repo_url": "https://gitcode.com/Ascend/MindSpeed-MM.git",
+    "repo_path_local": "/home/ttfhw4/mindspeed-mm/tmp_src",
+    "repo_path_remote": "s30067059@192.168.9.121:/home/s30067059/mindspeed-mm-verify/tmp_src",
+    "container_name": "ttfhw-mindspeed-mm-env",
+    "start_time": "2026-06-13T10:45:00+08:00",
+    "end_time": "2026-06-13T09:07:00+08:00",
+    "duration_seconds": 1055,
+    "total_steps": 9,
+    "total_duration_seconds": 2532
+  },
+  "machine_spec": {
+    "host_machine": {
+      "execution_host": "192.168.9.121",
+      "architecture": "aarch64",
+      "kernel": "Linux localhost.localdomain 5.10.0-60.139.0.166.oe2203.aarch64 #1 SMP Thu May 30 05:18:35 UTC 2024 aarch64",
+      "cpu_cores": 256,
+      "memory": "2.0Ti",
+      "disk_root": "/dev/mapper/openeuler-root 69G 62G 3.6G 95% /",
+      "disk_home": "/dev/mapper/openeuler-home 11T 4.2T 5.7T 43% /home",
+      "docker_version": "Docker version 18.09.0, build 4d60db4",
+      "npu": "8 x 910B4, npu-smi 25.5.1, all Health OK"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS-SP2)",
+      "architecture": "aarch64",
+      "cpu_cores": 256,
+      "memory": "2.0Ti visible",
+      "python": "Python 3.11.14",
+      "pip": "pip 26.0.1 from /opt/conda/lib/python3.11/site-packages/pip",
+      "ascend_paths": [
+        "/usr/local/Ascend/ascend-toolkit",
+        "/usr/local/Ascend/cann",
+        "/usr/local/Ascend/cann-9.0.0",
+        "/usr/local/Ascend/driver",
+        "/usr/local/Ascend/firmware",
+        "/usr/local/Ascend/nnal"
+      ]
+    },
+    "image_source": {
+      "type": "repository_provided_official_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "image_id": "fca520f737e4",
+      "image_size": "19.4GB",
+      "selection_reason": "README/install_guide.md 方式一：镜像安装 recommends MindSpeed MM 26.0.0 Atlas A2/910b openEuler24.03 py3.11 aarch64 image; docker/OVERVIEW.zh.md states current official image is openEuler 24.03 aarch64. User explicitly requested repository-provided image."
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "aarch64 for current official image; Dockerfile supports x86_64 and aarch64",
+      "source": "docs/zh/pytorch/install_guide.md lines 48-63; docker/Dockerfile lines 3-5; docker/OVERVIEW.zh.md lines 17-28"
+    },
+    "recommended_image": {
+      "value": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "source": "docs/zh/pytorch/install_guide.md lines 48-63 plus docker/OVERVIEW.zh.md lines 26-28"
+    },
+    "dependencies": {
+      "value": [
+        "NPU driver and firmware",
+        "CANN Toolkit/ops/NNAL",
+        "PyTorch 2.7.1",
+        "torch_npu 2.7.1",
+        "Megatron-LM core_v0.12.1",
+        "MindSpeed 26.0.0_core_r0.12.1",
+        "Python >= 3.10",
+        "pyproject dependencies: numpy, av, ftfy, bs4, beartype, timm==1.0.8, pandas==2.0.3, torch==2.7.1, torchvision, torchdata, diffusers==0.30.3, transformers==4.57.0, accelerate==0.32.1, pandarallel, datasets, qwen_vl_utils, imageio, imageio-ffmpeg, peft==0.7.1, pydantic>=2.10.4, jsonargparse[all]>=4.40.0, gpytorch, orjson, rich, pybind11, ninja, wheel, six, regex, decorator, attrs, psutil, pyyaml, protobuf, einops, scipy, pytest-mock, scikit-learn, SQLAlchemy"
+      ],
+      "source": "README.md version table lines 200-210; docs/zh/pytorch/install_guide.md lines 28-46, 204-257; pyproject.toml lines 12-52"
+    },
+    "build_commands": {
+      "value": "pip install -e .",
+      "source": "docs/zh/pytorch/install_guide.md lines 254-258"
+    },
+    "ut_commands": {
+      "value": "pytest tests/ut (inferred from test tree and pytest usage); CPU-safe subset: TORCH_DEVICE_BACKEND_AUTOLOAD=0 pytest -q tests/ut/test_aspect_ratio.py",
+      "source": "tests/conftest.py and tests/ut/*.py; tests/README.md; docs do not provide a single explicit UT command"
+    },
+    "sample_commands": {
+      "value": "mm-convert --help as installed CLI smoke sample; README quickstart points to model-specific examples requiring weights/datasets/NPU training setup",
+      "source": "pyproject.toml project.scripts lines 82-84; README.md quickstart lines 225-230"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "CANN",
+          "version": "9.0.0 in official image",
+          "download_url": "https://www.hiascend.com/developer/ascendhub/detail/6857f6fc2cfa4a678710a7075426ee5e",
+          "install_method": "preinstalled in official MindSpeed MM container image"
+        },
+        {
+          "name": "NPU firmware/driver",
+          "download_url": "https://hiascend.com/hardware/firmware-drivers/community",
+          "install_method": "host-mounted into container per install guide docker run command"
+        },
+        {
+          "name": "Triton-Ascend",
+          "download_url": "https://triton-ascend.osinfra.cn/pypi/simple",
+          "install_method": "pip install triton-ascend==3.2.1 --extra-index-url=https://triton-ascend.osinfra.cn/pypi/simple (documented, not needed for smoke commands)"
+        }
+      ],
+      "source": "docs/zh/pytorch/install_guide.md lines 36-44, 48-63, 260-269"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-13T10:45:00+08:00",
+      "step": "拉取官方镜像",
+      "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "Digest sha256:e3a4bc8ecda94eebca04b0ff7e9155f7f688c26c6fbf1d7bc57c1226b803c408; downloaded newer image; image ID fca520f737e4"
+    },
+    {
+      "timestamp": "2026-06-13T10:46:00+08:00",
+      "step": "停止已有容器",
+      "command": "docker stop dist_67 dist_45 dist_01 dist_23",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "Stopped dist_67, dist_45, dist_01, dist_23"
+    },
+    {
+      "timestamp": "2026-06-13T10:48:00+08:00",
+      "step": "克隆源码到远程",
+      "command": "git clone https://gitcode.com/Ascend/MindSpeed-MM.git /home/s30067059/mindspeed-mm-verify/tmp_src",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "Repository cloned on remote host; branch 26.0.0, commit 9e6ca6ca"
+    },
+    {
+      "timestamp": "2026-06-13T10:50:00+08:00",
+      "step": "启动容器",
+      "command": "docker run -dit --ipc=host --network host --name ttfhw-mindspeed-mm-env --privileged -v /usr/local/Ascend/driver:/usr/local/Ascend/driver -v /usr/local/Ascend/firmware:/usr/local/Ascend/firmware -v /usr/local/sbin/:/usr/local/sbin/ -v /usr/local/dcmi:/usr/local/dcmi -v /usr/local/bin/npu-smi:/usr/local/bin/npu-smi -v /etc/ascend_install.info:/etc/ascend_install.info -v /home/s30067059/mindspeed-mm-verify/tmp_src:/workspace/MindSpeed-MM-verify -w /workspace/MindSpeed-MM-verify <image> /bin/bash",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "Container 351ad971507d started; OS openEuler 24.03 (LTS-SP2), aarch64, Python 3.11.14"
+    },
+    {
+      "timestamp": "2026-06-13T10:51:00+08:00",
+      "step": "验证NPU可见性",
+      "command": "npu-smi info",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "8 x 910B4 visible, all Health OK, no running NPU processes"
+    },
+    {
+      "timestamp": "2026-06-13T10:52:00+08:00",
+      "step": "验证torch和torch_npu导入（未source）",
+      "command": "python -c 'import torch; import torch_npu'",
+      "success": false,
+      "returncode": 1,
+      "duration_seconds": null,
+      "output": "ImportError: libruntime_common.so undefined symbol; RuntimeError: Failed to load backend extension torch_npu"
+    },
+    {
+      "timestamp": "2026-06-13T10:53:00+08:00",
+      "step": "安装MindSpeed-MM（pip install -e .）",
+      "command": "cd /workspace/MindSpeed-MM-verify && time pip install -e .",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 785.105,
+      "real_seconds": 785.105,
+      "user_seconds": 148.152,
+      "sys_seconds": 9.664,
+      "output": "Successfully installed mindspeed-mm-0.1 and dependencies; expired SSL cert warning for mirrors.huaweicloud.com but packages downloaded from repo.huaweicloud.com"
+    },
+    {
+      "timestamp": "2026-06-13T10:58:00+08:00",
+      "step": "轻量UT测试（aspect_ratio）",
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 pytest -q tests/ut/test_aspect_ratio.py",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 0.681,
+      "real_seconds": 0.681,
+      "user_seconds": 0.651,
+      "sys_seconds": 0.028,
+      "output": "20 passed in 0.09s"
+    },
+    {
+      "timestamp": "2026-06-13T11:01:00+08:00",
+      "step": "样例smoke命令（mm-convert --help）",
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 mm-convert --help",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 13.761,
+      "real_seconds": 13.761,
+      "user_seconds": 22.211,
+      "sys_seconds": 2.009,
+      "output": "CLI help printed; converter subcommands listed"
+    },
+    {
+      "timestamp": "2026-06-13T11:01:30+08:00",
+      "step": "全量UT（安装Megatron前）",
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
+      "success": false,
+      "returncode": 1,
+      "duration_seconds": 17.023,
+      "real_seconds": 17.023,
+      "user_seconds": 23.835,
+      "sys_seconds": 1.939,
+      "output": "61 passed, 32 failed, 39 errors in 13.62s; main failure: ModuleNotFoundError: No module named 'megatron'"
+    },
+    {
+      "timestamp": "2026-06-13T08:00:00+00:00",
+      "step": "获取并安装Megatron-LM",
+      "command": "git clone https://github.com/NVIDIA/Megatron-LM.git && cd Megatron-LM && git checkout core_v0.12.1 && cp -r megatron /workspace/MindSpeed-MM-verify/",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "Megatron-LM core_v0.12.1 cloned and megatron directory copied to MindSpeed-MM-verify"
+    },
+    {
+      "timestamp": "2026-06-13T08:00:00+00:00",
+      "step": "获取并安装MindSpeed",
+      "command": "git clone https://gitcode.com/Ascend/MindSpeed.git && cd MindSpeed && git checkout 26.0.0_core_r0.12.1 && pip install -r requirements.txt && pip install -e .",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 42.731,
+      "real_seconds": 42.731,
+      "user_seconds": 10.664,
+      "sys_seconds": 1.4,
+      "output": "pip install -r requirements.txt: numpy 降级到 1.26.0, scipy 调整到 1.16.3"
+    },
+    {
+      "timestamp": "2026-06-13T08:01:00+00:00",
+      "step": "安装MindSpeed（pip install -e .）",
+      "command": "cd /workspace/MindSpeed && pip install -e .",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": 63.371,
+      "real_seconds": 63.371,
+      "user_seconds": 47.06,
+      "sys_seconds": 7.597,
+      "output": "Successfully installed mindspeed-0.12.1"
+    },
+    {
+      "timestamp": "2026-06-13T08:02:00+00:00",
+      "step": "验证Megatron/MindSpeed/torch_npu导入（source后）",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && python -c 'import megatron, mindspeed, torch_npu'",
+      "success": true,
+      "returncode": 0,
+      "duration_seconds": null,
+      "output": "imports ok; torch 2.7.1+cpu; torch_npu 2.7.1.post4"
+    },
+    {
+      "timestamp": "2026-06-13T08:03:00+00:00",
+      "step": "全量UT复测（安装Megatron和MindSpeed后）",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
+      "success": false,
+      "returncode": 1,
+      "duration_seconds": 113.981,
+      "real_seconds": 113.981,
+      "user_seconds": 2499.53,
+      "sys_seconds": 53.517,
+      "output": "506 passed, 19 failed, 2 skipped, 39 warnings in 102.34s"
+    },
+    {
+      "timestamp": "2026-06-13T09:05:42+00:00",
+      "step": "8卡可见复跑chunkloss测试",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 && pytest -q tests/ut/loss/test_chunkloss.py -s --tb=short",
+      "success": false,
+      "returncode": 1,
+      "duration_seconds": 52.827,
+      "real_seconds": 52.827,
+      "user_seconds": 33.702,
+      "sys_seconds": 8.988,
+      "output": "3 failed (NPU OOM on NPU 0); tests still used NPU 0 only despite 8-card visibility; no distributed/tensor parallelism was used"
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-13T10:45:00+08:00",
+      "step": "拉取官方镜像",
+      "action": "Pulled repository-provided official image",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T10:46:00+08:00",
+      "step": "停止已有容器",
+      "action": "Stopped running dist containers",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T10:48:00+08:00",
+      "step": "克隆源码到远程",
+      "action": "Cloned repository on remote server",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T10:50:00+08:00",
+      "step": "启动容器",
+      "action": "Started official MindSpeed MM container with NPU/Ascend mounts",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T10:51:00+08:00",
+      "step": "验证NPU可见性",
+      "action": "Collected host/container specs and NPU visibility",
+      "result": "NPU visible; torch_npu import failed (before source)",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T10:53:00+08:00",
+      "step": "安装MindSpeed-MM",
+      "action": "pip install -e .",
+      "result": "success",
+      "duration_seconds": 785.105
+    },
+    {
+      "timestamp": "2026-06-13T11:00:00+08:00",
+      "step": "轻量UT测试",
+      "action": "pytest tests/ut/test_aspect_ratio.py (CPU-safe subset)",
+      "result": "20 passed",
+      "duration_seconds": 0.681
+    },
+    {
+      "timestamp": "2026-06-13T11:01:00+08:00",
+      "step": "样例smoke",
+      "action": "mm-convert --help",
+      "result": "success",
+      "duration_seconds": 13.761
+    },
+    {
+      "timestamp": "2026-06-13T11:01:30+08:00",
+      "step": "全量UT（安装Megatron前）",
+      "action": "pytest tests/ut (before Megatron installed)",
+      "result": "61 passed, 32 failed, 39 errors",
+      "duration_seconds": 17.023
+    },
+    {
+      "timestamp": "2026-06-13T08:00:00+00:00",
+      "step": "获取并安装Megatron-LM",
+      "action": "git clone Megatron-LM && cp -r megatron to MindSpeed-MM-verify",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T08:00:00+00:00",
+      "step": "获取并安装MindSpeed",
+      "action": "git clone MindSpeed && pip install -r requirements.txt && pip install -e .",
+      "result": "success",
+      "duration_seconds": 42.731
+    },
+    {
+      "timestamp": "2026-06-13T08:02:00+00:00",
+      "step": "安装MindSpeed（editable）",
+      "action": "pip install -e .",
+      "result": "success",
+      "duration_seconds": 63.371
+    },
+    {
+      "timestamp": "2026-06-13T08:02:00+00:00",
+      "step": "验证模块导入（source后）",
+      "action": "source Ascend env && import megatron, mindspeed, torch_npu",
+      "result": "success",
+      "duration_seconds": null
+    },
+    {
+      "timestamp": "2026-06-13T08:03:00+00:00",
+      "step": "全量UT复测（安装Megatron后）",
+      "action": "pytest tests/ut (after Megatron+MindSpeed installed)",
+      "result": "506 passed, 19 failed, 2 skipped",
+      "duration_seconds": 113.981
+    },
+    {
+      "timestamp": "2026-06-13T09:05:42+00:00",
+      "step": "8卡可见复跑chunkloss",
+      "action": "ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 pytest tests/ut/loss/test_chunkloss.py",
+      "result": "3 failed NPU OOM on NPU 0",
+      "duration_seconds": 52.827
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 785.105,
+      "artifacts": [
+        {
+          "name": "mindspeed-mm",
+          "path": "/opt/conda/lib/python3.11/site-packages/mindspeed_mm-0.1.dist-info or editable install",
+          "size": "not measured"
+        },
+        {
+          "name": "mm-convert",
+          "path": "/opt/conda/bin/mm-convert",
+          "size": "console script"
+        }
+      ]
+    },
+    "ut": {
+      "status": "partial_success",
+      "duration_seconds": 113.981,
+      "total": 527,
+      "passed": 506,
+      "failed": 19,
+      "skipped": 2,
+      "warnings": 39,
+      "duration_readable": "102.34s (pytest clock)",
+      "real_time_seconds": 113.981,
+      "ut_before_megatron": {
+        "command": "pytest tests/ut (before Megatron installed)",
+        "duration_seconds": 17.023,
+        "total": 132,
+        "passed": 61,
+        "failed": 32,
+        "errors": 39
+      },
+      "ut_subset": {
+        "command": "pytest tests/ut/test_aspect_ratio.py",
+        "duration_seconds": 0.681,
+        "total": 20,
+        "passed": 20,
+        "failed": 0
+      },
+      "failures_by_category": [
+        {
+          "category": "缺少CI资源/checkpoint",
+          "count": 14,
+          "tests": [
+            "tests/ut/data/data_utils/test_utils.py::TestDataFileReader (2)",
+            "tests/ut/models/ae/test_ae_processor.py (1)",
+            "tests/ut/models/audio_encoder/test_audio_encoder_processor.py (1)",
+            "tests/ut/models/text_encoder/test_text_encoder_processor.py (4)",
+            "tests/ut/models/text_encoder/test_tokenzier_processor.py (3)",
+            "tests/ut/models/vision/vision_encoders/test_qwen2vl_rope_processor.py (4)"
+          ],
+          "error_pattern": "FileNotFoundError: /home/ci_resource/...; HFValidationError: Repo id invalid path"
+        },
+        {
+          "category": "单卡NPU OOM（普通pytest未启用分布式）",
+          "count": 3,
+          "tests": [
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_default_vlm_loss",
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_per_sample_vlm_loss",
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_per_token_vlm_loss"
+          ],
+          "error_pattern": "torch.OutOfMemoryError: NPU out of memory, tried to allocate 9.26 GiB on NPU 0",
+          "note": "8卡可见复跑后仍只用NPU 0，单进程pytest未启用分布式/张量并行"
+        },
+        {
+          "category": "其他",
+          "count": 2,
+          "tests": [
+            "tests/ut/loss/test_chunkloss.py OOM",
+            "待确认"
+          ]
+        }
+      ],
+      "chunkloss_8card_visible": {
+        "status": "failed",
+        "duration_seconds": 52.827,
+        "real_seconds": 52.827,
+        "total": 3,
+        "passed": 0,
+        "failed": 3,
+        "visible_devices": "0,1,2,3,4,5,6,7",
+        "observed_device_usage": "所有OOM错误均报NPU 0；pytest未启用分布式/张量并行，多卡可见不会自动分摊张量",
+        "failures": [
+          "test_default_vlm_loss: torch.OutOfMemoryError on NPU 0, tried to allocate 9.26 GiB",
+          "test_per_sample_vlm_loss: torch.OutOfMemoryError on NPU 0, tried to allocate 9.26 GiB",
+          "test_per_token_vlm_loss: torch.OutOfMemoryError on NPU 0, tried to allocate 9.26 GiB"
+        ]
+      }
+    },
+    "sample": {
+      "status": "success",
+      "duration_seconds": 13.761,
+      "results": [
+        {
+          "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 mm-convert --help",
+          "status": "success",
+          "summary": "CLI command launched and printed available converter subcommands"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README points to quickstart/model docs but does not provide a single repository-level unit test command.",
+    "Install guide says one-click install installs Megatron-LM, MindSpeed and MindSpeed MM, but using the official image plus pip install -e . did not provide a usable megatron module for full UT.",
+    "Official image documentation does not mention the observed torch_npu import failure caused by an Ascend runtime symbol mismatch on this host.",
+    "pip config in the image includes https://mirrors.huaweicloud.com/ascend/repos/pypi, whose certificate appears expired in this environment, causing repeated SSL warnings."
+  ],
+  "problems_encountered": [
+    {
+      "problem": "Initial local rsync to remote failed due to permission/path issues and was slow when retried.",
+      "resolution": "Stopped rsync and cloned the GitCode repository directly on the remote server.",
+      "source": "Execution observation"
+    },
+    {
+      "problem": "torch_npu import failed in the official container despite NPU visibility.",
+      "error": "libruntime_common.so undefined symbol _ZN12ErrorManager19ATCReportErrMessageESsRKSt6vectorISsSaISsEES4_",
+      "resolution": "Recorded as environment/runtime mismatch; used TORCH_DEVICE_BACKEND_AUTOLOAD=0 for CPU-safe smoke and UT subset to avoid automatic torch_npu backend loading.",
+      "source": "Container command: python -c 'import torch; import torch_npu'"
+    },
+    {
+      "problem": "Configured Ascend PyPI mirror certificate expired.",
+      "error": "SSLCertVerificationError certificate has expired for https://mirrors.huaweicloud.com/ascend/repos/pypi",
+      "resolution": "pip continued using https://repo.huaweicloud.com/repository/pypi/simple and installation succeeded.",
+      "source": "pip install -e . log"
+    },
+    {
+      "problem": "Full unit test suite failed partially due to missing megatron module.",
+      "error": "ModuleNotFoundError: No module named 'megatron'",
+      "resolution": "Recorded as missing dependency/environment gap. Did not install extra dependencies outside documented official image + pip install -e . workflow.",
+      "source": "pytest tests/ut log"
+    },
+    {
+      "problem": "Chunkloss unit tests still OOM when all 8 NPUs are visible.",
+      "error": "All three failures report torch.OutOfMemoryError on NPU 0 while trying to allocate 9.26 GiB.",
+      "resolution": "Recorded as a single-card test-design/resource issue. ASCEND_RT_VISIBLE_DEVICES exposes 8 cards, but this pytest invocation does not initialize distributed/tensor parallel execution, so tensors are not sharded across 8 cards.",
+      "source": "/tmp/ttfhw_ut_chunkloss_8card.log"
+    }
+  ]
+}

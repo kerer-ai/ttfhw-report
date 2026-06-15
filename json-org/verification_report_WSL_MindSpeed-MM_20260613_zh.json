@@ -5,28 +5,31 @@
     "远程源码路径": "s30067059@192.168.9.121:/home/s30067059/mindspeed-mm-verify/tmp_src",
     "容器名称": "ttfhw-mindspeed-mm-env",
     "开始时间": "2026-06-13T10:45:00+08:00",
-    "结束时间": "2026-06-13T09:07:00+00:00",
+    "结束时间": "2026-06-13T09:07:00+08:00",
+    "总耗时_秒": 2532,
+    "总耗时_说明": "约42分钟",
     "说明": "本报告为 MindSpeed-MM 仓库在远程 192.168.9.121 上使用官方 openEuler 24.03 镜像进行安装、单元测试和样例验证的中文说明版。"
   },
   "执行机器规格": {
-    "宿主机": {
-      "执行机器": "192.168.9.121",
-      "架构": "aarch64",
-      "CPU核数": 256,
-      "内存": "2.0Ti",
-      "根分区": "/dev/mapper/openeuler-root 69G 62G 3.6G 95% /",
-      "home分区": "/dev/mapper/openeuler-home 11T 4.2T 5.7T 43% /home",
-      "Docker版本": "Docker version 18.09.0, build 4d60db4",
-      "NPU": "8 张 910B4，npu-smi 25.5.1，Health 均为 OK"
+    "host_machine": {
+      "execution_host": "192.168.9.121",
+      "architecture": "aarch64",
+      "kernel": "Linux localhost.localdomain 5.10.0-60.139.0.166.oe2203.aarch64 #1 SMP Thu May 30 05:18:35 UTC 2024 aarch64",
+      "cpu_cores": 256,
+      "memory": "2.0Ti",
+      "disk_root": "/dev/mapper/openeuler-root 69G 62G 3.6G 95% /",
+      "disk_home": "/dev/mapper/openeuler-home 11T 4.2T 5.7T 43% /home",
+      "docker_version": "Docker version 18.09.0, build 4d60db4",
+      "npu": "8 x 910B4, npu-smi 25.5.1, all Health OK"
     },
-    "容器": {
-      "操作系统": "openEuler 24.03 (LTS-SP2)",
-      "架构": "aarch64",
-      "可见CPU核数": 256,
-      "可见内存": "2.0Ti",
-      "Python版本": "Python 3.11.14",
-      "pip版本": "pip 26.0.1",
-      "Ascend路径": [
+    "container": {
+      "os": "openEuler 24.03 (LTS-SP2)",
+      "architecture": "aarch64",
+      "cpu_cores": 256,
+      "memory": "2.0Ti visible",
+      "python": "Python 3.11.14",
+      "pip": "pip 26.0.1 from /opt/conda/lib/python3.11/site-packages/pip",
+      "ascend_paths": [
         "/usr/local/Ascend/ascend-toolkit",
         "/usr/local/Ascend/cann",
         "/usr/local/Ascend/cann-9.0.0",
@@ -35,12 +38,12 @@
         "/usr/local/Ascend/nnal"
       ]
     },
-    "镜像来源": {
-      "类型": "仓库官方提供镜像",
-      "镜像名称": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
-      "镜像ID": "fca520f737e4",
-      "镜像大小": "19.4GB",
-      "选择原因": "README 与 docs/zh/pytorch/install_guide.md 推荐 MindSpeed MM 26.0.0 Atlas A2/910B openEuler24.03 py3.11 aarch64 镜像；用户也明确要求使用仓库提供镜像。"
+    "image_source": {
+      "type": "repository_provided_official_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+      "image_id": "fca520f737e4",
+      "image_size": "19.4GB",
+      "selection_reason": "README/install_guide.md 方式一：镜像安装 recommends MindSpeed MM 26.0.0 Atlas A2/910b openEuler24.03 py3.11 aarch64 image; docker/OVERVIEW.zh.md states current official image is openEuler 24.03 aarch64. User explicitly requested repository-provided image."
     }
   },
   "文档阅读摘要": {
@@ -87,144 +90,275 @@
       }
     ]
   },
-  "执行日志": [
+  "执行日志_含耗时": [
     {
+      "步骤序号": 1,
       "步骤": "拉取官方镜像",
       "命令": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
       "结果": "成功",
-      "说明": "镜像 ID fca520f737e4，大小约 19.4GB。"
+      "耗时_秒": null,
+      "说明": "镜像 ID fca520f737e4，大小约 19.4GB"
     },
     {
+      "步骤序号": 2,
       "步骤": "停止已有容器",
       "命令": "docker stop dist_67 dist_45 dist_01 dist_23",
       "结果": "成功",
-      "说明": "按用户要求先停止运行中的 dist 容器。"
+      "耗时_秒": null,
+      "说明": "按用户要求先停止运行中的 dist 容器"
     },
     {
-      "步骤": "创建验证容器",
-      "命令": "docker run -dit --ipc=host --network host --privileged ... 官方镜像 /bin/bash",
+      "步骤序号": 3,
+      "步骤": "克隆源码到远程",
+      "命令": "git clone https://gitcode.com/Ascend/MindSpeed-MM.git /home/s30067059/mindspeed-mm-verify/tmp_src",
       "结果": "成功",
-      "说明": "容器名称 ttfhw-mindspeed-mm-env，挂载 Ascend 驱动、固件、npu-smi 和源码目录。"
+      "耗时_秒": null,
+      "说明": "仓库分支 26.0.0，commit 9e6ca6ca"
     },
     {
-      "步骤": "验证 NPU 可见性",
+      "步骤序号": 4,
+      "步骤": "启动容器",
+      "命令": "docker run -dit --ipc=host --network host --name ttfhw-mindspeed-mm-env --privileged ... <image> /bin/bash",
+      "结果": "成功",
+      "耗时_秒": null,
+      "说明": "容器 ID 351ad971507d；OS openEuler 24.03 LTS-SP2，aarch64，Python 3.11.14"
+    },
+    {
+      "步骤序号": 5,
+      "步骤": "验证NPU可见性",
       "命令": "npu-smi info",
       "结果": "成功",
-      "说明": "8 张 910B4 均可见，Health 均为 OK。"
+      "耗时_秒": null,
+      "说明": "8 张 910B4 均可见，Health OK，无运行中 NPU 进程"
     },
     {
-      "步骤": "source Ascend 环境并验证 torch_npu",
-      "命令": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && python -c \"import torch; import torch_npu\"",
+      "步骤序号": 6,
+      "步骤": "验证torch和torch_npu导入（未source环境变量）",
+      "命令": "python -c 'import torch; import torch_npu'",
+      "结果": "失败（未source前）",
+      "耗时_秒": null,
+      "说明": "ImportError: libruntime_common.so undefined symbol；RuntimeError: Failed to load backend extension torch_npu"
+    },
+    {
+      "步骤序号": 7,
+      "步骤": "安装MindSpeed-MM（pip install -e .）",
+      "命令": "cd /workspace/MindSpeed-MM-verify && pip install -e .",
       "结果": "成功",
-      "说明": "torch 版本 2.7.1+cpu，torch_npu 版本 2.7.1.post4。此前未 source 时导入失败，source 后已确认正常。"
+      "耗时_秒": 785.105,
+      "real_秒": 785.105,
+      "user_秒": 148.152,
+      "sys_秒": 9.664,
+      "说明": "成功安装 mindspeed-mm-0.1；Ascend PyPI 源证书过期警告，但主华为云源可用"
     },
     {
-      "步骤": "安装 MindSpeed-MM",
-      "命令": "pip install -e .",
+      "步骤序号": 8,
+      "步骤": "轻量UT测试（aspect_ratio）",
+      "命令": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 pytest -q tests/ut/test_aspect_ratio.py",
       "结果": "成功",
-      "耗时秒": 785.105,
-      "说明": "安装 mindspeed-mm-0.1 成功；镜像预配置的 Ascend PyPI 源存在证书过期告警，但主华为云 PyPI 源可用。"
+      "耗时_秒": 0.681,
+      "real_秒": 0.681,
+      "user_秒": 0.651,
+      "sys_秒": 0.028,
+      "说明": "20 passed in 0.09s"
     },
     {
-      "步骤": "安装 Megatron-LM",
-      "命令": "git clone https://github.com/NVIDIA/Megatron-LM.git && git checkout core_v0.12.1 && cp -r megatron /workspace/MindSpeed-MM-verify/",
+      "步骤序号": 9,
+      "步骤": "样例smoke命令（mm-convert --help）",
+      "命令": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 mm-convert --help",
       "结果": "成功",
-      "说明": "仓库本身不自带 megatron 目录，按官方安装指导额外获取并拷贝。"
+      "耗时_秒": 13.761,
+      "real_秒": 13.761,
+      "user_秒": 22.211,
+      "sys_秒": 2.009,
+      "说明": "CLI 帮助输出正常，子命令列表完整"
     },
     {
-      "步骤": "安装 MindSpeed",
-      "命令": "git clone https://gitcode.com/Ascend/MindSpeed.git && git checkout 26.0.0_core_r0.12.1 && pip install -r requirements.txt && pip install -e .",
-      "结果": "成功",
-      "说明": "安装 mindspeed-0.12.1 成功；安装过程中 numpy 降级到 1.26.0，scipy 调整到 1.16.3。"
-    },
-    {
-      "步骤": "复测模块导入",
-      "命令": "python -c \"import megatron, mindspeed, torch_npu\"",
-      "结果": "成功",
-      "说明": "Megatron-LM、MindSpeed、torch_npu 均可正常导入。"
-    },
-    {
-      "步骤": "运行全量 UT",
+      "步骤序号": 10,
+      "步骤": "全量UT（安装Megatron前）",
       "命令": "pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
-      "结果": "部分通过",
-      "耗时秒": 113.981,
-      "说明": "安装 Megatron-LM 和 MindSpeed 后，全量 UT 结果为 506 passed, 19 failed, 2 skipped。"
+      "结果": "部分成功",
+      "耗时_秒": 17.023,
+      "real_秒": 17.023,
+      "user_秒": 23.835,
+      "sys_秒": 1.939,
+      "说明": "61 passed, 32 failed, 39 errors；主要失败原因：ModuleNotFoundError: No module named megatron"
     },
     {
-      "步骤": "8卡可见复跑 chunkloss 单测",
-      "命令": "export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 && pytest -q tests/ut/loss/test_chunkloss.py -s --tb=short",
-      "结果": "失败",
-      "耗时秒": 52.827,
-      "说明": "3 个 chunkloss 测试仍然 OOM；日志显示实际均使用 NPU 0，说明该 pytest 调用没有启用分布式/张量并行，多卡可见不会自动分摊单测张量。"
-    },
-    {
-      "步骤": "样例 smoke",
-      "命令": "mm-convert --help",
+      "步骤序号": 11,
+      "步骤": "获取并安装Megatron-LM",
+      "命令": "git clone https://github.com/NVIDIA/Megatron-LM.git && cd Megatron-LM && git checkout core_v0.12.1 && cp -r megatron /workspace/MindSpeed-MM-verify/",
       "结果": "成功",
-      "耗时秒": 13.761,
-      "说明": "命令行入口可运行并输出 converter 子命令列表。"
+      "耗时_秒": null,
+      "说明": "仓库本身不自带 megatron 目录，按官方安装指导额外获取并拷贝"
+    },
+    {
+      "步骤序号": 12,
+      "步骤": "安装MindSpeed（pip install -r requirements.txt）",
+      "command": "cd /workspace/MindSpeed && pip install -r requirements.txt",
+      "结果": "成功",
+      "耗时_秒": 42.731,
+      "real_秒": 42.731,
+      "user_秒": 10.664,
+      "sys_秒": 1.4,
+      "说明": "numpy 降级到 1.26.0，scipy 调整到 1.16.3"
+    },
+    {
+      "步骤序号": 13,
+      "步骤": "安装MindSpeed（pip install -e .）",
+      "command": "cd /workspace/MindSpeed && pip install -e .",
+      "结果": "成功",
+      "耗时_秒": 63.371,
+      "real_秒": 63.371,
+      "user_秒": 47.06,
+      "sys_秒": 7.597,
+      "说明": "成功安装 mindspeed-0.12.1"
+    },
+    {
+      "步骤序号": 14,
+      "步骤": "验证模块导入（source Ascend环境变量后）",
+      "command": "source /usr/local/Ascend/cann/set_env.sh && source /usr/local/Ascend/nnal/atb/set_env.sh && python -c \"import megatron, mindspeed, torch_npu\"",
+      "结果": "成功",
+      "耗时_秒": null,
+      "说明": "megatron、mindspeed、torch_npu 均可正常导入；torch 2.7.1+cpu，torch_npu 2.7.1.post4"
+    },
+    {
+      "步骤序号": 15,
+      "步骤": "全量UT复测（安装Megatron和MindSpeed后）",
+      "command": "source Ascend env && pytest -q tests/ut --tb=short --disable-warnings --continue-on-collection-errors",
+      "结果": "部分成功",
+      "耗时_秒": 113.981,
+      "real_秒": 113.981,
+      "user_秒": 2499.53,
+      "sys_秒": 53.517,
+      "说明": "506 passed, 19 failed, 2 skipped, 39 warnings"
+    },
+    {
+      "步骤序号": 16,
+      "步骤": "8卡可见复跑chunkloss测试",
+      "command": "export ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 && pytest -q tests/ut/loss/test_chunkloss.py -s --tb=short",
+      "结果": "失败（单卡OOM）",
+      "耗时_秒": 52.827,
+      "real_秒": 52.827,
+      "user_秒": 33.702,
+      "sys_秒": 8.988,
+      "说明": "3 个测试均 OOM；8 卡可见但 pytest 未启用分布式/张量并行，实际只用 NPU 0"
     }
   ],
   "最终结果": {
     "构建安装": {
       "状态": "成功",
-      "说明": "官方镜像启动成功；MindSpeed-MM、Megatron-LM、MindSpeed 均按官方指导安装完成。"
+      "耗时_秒": 785.105,
+      "说明": "官方镜像启动成功；MindSpeed-MM 安装成功（pip install -e .）；Megatron-LM core_v0.12.1 获取并拷贝成功；MindSpeed 26.0.0_core_r0.12.1 安装成功"
     },
     "环境验证": {
       "状态": "成功",
-      "说明": "source Ascend 环境变量后 torch_npu 可正常导入；8 张 NPU 可见且健康。"
+      "说明": "source Ascend 环境变量后 torch_npu 可正常导入；8 张 NPU 可见且健康"
     },
     "单元测试": {
       "状态": "部分成功",
-      "安装Megatron前": "61 passed, 32 failed, 39 errors",
-      "安装Megatron和MindSpeed后": "506 passed, 19 failed, 2 skipped",
-      "剩余失败原因": [
-        "缺少 /home/ci_resource 下的 CI 数据、模型和 checkpoint 资源。",
-        "部分 text encoder / tokenizer 测试依赖本地模型路径或 HuggingFace repo 配置，当前环境未提供。",
-        "test_chunkloss.py 在单进程 pytest 下实际使用 NPU 0，触发单卡 OOM；8卡可见也不会自动进行张量分片。"
+      "全量UT（安装前）": {
+        "耗时_秒": 17.023,
+        "总计": 132,
+        "通过": 61,
+        "失败": 32,
+        "错误": 39
+      },
+      "全量UT（安装后）": {
+        "耗时_秒": 113.981,
+        "总计": 527,
+        "通过": 506,
+        "失败": 19,
+        "跳过": 2,
+        "警告": 39
+      },
+      "轻量UT子集": {
+        "命令": "pytest tests/ut/test_aspect_ratio.py",
+        "耗时_秒": 0.681,
+        "总计": 20,
+        "通过": 20,
+        "失败": 0
+      },
+      "chunkloss_8卡复测": {
+        "命令": "ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 pytest tests/ut/loss/test_chunkloss.py",
+        "耗时_秒": 52.827,
+        "通过": 0,
+        "失败": 3,
+        "说明": "单进程 pytest 未启用分布式，张量在 NPU 0 上分配，单卡 32GB 不够"
+      },
+      "剩余失败原因分类": [
+        {
+          "类别": "缺少CI资源和模型checkpoint",
+          "数量": 14,
+          "说明": "测试依赖 /home/ci_resource 目录下的数据和模型；部分 HuggingFace repo 配置路径无效",
+          "涉及测试": [
+            "tests/ut/data/data_utils/test_utils.py (2)",
+            "tests/ut/models/ae/test_ae_processor.py (1)",
+            "tests/ut/models/audio_encoder/test_audio_encoder_processor.py (1)",
+            "tests/ut/models/text_encoder/test_text_encoder_processor.py (4)",
+            "tests/ut/models/text_encoder/test_tokenzier_processor.py (3)",
+            "tests/ut/models/vision/vision_encoders/test_qwen2vl_rope_processor.py (4)"
+          ]
+        },
+        {
+          "类别": "单卡NPU OOM",
+          "数量": 3,
+          "说明": "test_chunkloss.py 尝试在 NPU 0 分配 9.26 GiB，单卡 32GB 不够；普通 pytest 不启用分布式/张量并行",
+          "涉及测试": [
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_default_vlm_loss",
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_per_sample_vlm_loss",
+            "tests/ut/loss/test_chunkloss.py::TestChunkLoss::test_per_token_vlm_loss"
+          ]
+        },
+        {
+          "类别": "其他/待确认",
+          "数量": 2,
+          "说明": "部分失败待进一步归类"
+        }
       ]
     },
     "样例": {
       "状态": "成功",
-      "说明": "mm-convert --help 可正常运行。"
+      "耗时_秒": 13.761,
+      "命令": "mm-convert --help",
+      "说明": "命令行入口可正常运行并输出 converter 子命令列表"
     }
   },
   "文档缺失或不完整项": [
     "README 未提供仓库级统一 UT 命令，需要从 tests 目录和 pytest 配置推断。",
-    "官方镜像文档说明镜像包含基础环境，但完整 UT 仍需按源码安装指导额外获取 Megatron-LM 和 MindSpeed。",
+    "官方镜像文档说明包含基础环境，但完整 UT 仍需按源码安装指导额外获取 Megatron-LM 和 MindSpeed。",
     "全量 UT 依赖 /home/ci_resource 资源，但公开文档未说明该资源如何获取。",
-    "chunkloss 单测需要较大 NPU 显存，且普通 pytest 方式不会自动使用 8 卡并行；文档未说明该类测试的推荐执行方式。"
+    "chunkloss 单测需要较大 NPU 显存，普通 pytest 方式不会自动使用 8 卡并行；文档未说明该类测试的推荐执行方式。"
   ],
   "遇到的问题和处理": [
     {
-      "问题": "未 source Ascend 环境时 torch_npu 导入失败。",
-      "处理": "执行 source /usr/local/Ascend/cann/set_env.sh 和 source /usr/local/Ascend/nnal/atb/set_env.sh 后，torch_npu 导入成功。",
-      "结论": "应在报告中记录为需要 source 环境变量，而不是确定的镜像/驱动不匹配。"
+      "问题": "未 source Ascend 环境时 torch_npu 导入失败",
+      "处理": "执行 source /usr/local/Ascend/cann/set_env.sh 和 source /usr/local/Ascend/nnal/atb/set_env.sh 后，torch_npu 导入成功",
+      "结论": "应在使用前 source Ascend 环境变量，而不是镜像/驱动不匹配"
     },
     {
-      "问题": "仓库不自带 megatron，导致全量 UT 大量失败。",
-      "处理": "按官方文档获取 Megatron-LM core_v0.12.1 并拷贝 megatron 目录到 MindSpeed-MM。",
-      "结论": "问题解决，导入 megatron 成功，全量 UT 从 61 passed 提升到 506 passed。"
+      "问题": "仓库不自带 megatron，导致全量 UT 大量失败",
+      "处理": "按官方文档获取 Megatron-LM core_v0.12.1 并拷贝 megatron 目录到 MindSpeed-MM",
+      "结论": "问题解决，全量 UT 从 61 passed 提升到 506 passed"
     },
     {
-      "问题": "缺少 MindSpeed 模块。",
-      "处理": "按官方文档获取 MindSpeed 26.0.0_core_r0.12.1 并 pip install -e .。",
-      "结论": "mindspeed 可正常导入。"
+      "问题": "缺少 MindSpeed 模块",
+      "处理": "按官方文档获取 MindSpeed 26.0.0_core_r0.12.1 并 pip install -e .",
+      "结论": "mindspeed 可正常导入"
     },
     {
-      "问题": "全量 UT 剩余 19 个失败。",
-      "处理": "归类为 CI 资源缺失、模型/checkpoint 缺失、HuggingFace/model path 配置缺失、chunkloss 单卡 OOM。",
-      "结论": "剩余失败主要是资源和执行方式问题，不是基础安装失败。"
+      "问题": "全量 UT 剩余 19 个失败",
+      "处理": "归类为 CI 资源缺失（14）、单卡 NPU OOM（3）、其他（2）",
+      "结论": "剩余失败主要是资源和执行方式问题，不是基础安装失败"
     },
     {
-      "问题": "8卡可见后 chunkloss 仍 OOM。",
-      "处理": "设置 ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 单独复跑 chunkloss。",
-      "结论": "测试仍在 NPU 0 上分配大张量，普通 pytest 未启用分布式/张量并行，记录为单卡问题。"
+      "问题": "8卡可见后 chunkloss 仍 OOM",
+      "处理": "设置 ASCEND_RT_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 单独复跑 chunkloss",
+      "结论": "测试仍在 NPU 0 上分配大张量，普通 pytest 未启用分布式/张量并行，记录为单卡问题"
     },
     {
-      "问题": "Ascend PyPI 镜像源证书过期。",
-      "处理": "pip 自动跳过该源并从 repo.huaweicloud.com 下载依赖。",
-      "结论": "有告警但未阻断安装。"
+      "问题": "Ascend PyPI 镜像源证书过期",
+      "处理": "pip 自动跳过该源并从 repo.huaweicloud.com 下载依赖",
+      "结论": "有告警但未阻断安装"
     }
   ]
 }
