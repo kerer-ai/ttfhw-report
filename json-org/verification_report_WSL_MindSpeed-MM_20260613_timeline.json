@@ -1,0 +1,170 @@
+{
+  "报告标题": "MindSpeed-MM 仓库验证各阶段执行时间统计",
+  "时间说明": "以下时间均为北京时间 (CST, UTC+8)",
+  "验证时间范围": "2026-06-13 10:45:00 CST ~ 2026-06-13 11:09:00 CST",
+  "总耗时_秒": 1089.48,
+  "总耗时说明": "1089.5s (18.2min)",
+  "总阶段数": 16,
+  "阶段统计": [
+    {
+      "序号": 1,
+      "时间": "2026-06-13 10:45:00 CST",
+      "阶段名称": "拉取官方镜像",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "成功",
+      "摘要": "Digest sha256:e3a4bc8ecda94eebca04b0ff7e9155f7f688c26c6fbf1d7bc57c1226b803c408; downloaded newer image; image ID fca520f"
+    },
+    {
+      "序号": 2,
+      "时间": "2026-06-13 10:46:00 CST",
+      "阶段名称": "停止已有容器",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "成功",
+      "摘要": "Stopped dist_67, dist_45, dist_01, dist_23"
+    },
+    {
+      "序号": 3,
+      "时间": "2026-06-13 10:48:00 CST",
+      "阶段名称": "克隆源码到远程",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "成功",
+      "摘要": "Repository cloned on remote host; branch 26.0.0, commit 9e6ca6ca"
+    },
+    {
+      "序号": 4,
+      "时间": "2026-06-13 10:50:00 CST",
+      "阶段名称": "启动容器",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "成功",
+      "摘要": "Container 351ad971507d started; OS openEuler 24.03 (LTS-SP2), aarch64, Python 3.11.14"
+    },
+    {
+      "序号": 5,
+      "时间": "2026-06-13 10:51:00 CST",
+      "阶段名称": "验证NPU可见性",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "成功",
+      "摘要": "8 x 910B4 visible, all Health OK, no running NPU processes"
+    },
+    {
+      "序号": 6,
+      "时间": "2026-06-13 10:52:00 CST",
+      "阶段名称": "验证torch和torch_npu导入（未source）",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 0.0,
+      "结果": "失败",
+      "摘要": "ImportError: libruntime_common.so undefined symbol; RuntimeError: Failed to load backend extension torch_npu"
+    },
+    {
+      "序号": 7,
+      "时间": "2026-06-13 10:53:00 CST",
+      "阶段名称": "安装MindSpeed-MM（pip install -e .）",
+      "耗时_秒": 785.105,
+      "耗时说明": "785.105s",
+      "累计耗时_秒": 785.105,
+      "结果": "成功",
+      "摘要": "Successfully installed mindspeed-mm-0.1 and dependencies; expired SSL cert warning for mirrors.huaweicloud.com but packa"
+    },
+    {
+      "序号": 8,
+      "时间": "2026-06-13 10:58:00 CST",
+      "阶段名称": "轻量UT测试（aspect_ratio 20项）",
+      "耗时_秒": 0.681,
+      "耗时说明": "0.681s",
+      "累计耗时_秒": 785.786,
+      "结果": "成功",
+      "摘要": "20 passed in 0.09s"
+    },
+    {
+      "序号": 9,
+      "时间": "2026-06-13 11:01:00 CST",
+      "阶段名称": "样例smoke命令（mm-convert --help）",
+      "耗时_秒": 13.761,
+      "耗时说明": "13.761s",
+      "累计耗时_秒": 799.547,
+      "结果": "成功",
+      "摘要": "CLI help printed; converter subcommands listed"
+    },
+    {
+      "序号": 10,
+      "时间": "2026-06-13 11:01:30 CST",
+      "阶段名称": "全量UT（安装Megatron前）",
+      "耗时_秒": 17.023,
+      "耗时说明": "17.023s",
+      "累计耗时_秒": 816.57,
+      "结果": "失败",
+      "摘要": "61 passed, 32 failed, 39 errors in 13.62s; main failure: ModuleNotFoundError: No module named 'megatron'"
+    },
+    {
+      "序号": 11,
+      "时间": "2026-06-13 08:00:00 CST",
+      "阶段名称": "获取并安装Megatron-LM",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 816.57,
+      "结果": "成功",
+      "摘要": "Megatron-LM core_v0.12.1 cloned and megatron directory copied to MindSpeed-MM-verify"
+    },
+    {
+      "序号": 12,
+      "时间": "2026-06-13 08:00:00 CST",
+      "阶段名称": "获取并安装MindSpeed（requirements）",
+      "耗时_秒": 42.731,
+      "耗时说明": "42.731s",
+      "累计耗时_秒": 859.301,
+      "结果": "成功",
+      "摘要": "pip install -r requirements.txt: numpy 降级到 1.26.0, scipy 调整到 1.16.3"
+    },
+    {
+      "序号": 13,
+      "时间": "2026-06-13 08:01:00 CST",
+      "阶段名称": "安装MindSpeed（pip install -e .）",
+      "耗时_秒": 63.371,
+      "耗时说明": "63.371s",
+      "累计耗时_秒": 922.672,
+      "结果": "成功",
+      "摘要": "Successfully installed mindspeed-0.12.1"
+    },
+    {
+      "序号": 14,
+      "时间": "2026-06-13 08:02:00 CST",
+      "阶段名称": "验证模块导入（source Ascend环境后）",
+      "耗时_秒": null,
+      "耗时说明": "未记录",
+      "累计耗时_秒": 922.672,
+      "结果": "成功",
+      "摘要": "imports ok; torch 2.7.1+cpu; torch_npu 2.7.1.post4"
+    },
+    {
+      "序号": 15,
+      "时间": "2026-06-13 08:03:00 CST",
+      "阶段名称": "全量UT复测（安装Megatron后）",
+      "耗时_秒": 113.981,
+      "耗时说明": "113.981s",
+      "累计耗时_秒": 1036.653,
+      "结果": "失败",
+      "摘要": "506 passed, 19 failed, 2 skipped, 39 warnings in 102.34s"
+    },
+    {
+      "序号": 16,
+      "时间": "2026-06-13 09:05:42 CST",
+      "阶段名称": "8卡可见复跑chunkloss测试",
+      "耗时_秒": 52.827,
+      "耗时说明": "52.827s",
+      "累计耗时_秒": 1089.48,
+      "结果": "失败",
+      "摘要": "3 failed (NPU OOM on NPU 0); tests still used NPU 0 only despite 8-card visibility; no distributed/tensor parallelism wa"
+    }
+  ]
+}
