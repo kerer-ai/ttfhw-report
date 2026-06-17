@@ -29,8 +29,8 @@ function normStatus(s: any): string {
   if (t === 'failed' || t === 'fail' || t === 'failure' || t === 'unsuccessful' || t === '失败' || t === 'error') return 'failed'
   // 部分成功
   if (t === 'partial_success' || t === 'partial_failure' || t === 'partial' || t === 'incomplete' || t === 'mostly_passed' || t === 'completed_mostly' || t === '部分成功' || t === '部分通过' || t.includes('partial')) return 'partial_success'
-  // 无用例 (仓库没有测试)
-  if (t === 'not_available' || t === 'no_tests') return 'no_tests'
+  // 无用例 (仓库没有测试/示例)
+  if (t === 'not_available' || t === 'no_tests' || t === 'not_applicable') return 'no_tests'
   // 无法执行 / 跳过
   if (t === 'skipped' || t === 'not_run' || t === 'not_executed' || t === 'not_attempted' || t === 'not_configured' || t === 'unknown' || t.includes('not_attempted') || t.includes('not_attempt')) return 'not_run'
   // 中文：无法执行/环境不具备
@@ -398,8 +398,9 @@ function mergeFinalResults(tmpl: any, src: any) {
   // --- sample ---
   const sample = fr.sample || fr.samples || fr.sample_run || fr.examples || {}
   const sampleResults = sample.results || sample.sample_results || []
+  const sampleResultsCount = Array.isArray(sampleResults) ? sampleResults.length : 0
   tmpl.final_results.sample = {
-    status: normStatus(sample.status),
+    status: normUtStatus(sample.status, sampleResultsCount > 0 ? 1 : 0),
     duration_seconds: defNum(sample.duration_seconds) ?? 0,
     results: Array.isArray(sampleResults)
       ? sampleResults.map((r: any) => ({
@@ -620,8 +621,9 @@ function convertOpenEuler(data: any): any {
   }
 
   const sampleResults = sample.results || sample.sample_results || []
+  const sampleResultCount = Array.isArray(sampleResults) ? sampleResults.length : 0
   tmpl.final_results.sample = {
-    status: normStatus(sample.status),
+    status: normUtStatus(sample.status, sampleResultCount > 0 ? 1 : 0),
     duration_seconds: 0,
     results: Array.isArray(sampleResults) ? sampleResults.map((r: any) => ({
       sample_name: defStr(r.name || r.sample_name),

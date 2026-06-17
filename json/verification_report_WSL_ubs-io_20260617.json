@@ -895,7 +895,7 @@
       "skip_reason": "unknown"
     },
     "sample": {
-      "status": "unknown",
+      "status": "no_tests",
       "duration_seconds": 0,
       "results": []
     }

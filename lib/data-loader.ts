@@ -388,8 +388,8 @@ function normalizeStatus(status: any): ResultStatus {
   if (s === 'failed' || s === 'failure' || s === 'error' || s === 'blocked') return 'failed'
   if (s === 'partial_success' || s === 'partial_failure' || s === 'mainly_success' || s === 'mostly_success' || s.includes('partial') || (s.includes('success') && s.includes('fail'))) return 'partial_success'
   if (s === 'skipped') return 'skipped'
-  if (s === 'no_tests') return 'no_tests'
-  if (s === 'not_run' || s === 'not_executed' || s === 'not_configured' || s === 'not_attempted' || s === 'not_applicable') return 'not_run'
+  if (s === 'no_tests' || s === 'not_applicable' || s === 'not_available') return 'no_tests'
+  if (s === 'not_run' || s === 'not_executed' || s === 'not_configured' || s === 'not_attempted') return 'not_run'
   return 'unknown'
 }
 
