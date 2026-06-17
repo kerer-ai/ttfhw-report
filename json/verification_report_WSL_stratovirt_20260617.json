@@ -80,7 +80,7 @@
       "command": "git clone --branch master --single-branch https://gitcode.com/openeuler/stratovirt.git tmp_src/stratovirt",
       "success": true,
       "output": "仓库克隆成功",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 15
     },
@@ -89,7 +89,7 @@
       "command": "检查 .pre-commit-config.yaml、lint-runner 配置、.devcontainer/ 目录",
       "success": true,
       "output": "三项均不存在",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -98,7 +98,7 @@
       "command": "docker run -d --name ttfhw-stratovirt-env --privileged -v tmp_src/stratovirt:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "容器启动成功",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -107,7 +107,7 @@
       "command": "dnf install -y rust cargo pixman-devel libcap-ng-devel cyrus-sasl-devel pulseaudio clang gtk3-devel libusbx alsa-lib-devel make",
       "success": true,
       "output": "系统依赖安装成功（含 Rust 1.82.0）",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 120
     },
@@ -116,7 +116,7 @@
       "command": "curl -sSf https://sh.rustup.rs | sh -s -- -y（升级 Rust）",
       "success": true,
       "output": "Rust 升级至 1.96.0",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -134,7 +134,7 @@
       "command": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
       "success": true,
       "output": "全部 410 个测试通过，0 失败",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 76
     },
@@ -143,7 +143,7 @@
       "command": "docker stop ttfhw-stratovirt-env && docker rm ttfhw-stratovirt-env",
       "success": true,
       "output": "容器已停止并删除",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     }

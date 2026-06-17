@@ -79,7 +79,7 @@
       "command": "git clone https://gitcode.com/openeuler/ubs-mem.git",
       "success": true,
       "output": "Cloning into 'ubs-mem'...",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -88,7 +88,7 @@
       "command": "cat README.md",
       "success": true,
       "output": "读取 README.md 完成，获取构建依赖、命令等信息",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -106,7 +106,7 @@
       "command": "find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
       "success": true,
       "output": "未找到 lint-runner 配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -124,7 +124,7 @@
       "command": "docker run -d --name ttfhw-ubs-mem-env --privileged --network host -v /ttfhw_verify/ubs-mem:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
       "success": true,
       "output": "Container started",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -133,7 +133,7 @@
       "command": "dnf install -y rpm-build cmake ninja-build gcc gcc-c++ make patch",
       "success": true,
       "output": "安装 41 个包完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -142,7 +142,7 @@
       "command": "dnf install -y numactl-devel systemd-devel openssl-devel",
       "success": true,
       "output": "安装 19 个包完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 15
     },
@@ -151,7 +151,7 @@
       "command": "dnf install -y libboundscheck",
       "success": true,
       "output": "安装 libboundscheck-v1.1.11-6.oe2403 完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 10
     },
@@ -160,7 +160,7 @@
       "command": "docker cp ... hcom headers and libs to /usr/include/hcom/ and /usr/lib64/",
       "success": true,
       "output": "从宿主机 /root/ttfhw-work/ubs-comm-20260616165745/dist/ 复制 hcom 头文件和库到容器",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -178,7 +178,7 @@
       "command": "sh build.sh -t release (重试，已安装 hcom)",
       "success": true,
       "output": "[89/89] Install the project... Done building ubsm Success",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 68
     },
@@ -187,7 +187,7 @@
       "command": "dnf install -y git openssl",
       "success": true,
       "output": "安装 git 和 openssl 完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -205,7 +205,7 @@
       "command": "dnf install -y libasan",
       "success": true,
       "output": "安装 libasan-12.3.1-38.oe2403 完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 20
     },
@@ -214,7 +214,7 @@
       "command": "cd test/build && make -j6 install",
       "success": true,
       "output": "[100%] Built target mxmd_ut",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 75
     },
@@ -223,7 +223,7 @@
       "command": "LD_PRELOAD=... LD_LIBRARY_PATH=. HSECEASY_PATH=. ./mxmd_ut --gtest_break_on_failure --gtest_output=xml:gcover_report/test_detail.xml",
       "success": true,
       "output": "[==========] Running 752 tests from 60 test suites. [  PASSED  ] 752 tests.",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 91
     },
@@ -232,7 +232,7 @@
       "command": "docker stop ttfhw-ubs-mem-env && docker rm ttfhw-ubs-mem-env",
       "success": true,
       "output": "容器已停止并删除",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     }

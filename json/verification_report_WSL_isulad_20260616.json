@@ -91,7 +91,7 @@
       "command": "git clone --branch master --single-branch https://gitcode.com/openeuler/iSulad.git tmp_src/isulad",
       "success": true,
       "output": "仓库克隆成功",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -100,7 +100,7 @@
       "command": "检查 .pre-commit-config.yaml: ls tmp_src/isulad/.pre-commit-config.yaml",
       "success": true,
       "output": "文件不存在",
-      "error": "unknown",
+      "error": "",
       "returncode": 2,
       "duration_seconds": 0
     },
@@ -109,7 +109,7 @@
       "command": "检查 lint-runner 配置: find tmp_src/isulad -name '.lint-runner.*'",
       "success": true,
       "output": "未找到 lint-runner 配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0
     },
@@ -118,7 +118,7 @@
       "command": "检查 .devcontainer/ 目录",
       "success": false,
       "output": "目录不存在",
-      "error": "unknown",
+      "error": "",
       "returncode": 2,
       "duration_seconds": 0
     },
@@ -127,7 +127,7 @@
       "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "镜像已存在，无需下载",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -136,7 +136,7 @@
       "command": "docker run -d --name ttfhw-isulad-env --privileged -v tmp_src/isulad:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "容器启动成功，ID: ded2647e5bc4",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -154,7 +154,7 @@
       "command": "dnf install -y cmake gcc-c++ protobuf-devel grpc grpc-plugins grpc-devel libcap-devel libseccomp-devel libselinux-devel libwebsockets libwebsockets-devel libarchive-devel device-mapper-devel yajl-devel sqlite-devel libcurl-devel libevent-devel libevhtp-devel systemd-devel ncurses-devel openssl-devel gtest-devel gmock-devel git pkgconfig make automake autoconf libtool",
       "success": true,
       "output": "所有可用依赖安装成功",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 45
     },
@@ -163,7 +163,7 @@
       "command": "dnf install -y libisula-devel (版本 2.1.4-13.oe2403)",
       "success": true,
       "output": "安装 libisula 2.1.4，版本低于 spec 要求的 2.1.5",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -172,7 +172,7 @@
       "command": "dnf install -y lib-shim-v2 lib-shim-v2-devel",
       "success": true,
       "output": "安装 lib-shim-v2 0.0.1",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -181,7 +181,7 @@
       "command": "cmake .. (首次，libisula 2.1.4)",
       "success": true,
       "output": "所有依赖检查通过，cmake 配置成功",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1.2
     },
@@ -199,7 +199,7 @@
       "command": "从 LCR 源码构建 libisula 2.1.5: git clone lcr && cmake -DENABLE_LIBLCR=OFF && make -j12 && make install",
       "success": true,
       "output": "libisula 2.1.5 构建安装成功，新增 isula_sub_string、isula_fopen 等 API",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 50
     },
@@ -208,7 +208,7 @@
       "command": "cmake .. + make -j12 (libisula 2.1.5, 不含 UT)",
       "success": true,
       "output": "构建成功，产物：isulad (56M), libisula_client.so (24M), libisulad_tools.so (2.9M)",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 50
     },
@@ -226,7 +226,7 @@
       "command": "make -j12 (含 UT)",
       "success": true,
       "output": "构建成功，包含测试可执行文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 125
     },
@@ -244,7 +244,7 @@
       "command": "docker stop ttfhw-isulad-env && docker rm ttfhw-isulad-env",
       "success": true,
       "output": "容器已停止并删除",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     }

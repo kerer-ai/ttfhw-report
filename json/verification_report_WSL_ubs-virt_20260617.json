@@ -73,7 +73,7 @@
       "command": "git clone https://gitcode.com/openeuler/ubs-virt.git",
       "success": true,
       "output": "Cloning into 'ubs-virt'...",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -82,7 +82,7 @@
       "command": "检查 .pre-commit-config.yaml",
       "success": true,
       "output": "文件存在，包含 3 个 hooks: run-build, clang-format, clang-tidy",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -100,7 +100,7 @@
       "command": "检查 lint-runner 配置",
       "success": true,
       "output": "未找到 .lint-runner.yaml、.lint-runner.json 等配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -109,7 +109,7 @@
       "command": "检查 .devcontainer 目录",
       "success": true,
       "output": "不存在 .devcontainer 目录",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -118,7 +118,7 @@
       "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "Image is up to date",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -127,7 +127,7 @@
       "command": "docker run -d --name ttfhw-ubs-virt-env ... hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
       "success": true,
       "output": "Container started: c525f7e3dd9f",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -136,7 +136,7 @@
       "command": "dnf install -y gcc-c++ gcc cmake make patch",
       "success": true,
       "output": "安装完成: gcc 12.3.1, cmake 3.27.9, make 4.4.1",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -145,7 +145,7 @@
       "command": "dnf install -y libboundscheck libvirt-devel systemd-devel libxml2-devel numactl-libs ninja-build",
       "success": true,
       "output": "安装完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 45
     },
@@ -154,7 +154,7 @@
       "command": "dnf install -y clang libbpf-devel bpftool rapidjson-devel",
       "success": true,
       "output": "安装完成: clang 17.0.6, libbpf 1.2.2",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -163,7 +163,7 @@
       "command": "dnf install -y rpm-build libasan",
       "success": true,
       "output": "安装完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 20
     },
@@ -172,7 +172,7 @@
       "command": "dnf install -y dos2unix && find . -name '*.sh' -exec dos2unix {} \\;",
       "success": true,
       "output": "转换所有 shell 脚本的行尾格式",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 10
     },
@@ -181,7 +181,7 @@
       "command": "cd /workspace/virt-awaresched && bash build.sh",
       "success": true,
       "output": "Build completed in 131.235s. 产物: vas_daemon (724K), vasctl (672K)",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 131
     },
@@ -199,7 +199,7 @@
       "command": "cd /workspace/ubs-virt-ovs && mkdir build_output && cd build_output && cmake .. -DCMAKE_BUILD_TYPE=RelwithDebinfo && cmake --build . -j$(nproc)",
       "success": true,
       "output": "cmake 编译成功. 产物: ubs-virt-ovs (6.9M)",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 60
     },
@@ -235,7 +235,7 @@
       "command": "cd /workspace/ubs-virt-ovs/build_test/test && ./virt_ut",
       "success": true,
       "output": "179 tests from 13 test suites ran. 179 passed.",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 15
     },
@@ -253,7 +253,7 @@
       "command": "docker stop ttfhw-ubs-virt-env && docker rm ttfhw-ubs-virt-env",
       "success": true,
       "output": "容器已停止并删除",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     }

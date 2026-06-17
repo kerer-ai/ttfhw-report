@@ -87,7 +87,7 @@
       "command": "git clone https://gitcode.com/openeuler/ubs-engine.git",
       "success": true,
       "output": "Cloning into 'ubs-engine'...",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -96,7 +96,7 @@
       "command": "读取 README.md、docs/build_install/构建指导.md、ubs-engine.spec",
       "success": true,
       "output": "成功提取构建依赖、构建命令、UT 命令等信息",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -105,7 +105,7 @@
       "command": "检查 .pre-commit-config.yaml",
       "success": true,
       "output": "存在，配置了 5 个 hooks：run-build、run-build-test、clang-format、clang-tidy、clang-tidy-test",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -114,7 +114,7 @@
       "command": "检查 .lint-runner 配置",
       "success": true,
       "output": "未找到 lint-runner 配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -123,7 +123,7 @@
       "command": "检查 .devcontainer 目录",
       "success": true,
       "output": "未找到 .devcontainer 目录",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -132,7 +132,7 @@
       "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974\nStatus: Image is up to date",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 45
     },
@@ -141,7 +141,7 @@
       "command": "docker run -d --name ttfhw-ubs-engine-env -v //d/code/ttfhw_5/ubs-engine:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
       "success": true,
       "output": "Container ID: <container-id>",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -159,7 +159,7 @@
       "command": "yum install -y cmake make gcc-c++ gcc python3-setuptools glibc-devel libstdc++-devel systemd-devel libboundscheck libxml2-devel openssl-devel cpp-httplib-devel rapidjson-devel numactl-libs ninja-build bash bc coreutils sudo patch libvirt-devel",
       "success": true,
       "output": "Complete!",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 120
     },
@@ -168,7 +168,7 @@
       "command": "从源码编译安装 ubs-comm-devel：\ngit clone -b openEuler-24.03-LTS-SP3 https://gitcode.com/src-openeuler/ubs-comm.git /tmp/src/ubs-comm\nrpmbuild -ba ~/rpmbuild/SPECS/ubs-comm.spec\ndnf install -y ~/rpmbuild/RPMS/x86_64/ubs-comm-lib-*.rpm ~/rpmbuild/RPMS/x86_64/ubs-comm-devel-*.rpm",
       "success": true,
       "output": "Installed: ubs-comm-lib-1.0.0-26.x86_64, ubs-comm-devel-1.0.0-26.x86_64",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 300
     },
@@ -186,7 +186,7 @@
       "command": "cd /workspace && bash build.sh（重新构建）",
       "success": true,
       "output": "[552/552] Linking CXX shared library lib/libmempooling.so\nBuild complated in 371.162s",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 371
     },

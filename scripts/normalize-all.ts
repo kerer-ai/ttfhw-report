@@ -245,7 +245,7 @@ function mergeExecutionLog(tmpl: any, src: any) {
       command: defStr(e.command),
       success: e.success !== undefined ? Boolean(e.success) : (e.result === 'success' || e.status === 'success'),
       output: defStr(e.output || e.output_summary),
-      error: defStr(e.error || e.error_message),
+      error: (e.error || e.error_message) && (e.error || e.error_message) !== 'unknown' ? defStr(e.error || e.error_message) : '',
       returncode: defNum(e.returncode) ?? (e.success ? 0 : 1),
       duration_seconds: defNum(e.duration_seconds) ?? (e.duration_estimate ? undefined : undefined),
       ...(e.note ? { note: defStr(e.note) } : {}),

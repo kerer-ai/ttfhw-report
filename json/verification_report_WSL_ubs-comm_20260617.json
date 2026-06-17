@@ -76,7 +76,7 @@
       "command": "git clone https://gitcode.com/openeuler/ubs-comm.git",
       "success": true,
       "output": "Cloning into 'ubs-comm'...",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
@@ -85,7 +85,7 @@
       "command": "检查 pre-commit 配置: find . -name '.pre-commit-config.yaml'",
       "success": true,
       "output": "./.pre-commit-config.yaml",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -94,7 +94,7 @@
       "command": "检查 lint-runner 配置: find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
       "success": true,
       "output": "未找到 lint-runner 配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -103,7 +103,7 @@
       "command": "检查 devcontainer 配置: find . -type d -name '.devcontainer'",
       "success": true,
       "output": "未找到 devcontainer 目录",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -112,7 +112,7 @@
       "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "success": true,
       "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974\nStatus: Image is up to date",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -121,7 +121,7 @@
       "command": "docker run -d --name ttfhw-ubs-comm-env -v D:/code/<user>/ubs-comm:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
       "success": true,
       "output": "Container ID: <container-id>",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -130,7 +130,7 @@
       "command": "dnf install -y cmake gcc gcc-c++ make git",
       "success": true,
       "output": "安装完成，共 152 个包",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 454
     },
@@ -139,7 +139,7 @@
       "command": "dnf install -y libboundscheck",
       "success": true,
       "output": "安装完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -148,7 +148,7 @@
       "command": "dnf install -y openssl-devel",
       "success": true,
       "output": "安装完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 4
     },
@@ -157,7 +157,7 @@
       "command": "find . -name '*.sh' -exec sed -i 's/\\r$//' {} \\;",
       "success": true,
       "output": "转换所有脚本行尾符",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -166,7 +166,7 @@
       "command": "cd /workspace && export HCOM_BUILD_RDMA=off && time ./build.sh",
       "success": true,
       "output": "[build.sh] ./build.sh succeeds",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 324
     },
@@ -175,7 +175,7 @@
       "command": "dnf install -y rdma-core-devel",
       "success": true,
       "output": "安装完成",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 11
     },
@@ -184,7 +184,7 @@
       "command": "cd /workspace && export HCOM_BUILD_TYPE=debug && export HCOM_BUILD_TESTS=on && export HCOM_BUILD_RDMA=on && time ./build.sh",
       "success": true,
       "output": "[build.sh] ./build.sh succeeds",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1149
     },
@@ -193,7 +193,7 @@
       "command": "cd /workspace && time ./build/generate_gtest_report.sh",
       "success": true,
       "output": "[  PASSED  ] 306 tests.\nhcom_test result 0",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 361
     },
@@ -202,7 +202,7 @@
       "command": "cd /workspace && export HCOM_BUILD_TOOLS_PERF=on && export HCOM_BUILD_RDMA=on && export HCOM_BUILD_TYPE=release && time ./build.sh",
       "success": true,
       "output": "[build.sh] ./build.sh succeeds",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 388
     },
@@ -211,7 +211,7 @@
       "command": "find /workspace -name 'hcom_perf' -type f",
       "success": true,
       "output": "/workspace/dist/BoostKit-hcom_1.0.0_x86_64/hcom/hcom_perf\n/workspace/test/hcom/tools/perf_test/build/hcom_perf",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -220,7 +220,7 @@
       "command": "docker stop ttfhw-ubs-comm-env && docker rm ttfhw-ubs-comm-env",
       "success": true,
       "output": "ttfhw-ubs-comm-env",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     }

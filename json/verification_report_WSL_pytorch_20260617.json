@@ -81,7 +81,7 @@
       "command": "查阅 README.md / README.zh.md / docker/README.md / docker/Dockerfile / ci/docker/X86/Dockerfile / ci/build.sh / test/README.md",
       "success": true,
       "output": "确认推荐流程：在 manylinux-builder 容器内执行 bash ci/build.sh --python=3.10 生成 wheel；UT/样例需 NPU 硬件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 60
     },
@@ -90,7 +90,7 @@
       "command": "ls -la .pre-commit-config.yaml .lintrunner.toml .devcontainer",
       "success": true,
       "output": "未找到 .pre-commit-config.yaml 与 .devcontainer；检测到 .lintrunner.toml（59931 bytes）",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -99,7 +99,7 @@
       "command": "lintrunner --all-files",
       "success": true,
       "output": "ok No lint issues.（启用 linter：NEWLINE、TABS）",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -108,7 +108,7 @@
       "command": "docker images | grep manylinux-builder",
       "success": true,
       "output": "manylinux-builder:v1（由 docker/builder/X86/Dockerfile 构建，基于 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0）",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -117,7 +117,7 @@
       "command": "docker run -d --name ttfhw-pytorch-env -v /home/<user>/pytorch:/home/pytorch -w /home/pytorch manylinux-builder:v1 tail -f /dev/null",
       "success": true,
       "output": "<container-id>",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -126,7 +126,7 @@
       "command": "docker exec ttfhw-pytorch-env bash -c 'cat /etc/os-release; uname -m; nproc; python3.10 --version; pip3.10 show torch'",
       "success": true,
       "output": "AlmaLinux 8.10；x86_64；20 cores；Python 3.10.17；torch 2.7.1+cpu",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -145,7 +145,7 @@
       "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info",
       "success": true,
       "output": "已清理过期 CMake 缓存目录",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -164,7 +164,7 @@
       "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info /home/pytorch/third_party/torchair/torchair/build",
       "success": true,
       "output": "已清理 build/ 与子模块 torchair 残留 build/",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -183,7 +183,7 @@
       "command": "第四次（增量）构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=4 bash ci/build.sh --python=3.10",
       "success": true,
       "output": "Successfully built wheel；auditwheel 修复后产物：torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 335,
       "note": "并发降到 4（=容器核数 20 × 20%，远低于 60% 上限），单进程内存峰值得以控制；此次为增量构建（保留前次已编译产物）"
@@ -193,7 +193,7 @@
       "command": "ls -la /home/pytorch/dist/",
       "success": true,
       "output": "torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl（45,252,629 bytes ≈ 43.2 MB）",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -202,7 +202,7 @@
       "command": "pip3.10 install dist/torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
       "success": true,
       "output": "Successfully installed torch-npu-2.7.1.post5+git8e0459e",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -221,7 +221,7 @@
       "command": "docker stop ttfhw-pytorch-env && docker rm ttfhw-pytorch-env",
       "success": true,
       "output": "ttfhw-pytorch-env 已停止并删除",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     }

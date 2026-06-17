@@ -83,7 +83,7 @@
       "command": "git clone --depth=1 https://gitcode.com/openeuler/kernel.git tmp_src/kernel",
       "success": true,
       "output": "Clone 完成，85857 个文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 120
     },
@@ -92,7 +92,7 @@
       "command": "检查 .pre-commit-config.yaml 是否存在",
       "success": true,
       "output": "文件不存在",
-      "error": "unknown",
+      "error": "",
       "returncode": 2,
       "duration_seconds": 0
     },
@@ -101,7 +101,7 @@
       "command": "find . -name '.lint-runner.*' -o -name 'lint-runner.config.*' 检查 lint-runner 配置",
       "success": true,
       "output": "未找到 lint-runner 配置文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0
     },
@@ -110,7 +110,7 @@
       "command": "检查 .devcontainer/ 目录",
       "success": true,
       "output": "目录不存在",
-      "error": "unknown",
+      "error": "",
       "returncode": 2,
       "duration_seconds": 0
     },
@@ -119,7 +119,7 @@
       "command": "读取 README 了解仓库入口",
       "success": true,
       "output": "README 指向 Documentation/admin-guide/README.rst 和 Documentation/process/changes.rst",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -128,7 +128,7 @@
       "command": "读取 Documentation/admin-guide/README.rst",
       "success": true,
       "output": "获取了完整的构建、配置、安装说明。确认内核版本 6.x",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
@@ -137,7 +137,7 @@
       "command": "读取 Documentation/process/changes.rst 软件需求章节",
       "success": true,
       "output": "获取了完整的依赖版本需求列表：gcc>=5.1, make>=3.82, flex>=2.5.35, bison>=2.0, openssl>=1.0.0 等",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 3
     },
@@ -146,7 +146,7 @@
       "command": "检查 arch/x86/configs/ 目录查找 openEuler 配置文件",
       "success": true,
       "output": "发现 openeuler_defconfig、x86_64_defconfig、i386_defconfig 等",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0
     },
@@ -164,7 +164,7 @@
       "command": "检查构建工具版本：gcc --version, make --version, flex --version, bison --version, bc --version, openssl version, perl --version, ld -v",
       "success": true,
       "output": "所有构建工具版本均满足要求：gcc 13.3.0, make 4.3, flex 2.6.4, bison 3.8.2, bc 1.07.1, OpenSSL 3.0.13, perl 5.38.2, ld 2.42",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -173,7 +173,7 @@
       "command": "检查开发包安装状态：dpkg -l libssl-dev libelf-dev",
       "success": true,
       "output": "libssl-dev 和 libelf-dev 均已安装",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
@@ -182,7 +182,7 @@
       "command": "检查 Perl 模块：Getopt::Long, Getopt::Std, File::Basename, File::Find",
       "success": true,
       "output": "全部四个 Perl 模块可用",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0
     },
@@ -191,7 +191,7 @@
       "command": "make openeuler_defconfig",
       "success": true,
       "output": "configuration written to .config",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2.7
     },
@@ -200,7 +200,7 @@
       "command": "time make -j12（内核编译）",
       "success": true,
       "output": "编译完成，生成 vmlinux、bzImage、2633 个内核模块",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 1123.09
     },
@@ -209,7 +209,7 @@
       "command": "检查构建产物大小：ls -lh bzImage vmlinux System.map .config",
       "success": true,
       "output": "bzImage=14M, vmlinux=389M, System.map=6.9M, .config=236K, 2633个 .ko 模块共 4.5G",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 2
     },
@@ -218,7 +218,7 @@
       "command": "make testconfig（Kconfig 单元测试）",
       "success": true,
       "output": "17 passed, 0 failed in 0.10s",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0.4
     },
@@ -227,7 +227,7 @@
       "command": "make -C tools/testing/selftests/kcmp && ./kcmp_test",
       "success": true,
       "output": "TAP version 13: 3 passed, 0 failed",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0.06
     },
@@ -236,7 +236,7 @@
       "command": "make -C tools/testing/selftests/breakpoints && ./breakpoint_test",
       "success": true,
       "output": "TAP version 13: 110 passed, 0 failed",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0.13
     },
@@ -245,7 +245,7 @@
       "command": "make M=samples/bpf（编译 BPF 样例）",
       "success": true,
       "output": "编译完成，生成 bpftool 及相关 .o 文件",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 15
     },
@@ -254,7 +254,7 @@
       "command": "make -C tools/testing/selftests/clone3",
       "success": true,
       "output": "编译完成：clone3, clone3_clear_sighand, clone3_set_tid, clone3_cap_checkpoint_restore",
-      "error": "unknown",
+      "error": "",
       "returncode": 0,
       "duration_seconds": 0.4
     }

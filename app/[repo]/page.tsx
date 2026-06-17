@@ -289,7 +289,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
                 {log.output && (
                   <div className="text-sm text-slate-600 mt-1">{log.output}</div>
                 )}
-                {log.error && (
+                {log.error && log.error !== 'unknown' && (
                   <div className="text-sm text-red-600 mt-1 font-medium">错误: {log.error}</div>
                 )}
                 {log.note && (
