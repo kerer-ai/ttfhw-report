@@ -413,7 +413,20 @@
       "summary": "检测到 pre-commit 配置（3个hooks: run-build, clang-format, clang-tidy），run-build hook 在宿主机上执行超时。未检测到 lint-runner 配置",
       "pre_commit": {
         "configured": true,
-        "config_file": ".pre-commit-config.yaml"
+        "config_file": ".pre-commit-config.yaml",
+        "status": "执行超时",
+        "duration_seconds": 300,
+        "total_hooks": 3,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 3,
+        "failures": [
+          {
+            "hook_name": "run-build",
+            "file": "N/A",
+            "error": "run-build hook 在 Windows 宿主机上无法完成编译，执行超时"
+          }
+        ]
       },
       "lint_runner": {
         "configured": false,

@@ -344,18 +344,36 @@ export interface UtStats {
 export interface StaticAnalysisResult {
   enabled: boolean;
   summary?: string;
-  pre_commit: {
-    configured: boolean;
-    config_file?: string | null;
-  };
-  lint_runner: {
-    configured: boolean;
-    config_file?: string | null;
-    status?: string;
-    duration_seconds?: number;
-    active_linters?: string[];
-    result?: string;
-  };
+  pre_commit: PreCommitDetail;
+  lint_runner: LintRunnerDetail;
+}
+
+export interface PreCommitDetail {
+  configured: boolean;
+  config_file?: string | null;
+  status?: string;
+  duration_seconds?: number;
+  total_hooks?: number;
+  passed?: number;
+  failed?: number;
+  skipped?: number;
+  failures?: PreCommitFailure[];
+}
+
+export interface PreCommitFailure {
+  hook_id?: string;
+  hook_name?: string;
+  reason?: string;
+  test_name?: string;
+}
+
+export interface LintRunnerDetail {
+  configured: boolean;
+  config_file?: string | null;
+  status?: string;
+  duration_seconds?: number;
+  active_linters?: string[];
+  result?: string;
 }
 
 export interface DevcontainerResult {

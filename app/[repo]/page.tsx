@@ -162,8 +162,8 @@ export default async function RepoDetailPage({ params }: PageProps) {
         </Card>
       )}
 
-      {/* 静态分析 (v630) */}
-      {detail.staticAnalysis?.enabled && (
+      {/* 静态分析 (v630): 只要 pre_commit 或 lint_runner 任一存在即展示 */}
+      {detail.staticAnalysis && (detail.staticAnalysis.enabled || detail.staticAnalysis.pre_commit?.configured || detail.staticAnalysis.lint_runner?.configured) && (
         <Card>
           <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <FileSearch className="w-5 h-5 text-indigo-500" />
@@ -181,10 +181,24 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   : <XCircle className="w-4 h-4 text-slate-400" />}
                 <span className="text-sm font-medium">Pre-commit</span>
               </div>
-              {detail.staticAnalysis.pre_commit.configured && detail.staticAnalysis.pre_commit.config_file && (
-                <code className="text-xs bg-white px-2 py-1 rounded block mt-1">{detail.staticAnalysis.pre_commit.config_file}</code>
-              )}
-              {!detail.staticAnalysis.pre_commit.configured && (
+              {detail.staticAnalysis.pre_commit.configured ? (
+                <div className="mt-1 space-y-1">
+                  {detail.staticAnalysis.pre_commit.config_file && (
+                    <code className="text-xs bg-white px-2 py-1 rounded block">{detail.staticAnalysis.pre_commit.config_file}</code>
+                  )}
+                  {detail.staticAnalysis.pre_commit.total_hooks != null && (
+                    <div className="grid grid-cols-4 gap-1 mt-2">
+                      <MiniMetric label="Hooks总数" value={detail.staticAnalysis.pre_commit.total_hooks} />
+                      <MiniMetric label="通过" value={detail.staticAnalysis.pre_commit.passed ?? 0} />
+                      <MiniMetric label="失败" value={detail.staticAnalysis.pre_commit.failed ?? 0} />
+                      <MiniMetric label="跳过" value={detail.staticAnalysis.pre_commit.skipped ?? 0} />
+                    </div>
+                  )}
+                  {detail.staticAnalysis.pre_commit.status && (
+                    <span className="text-xs text-slate-600">状态: {detail.staticAnalysis.pre_commit.status}</span>
+                  )}
+                </div>
+              ) : (
                 <span className="text-xs text-slate-500">未配置</span>
               )}
             </div>
@@ -204,6 +218,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   )}
                   {detail.staticAnalysis.lint_runner.active_linters && detail.staticAnalysis.lint_runner.active_linters.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1">
+                      <span className="text-xs text-slate-500">启用规则:</span>
                       {detail.staticAnalysis.lint_runner.active_linters.map((l: string) => (
                         <span key={l} className="rounded bg-indigo-100 px-2 py-0.5 text-xs text-indigo-700">{l}</span>
                       ))}
@@ -213,6 +228,9 @@ export default async function RepoDetailPage({ params }: PageProps) {
                     <span className={`text-xs ${detail.staticAnalysis.lint_runner.status.includes('通过') || detail.staticAnalysis.lint_runner.status.toLowerCase().includes('ok') ? 'text-green-600' : 'text-red-600'}`}>
                       状态: {detail.staticAnalysis.lint_runner.status}
                     </span>
+                  )}
+                  {detail.staticAnalysis.lint_runner.duration_seconds != null && detail.staticAnalysis.lint_runner.duration_seconds > 0 && (
+                    <span className="text-xs text-slate-500 ml-2">耗时: {detail.staticAnalysis.lint_runner.duration_seconds}s</span>
                   )}
                   {detail.staticAnalysis.lint_runner.result && (
                     <p className="text-xs text-slate-600 mt-1 whitespace-pre-wrap break-words">{detail.staticAnalysis.lint_runner.result}</p>

@@ -153,11 +153,11 @@ function normalizeToSummary(name: string, data: any): RepoSummary {
   // v630: 静态分析和 devcontainer 状态
   const staticAnalysis = data.final_results?.static_analysis
   const devcontainer = data.final_results?.devcontainer
-  const preCommitStatus: ConfigStatus = staticAnalysis?.enabled
-    ? (staticAnalysis.pre_commit?.configured ? 'configured' : 'not_configured')
+  const preCommitStatus: ConfigStatus = staticAnalysis?.pre_commit?.configured !== undefined
+    ? (staticAnalysis.pre_commit.configured ? 'configured' : 'not_configured')
     : 'unknown'
-  const lintRunnerStatus: ConfigStatus = staticAnalysis?.enabled
-    ? (staticAnalysis.lint_runner?.configured ? 'configured' : 'not_configured')
+  const lintRunnerStatus: ConfigStatus = staticAnalysis?.lint_runner?.configured !== undefined
+    ? (staticAnalysis.lint_runner.configured ? 'configured' : 'not_configured')
     : 'unknown'
   const devcontainerStatus: ConfigStatus = devcontainer?.enabled !== undefined
     ? (devcontainer.enabled ? 'configured' : 'not_configured')

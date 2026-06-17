@@ -279,6 +279,13 @@ function mergeFinalResults(tmpl: any, src: any) {
     pre_commit: {
       configured: Boolean(sa.pre_commit?.configured),
       config_file: sa.pre_commit?.config_file || null,
+      status: defStr(sa.pre_commit?.status),
+      duration_seconds: defNum(sa.pre_commit?.duration_seconds) ?? 0,
+      total_hooks: defNum(sa.pre_commit?.total_hooks),
+      passed: defNum(sa.pre_commit?.passed) ?? 0,
+      failed: defNum(sa.pre_commit?.failed) ?? 0,
+      skipped: defNum(sa.pre_commit?.skipped) ?? 0,
+      failures: Array.isArray(sa.pre_commit?.failures) ? sa.pre_commit.failures : [],
     },
     lint_runner: {
       configured: Boolean(sa.lint_runner?.configured),

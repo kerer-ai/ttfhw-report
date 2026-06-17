@@ -403,7 +403,14 @@
       "summary": "仓库配置了 pre-commit（5个hooks），但未安装 pre-commit 工具，未配置 lint-runner",
       "pre_commit": {
         "configured": true,
-        "config_file": ".pre-commit-config.yaml"
+        "config_file": ".pre-commit-config.yaml",
+        "status": "未执行",
+        "duration_seconds": 0,
+        "total_hooks": 5,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 5,
+        "failures": []
       },
       "lint_runner": {
         "configured": false,

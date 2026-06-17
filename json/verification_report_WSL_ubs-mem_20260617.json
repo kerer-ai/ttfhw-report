@@ -462,7 +462,40 @@
       "summary": "仓库配置了 pre-commit（5个hooks），但因宿主机缺少构建工具全部执行失败；未配置 lint-runner",
       "pre_commit": {
         "configured": true,
-        "config_file": ".pre-commit-config.yaml"
+        "config_file": ".pre-commit-config.yaml",
+        "status": "全部失败",
+        "duration_seconds": 120,
+        "total_hooks": 5,
+        "passed": 0,
+        "failed": 5,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "run-build",
+            "file": "N/A",
+            "error": "宿主机缺少 ninja-build、gcc 等构建工具"
+          },
+          {
+            "hook_name": "run-build-test",
+            "file": "N/A",
+            "error": "宿主机缺少 libnuma.so、patch 命令"
+          },
+          {
+            "hook_name": "clang-format",
+            "file": "N/A",
+            "error": "clang-format 未安装"
+          },
+          {
+            "hook_name": "clang-tidy",
+            "file": "N/A",
+            "error": "clang-tidy 未安装"
+          },
+          {
+            "hook_name": "clang-tidy-test",
+            "file": "N/A",
+            "error": "clang-tidy 未安装"
+          }
+        ]
       },
       "lint_runner": {
         "configured": false,

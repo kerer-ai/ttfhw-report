@@ -419,7 +419,13 @@
       "summary": "仓库未配置 pre-commit；配置了 lint-runner（.lintrunner.toml），启用 NEWLINE 与 TABS 两个 linter，执行 lintrunner --all-files 全部通过",
       "pre_commit": {
         "configured": false,
-        "config_file": null
+        "config_file": null,
+        "status": "unknown",
+        "duration_seconds": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "failures": []
       },
       "lint_runner": {
         "configured": true,
