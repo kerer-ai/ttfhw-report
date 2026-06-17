@@ -1,0 +1,128 @@
+{
+  "_description": "飞书表格列到 JSON 字段的映射。key 为表格列标，value 为 JSON 路径。可在运行时根据实际表头调整。",
+  "columns": {
+    "仓库名": {
+      "column": "A",
+      "field": "repo_name",
+      "source": "filename",
+      "format": "repo_name_from_filename"
+    },
+    "GitCode URL": {
+      "column": "B",
+      "field": "repo_url",
+      "source": "metadata.repo_url"
+    },
+    "构建状态": {
+      "column": "C",
+      "field": "build_status",
+      "source": "final_results.build.status",
+      "format": "status_label"
+    },
+    "构建命令": {
+      "column": "D",
+      "field": "build_command",
+      "source": "final_results.build.command"
+    },
+    "UT状态": {
+      "column": "E",
+      "field": "ut_status",
+      "source": "final_results.ut.status",
+      "format": "status_label"
+    },
+    "UT总量": {
+      "column": "F",
+      "field": "ut_total",
+      "source": "final_results.ut.total"
+    },
+    "UT通过": {
+      "column": "G",
+      "field": "ut_passed",
+      "source": "final_results.ut.passed"
+    },
+    "UT失败": {
+      "column": "H",
+      "field": "ut_failed",
+      "source": "final_results.ut.failed"
+    },
+    "UT通过率": {
+      "column": "I",
+      "field": "ut_pass_rate",
+      "formula": "passed/total*100",
+      "format": "percent_1_decimal"
+    },
+    "Sample状态": {
+      "column": "J",
+      "field": "sample_status",
+      "source": "final_results.sample.status",
+      "format": "status_label"
+    },
+    "Pre-commit": {
+      "column": "K",
+      "field": "pre_commit",
+      "source": "final_results.static_analysis.pre_commit.configured",
+      "format": "checkmark"
+    },
+    "PC Hooks总数": {
+      "column": "L",
+      "field": "pc_total_hooks",
+      "source": "final_results.static_analysis.pre_commit.total_hooks"
+    },
+    "PC 通过": {
+      "column": "M",
+      "field": "pc_passed",
+      "source": "final_results.static_analysis.pre_commit.passed"
+    },
+    "PC 失败": {
+      "column": "N",
+      "field": "pc_failed",
+      "source": "final_results.static_analysis.pre_commit.failed"
+    },
+    "Lint-runner": {
+      "column": "O",
+      "field": "lint_runner",
+      "source": "final_results.static_analysis.lint_runner.configured",
+      "format": "checkmark"
+    },
+    "LR 启用的规则": {
+      "column": "P",
+      "field": "lr_linters",
+      "source": "final_results.static_analysis.lint_runner.active_linters",
+      "format": "list_join"
+    },
+    "Devcontainer": {
+      "column": "Q",
+      "field": "devcontainer",
+      "source": "final_results.devcontainer.enabled",
+      "format": "checkmark"
+    },
+    "总耗时 (s)": {
+      "column": "R",
+      "field": "total_duration",
+      "source": "metadata.duration_seconds"
+    },
+    "构建耗时 (s)": {
+      "column": "S",
+      "field": "build_duration",
+      "source": "final_results.build.duration_seconds"
+    },
+    "验证时间": {
+      "column": "T",
+      "field": "start_time",
+      "source": "metadata.start_time",
+      "format": "date_only"
+    }
+  },
+  "status_labels": {
+    "success": "成功",
+    "partial_success": "部分成功",
+    "failed": "失败",
+    "not_run": "无法执行",
+    "no_tests": "无用例",
+    "unknown": "未知"
+  },
+  "checkmark_labels": {
+    "true": "✓",
+    "false": "✗",
+    "null": "-"
+  }
+}
