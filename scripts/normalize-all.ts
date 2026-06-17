@@ -262,7 +262,11 @@ function mergeExecutionLog(tmpl: any, src: any) {
       timestamp: defStr(e.timestamp),
       command: defStr(e.command),
       success: e.success !== undefined ? Boolean(e.success) : (e.result === 'success' || e.status === 'success'),
-      output: defStr(e.output || e.output_summary),
+      output: (e.output !== undefined && e.output !== null && e.output !== '')
+        ? String(e.output)
+        : (e.output_summary !== undefined && e.output_summary !== null && e.output_summary !== '')
+          ? String(e.output_summary)
+          : '',
       error: (e.error || e.error_message) && (e.error || e.error_message) !== 'unknown' ? defStr(e.error || e.error_message) : '',
       returncode: defNum(e.returncode) ?? (e.success ? 0 : 1),
       duration_seconds: defNum(e.duration_seconds) ?? (e.duration_estimate ? undefined : undefined),

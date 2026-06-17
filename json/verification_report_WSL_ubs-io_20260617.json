@@ -67,7 +67,7 @@
       "timestamp": "2026-06-17T17:16:07",
       "command": "cd /tmp && rm -rf ubs-io && git clone https://gitcode.com/openeuler/ubs-io.git",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "Cloning into 'ubs-io'...\n",
       "returncode": 0,
       "duration_seconds": 0
@@ -139,7 +139,7 @@
       "timestamp": "2026-06-17T17:16:09",
       "command": "cd /tmp/ubs-io && find . -name '.lint-runner*' -o -name 'lint-runner*' 2>/dev/null",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -166,7 +166,7 @@
       "timestamp": "2026-06-17T17:16:10",
       "command": "cd /tmp/ubs-io && ls -la .devcontainer/ 2>/dev/null",
       "success": false,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 2,
       "duration_seconds": 0
@@ -283,7 +283,7 @@
       "timestamp": "2026-06-17T17:16:12",
       "command": "cd /tmp/ubs-io/ubsio-boostio && mkdir -p build",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -328,7 +328,7 @@
       "timestamp": "2026-06-17T17:25:00",
       "command": "find /tmp/ubs-io/build -name '*test*' -type f -executable 2>/dev/null",
       "success": false,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 1,
       "duration_seconds": 0
@@ -346,7 +346,7 @@
       "timestamp": "2026-06-17T17:25:01",
       "command": "find /tmp/ubs-io/ubsio-boostio/Build/spdlog/example -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -355,7 +355,7 @@
       "timestamp": "2026-06-17T17:25:01",
       "command": "find /tmp/ubs-io/ubsio-boostio/Build/spdlog/example/CMakeFiles/example.dir -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -373,7 +373,7 @@
       "timestamp": "2026-06-17T17:25:01",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/push-to-checkout.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -382,7 +382,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/post-update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -391,7 +391,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-merge-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -400,7 +400,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-push.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -409,7 +409,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -418,7 +418,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-rebase.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -427,7 +427,7 @@
       "timestamp": "2026-06-17T17:25:02",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-receive.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -436,7 +436,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/applypatch-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -445,7 +445,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/fsmonitor-watchman.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -454,7 +454,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/pre-applypatch.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -463,7 +463,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -472,7 +472,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -481,7 +481,7 @@
       "timestamp": "2026-06-17T17:25:03",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/spdlog-src/.git/hooks/prepare-commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -490,7 +490,7 @@
       "timestamp": "2026-06-17T17:25:04",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/test/hcom/opensslcrt/multiLevelCert/demoCA -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -499,7 +499,7 @@
       "timestamp": "2026-06-17T17:25:04",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/test/hcom/opensslcrt/crlRevokedCert/demoCA -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -526,7 +526,7 @@
       "timestamp": "2026-06-17T17:25:04",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/push-to-checkout.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -535,7 +535,7 @@
       "timestamp": "2026-06-17T17:25:04",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/post-update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -544,7 +544,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-merge-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -553,7 +553,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-push.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -562,7 +562,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -571,7 +571,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-rebase.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -580,7 +580,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-receive.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -589,7 +589,7 @@
       "timestamp": "2026-06-17T17:25:05",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/applypatch-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -598,7 +598,7 @@
       "timestamp": "2026-06-17T17:25:06",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/fsmonitor-watchman.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -607,7 +607,7 @@
       "timestamp": "2026-06-17T17:25:06",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/pre-applypatch.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -616,7 +616,7 @@
       "timestamp": "2026-06-17T17:25:06",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -625,7 +625,7 @@
       "timestamp": "2026-06-17T17:25:06",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -634,7 +634,7 @@
       "timestamp": "2026-06-17T17:25:06",
       "command": "find /tmp/ubs-io/ubsio-boostio/build/_deps/ubs_comm-src/.git/hooks/prepare-commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -643,7 +643,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/push-to-checkout.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -652,7 +652,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/post-update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -661,7 +661,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/pre-merge-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -670,7 +670,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/pre-push.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -679,7 +679,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/pre-commit.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -688,7 +688,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/pre-rebase.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -697,7 +697,7 @@
       "timestamp": "2026-06-17T17:25:07",
       "command": "find /tmp/ubs-io/.git/hooks/pre-receive.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -706,7 +706,7 @@
       "timestamp": "2026-06-17T17:25:08",
       "command": "find /tmp/ubs-io/.git/hooks/applypatch-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -715,7 +715,7 @@
       "timestamp": "2026-06-17T17:25:08",
       "command": "find /tmp/ubs-io/.git/hooks/fsmonitor-watchman.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -724,7 +724,7 @@
       "timestamp": "2026-06-17T17:25:08",
       "command": "find /tmp/ubs-io/.git/hooks/pre-applypatch.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -733,7 +733,7 @@
       "timestamp": "2026-06-17T17:25:08",
       "command": "find /tmp/ubs-io/.git/hooks/commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -742,7 +742,7 @@
       "timestamp": "2026-06-17T17:25:08",
       "command": "find /tmp/ubs-io/.git/hooks/update.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
@@ -751,7 +751,7 @@
       "timestamp": "2026-06-17T17:25:09",
       "command": "find /tmp/ubs-io/.git/hooks/prepare-commit-msg.sample -type f -name '*.cpp' -o -name '*.c' -o -name '*.py' 2>/dev/null | head -5",
       "success": true,
-      "output": "unknown",
+      "output": "",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0
