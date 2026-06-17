@@ -415,7 +415,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 371,
-      "command": "unknown",
+      "command": "bash build.sh (Release 构建)",
       "artifacts": [
         {
           "name": "ubse",

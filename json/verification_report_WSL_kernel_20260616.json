@@ -562,7 +562,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 1123,
-      "command": "unknown",
+      "command": "make openeuler_defconfig && make -j$(nproc)",
       "artifacts": [
         {
           "name": "bzImage",

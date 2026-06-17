@@ -231,7 +231,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 120,
-      "command": "unknown",
+      "command": "make build (等价于 cargo build --workspace --bins --release)",
       "artifacts": [
         {
           "name": "stratovirt",

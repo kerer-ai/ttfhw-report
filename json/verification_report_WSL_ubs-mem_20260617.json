@@ -515,7 +515,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 68,
-      "command": "unknown",
+      "command": "sh build.sh -t release -p",
       "artifacts": [
         {
           "name": "ubsmd",

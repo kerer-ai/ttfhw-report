@@ -246,7 +246,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 54,
-      "command": "unknown",
+      "command": "make all (构建 Go 模块 atune-adm、atuned、daemon_profile_server.so + 初始化 sqlite db)",
       "artifacts": [
         {
           "name": "atuned",

@@ -446,7 +446,7 @@
     "build": {
       "status": "partial_success",
       "duration_seconds": 342,
-      "command": "unknown",
+      "command": "virt-awaresched: cd virt-awaresched && bash build.sh ; ubs-virt-ovs: cd ubs-virt-ovs && bash build/build.sh ; virt-optimizer: cd virt-optimizer && bash build.sh ; ubs-virt-enpu: cd ubs-virt-enpu/vcann-rt && bash make_build.sh（需设置 ASCEND_HOME_PATH 环境变量）",
       "artifacts": [
         {
           "name": "vas_daemon",

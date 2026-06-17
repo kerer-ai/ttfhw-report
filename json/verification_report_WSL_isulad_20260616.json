@@ -332,7 +332,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 50,
-      "command": "unknown",
+      "command": "mkdir build && cd build && cmake .. && make -j$(nproc)",
       "artifacts": [
         {
           "name": "isulad",

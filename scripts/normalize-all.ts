@@ -335,10 +335,17 @@ function mergeFinalResults(tmpl: any, src: any) {
       if (v && typeof v === 'object') buildArtifacts.push(v)
     }
   }
+  // build.command: 优先源数据 command，回退 document_reading_summary.build_commands
+  const buildCommand = build.command
+    || (Array.isArray(src.document_reading_summary?.build_commands?.value)
+        ? src.document_reading_summary.build_commands.value.join(' ; ')
+        : src.document_reading_summary?.build_commands?.value)
+    || undefined
+
   tmpl.final_results.build = {
     status: normStatus(build.status),
     duration_seconds: defNum(build.duration_seconds) ?? 0,
-    command: defStr(build.command),
+    command: buildCommand || undefined,
     concurrency: defNum(build.concurrency),
     duration_breakdown: build.duration_breakdown && typeof build.duration_breakdown === 'object' ? { ...build.duration_breakdown } : undefined,
     artifacts: Array.isArray(buildArtifacts)

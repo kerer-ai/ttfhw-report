@@ -430,7 +430,7 @@
     "build": {
       "status": "success",
       "duration_seconds": 324,
-      "command": "unknown",
+      "command": "./build.sh",
       "artifacts": [
         {
           "name": "libhcom.so",
