@@ -197,6 +197,25 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   {detail.staticAnalysis.pre_commit.status && (
                     <span className="text-xs text-slate-600">状态: {detail.staticAnalysis.pre_commit.status}</span>
                   )}
+                  {detail.staticAnalysis.pre_commit.failures && detail.staticAnalysis.pre_commit.failures.length > 0 && (
+                    <div className="mt-2 space-y-1">
+                      <span className="text-xs font-medium text-red-600">失败 Hook 详情:</span>
+                      {detail.staticAnalysis.pre_commit.failures.map((f: any, i: number) => (
+                        <div key={i} className="rounded border border-red-200 bg-red-50 p-2 text-xs">
+                          <div className="flex items-center gap-2">
+                            <XCircle className="w-3 h-3 text-red-500 shrink-0" />
+                            <span className="font-medium text-red-700">{f.hook_name || f.hook_id}</span>
+                          </div>
+                          {f.error && (
+                            <div className="mt-1 text-red-600 ml-5">{f.error}</div>
+                          )}
+                          {f.file && f.file !== 'N/A' && (
+                            <div className="mt-0.5 text-slate-400 ml-5">文件: {f.file}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <span className="text-xs text-slate-500">未配置</span>
