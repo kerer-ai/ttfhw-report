@@ -1,5 +1,6 @@
 // 汇总数据接口
 export type ResultStatus = 'success' | 'failed' | 'partial_success' | 'unknown' | 'skipped' | 'not_run';
+export type ConfigStatus = 'configured' | 'not_configured' | 'unknown';
 
 export interface RepoSummary {
   name: string;
@@ -21,6 +22,10 @@ export interface RepoSummary {
   environment: 'local' | 'remote' | 'unknown';
   url?: string;
   category?: string;
+  // v630: 代码质量配置状态
+  preCommitStatus: ConfigStatus;
+  lintRunnerStatus: ConfigStatus;
+  devcontainerStatus: ConfigStatus;
 }
 
 // 详情数据接口 - 扩展覆盖所有JSON字段

@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { RepoSummary, RepoDetail, Attempt, BuildResult, UtStats, TimelinePhase, DocumentationChecklist, DependencyInfo, HardwareConfig, ImageSelection, SummaryStats, Artifact, Dependency, MissingDependency, ResultStatus } from './types'
+import { RepoSummary, RepoDetail, Attempt, BuildResult, UtStats, TimelinePhase, DocumentationChecklist, DependencyInfo, HardwareConfig, ImageSelection, SummaryStats, Artifact, Dependency, MissingDependency, ResultStatus, ConfigStatus } from './types'
 import { deriveRepoIdentity, normalizeRepoName } from './utils'
 
 const JSON_DIR = path.join(process.cwd(), 'json')
@@ -93,6 +93,7 @@ export function getAllRepoSummaries(): RepoSummary[] {
         utDuration: undefined, sampleDuration: undefined,
         testPassed: 0, testFailed: 0, testTotal: undefined, testSkipped: undefined,
         generatedAt: 'N/A', environment: 'unknown', url: identity.url, category: identity.community,
+        preCommitStatus: 'unknown', lintRunnerStatus: 'unknown', devcontainerStatus: 'unknown',
       }
     }
   })
@@ -149,6 +150,19 @@ function normalizeToSummary(name: string, data: any): RepoSummary {
   const knownDurations = (buildDuration ?? 0) + (utDuration ?? 0) + (sampleDuration ?? 0)
   const envDuration = totalDuration > knownDurations ? totalDuration - knownDurations : undefined
 
+  // v630: 静态分析和 devcontainer 状态
+  const staticAnalysis = data.final_results?.static_analysis
+  const devcontainer = data.final_results?.devcontainer
+  const preCommitStatus: ConfigStatus = staticAnalysis?.enabled
+    ? (staticAnalysis.pre_commit?.configured ? 'configured' : 'not_configured')
+    : 'unknown'
+  const lintRunnerStatus: ConfigStatus = staticAnalysis?.enabled
+    ? (staticAnalysis.lint_runner?.configured ? 'configured' : 'not_configured')
+    : 'unknown'
+  const devcontainerStatus: ConfigStatus = devcontainer?.enabled !== undefined
+    ? (devcontainer.enabled ? 'configured' : 'not_configured')
+    : 'unknown'
+
   return {
     name,
     displayName: identity.repoName || name,
@@ -169,6 +183,9 @@ function normalizeToSummary(name: string, data: any): RepoSummary {
     environment: data.environment || 'unknown',
     url: identity.url || repoUrl || '',
     category: identity.community,
+    preCommitStatus,
+    lintRunnerStatus,
+    devcontainerStatus,
   }
 }
 

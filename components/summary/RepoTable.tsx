@@ -21,21 +21,24 @@ export function RepoTable({ repos }: RepoTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[1180px] table-fixed">
+      <table className="w-full min-w-[1400px] table-fixed">
         <thead>
           <tr className="border-b border-slate-200 bg-slate-50">
-            <th className="w-[18%] px-3 py-3 text-left text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">仓库</th>
-            <th className="w-[8%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">结果</th>
-            <th className="w-[6%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">构建</th>
-            <th className="w-[6%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">测试</th>
-            <th className="w-[6%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">示例</th>
-            <th className="w-[8%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">总耗时</th>
-            <th className="w-[8%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">环境准备</th>
-            <th className="w-[8%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Build时长</th>
-            <th className="w-[8%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">UT时长</th>
-            <th className="w-[9%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Sample/Example</th>
-            <th className="w-[8%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">UT通过率</th>
-            <th className="w-[7%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">生成时间</th>
+            <th className="w-[14%] px-3 py-3 text-left text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">仓库</th>
+            <th className="w-[6%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">结果</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">构建</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">测试</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">示例</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Pre-commit</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Lint-runner</th>
+            <th className="w-[5%] px-3 py-3 text-center text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Devcontainer</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">总耗时</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">环境准备</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Build时长</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">UT时长</th>
+            <th className="w-[7%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">Sample</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">UT通过率</th>
+            <th className="w-[6%] px-3 py-3 text-right text-xs font-semibold text-slate-600 xl:px-4 xl:text-sm">生成时间</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-slate-100">
@@ -75,6 +78,15 @@ export function RepoTable({ repos }: RepoTableProps) {
               </td>
               <td className="px-3 py-3 text-center xl:px-4">
                 <Badge status={repo.sampleStatus} size="sm" />
+              </td>
+              <td className="px-3 py-3 text-center xl:px-4">
+                <ConfigBadge status={repo.preCommitStatus} />
+              </td>
+              <td className="px-3 py-3 text-center xl:px-4">
+                <ConfigBadge status={repo.lintRunnerStatus} />
+              </td>
+              <td className="px-3 py-3 text-center xl:px-4">
+                <ConfigBadge status={repo.devcontainerStatus} />
               </td>
               <td className="px-3 py-3 text-right text-xs text-slate-600 xl:px-4 xl:text-sm">
                 {formatDuration(repo.totalDuration)}
@@ -130,5 +142,19 @@ function DurationCell({ seconds }: { seconds?: number }) {
         ? formatDuration(seconds)
         : <span className="text-slate-400">-</span>}
     </td>
+  )
+}
+
+function ConfigBadge({ status }: { status: string }) {
+  const config: Record<string, { label: string; className: string }> = {
+    configured: { label: '✓', className: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+    not_configured: { label: '✗', className: 'bg-red-50 text-red-400 border border-red-200' },
+    unknown: { label: '-', className: 'bg-gray-50 text-gray-300 border border-gray-200' },
+  }
+  const c = config[status] || config.unknown
+  return (
+    <span className={`inline-flex items-center justify-center w-6 h-6 rounded text-xs font-bold ${c.className}`}>
+      {c.label}
+    </span>
   )
 }
