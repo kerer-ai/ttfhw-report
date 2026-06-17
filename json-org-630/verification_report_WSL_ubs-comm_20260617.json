@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "D:/code/ttfhw_5/ubs-comm",
+    "repo_path": "D:/code/<user>/ubs-comm",
     "start_time": "2026-06-17T11:14:00",
     "end_time": "2026-06-17T12:15:00",
     "duration_seconds": 3660,
@@ -116,9 +116,9 @@
     },
     {
       "timestamp": "2026-06-17T11:18:00",
-      "command": "docker run -d --name ttfhw-ubs-comm-env -v D:/code/ttfhw_5/ubs-comm:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "command": "docker run -d --name ttfhw-ubs-comm-env -v D:/code/<user>/ubs-comm:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
       "success": true,
-      "output": "Container ID: 3e0c971de6eca5514a7eb545399487886e75e83f74fea026371249611256e1d7",
+      "output": "Container ID: <container-id>",
       "error": "",
       "returncode": 0,
       "duration_seconds": 3

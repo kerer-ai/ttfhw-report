@@ -172,7 +172,7 @@ function normalizeToDetail(name: string, data: any): RepoDetail {
   return {
     ...summary,
     url: data.repo_info?.url || summary.url || data.metadata?.repo_url || '',
-    branch: data.repo_info?.branch || 'master',
+    branch: data.metadata?.branch || data.repo_info?.branch || 'master',
     timeline: extractTimeline(data),
     attempts: extractAttempts(data),
     buildResult: normalizeBuildResult(data.final_results?.build),
@@ -191,6 +191,9 @@ function normalizeToDetail(name: string, data: any): RepoDetail {
     documentationGaps: data.documentation_gaps,
     problemsEncountered: data.problems_encountered,
     rawData: data,
+    // v630: new final_results sub-modules
+    staticAnalysis: data.final_results?.static_analysis || undefined,
+    devcontainer: data.final_results?.devcontainer || undefined,
   }
 }
 
@@ -255,9 +258,9 @@ function extractAttempts(data: any): Attempt[] {
     action: e.command || '',
     command: e.command,
     result: e.success ? 'success' : 'failed',
-    durationSeconds: typeof e.duration_seconds === 'number' ? e.duration_seconds : 0,
-    output: e.output,
-    errorMessage: e.error,
+    durationSeconds: typeof e.duration_seconds === 'number' ? e.duration_seconds : (typeof e.duration_estimate === 'string' ? 0 : 0),
+    output: e.output || e.output_summary,
+    errorMessage: e.error || e.error_message,
   }))
 }
 
@@ -277,10 +280,13 @@ function normalizeBuildResult(build: any): BuildResult {
 
   return {
     status: normalizeStatus(build.status),
-    buildCommand: build.build_command,
+    buildCommand: build.command || build.build_command,
     durationSeconds: defNum(build.duration_seconds),
     artifacts,
     error: build.error,
+    command: build.command,
+    concurrency: defNum(build.concurrency),
+    durationBreakdown: build.duration_breakdown || undefined,
   }
 }
 
@@ -304,6 +310,7 @@ function normalizeUtStats(ut: any): UtStats {
     errorSummary: ut.failures?.length ? `${ut.failures.length} failures` : undefined,
     errorDetail: ut.failures?.length ? JSON.stringify(ut.failures) : undefined,
     coveragePercent: ut.coverage_percent,
+    skipReason: ut.skip_reason || undefined,
   }
 }
 

@@ -11,7 +11,7 @@
 import fs from 'fs'
 import path from 'path'
 
-const JSON_DIR = path.join(__dirname, '..', 'json')
+const JSON_DIR = path.join(process.cwd(), 'json')
 const TEMPLATE_TOP_KEYS = [
   'metadata', 'machine_spec', 'document_reading_summary',
   'execution_log', 'process_timeline', 'final_results',
@@ -115,6 +115,8 @@ function emptyTemplate(): any {
     execution_log: [] as any[],
     process_timeline: [] as any[],
     final_results: {
+      static_analysis: { enabled: false, pre_commit: { configured: false, config_file: null }, lint_runner: { configured: false, config_file: null } },
+      devcontainer: { enabled: false, config_dir: null, config_files: [] as string[] },
       build: { status: 'unknown', duration_seconds: 0, artifacts: [] as any[] },
       ut: { status: 'unknown', duration_seconds: 0, total: 0, passed: 0, failed: 0, failures: [] as any[] },
       sample: { status: 'unknown', duration_seconds: 0, results: [] as any[] },
@@ -130,10 +132,17 @@ function mergeMetadata(tmpl: any, src: any) {
   const s = src.metadata || src.meta || {}
   m.repo_path = defStr(s.repo_path || s.repo_path_original)
   m.repo_name = defStr(s.repo_name)  // Preserve original repo_name
+  m.repo_url = defStr(s.repo_url || s.repository_url)
   m.start_time = defStr(s.start_time || s.generated_at)
   m.end_time = defStr(s.end_time)
   m.duration_seconds = defNum(s.duration_seconds) ?? 0
   m.total_steps = defNum(s.total_steps) ?? (Array.isArray(src.execution_log || src.process_timeline) ? Math.max((src.execution_log || src.process_timeline).length, 0) : 0)
+  // v630: preserve new metadata fields
+  if (s.branch) m.branch = defStr(s.branch)
+  if (s.commit) m.commit = defStr(s.commit)
+  if (s.commit_subject) m.commit_subject = defStr(s.commit_subject)
+  if (s.commit_date) m.commit_date = defStr(s.commit_date)
+  if (s.git_describe) m.git_describe = defStr(s.git_describe)
 }
 
 function mergeMachineSpec(tmpl: any, src: any) {
@@ -232,10 +241,10 @@ function mergeExecutionLog(tmpl: any, src: any) {
       timestamp: defStr(e.timestamp),
       command: defStr(e.command),
       success: e.success !== undefined ? Boolean(e.success) : (e.result === 'success' || e.status === 'success'),
-      output: defStr(e.output),
+      output: defStr(e.output || e.output_summary),
       error: defStr(e.error || e.error_message),
       returncode: defNum(e.returncode) ?? (e.success ? 0 : 1),
-      ...(e.duration_seconds || e.duration_estimate ? { duration_estimate: defStr(e.duration_seconds ? `${e.duration_seconds} seconds` : e.duration_estimate) } : {}),
+      duration_seconds: defNum(e.duration_seconds) ?? (e.duration_estimate ? undefined : undefined),
       ...(e.note ? { note: defStr(e.note) } : {}),
     }))
   }
@@ -259,6 +268,34 @@ function mergeFinalResults(tmpl: any, src: any) {
   const orig = src.__original || src
   const fr = src.final_results || orig.final_results || {}
 
+  // --- static_analysis (v630) ---
+  const sa = fr.static_analysis || {}
+  tmpl.final_results.static_analysis = {
+    enabled: Boolean(sa.enabled),
+    summary: defStr(sa.summary),
+    pre_commit: {
+      configured: Boolean(sa.pre_commit?.configured),
+      config_file: sa.pre_commit?.config_file || null,
+    },
+    lint_runner: {
+      configured: Boolean(sa.lint_runner?.configured),
+      config_file: sa.lint_runner?.config_file || null,
+      status: defStr(sa.lint_runner?.status),
+      duration_seconds: defNum(sa.lint_runner?.duration_seconds) ?? 0,
+      active_linters: Array.isArray(sa.lint_runner?.active_linters) ? sa.lint_runner.active_linters : [],
+      result: defStr(sa.lint_runner?.result),
+    },
+  }
+
+  // --- devcontainer (v630) ---
+  const dc = fr.devcontainer || {}
+  tmpl.final_results.devcontainer = {
+    enabled: Boolean(dc.enabled),
+    config_dir: dc.config_dir || null,
+    config_files: Array.isArray(dc.config_files) ? dc.config_files : [],
+    summary: defStr(dc.summary),
+  }
+
   // --- build ---
   const build = fr.build || {}
   // Merge artifacts from multiple sources: final_results.build.artifacts, build_artifacts top-level
@@ -273,6 +310,9 @@ function mergeFinalResults(tmpl: any, src: any) {
   tmpl.final_results.build = {
     status: normStatus(build.status),
     duration_seconds: defNum(build.duration_seconds) ?? 0,
+    command: defStr(build.command),
+    concurrency: defNum(build.concurrency),
+    duration_breakdown: build.duration_breakdown && typeof build.duration_breakdown === 'object' ? { ...build.duration_breakdown } : undefined,
     artifacts: Array.isArray(buildArtifacts)
       ? buildArtifacts.map((a: any) => {
           if (typeof a === 'string') return { name: a, path: 'unknown', size: 'unknown' }
@@ -324,6 +364,7 @@ function mergeFinalResults(tmpl: any, src: any) {
     passed,
     failed,
     failures: uniqueFailures,
+    skip_reason: defStr(ut.skip_reason),
   }
 
   // --- sample ---
@@ -340,6 +381,13 @@ function mergeFinalResults(tmpl: any, src: any) {
           execution_time: defStr(r.execution_time || r.duration || r.time),
         }))
       : [],
+    smoke_test_after_install: sample.smoke_test_after_install
+      ? {
+          command: defStr(sample.smoke_test_after_install.command),
+          status: defStr(sample.smoke_test_after_install.status),
+          interpretation: defStr(sample.smoke_test_after_install.interpretation),
+        }
+      : undefined,
   }
 }
 

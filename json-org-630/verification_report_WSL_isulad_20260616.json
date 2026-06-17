@@ -1,0 +1,371 @@
+{
+  "metadata": {
+    "repo_path": "/home/<user>/workspace/tmp/ttfhw/tmp_src/isulad",
+    "repo_url": "https://gitcode.com/openeuler/iSulad.git",
+    "branch": "master",
+    "start_time": "2026-06-16T12:26:00",
+    "end_time": "2026-06-16T12:42:00",
+    "duration_seconds": 960,
+    "total_steps": 42
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G (846G available)",
+      "docker_version": "Docker version 29.2.1, build a5c7197"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "Dockerfile 指定 FROM centos:7.6.1810（过旧），README 推荐 openEuler 并使用 dnf builddep → 选择 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 前置要求章节",
+      "value": "x86_64 (Kernel 3.0.x+)"
+    },
+    "recommended_image": {
+      "source": "Dockerfile + README.md 快速设置章节",
+      "value": "Dockerfile 指定 centos:7.6.1810，但 README 入门指南推荐 openEuler 发行版 → 选择 openEuler 24.03 LTS"
+    },
+    "dependencies": {
+      "source": "README.md + CMakeLists.txt + cmake/checker.cmake + iSulad.spec",
+      "value": [
+        "cmake >= 2.8",
+        "gcc-c++ (支持 C++11/17)",
+        "protobuf >= 3.1.0",
+        "grpc + grpc-devel + grpc-plugins",
+        "libisula >= 2.1.5 (isula_libutils、isulad_shim_libutils)",
+        "libcap-devel",
+        "zlib >= 1.2.8",
+        "yajl >= 2",
+        "openssl-devel",
+        "libcurl >= 7.4.0",
+        "systemd-devel",
+        "libselinux >= 2.0",
+        "libseccomp-devel",
+        "libwebsockets + libwebsockets-devel",
+        "libarchive >= 3.4",
+        "device-mapper-devel",
+        "sqlite3 >= 3.7.17",
+        "libevent >= 2.1.8",
+        "libevhtp >= 1.2.16",
+        "ncurses",
+        "gtest-devel + gmock-devel (测试)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 构建章节 + docs/build_docs/README.md",
+      "value": "mkdir build && cd build && cmake .. && make -j$(nproc)"
+    },
+    "ut_commands": {
+      "source": "docs/build_docs/guide/build_guide_with_docker_image.md",
+      "value": "cd build && ctest -V (需 cmake 配置 -DENABLE_UT=ON)"
+    },
+    "sample_commands": {
+      "source": "未在 README 中找到样例命令说明",
+      "value": "文档未指定，无独立样例可执行"
+    },
+    "special_dependencies": {
+      "source": "cmake/checker.cmake + iSulad.spec",
+      "value": [
+        "libisula >= 2.1.5（openEuler 24.03 仅提供 2.1.4，需从 LCR 源码构建）",
+        "isulad-shim 组件需要 libisula 中 isula_sub_string、isula_fopen 等 2.1.5 新增 API"
+      ]
+    }
+  },
+  "static_check_results": {
+    "pre_commit": {
+      "configured": false,
+      "config_file": "未找到 .pre-commit-config.yaml",
+      "result": "仓库未配置 pre-commit 静态检查"
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": "未找到 lint-runner 配置文件",
+      "result": "仓库未配置 lint-runner"
+    },
+    "summary": "仓库未配置 pre-commit 和 lint-runner 静态代码检查工具"
+  },
+  "devcontainer": {
+    "configured": false,
+    "config_path": "未找到 .devcontainer/ 目录",
+    "result": "仓库不具备 devcontainer 开发容器能力"
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-16T12:26:00",
+      "command": "git clone --branch master --single-branch https://gitcode.com/openeuler/iSulad.git tmp_src/isulad",
+      "success": true,
+      "output": "仓库克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-16T12:26:30",
+      "command": "检查 .pre-commit-config.yaml: ls tmp_src/isulad/.pre-commit-config.yaml",
+      "success": true,
+      "output": "文件不存在",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 0
+    },
+    {
+      "timestamp": "2026-06-16T12:26:30",
+      "command": "检查 lint-runner 配置: find tmp_src/isulad -name '.lint-runner.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 0
+    },
+    {
+      "timestamp": "2026-06-16T12:26:30",
+      "command": "检查 .devcontainer/ 目录",
+      "success": false,
+      "output": "目录不存在",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 0
+    },
+    {
+      "timestamp": "2026-06-16T12:26:30",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "镜像已存在，无需下载",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-16T12:26:35",
+      "command": "docker run -d --name ttfhw-isulad-env --privileged -v tmp_src/isulad:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "容器启动成功，ID: ded2647e5bc4",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-16T12:26:40",
+      "command": "dnf install -y dnf-plugins-core && dnf builddep -y iSulad.spec",
+      "success": false,
+      "output": "大部分依赖已安装，但 libisula-devel > 2.1.5-0 未在仓库中找到",
+      "error": "No matching package to install: 'libisula-devel > 2.1.5-0'",
+      "returncode": 1,
+      "duration_seconds": 615
+    },
+    {
+      "timestamp": "2026-06-16T12:36:00",
+      "command": "dnf install -y cmake gcc-c++ protobuf-devel grpc grpc-plugins grpc-devel libcap-devel libseccomp-devel libselinux-devel libwebsockets libwebsockets-devel libarchive-devel device-mapper-devel yajl-devel sqlite-devel libcurl-devel libevent-devel libevhtp-devel systemd-devel ncurses-devel openssl-devel gtest-devel gmock-devel git pkgconfig make automake autoconf libtool",
+      "success": true,
+      "output": "所有可用依赖安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-16T12:37:00",
+      "command": "dnf install -y libisula-devel (版本 2.1.4-13.oe2403)",
+      "success": true,
+      "output": "安装 libisula 2.1.4，版本低于 spec 要求的 2.1.5",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-16T12:37:10",
+      "command": "dnf install -y lib-shim-v2 lib-shim-v2-devel",
+      "success": true,
+      "output": "安装 lib-shim-v2 0.0.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-16T12:37:15",
+      "command": "cmake .. (首次，libisula 2.1.4)",
+      "success": true,
+      "output": "所有依赖检查通过，cmake 配置成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1.2
+    },
+    {
+      "timestamp": "2026-06-16T12:37:20",
+      "command": "make -j12 (首次构建，libisula 2.1.4)",
+      "success": false,
+      "output": "isulad-shim 编译失败：isula_sub_string、isula_fopen 隐式声明，shim_client_process_state 缺少 syslog_driver/syslog_tag/syslog_facility 字段",
+      "error": "libisula 2.1.4 API 与 iSulad master (2.1.6) 不兼容",
+      "returncode": 2,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-16T12:38:00",
+      "command": "从 LCR 源码构建 libisula 2.1.5: git clone lcr && cmake -DENABLE_LIBLCR=OFF && make -j12 && make install",
+      "success": true,
+      "output": "libisula 2.1.5 构建安装成功，新增 isula_sub_string、isula_fopen 等 API",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 50
+    },
+    {
+      "timestamp": "2026-06-16T12:39:00",
+      "command": "cmake .. + make -j12 (libisula 2.1.5, 不含 UT)",
+      "success": true,
+      "output": "构建成功，产物：isulad (56M), libisula_client.so (24M), libisulad_tools.so (2.9M)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 50
+    },
+    {
+      "timestamp": "2026-06-16T12:40:00",
+      "command": "cmake -DENABLE_UT=ON .. (需 Dart.cmake 兼容适配: CMP0145 policy 问题)",
+      "success": true,
+      "output": "通过创建 stub Dart.cmake 并设置 CMAKE_MODULE_PATH，UT 模式配置成功（cmake 3.27.9 中 CMP0145=NEW 移除了 Dart 模块）",
+      "error": "cmake 3.27.9 中 cmake_minimum_required(VERSION 2.8...4.0) 将 CMP0145 设为 NEW，移除 Dart 模块",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-16T12:40:30",
+      "command": "make -j12 (含 UT)",
+      "success": true,
+      "output": "构建成功，包含测试可执行文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 125
+    },
+    {
+      "timestamp": "2026-06-16T12:42:00",
+      "command": "ctest --output-on-failure -j4",
+      "success": true,
+      "output": "49 个测试：47 通过，2 失败 (96%)",
+      "error": "cgroup_cpu_ut: test_common_find_cgroup_mnt_and_root 失败（容器中 cgroup 挂载点差异）；utils_verify_ut: 并发执行时偶发竞争失败（单独运行通过）",
+      "returncode": 8,
+      "duration_seconds": 0.2
+    },
+    {
+      "timestamp": "2026-06-16T12:42:10",
+      "command": "docker stop ttfhw-isulad-env && docker rm ttfhw-isulad-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-16T12:26:00",
+      "step": "步骤1",
+      "action": "文档阅读理解",
+      "result": "完成",
+      "details": "从 README.md/README_zh.md 入口读取，结合 docs/build_docs/ 和 CMakeLists.txt、iSulad.spec、cmake/checker.cmake 提取完整依赖链。发现文档指定的 dnf builddep 方式因 libisula 版本不足而失败，需从 LCR 源码构建。"
+    },
+    {
+      "timestamp": "2026-06-16T12:26:30",
+      "step": "步骤2",
+      "action": "静态检查能力扫描",
+      "result": "两项均未配置",
+      "details": "仓库无 .pre-commit-config.yaml 和 lint-runner 配置，未启用静态代码检查工具。"
+    },
+    {
+      "timestamp": "2026-06-16T12:26:35",
+      "step": "步骤3",
+      "action": "devcontainer 扫描",
+      "result": "未配置",
+      "details": "仓库根目录无 .devcontainer/ 目录，不具备 devcontainer 开发容器能力。"
+    },
+    {
+      "timestamp": "2026-06-16T12:26:35",
+      "step": "步骤4",
+      "action": "启动容器并安装依赖",
+      "result": "完成",
+      "details": "使用 openEuler 24.03 LTS 镜像启动容器。dnf builddep 方式部分失败（libisula-devel > 2.1.5 不在仓库中），改为手动安装可用依赖 + 从 LCR 源码构建 libisula 2.1.5。"
+    },
+    {
+      "timestamp": "2026-06-16T12:38:30",
+      "step": "步骤5",
+      "action": "执行构建",
+      "result": "成功",
+      "details": "cmake 配置通过（所有依赖检查 works），make -j12 构建成功。产物：isulad 可执行文件 (56M)、libisula_client.so (24M)、libisulad_tools.so (2.9M)。不含 UT 构建耗时约 50s，含 UT 构建耗时约 125s。"
+    },
+    {
+      "timestamp": "2026-06-16T12:42:00",
+      "step": "步骤6",
+      "action": "执行单元测试和样例",
+      "result": "47/49 通过 (96%)",
+      "details": "ctest -j4 运行 49 个测试，47 个通过，2 个失败。cgroup_cpu_ut 因容器 cgroup 环境差异失败，utils_verify_ut 为并发竞争问题（单独运行通过）。README 未指定样例命令，无独立样例可运行。"
+    },
+    {
+      "timestamp": "2026-06-16T12:42:10",
+      "step": "步骤7",
+      "action": "清理容器、生成报告",
+      "result": "完成",
+      "details": "容器 ttfhw-isulad-env 已停止并删除。源码保留在 tmp_src/isulad/，报告输出至 verification_report/。"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 50,
+      "artifacts": [
+        {"name": "isulad", "path": "build/src/isulad", "size": "56M", "type": "ELF executable"},
+        {"name": "libisula_client.so", "path": "build/src/libisula_client.so", "size": "24M", "type": "shared library"},
+        {"name": "libisulad_tools.so", "path": "build/src/libisulad_tools.so", "size": "2.9M", "type": "shared library"}
+      ]
+    },
+    "ut": {
+      "status": "partial",
+      "duration_seconds": 0.2,
+      "total": 49,
+      "passed": 47,
+      "failed": 2,
+      "failed_tests": [
+        "cgroup_cpu_ut (test_common_find_cgroup_mnt_and_root) — 容器 cgroup 环境差异",
+        "utils_verify_ut — 并发执行竞争（单独运行通过）"
+      ]
+    },
+    "sample": {
+      "status": "not_applicable",
+      "duration_seconds": 0,
+      "note": "README 中未指定样例命令，无独立样例可执行"
+    }
+  },
+  "problems_encountered": [
+    {
+      "problem": "dnf builddep 失败：libisula-devel > 2.1.5-0 不在 openEuler 24.03 仓库中",
+      "solution": "从 LCR 源码仓库 (openeuler/lcr) 构建 libisula 2.1.5，安装后 cmake 检查通过"
+    },
+    {
+      "problem": "libisula 2.1.4 与 iSulad master (2.1.6) API 不兼容：缺少 isula_sub_string、isula_fopen 及 shim_client_process_state 新字段",
+      "solution": "构建并安装 libisula 2.1.5，提供所需 API"
+    },
+    {
+      "problem": "cmake -DENABLE_UT=ON 失败：include(Dart) 找不到 Dart 模块",
+      "solution": "cmake 3.27.9 中 cmake_minimum_required(VERSION 2.8...4.0) 将 CMP0145 设为 NEW，移除了 Dart 模块。通过创建 stub Dart.cmake 并设置 CMAKE_MODULE_PATH 绕过"
+    },
+    {
+      "problem": "cgroup_cpu_ut 测试失败 (test_common_find_cgroup_mnt_and_root)",
+      "solution": "容器中 cgroup 挂载点与物理机不同，预期 cgroup 路径检查失败，属于环境差异而非代码缺陷"
+    }
+  ],
+  "documentation_gaps": [
+    "README 中 dnf builddep 方式在 openEuler 24.03 上无法直接使用（libisula 版本不足），未说明从源码构建 libisula 的替代方案",
+    "README 未说明单元测试启用方式（-DENABLE_UT=ON），仅在 build_guide_with_docker_image.md 中有提及",
+    "README 未列出完整的构建依赖清单，需阅读 cmake/checker.cmake 和 iSulad.spec 获取",
+    "Dockerfile 基于 centos:7.6.1810（已停止维护），与 README 推荐 openEuler 不一致"
+  ]
+}

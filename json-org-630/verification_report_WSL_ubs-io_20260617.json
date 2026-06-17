@@ -243,7 +243,7 @@
       "timestamp": "2026-06-17T17:16:10",
       "command": "uname -a",
       "success": true,
-      "output": "Linux ecs-aa6e-c06e 5.10.0-60.139.0.166.oe2203.aarch64 #1 SMP Thu May 30 05:18:35 UTC 2024 aarch64 aarch64 aarch64 GNU/Linux\n",
+      "output": "Linux ecs-<hostid> 5.10.0-60.139.0.166.oe2203.aarch64 #1 SMP Thu May 30 05:18:35 UTC 2024 aarch64 aarch64 aarch64 GNU/Linux\n",
       "error": "",
       "returncode": 0,
       "duration_seconds": 0

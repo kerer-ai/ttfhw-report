@@ -51,10 +51,13 @@ export default async function RepoDetailPage({ params }: PageProps) {
           <StatusBadge result={detail.result} size="lg" />
         </div>
         {metadata && (
-          <div className="mt-3 text-sm text-slate-500 flex gap-4">
+          <div className="mt-3 text-sm text-slate-500 flex gap-4 flex-wrap">
             <span><Clock className="w-4 h-4 inline mr-1" />{metadata.start_time} → {metadata.end_time}</span>
             <span>耗时: {durationMinutes} 分钟</span>
             {metadata.total_steps && <span>步骤: {metadata.total_steps}</span>}
+            {metadata.branch && <span className="rounded bg-slate-100 px-2 py-0.5 text-xs">分支: {metadata.branch}</span>}
+            {metadata.commit && <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-mono">commit: {metadata.commit.substring(0, 8)}</span>}
+            {metadata.git_describe && <span className="rounded bg-slate-100 px-2 py-0.5 text-xs">{metadata.git_describe}</span>}
           </div>
         )}
       </header>
@@ -159,6 +162,104 @@ export default async function RepoDetailPage({ params }: PageProps) {
         </Card>
       )}
 
+      {/* 静态分析 (v630) */}
+      {detail.staticAnalysis?.enabled && (
+        <Card>
+          <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
+            <FileSearch className="w-5 h-5 text-indigo-500" />
+            静态分析
+          </h2>
+          {detail.staticAnalysis.summary && (
+            <p className="text-sm text-slate-600 mb-4">{detail.staticAnalysis.summary}</p>
+          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Pre-commit */}
+            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.pre_commit.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                {detail.staticAnalysis.pre_commit.configured
+                  ? <CheckCircle className="w-4 h-4 text-green-600" />
+                  : <XCircle className="w-4 h-4 text-slate-400" />}
+                <span className="text-sm font-medium">Pre-commit</span>
+              </div>
+              {detail.staticAnalysis.pre_commit.configured && detail.staticAnalysis.pre_commit.config_file && (
+                <code className="text-xs bg-white px-2 py-1 rounded block mt-1">{detail.staticAnalysis.pre_commit.config_file}</code>
+              )}
+              {!detail.staticAnalysis.pre_commit.configured && (
+                <span className="text-xs text-slate-500">未配置</span>
+              )}
+            </div>
+
+            {/* Lint-runner */}
+            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.lint_runner.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+              <div className="flex items-center gap-2 mb-1">
+                {detail.staticAnalysis.lint_runner.configured
+                  ? <CheckCircle className="w-4 h-4 text-green-600" />
+                  : <XCircle className="w-4 h-4 text-slate-400" />}
+                <span className="text-sm font-medium">Lint-runner</span>
+              </div>
+              {detail.staticAnalysis.lint_runner.configured && (
+                <div className="mt-1 space-y-1">
+                  {detail.staticAnalysis.lint_runner.config_file && (
+                    <code className="text-xs bg-white px-2 py-1 rounded block">{detail.staticAnalysis.lint_runner.config_file}</code>
+                  )}
+                  {detail.staticAnalysis.lint_runner.active_linters && detail.staticAnalysis.lint_runner.active_linters.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {detail.staticAnalysis.lint_runner.active_linters.map((l: string) => (
+                        <span key={l} className="rounded bg-indigo-100 px-2 py-0.5 text-xs text-indigo-700">{l}</span>
+                      ))}
+                    </div>
+                  )}
+                  {detail.staticAnalysis.lint_runner.status && (
+                    <span className={`text-xs ${detail.staticAnalysis.lint_runner.status.includes('通过') || detail.staticAnalysis.lint_runner.status.toLowerCase().includes('ok') ? 'text-green-600' : 'text-red-600'}`}>
+                      状态: {detail.staticAnalysis.lint_runner.status}
+                    </span>
+                  )}
+                  {detail.staticAnalysis.lint_runner.result && (
+                    <p className="text-xs text-slate-600 mt-1 whitespace-pre-wrap break-words">{detail.staticAnalysis.lint_runner.result}</p>
+                  )}
+                </div>
+              )}
+              {!detail.staticAnalysis.lint_runner.configured && (
+                <span className="text-xs text-slate-500">未配置</span>
+              )}
+            </div>
+          </div>
+        </Card>
+      )}
+
+      {/* Devcontainer (v630) */}
+      {detail.devcontainer && (
+        <Card>
+          <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
+            <Package className="w-5 h-5 text-teal-500" />
+            Devcontainer
+          </h2>
+          <div className={`rounded-lg border p-4 ${detail.devcontainer.enabled ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+            <div className="flex items-center gap-2 mb-2">
+              {detail.devcontainer.enabled
+                ? <CheckCircle className="w-5 h-5 text-green-600" />
+                : <XCircle className="w-5 h-5 text-slate-400" />}
+              <span className="font-medium text-sm">
+                {detail.devcontainer.enabled ? '已配置' : '未配置'}
+              </span>
+            </div>
+            {detail.devcontainer.summary && (
+              <p className="text-sm text-slate-600">{detail.devcontainer.summary}</p>
+            )}
+            {detail.devcontainer.enabled && detail.devcontainer.config_files && detail.devcontainer.config_files.length > 0 && (
+              <div className="mt-2">
+                <span className="text-xs text-slate-500">配置文件:</span>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {detail.devcontainer.config_files.map((f: string) => (
+                    <code key={f} className="text-xs bg-white px-2 py-1 rounded">{f}</code>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </Card>
+      )}
+
       {/* 执行日志 */}
       {executionLog.length > 0 && (
         <Card>
@@ -179,6 +280,12 @@ export default async function RepoDetailPage({ params }: PageProps) {
                     {log.command}
                   </code>
                 )}
+                {(log.returncode !== undefined || (log as any).duration_seconds !== undefined) && (
+                  <div className="flex gap-3 mt-1 text-xs text-slate-400">
+                    {log.returncode !== undefined && <span>返回码: {log.returncode}</span>}
+                    {(log as any).duration_seconds > 0 && <span>耗时: {(log as any).duration_seconds}s</span>}
+                  </div>
+                )}
                 {log.output && (
                   <div className="text-sm text-slate-600 mt-1">{log.output}</div>
                 )}
@@ -189,7 +296,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   <div className="text-xs text-slate-500 mt-1 italic">{log.note}</div>
                 )}
                 <JsonObjectGrid
-                  data={omitKeys(log, ['timestamp', 'step', 'command', 'success', 'output', 'error', 'note'])}
+                  data={omitKeys(log, ['timestamp', 'step', 'command', 'success', 'output', 'error', 'note', 'returncode', 'duration_seconds'])}
                   compact
                 />
               </div>
@@ -282,7 +389,21 @@ function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<s
 
       <OverviewCard title="Build" status={build.status}>
         <OverviewRow label="时长" value={formatDurationDisplay(build.duration)} strong />
+        {build.concurrency != null && <OverviewRow label="并发数" value={`${build.concurrency}`} />}
         <OverviewRow label="构建执行命令" value={build.commands} code />
+        {build.durationBreakdown && typeof build.durationBreakdown === 'object' && Object.keys(build.durationBreakdown).length > 0 && (
+          <div>
+            <div className="mb-1 text-xs font-medium text-slate-500">耗时分解</div>
+            <div className="space-y-1">
+              {Object.entries(build.durationBreakdown as Record<string, number>).map(([key, val]) => (
+                <div key={key} className="flex justify-between text-xs text-slate-600">
+                  <span className="truncate mr-2">{key}</span>
+                  <span className="font-mono shrink-0">{formatDurationDisplay(val)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         <OverviewRow label="产物" value={build.artifacts} />
       </OverviewCard>
 
@@ -296,12 +417,27 @@ function TopOverviewCards({ detail, rawData }: { detail: any; rawData?: Record<s
         <OverviewRow label="时长" value={formatDurationDisplay(ut.duration)} strong />
         <OverviewRow label="已执行用例通过率" value={ut.passRate} strong />
         <StatusExplanation status={ut.status} note={ut.note} />
+        {ut.skipReason && <OverviewRow label="跳过原因" value={ut.skipReason} />}
         <OverviewRow label="UT执行命令" value={ut.commands} code />
       </OverviewCard>
 
       <OverviewCard title="Sample/Example" status={sample.status}>
         <OverviewRow label="时长" value={formatDurationDisplay(sample.duration)} strong />
         <OverviewRow label="执行命令" value={sample.commands} code />
+        {sample.smokeTest && (
+          <div className="rounded-lg border border-slate-200 bg-slate-50 p-2 text-xs">
+            <div className="mb-1 font-medium text-slate-600">产物安装后冒烟测试</div>
+            {sample.smokeTest.command && (
+              <code className="block overflow-x-auto whitespace-pre-wrap break-words rounded bg-slate-900 px-2 py-1 mb-1 text-xs text-slate-50">{sample.smokeTest.command}</code>
+            )}
+            {sample.smokeTest.status && (
+              <div className="text-xs text-slate-700">状态: {sample.smokeTest.status}</div>
+            )}
+            {sample.smokeTest.interpretation && (
+              <div className="text-xs text-slate-600 mt-1">{sample.smokeTest.interpretation}</div>
+            )}
+          </div>
+        )}
       </OverviewCard>
     </div>
   )
@@ -397,10 +533,13 @@ function getBuildOverview(detail: any) {
     status: normalizeStatusString(finalBuild.status),
     duration: finalBuild.duration_seconds,
     commands: firstPresent(
+      finalBuild.command,
       detail.documentReadingSummary?.build_commands?.value,
       detail.documentReadingSummary?.build_entry?.value,
       findCommand(detail.executionLog, ['build']),
     ),
+    concurrency: finalBuild.concurrency,
+    durationBreakdown: finalBuild.duration_breakdown,
     artifacts: normalizeArtifactsForDisplay(finalBuild.artifacts),
   }
 }
@@ -425,6 +564,7 @@ function getUtOverview(detail: any) {
       detail.documentReadingSummary?.ut_entry?.value,
       findCommand(detail.executionLog, ['ut', 'test', 'pytest']),
     ),
+    skipReason: finalUt.skip_reason,
   }
 }
 
@@ -437,6 +577,7 @@ function getSampleOverview(detail: any) {
       detail.documentReadingSummary?.sample_commands?.value,
       findCommand(detail.executionLog, ['sample', 'example']),
     ),
+    smokeTest: finalSample.smoke_test_after_install || undefined,
   }
 }
 

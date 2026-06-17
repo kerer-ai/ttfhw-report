@@ -53,6 +53,10 @@ export interface RepoDetail extends RepoSummary {
   problemsEncountered?: ProblemEncountered[];
   conclusion?: Conclusion;
   sessionExportFile?: string;
+
+  // v630 新增字段
+  staticAnalysis?: StaticAnalysisResult;
+  devcontainer?: DevcontainerResult;
 }
 
 // report-511 特有类型定义
@@ -64,6 +68,12 @@ export interface ReportMetadata {
   end_time?: string;
   duration_seconds?: number;
   total_steps?: number;
+  // v630 新增
+  branch?: string;
+  commit?: string;
+  commit_subject?: string;
+  commit_date?: string;
+  git_describe?: string;
 }
 
 export interface MachineSpec {
@@ -283,6 +293,12 @@ export interface BuildResult {
   warnings?: string[];
   targetsCount?: number;
   progress?: string;
+  /** 构建命令 (v630) */
+  command?: string;
+  /** 构建并发数 (v630) */
+  concurrency?: number;
+  /** 多次构建尝试的耗时分解 (v630) */
+  durationBreakdown?: Record<string, number>;
 }
 
 export interface BuildError {
@@ -314,6 +330,47 @@ export interface UtStats {
   errorSummary?: string;
   errorDetail?: string;
   coveragePercent?: number;
+  /** UT跳过原因 (v630) */
+  skipReason?: string;
+}
+
+// ======================== v630 新增类型 ========================
+
+export interface StaticAnalysisResult {
+  enabled: boolean;
+  summary?: string;
+  pre_commit: {
+    configured: boolean;
+    config_file?: string | null;
+  };
+  lint_runner: {
+    configured: boolean;
+    config_file?: string | null;
+    status?: string;
+    duration_seconds?: number;
+    active_linters?: string[];
+    result?: string;
+  };
+}
+
+export interface DevcontainerResult {
+  enabled: boolean;
+  config_dir?: string | null;
+  config_files?: string[];
+  summary?: string;
+}
+
+export interface SmokeTestResult {
+  command?: string;
+  status?: string;
+  interpretation?: string;
+}
+
+export interface SampleResultItem {
+  sample_name: string;
+  execution_status: string;
+  output_summary: string;
+  execution_time: string;
 }
 
 export interface DocumentationChecklist {

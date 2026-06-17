@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "repo_path": "/home/ttfhw5/pytorch",
+    "repo_path": "/home/<user>/pytorch",
     "repo_url": "https://gitcode.com/Ascend/pytorch.git",
     "branch": "v2.7.1",
     "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa",
@@ -122,9 +122,9 @@
     },
     {
       "timestamp": "2026-06-17T17:16:56",
-      "command": "docker run -d --name ttfhw-pytorch-env -v /home/ttfhw5/pytorch:/home/pytorch -w /home/pytorch manylinux-builder:v1 tail -f /dev/null",
+      "command": "docker run -d --name ttfhw-pytorch-env -v /home/<user>/pytorch:/home/pytorch -w /home/pytorch manylinux-builder:v1 tail -f /dev/null",
       "success": true,
-      "output": "f7856fff3b1d5929000f8bc0ff74775761db9f6996d7a98c0f0f6a796ae43bc1",
+      "output": "<container-id>",
       "error": "",
       "returncode": 0,
       "duration_seconds": 2
@@ -289,7 +289,7 @@
       "step": "container_setup",
       "action": "启动新容器 ttfhw-pytorch-env，挂载仓库到 /home/pytorch",
       "result": "成功",
-      "details": {"image": "manylinux-builder:v1", "mount": "/home/ttfhw5/pytorch -> /home/pytorch"}
+      "details": {"image": "manylinux-builder:v1", "mount": "/home/<user>/pytorch -> /home/pytorch"}
     },
     {
       "timestamp": "2026-06-17T17:25:30",
