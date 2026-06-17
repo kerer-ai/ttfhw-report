@@ -415,7 +415,7 @@ export function calculateSummaryStats(repos: RepoSummary[]): SummaryStats {
   const avgEnvironmentDuration = envDurations.length > 0 ? envDurations.reduce((sum, d) => sum + d, 0) / envDurations.length : 0
   const totalTestsAll = repos.reduce((sum, r) => sum + (r.testTotal ?? 0), 0)
   const totalPassedAll = repos.reduce((sum, r) => sum + (r.testPassed ?? 0), 0)
-  const overallPassRate = totalTestsAll > 0 ? Math.round((totalPassedAll / totalTestsAll) * 100) : 0
+  const overallPassRate = totalTestsAll > 0 ? Math.round((totalPassedAll / totalTestsAll) * 1000) / 10 : 0
   const buildableCount = repos.filter(r => r.buildStatus === 'success' || r.buildStatus === 'partial_success').length
   const testableCount = repos.filter(r => r.utStatus === 'success' || r.utStatus === 'partial_success').length
   const ttfhwPassRate = total > 0 ? Math.round((success / total) * 100) : 0
