@@ -5,8 +5,7 @@
     "end_time": "2026-06-17T03:15:00",
     "duration_seconds": 6600,
     "total_steps": 8,
-    "repo_name": "unknown",
-    "repo_url": "unknown"
+    "repo_url": "https://gitcode.com/openeuler/ubs-engine.git"
   },
   "machine_spec": {
     "host_machine": {

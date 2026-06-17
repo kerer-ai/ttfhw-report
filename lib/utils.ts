@@ -192,6 +192,88 @@ export function getRepoCommunity(repoName: string): string | undefined {
   return REPO_COMMUNITY_MAP[key]
 }
 
+// 仓库 URL 映射（基于 repo-communities.yaml）
+const REPO_URL_MAP: Record<string, string> = {
+  // MindIE
+  'mindie-motor': 'https://gitcode.com/Ascend/MindIE-Motor.git',
+  'mindie-sd': 'https://gitcode.com/Ascend/MindIE-SD.git',
+  'mindie-pymotor': 'https://gitcode.com/Ascend/MindIE-PyMotor.git',
+  'mindie-llm': 'https://gitcode.com/Ascend/MindIE-LLM.git',
+  // MindSpeed
+  'mindspeed': 'https://gitcode.com/Ascend/MindSpeed.git',
+  'mindspeed-llm': 'https://gitcode.com/Ascend/MindSpeed-LLM.git',
+  'mindspeed-mm': 'https://gitcode.com/Ascend/MindSpeed-MM.git',
+  // pytorch
+  'pytorch': 'https://gitcode.com/Ascend/pytorch.git',
+  'op-plugin': 'https://gitcode.com/Ascend/op-plugin.git',
+  'torchair': 'https://gitcode.com/Ascend/torchair.git',
+  // openEuler
+  'kernel': 'https://gitcode.com/openeuler/kernel.git',
+  'openeuler-kernel': 'https://gitcode.com/openeuler/kernel.git',
+  'isulad': 'https://gitcode.com/openeuler/iSulad.git',
+  'a-tune': 'https://gitcode.com/openeuler/A-Tune.git',
+  'stratovirt': 'https://gitcode.com/openeuler/stratovirt.git',
+  'bishengjdk-8': 'https://gitcode.com/openeuler/bishengjdk-8.git',
+  // ubsCore
+  'memcache': 'https://gitcode.com/Ascend/memcache.git',
+  'memfabric-hybrid': 'https://gitcode.com/Ascend/memfabric_hybrid.git',
+  'ubs-engine': 'https://gitcode.com/openeuler/ubs-engine.git',
+  'ubs-comm': 'https://gitcode.com/openeuler/ubs-comm.git',
+  'ubs-virt': 'https://gitcode.com/openeuler/ubs-virt.git',
+  'ubs-io': 'https://gitcode.com/openeuler/ubs-io.git',
+  'ubs-mem': 'https://gitcode.com/openeuler/ubs-mem.git',
+  'omnistatestore': 'https://gitcode.com/openeuler/OmniStateStore.git',
+  'ham': 'https://gitcode.com/openeuler/ham.git',
+  'ubturbo': 'https://gitcode.com/openeuler/ubturbo.git',
+  // HPCKit
+  'kupl': 'https://gitcode.com/kunpengcompute/kupl.git',
+  'kutacc': 'https://gitcode.com/kunpengcompute/kutacc.git',
+  'kudnn': 'https://gitcode.com/kunpengcompute/kudnn.git',
+  'kuqcd': 'https://gitcode.com/kunpengcompute/kuqcd.git',
+  'hmpi': 'https://gitcode.com/kunpengcompute/hmpi.git',
+  'hucx': 'https://gitcode.com/kunpengcompute/hucx.git',
+  'xucg': 'https://gitcode.com/kunpengcompute/xucg.git',
+  // openUBMC
+  'libmcpp': 'https://gitcode.com/openUBMC/libmcpp.git',
+  'devmon': 'https://gitcode.com/openUBMC/devmon.git',
+  'libipmi': 'https://gitcode.com/openUBMC/libipmi.git',
+  'component_drivers': 'https://gitcode.com/openUBMC/component_drivers.git',
+  'webui': 'https://gitcode.com/openUBMC/webui.git',
+  'manifest': 'https://gitcode.com/openUBMC/manifest.git',
+  // CANN
+  'ops-nn': 'https://gitcode.com/cann/ops-nn.git',
+  'ops-math': 'https://gitcode.com/cann/ops-math.git',
+  'ops-transformer': 'https://gitcode.com/cann/ops-transformer.git',
+  'ops-cv': 'https://gitcode.com/cann/ops-cv.git',
+  'opbase': 'https://gitcode.com/cann/opbase.git',
+  'hixl': 'https://gitcode.com/cann/hixl.git',
+  'shmem': 'https://gitcode.com/cann/shmem.git',
+  'hccl': 'https://gitcode.com/cann/hccl.git',
+  'hcomm': 'https://gitcode.com/cann/hcomm.git',
+  'ge': 'https://gitcode.com/cann/ge.git',
+  'metadef': 'https://gitcode.com/cann/metadef.git',
+  'graph-autofusion': 'https://gitcode.com/cann/graph-autofusion.git',
+  'asc-devkit': 'https://gitcode.com/cann/asc-devkit.git',
+  'asc-tools': 'https://gitcode.com/cann/asc-tools.git',
+  'pto-isa': 'https://gitcode.com/cann/pto-isa.git',
+  'pyasc': 'https://gitcode.com/cann/pyasc.git',
+  'pypto': 'https://gitcode.com/cann/pypto.git',
+  'atvoss': 'https://gitcode.com/cann/atvoss.git',
+  'runtime': 'https://gitcode.com/cann/runtime.git',
+  'driver': 'https://gitcode.com/cann/driver.git',
+  'oam-tools': 'https://gitcode.com/cann/oam-tools.git',
+  'amct': 'https://gitcode.com/cann/amct.git',
+}
+
+/**
+ * 获取仓库的 GitCode URL
+ * 基于 lib/repo-communities.yaml 配置文件
+ */
+export function getRepoUrl(repoName: string): string | undefined {
+  const key = normalizeRepoKey(repoName)
+  return REPO_URL_MAP[key]
+}
+
 /**
  * 规范化仓库名称
  * 清理文件名中的前缀、后缀、日期等
@@ -238,9 +320,12 @@ export function deriveRepoIdentity(source: {
   // 直接从配置表获取社区
   const community = getRepoCommunity(repoName)
 
-  // URL 优先使用 repoUrl、repoInfoUrl，回退到 repoPath（当它是 URL 时）
+  // URL 优先使用 repoUrl、repoInfoUrl，回退到 repoPath（当它是 URL 时），再回退到配置表
   const repoPathUrl = source.repoPath && /^https?:\/\//.test(source.repoPath) ? source.repoPath : undefined
-  const url = source.repoUrl || source.repoInfoUrl || repoPathUrl
+  const url = (source.repoUrl && /^https?:\/\//.test(source.repoUrl) ? source.repoUrl : undefined)
+    || (source.repoInfoUrl && /^https?:\/\//.test(source.repoInfoUrl) ? source.repoInfoUrl : undefined)
+    || repoPathUrl
+    || getRepoUrl(repoName)
 
   return {
     repoName,

@@ -116,12 +116,18 @@ function normalizeToSummary(name: string, data: any): RepoSummary {
   const sample = data.final_results?.sample || {}
   const repoInfo = data.repo_info || {}
   const origMeta = data.__original?.metadata
-  const repoUrl = repoInfo.url || meta.repo_url || meta.repo_path
+  const repoUrl = (meta.repo_url && meta.repo_url !== 'unknown') ? meta.repo_url
+    : (repoInfo.url && repoInfo.url !== 'unknown') ? repoInfo.url
+    : (meta.repo_path && /^https?:\/\//.test(meta.repo_path)) ? meta.repo_path
+    : undefined
+  // 有效的仓库名（过滤占位符）
+  const effectiveRepoName = [repoInfo.name, meta.repo_name, origMeta?.repo_name]
+    .find((n: string | undefined) => n && n !== 'unknown')
   const identity = deriveRepoIdentity({
     fallbackName: name,
     repoPath: meta.repo_path,
     repoUrl: repoUrl,
-    repoInfoName: repoInfo.name || meta.repo_name || origMeta?.repo_name || meta.repo_path,
+    repoInfoName: effectiveRepoName,
     repoInfoUrl: repoUrl,
   })
 

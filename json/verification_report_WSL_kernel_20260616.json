@@ -5,7 +5,6 @@
     "end_time": "2026-06-16T17:46:00",
     "duration_seconds": 1380,
     "total_steps": 35,
-    "repo_name": "unknown",
     "repo_url": "https://gitcode.com/openeuler/kernel.git"
   },
   "machine_spec": {

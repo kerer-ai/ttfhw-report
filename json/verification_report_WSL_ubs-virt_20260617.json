@@ -5,8 +5,7 @@
     "end_time": "2026-06-17T15:20:00",
     "duration_seconds": 2400,
     "total_steps": 45,
-    "repo_name": "unknown",
-    "repo_url": "unknown"
+    "repo_url": "https://gitcode.com/openeuler/ubs-virt.git"
   },
   "machine_spec": {
     "host_machine": {

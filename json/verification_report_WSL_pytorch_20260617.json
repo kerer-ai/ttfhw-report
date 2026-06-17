@@ -5,7 +5,6 @@
     "end_time": "2026-06-17T18:25:00",
     "duration_seconds": 4084,
     "total_steps": 16,
-    "repo_name": "unknown",
     "repo_url": "https://gitcode.com/Ascend/pytorch.git",
     "branch": "v2.7.1",
     "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa",

@@ -131,8 +131,11 @@ function mergeMetadata(tmpl: any, src: any) {
   const m = tmpl.metadata
   const s = src.metadata || src.meta || {}
   m.repo_path = defStr(s.repo_path || s.repo_path_original)
-  m.repo_name = defStr(s.repo_name)  // Preserve original repo_name
-  m.repo_url = defStr(s.repo_url || s.repository_url)
+  m.repo_name = s.repo_name && s.repo_name !== 'unknown' ? defStr(s.repo_name) : undefined
+  // repo_url: prefer explicit URL, then repo_path if it's a URL, then repository_url
+  const explicitUrl = s.repo_url || s.repository_url
+  const pathAsUrl = (typeof s.repo_path === 'string' && /^https?:\/\//.test(s.repo_path)) ? s.repo_path : undefined
+  m.repo_url = defStr(explicitUrl || pathAsUrl)
   m.start_time = defStr(s.start_time || s.generated_at)
   m.end_time = defStr(s.end_time)
   m.duration_seconds = defNum(s.duration_seconds) ?? 0

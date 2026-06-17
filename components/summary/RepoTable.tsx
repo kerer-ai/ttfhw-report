@@ -4,6 +4,7 @@ import { RepoSummary } from '@/lib/types'
 import { Badge, StatusBadge } from '@/components/ui/Badge'
 import { formatDuration } from '@/lib/utils'
 import { ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 
 interface RepoTableProps {
   repos: RepoSummary[]
@@ -42,12 +43,12 @@ export function RepoTable({ repos }: RepoTableProps) {
             <tr key={repo.name} className="transition-colors hover:bg-blue-50/40">
               <td className="px-3 py-3 xl:px-4">
                 <div className="flex items-center gap-2 min-w-0">
-                  <a
+                  <Link
                     href={`/${repo.name}`}
                     className="font-medium text-blue-700 break-words hover:text-blue-900"
                   >
                     {repo.displayName}
-                  </a>
+                  </Link>
                   {repo.url && (
                     <a
                       href={repo.url}
