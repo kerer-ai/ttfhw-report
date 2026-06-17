@@ -652,6 +652,7 @@ function normalizeStatusString(status?: string): string {
   if (!status) return 'unknown'
   const lower = status.toLowerCase()
   if (lower === 'skipped') return 'skipped'
+  if (lower === 'no_tests') return 'no_tests'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'
   if (lower.includes('partial')) return 'partial_success'
   if (lower.includes('fail') || lower.includes('block') || lower.includes('unsuccessful')) return 'failed'
@@ -662,6 +663,7 @@ function normalizeStatusString(status?: string): string {
 function normalizeDisplayStatus(status?: string): string {
   if (!status) return 'unknown'
   const lower = status.toLowerCase()
+  if (lower === 'no_tests') return 'no_tests'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'
   if (lower.includes('partial')) return 'partial_success'
   if (lower.includes('fail') || lower.includes('block')) return 'failed'
@@ -682,7 +684,9 @@ function statusText(status?: string): string {
     case 'skipped':
       return '跳过'
     case 'not_run':
-      return '未运行'
+      return '无法执行'
+    case 'no_tests':
+      return '无用例'
     case 'unknown':
     default:
       return '未知'

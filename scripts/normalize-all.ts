@@ -23,10 +23,18 @@ const TEMPLATE_TOP_KEYS = [
 function normStatus(s: any): string {
   if (s === undefined || s === null) return 'unknown'
   const t = String(s).toLowerCase().trim()
+  // 成功
   if (t === 'success' || t === 'passed' || t === '通过' || t === '已验证' || t === 'verified' || t === '成功' || t === 'completed' || t === 'completed_success') return 'success'
+  // 失败
   if (t === 'failed' || t === 'fail' || t === 'failure' || t === 'unsuccessful' || t === '失败' || t === 'error') return 'failed'
-  if (t === 'partial_success' || t === 'partial_failure' || t === 'partial' || t === 'incomplete' || t === 'mostly_passed' || t === 'completed_mostly' || t.includes('partial')) return 'partial_success'
-  if (t === 'skipped' || t === 'not_run' || t === 'not_attempted' || t.includes('not_attempted') || t.includes('not_attempt') || t === 'unknown') return 'not_run'
+  // 部分成功
+  if (t === 'partial_success' || t === 'partial_failure' || t === 'partial' || t === 'incomplete' || t === 'mostly_passed' || t === 'completed_mostly' || t === '部分成功' || t === '部分通过' || t.includes('partial')) return 'partial_success'
+  // 无用例 (仓库没有测试)
+  if (t === 'not_available' || t === 'no_tests') return 'no_tests'
+  // 无法执行 / 跳过
+  if (t === 'skipped' || t === 'not_run' || t === 'not_executed' || t === 'not_attempted' || t === 'not_configured' || t === 'unknown' || t.includes('not_attempted') || t.includes('not_attempt')) return 'not_run'
+  // 中文：无法执行/环境不具备
+  if (t.includes('未执行') || t.includes('无法执行') || t.includes('不具备') || t.includes('不能执行')) return 'not_run'
   if (t.includes('executed') && t.includes('fail')) return 'partial_success'
   if (t.includes('success') && t.includes('fail')) return 'partial_success'
   if (t.includes('success') || t.includes('passed')) return 'success'
@@ -34,6 +42,16 @@ function normStatus(s: any): string {
   if (t.includes('fail')) return 'failed'
   if (t.includes('not') || t.includes('skip')) return 'not_run'
   return 'unknown'
+}
+
+// UT 专用状态归一化：结合 total 值判断是否为 no_tests
+function normUtStatus(s: any, total?: number): string {
+  const base = normStatus(s)
+  // 状态缺失且 total=0 或明确 no_tests → 无用例
+  if ((!s || s === undefined || s === null) && (total === undefined || total === 0)) return 'no_tests'
+  if (base === 'no_tests') return 'no_tests'
+  if (base === 'unknown' && (total === undefined || total === 0)) return 'no_tests'
+  return base
 }
 
 function defStr(v: any): string {
@@ -368,7 +386,7 @@ function mergeFinalResults(tmpl: any, src: any) {
   })
 
   tmpl.final_results.ut = {
-    status: normStatus(ut.status),
+    status: normUtStatus(ut.status, total),
     duration_seconds: defNum(ut.duration_seconds || ut.total_execution_time_seconds || ut.execution_time_seconds) ?? 0,
     total,
     passed,
@@ -593,7 +611,7 @@ function convertOpenEuler(data: any): any {
   const passedTests = defNum(utResults.passed) ?? defNum(ut.passed_tests) ?? 0
   const failedTests = defNum(utResults.failed) ?? defNum(ut.failed_tests) ?? 0
   tmpl.final_results.ut = {
-    status: normStatus(utStatusSrc),
+    status: normUtStatus(utStatusSrc, totalTests),
     duration_seconds: 0,
     total: totalTests,
     passed: passedTests,
@@ -705,7 +723,7 @@ function convertShmemV2(data: any): any {
   }
 
   tmpl.final_results.ut = {
-    status: normStatus(utRun.status),
+    status: normUtStatus(utRun.status, totalTests),
     duration_seconds: defNum(testSummary.execution_time_seconds || utRun.execution_time_seconds) ?? 0,
     total: totalTests,
     passed: passedTests,
@@ -861,7 +879,7 @@ function convertKutaccV2(data: any): any {
   const failedTests = testComponents.reduce((s: number, c: any) => s + (c.failed_tests || 0), 0)
 
   let utStatus: string
-  if (totalTests === 0) utStatus = 'not_run'
+  if (totalTests === 0) utStatus = 'no_tests'
   else if (failedTests === 0) utStatus = 'success'
   else if (passedTests > 0) utStatus = 'partial_success'
   else utStatus = 'failed'

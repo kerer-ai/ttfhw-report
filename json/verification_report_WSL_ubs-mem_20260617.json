@@ -569,7 +569,7 @@
       "skip_reason": "unknown"
     },
     "sample": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": []
     }

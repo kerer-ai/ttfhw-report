@@ -42,6 +42,9 @@ export function getStatusColor(status: string): string {
       return 'bg-error text-white'
     case 'partial_success':
       return 'bg-partial text-white'
+    case 'no_tests':
+    case 'not_run':
+      return 'bg-slate-500 text-white'
     default:
       return 'bg-gray-400 text-white'
   }

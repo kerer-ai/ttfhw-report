@@ -886,7 +886,7 @@
       "artifacts": []
     },
     "ut": {
-      "status": "unknown",
+      "status": "no_tests",
       "duration_seconds": 0,
       "total": 0,
       "passed": 0,

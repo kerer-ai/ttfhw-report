@@ -444,7 +444,7 @@
       "summary": "仓库未配置 devcontainer 开发容器"
     },
     "build": {
-      "status": "unknown",
+      "status": "partial_success",
       "duration_seconds": 342,
       "command": "unknown",
       "artifacts": [
@@ -481,7 +481,7 @@
       ]
     },
     "ut": {
-      "status": "unknown",
+      "status": "partial_success",
       "duration_seconds": 165,
       "total": 414,
       "passed": 411,
@@ -503,12 +503,12 @@
       "skip_reason": "unknown"
     },
     "sample": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": [
         {
           "sample_name": "virt-awaresched CLI",
-          "execution_status": "unknown",
+          "execution_status": "not_run",
           "output_summary": "vasctl CLI 需要部署 vas-daemon 服务后才能使用，当前环境无 libvirt 运行时",
           "execution_time": "N/A"
         }

@@ -466,7 +466,7 @@
       ]
     },
     "ut": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "total": 0,
       "passed": 0,
@@ -475,7 +475,7 @@
       "skip_reason": "test/README.md 与 README.md 中明确说明 UT（python ci/access_control_test.py --all）需要 Ascend NPU 硬件 + CANN 环境（source /usr/local/Ascend/ascend-toolkit/set_env.sh）；本机为 WSL2 x86_64 纯 CPU 环境，没有 Ascend 硬件，无法运行真实 UT"
     },
     "sample": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": [
         {

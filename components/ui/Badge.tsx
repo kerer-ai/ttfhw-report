@@ -61,7 +61,8 @@ function statusLabel(status: string): string {
     case 'failed': return '失败'
     case 'partial_success': return '部分成功'
     case 'skipped': return '跳过'
-    case 'not_run': return '未运行'
+    case 'not_run': return '无法执行'
+    case 'no_tests': return '无用例'
     case 'timeout': return '超时'
     default: return '未知'
   }
@@ -76,6 +77,7 @@ function badgeColor(status: string, solid = false): string {
       case 'timeout': return 'bg-orange-500 text-white'
       case 'skipped':
       case 'not_run': return 'bg-gray-500 text-white'
+      case 'no_tests': return 'bg-slate-500 text-white'
       default: return 'bg-gray-400 text-white'
     }
   }
@@ -87,6 +89,7 @@ function badgeColor(status: string, solid = false): string {
     case 'timeout': return 'bg-orange-100 text-orange-700 border border-orange-300'
     case 'skipped':
     case 'not_run':
+    case 'no_tests':
     case 'unknown':
     default: return 'bg-gray-100 text-gray-700 border border-gray-300'
   }

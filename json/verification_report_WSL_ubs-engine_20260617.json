@@ -470,7 +470,7 @@
       ]
     },
     "ut": {
-      "status": "unknown",
+      "status": "partial_success",
       "duration_seconds": 3600,
       "total": 5552,
       "passed": 5552,
@@ -479,7 +479,7 @@
       "skip_reason": "unknown"
     },
     "sample": {
-      "status": "unknown",
+      "status": "not_run",
       "duration_seconds": 0,
       "results": []
     }

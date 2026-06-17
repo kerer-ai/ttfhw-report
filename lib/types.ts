@@ -1,5 +1,5 @@
 // 汇总数据接口
-export type ResultStatus = 'success' | 'failed' | 'partial_success' | 'unknown' | 'skipped' | 'not_run';
+export type ResultStatus = 'success' | 'failed' | 'partial_success' | 'unknown' | 'skipped' | 'not_run' | 'no_tests';
 export type ConfigStatus = 'configured' | 'not_configured' | 'unknown';
 
 export interface RepoSummary {

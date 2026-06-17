@@ -388,16 +388,18 @@ function normalizeStatus(status: any): ResultStatus {
   if (s === 'failed' || s === 'failure' || s === 'error' || s === 'blocked') return 'failed'
   if (s === 'partial_success' || s === 'partial_failure' || s === 'mainly_success' || s === 'mostly_success' || s.includes('partial') || (s.includes('success') && s.includes('fail'))) return 'partial_success'
   if (s === 'skipped') return 'skipped'
+  if (s === 'no_tests') return 'no_tests'
   if (s === 'not_run' || s === 'not_executed' || s === 'not_configured' || s === 'not_attempted' || s === 'not_applicable') return 'not_run'
   return 'unknown'
 }
 
 function deriveOverallResultFromStatus(buildStatus: ResultStatus, utStatus: ResultStatus, sampleStatus: ResultStatus): ResultStatus {
-  const sampleRan = sampleStatus !== 'not_run' && sampleStatus !== 'unknown'
+  const sampleRan = sampleStatus !== 'not_run' && sampleStatus !== 'unknown' && sampleStatus !== 'no_tests'
   const sampleOk = !sampleRan || sampleStatus === 'success'
+  const utEffective = utStatus === 'no_tests' ? 'not_run' : utStatus
 
   if (buildStatus === 'success' && utStatus === 'success' && sampleOk) return 'success'
-  if (buildStatus === 'success' || buildStatus === 'partial_success' || utStatus === 'success' || utStatus === 'partial_success' || (sampleRan && sampleStatus === 'success')) return 'partial_success'
+  if (buildStatus === 'success' || buildStatus === 'partial_success' || utEffective === 'success' || utEffective === 'partial_success' || (sampleRan && sampleStatus === 'success')) return 'partial_success'
   return 'failed'
 }
 
