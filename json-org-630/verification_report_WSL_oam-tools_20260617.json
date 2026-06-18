@@ -1,0 +1,413 @@
+{
+  "metadata": {
+    "repo_path": "/mnt/d/code/ttfhw_0617/oam-tools",
+    "repo_url": "https://gitcode.com/cann/oam-tools.git",
+    "start_time": "2026-06-17T15:36:00",
+    "end_time": "2026-06-17T18:20:00",
+    "duration_seconds": 9840,
+    "total_steps": 20
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "349G available (/mnt/d)",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "文档(docs/zh/quick_install.md 方式2)推荐 AscendHub CANN 镜像 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10，但该镜像需 AscendHub 登录认证、公开拉取返回 not found 无法获取；故改用默认 openEuler 24.03 LTS，并通过仓库提供的 init_env.sh 下载安装 CANN toolkit(8.5.0)"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 支持的硬件环境章节",
+      "value": "aarch64、x86_64"
+    },
+    "recommended_image": {
+      "source": "docs/zh/quick_install.md - 方式2:Docker部署",
+      "value": "文档推荐 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10 (Ubuntu22.04+CANN预集成)，但需 AscendHub 登录认证，公开不可拉取；最终使用默认 openEuler 24.03 LTS + init_env.sh 安装 CANN"
+    },
+    "dependencies": {
+      "source": "docs/zh/quick_install.md 前置依赖 + CMakeLists.txt + requirements.txt",
+      "value": [
+        "python >= 3.12.0",
+        "gcc >= 7.3.0",
+        "cmake >= 3.16.0",
+        "ccache",
+        "CANN toolkit 组合包 (Ascend-cann-toolkit_8.5.0)",
+        "protobuf >= 25.1 (C++编译, cmake自动拉取)",
+        "abseil >= 20230802.1 (cmake自动拉取)",
+        "boost 1.87.0 (UT依赖, cmake自动拉取)",
+        "json >= 3.11.3",
+        "patch >= 2.7.6",
+        "coverage >= 7.13.2 (UT)",
+        "googletest 1.14.0 (UT, cmake自动拉取)",
+        "mockcpp 2.7 (UT, cmake自动拉取)",
+        "pytest >= 9.0.2 / pytest-mock >= 3.15.1 (UT)",
+        "torch==2.12.0+cpu / numpy / pandas / h5py 等 (requirements.txt)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 源码编译章节",
+      "value": "bash build.sh  (可选 --cann_3rd_lib_path 指定第三方库路径; 编译并发 -j 默认8)"
+    },
+    "ut_commands": {
+      "source": "README.md - 验证章节",
+      "value": "bash build.sh -u  (可用 --component 指定 asys/msaicerr/msprof/all; --ut/--st 控制用例类型)"
+    },
+    "sample_commands": {
+      "source": "README.md - 功能运行示例章节",
+      "value": "安装后 source set_env.sh，执行: python3 ${ASCEND_INSTALL_PATH}/tools/ascend_system_advisor/asys/asys.py -h ; python3 ${ASCEND_INSTALL_PATH}/tools/msaicerr/msaicerr.py -h ; python3 ${ASCEND_INSTALL_PATH}/tools/profiler/profiler_tool/analysis/msprof/msprof.py -h"
+    },
+    "special_dependencies": {
+      "source": "install_bundle.sh + build.sh + init_env.sh",
+      "value": [
+        "init_env.sh 从 ascend.devcloud.huaweicloud.com 下载 CANN toolkit/ops 包(~3GB)",
+        "install_bundle.sh 从 ascend-cann.obs 自动下载闭源二进制包 cann-oam-tools-release-x86_64.tar.gz",
+        "build.sh 通过 git clone 拉取子仓 msprof/msprobe (gitcode.com/Ascend/*)",
+        "cmake FetchContent 自动拉取 cann-cmake 与第三方库 protobuf/abseil/boost/gtest/mockcpp"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T15:36:30",
+      "command": "git clone https://gitcode.com/cann/oam-tools.git .",
+      "success": true,
+      "output": "Cloning into '.' ... Updating files: 100% (1296/1296), done.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 40
+    },
+    {
+      "timestamp": "2026-06-17T15:42:00",
+      "command": "pre-commit run --all-files (宿主机, 首次需安装各 hook 隔离环境)",
+      "success": false,
+      "output": "clang-format...Failed; OAT Compliance Check...Failed; ruff...Failed(484 errors, 262 fixed); pylint...Failed; Incremental codecheck...Passed; bandit...Failed; codespell...Failed",
+      "error": "7个hook中6个失败: clang-format/OAT/ruff/pylint/bandit/codespell 失败, incremental-codecheck 通过",
+      "returncode": 1,
+      "duration_seconds": 465
+    },
+    {
+      "timestamp": "2026-06-17T15:50:00",
+      "command": "find . -iname '.lint-runner.*' -o -iname 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T15:50:05",
+      "command": "ls .devcontainer/",
+      "success": true,
+      "output": "无 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T15:55:00",
+      "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:8.5.0-910b-ubuntu22.04-py3.10",
+      "success": false,
+      "output": "Error response from daemon: ... not found",
+      "error": "文档推荐镜像需 AscendHub 登录认证, 公开拉取返回 not found",
+      "returncode": 1,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T15:56:00",
+      "command": "docker run -d --name ttfhw-oam-tools-env -v /mnt/d/code/ttfhw_0617/oam-tools:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 1205bf84f04a, Up (openEuler 24.03 LTS, x86_64, 20 cores)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T15:58:00",
+      "command": "dnf install -y gcc gcc-c++ make cmake git wget curl ccache patch tar python3-pip python3-devel",
+      "success": true,
+      "output": "已安装: gcc 12.3.1, cmake 3.27.9, make 4.4.1, ccache 4.8.3, wget, git, python3-pip 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 90
+    },
+    {
+      "timestamp": "2026-06-17T16:00:00",
+      "command": "bash init_env.sh (容器内后台)",
+      "success": false,
+      "output": "下载 CANN toolkit(~790MB)+ops(~2.1GB) 完成, 但安装阶段打印 EULA 后失败",
+      "error": "[ERROR] Failed to install toolkit — init_env.sh 未使用 --quiet 参数, CANN .run 非交互式 EULA 接受失败",
+      "returncode": 1,
+      "duration_seconds": 1500
+    },
+    {
+      "timestamp": "2026-06-17T16:30:00",
+      "command": "./Ascend-cann-toolkit_8.5.0_linux-x86_64.run --full --install-path=/usr/local/Ascend --quiet",
+      "success": true,
+      "output": "Toolkit: Ascend-cann-toolkit_8.5.0_linux-x86_64 install success, installed in /usr/local/Ascend",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 360,
+      "note": "init_env.sh 失败后, 手动用 --quiet(接受EULA)安装 toolkit; 编译态仅需 toolkit"
+    },
+    {
+      "timestamp": "2026-06-17T16:40:00",
+      "command": "pip3 install -r requirements.txt (默认 pypi 源)",
+      "success": false,
+      "output": "pytest/numpy/pandas 等可下载, 但 ruff 解析失败",
+      "error": "ERROR: No matching distribution found for ruff>=0.14.14 (from versions: none) — pypi 源对该包索引查询失败",
+      "returncode": 1,
+      "duration_seconds": 240
+    },
+    {
+      "timestamp": "2026-06-17T16:50:00",
+      "command": "pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --extra-index-url https://download.pytorch.org/whl/cpu",
+      "success": true,
+      "output": "Successfully installed pytest-9.1.0 ruff-0.15.17 torch-2.12.0+cpu numpy pandas h5py coverage pytest-mock protobuf 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 420,
+      "note": "切换清华镜像解决 ruff 索引失败问题"
+    },
+    {
+      "timestamp": "2026-06-17T16:57:00",
+      "command": "source setenv.bash; export ASCEND_HOME_PATH; 建立 pkg_inc 软链(mmpa/fmk/ts/adump)",
+      "success": true,
+      "output": "ASCEND_HOME_PATH=/usr/local/Ascend/cann, lib64/include/bin 均存在, pkg_inc 已链接",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T16:58:00",
+      "command": "bash build.sh (首次构建)",
+      "success": false,
+      "output": "install_bundle 下载闭源包成功, cmake FetchContent 阶段失败",
+      "error": "fatal: detected dubious ownership in repository at '/workspace/build/_deps/cann-cmake-src' — 绑定挂载目录归属宿主用户, 容器内 git 拒绝操作",
+      "returncode": 1,
+      "duration_seconds": 252,
+      "note": "cmake FetchContent 拉取 cann-cmake 时 git clone 后 checkout 触发 dubious ownership"
+    },
+    {
+      "timestamp": "2026-06-17T17:02:00",
+      "command": "git config --global --add safe.directory '*'; rm -rf build build_out (保留 bundle)",
+      "success": true,
+      "output": "safe.directory 已配置, build 目录已清理, bundle 保留",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T17:03:00",
+      "command": "bash build.sh (重新构建, -j8)",
+      "success": true,
+      "output": "下载闭源包+子仓, 编译 protobuf/msprof/msaicerr/operator_cmp, 打包成功: cann-oam-tools_9.0.0_linux-x86_64.run; 'oam_tools build success!'",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1550,
+      "note": "real 25m50s; 并发8(≤核数60%=12)"
+    },
+    {
+      "timestamp": "2026-06-17T17:29:00",
+      "command": "bash build.sh -u (构建UT并执行全部用例)",
+      "success": false,
+      "output": "asys_ut:473通过; asys_st:257通过1失败; msaicerr_ut:522通过; msaicerr_st:187通过; msprof_ut(gtest):280通过; install_st:1通过6失败; upgrade_st:0通过4失败; uninstall_st:0通过0失败2错误; RESULT: One or more test cases failed",
+      "error": "install/upgrade/uninstall ST 失败: .run 安装包校验绑定挂载父目录权限失败(ERR_NO:0x0095) + 无NPU; asys_st 1个 coretrace 解析用例失败",
+      "returncode": 1,
+      "duration_seconds": 413,
+      "note": "完整 bash build.sh -u(含UT重新编译)耗时 2883s; 此处为 run_tests.sh 测试执行段约413s"
+    },
+    {
+      "timestamp": "2026-06-17T18:14:30",
+      "command": "python3 src/asys/asys.py -h",
+      "success": true,
+      "output": "显示 asys 全部子命令帮助 (collect/launch/diagnose/health/info/analyze/config/profiling)",
+      "error": "警告: libascend_hal.so/libdrvdsmi.so/libascendcl.so 缺失(无NPU驱动, 不影响 -h)",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T18:15:00",
+      "command": "python3 src/msaicerr/msaicerr.py -h (已设 ASCEND_INSTALL_PATH)",
+      "success": true,
+      "output": "显示 msaicerr 参数帮助 (-p/-d/-e/-out/-dev/-dtype)",
+      "error": "未设 ASCEND_INSTALL_PATH 时退出码2(需安装态CANN环境变量); 设置后正常",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T18:15:30",
+      "command": "python3 submodule/msprof/analysis/msprof/msprof.py -h",
+      "success": true,
+      "output": "显示 msprof 分析脚本帮助 (import/export/query/analyze)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T18:20:00",
+      "command": "docker rm -f ttfhw-oam-tools-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    }
+  ],
+  "process_timeline": [
+    { "timestamp": "2026-06-17T15:36:00", "step": "start", "action": "克隆仓库并开始验证流程", "result": "成功", "details": {"repo": "oam-tools", "commit_files": 1296} },
+    { "timestamp": "2026-06-17T15:40:00", "step": "document_reading", "action": "从 README 入口逐层阅读文档(README/quick_install/build.sh/CMakeLists/requirements)", "result": "成功", "details": {"sections_read": ["支持的硬件环境","源码编译","验证","功能运行示例","前置依赖","离线编译"], "key_files": ["README.md","docs/zh/quick_install.md","build.sh","CMakeLists.txt","init_env.sh","requirements.txt"]} },
+    { "timestamp": "2026-06-17T15:42:00", "step": "static_analysis_scan", "action": "检查仓库 pre-commit 配置", "result": "已配置", "details": {"config_file": ".pre-commit-config.yaml", "hooks": ["clang-format","oat-check","ruff","pylint","incremental-codecheck","bandit","codespell"]} },
+    { "timestamp": "2026-06-17T15:42:30", "step": "static_analysis_execution", "action": "执行 pre-commit run --all-files", "result": "部分通过", "details": {"passed": 1, "failed": 6, "skipped": 0, "duration_seconds": 465} },
+    { "timestamp": "2026-06-17T15:50:00", "step": "static_analysis_scan", "action": "检查 lint-runner 配置", "result": "未配置", "details": {"searched_patterns": [".lint-runner.yaml",".lint-runner.json","lint-runner.config.*"]} },
+    { "timestamp": "2026-06-17T15:50:05", "step": "devcontainer_scan", "action": "检查 .devcontainer 目录及配置", "result": "未配置", "details": {"config_dir": null, "files": []} },
+    { "timestamp": "2026-06-17T15:55:00", "step": "image_selection", "action": "选择基础镜像", "result": "openEuler 24.03 LTS", "details": {"selection_reason": "文档推荐 AscendHub CANN 镜像需登录认证不可公开拉取(not found), 改用默认 openEuler 并用 init_env.sh 安装 CANN"} },
+    { "timestamp": "2026-06-17T15:56:00", "step": "container_setup", "action": "启动 openEuler 容器并挂载仓库", "result": "成功", "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container": "ttfhw-oam-tools-env"} },
+    { "timestamp": "2026-06-17T15:58:00", "step": "dependency_installation", "action": "安装系统构建依赖", "result": "成功", "details": {"packages": ["gcc","gcc-c++","make","cmake","git","wget","curl","ccache","patch","python3-pip","python3-devel"]} },
+    { "timestamp": "2026-06-17T16:00:00", "step": "dependency_installation", "action": "执行 init_env.sh 安装 CANN", "result": "失败", "details": {"error": "init_env.sh 缺少 --quiet, CANN .run 非交互 EULA 接受失败"} },
+    { "timestamp": "2026-06-17T16:30:00", "step": "problem_resolution", "action": "手动用 --quiet 安装 CANN toolkit(8.5.0)", "result": "已解决", "details": {"solution": "./Ascend-cann-toolkit_8.5.0_linux-x86_64.run --full --install-path=/usr/local/Ascend --quiet", "source": ".run --help 说明 --quiet 即接受 EULA"} },
+    { "timestamp": "2026-06-17T16:50:00", "step": "dependency_installation", "action": "安装 Python 依赖(requirements.txt, 清华镜像)", "result": "成功", "details": {"packages": "pytest-9.1.0 ruff-0.15.17 torch-2.12.0+cpu 等", "note": "默认 pypi 源 ruff 索引失败, 切换清华镜像解决"} },
+    { "timestamp": "2026-06-17T16:58:00", "step": "build_attempt", "action": "首次构建 bash build.sh", "result": "失败", "details": {"error": "git dubious ownership (绑定挂载目录归属) 阻断 cmake FetchContent cann-cmake"} },
+    { "timestamp": "2026-06-17T17:02:00", "step": "problem_resolution", "action": "配置 git safe.directory '*' 并清理 build 目录", "result": "已解决", "details": {"solution": "git config --global --add safe.directory '*'"} },
+    { "timestamp": "2026-06-17T17:03:00", "step": "build_retry", "action": "重新构建 bash build.sh", "result": "成功", "details": {"concurrency": 8, "concurrency_ratio": "40%(≤60%)", "duration_seconds": 1550, "artifact": "build_out/cann-oam-tools_9.0.0_linux-x86_64.run (234M)"} },
+    { "timestamp": "2026-06-17T17:29:00", "step": "ut_execution", "action": "执行单元测试/ST bash build.sh -u", "result": "部分成功", "details": {"cases": 8, "passed_cases": 4, "failed_cases": 4, "total_passed": 1720, "total_failed": 11, "total_errors": 2} },
+    { "timestamp": "2026-06-17T18:14:30", "step": "sample_execution", "action": "执行功能样例入口(asys/msaicerr/msprof -h)", "result": "成功", "details": {"samples_run": 3, "note": "完整功能样例需 NPU+安装, 此处验证入口可加载并输出帮助"} },
+    { "timestamp": "2026-06-17T18:20:00", "step": "cleanup", "action": "停止并删除容器", "result": "成功", "details": {"container": "ttfhw-oam-tools-env"} },
+    { "timestamp": "2026-06-17T18:20:30", "step": "report_generation", "action": "生成验证报告", "result": "成功", "details": {"output_file": "verification_report_WSL_oam-tools_20260617.json"} }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置(7个hook, 1通过6失败), 未检测到 lint-runner 配置; pre-commit 首次需联网安装各 hook 隔离环境(clang-format/ruff/pylint/bandit/codespell 等), 耗时较长",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 465,
+        "total_hooks": 7,
+        "passed": 1,
+        "failed": 6,
+        "skipped": 0,
+        "failures": [
+          { "hook_name": "clang-format", "file": "多文件(C++/C)", "error": "代码格式不符, hook 自动修改了文件" },
+          { "hook_name": "oat-check", "file": "-", "error": "OAT 合规扫描未通过(扫描65个暂存文件)" },
+          { "hook_name": "ruff", "file": "多文件(.py)", "error": "发现484个问题, --fix 修复262个, 仍剩222个" },
+          { "hook_name": "pylint", "file": "多文件(.py)", "error": "pylint 检查未通过" },
+          { "hook_name": "bandit", "file": "多文件(.py)", "error": "安全扫描(-ll, medium及以上)未通过" },
+          { "hook_name": "codespell", "file": "多文件", "error": "拼写检查未通过" }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 .devcontainer 开发容器能力"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 1550,
+      "artifacts": [
+        { "name": "cann-oam-tools_9.0.0_linux-x86_64.run", "path": "build_out/cann-oam-tools_9.0.0_linux-x86_64.run", "size": "234 MB" },
+        { "name": "libascend_dump_parser.so", "path": "build/src/msaicerr/proto_parse/libascend_dump_parser.so", "size": "3.9 MB" },
+        { "name": "libascend_profinj.so", "path": "build/src/msprof/collector/dvvp/acp/libascend_profinj.so", "size": "1.3 MB" },
+        { "name": "msprofbin 可执行(msprof)", "path": "build/src/msprof/collector/dvvp/msprofbin/msprof", "size": "链接产物" }
+      ],
+      "concurrency": 8,
+      "concurrency_ratio": "40% (≤容器核数60%)"
+    },
+    "ut": {
+      "status": "部分成功",
+      "duration_seconds": 413,
+      "note": "完整命令 bash build.sh -u(含UT重新编译)耗时 2883s; 此处 duration 为 run_tests.sh 测试执行段",
+      "cases": [
+        { "case": "asys_ut", "framework": "pytest", "result": "通过", "passed": 473, "failed": 0, "errors": 0, "coverage": "87%" },
+        { "case": "asys_st", "framework": "pytest", "result": "失败", "passed": 257, "failed": 1, "errors": 0, "coverage": "78%", "fail_detail": "test_asys_analyze_coretrace_one_file_without_symbol_path 断言失败(check_file_contents)" },
+        { "case": "msaicerr_ut", "framework": "pytest", "result": "通过", "passed": 522, "failed": 0, "errors": 0, "coverage": "90%" },
+        { "case": "msaicerr_st", "framework": "pytest", "result": "通过", "passed": 187, "failed": 0, "errors": 0, "coverage": "78%" },
+        { "case": "msprof_ut", "framework": "gtest", "result": "通过", "passed": 280, "failed": 0, "errors": 0 },
+        { "case": "install_st", "framework": "pytest", "result": "失败", "passed": 1, "failed": 6, "errors": 0, "fail_detail": ".run 安装 --full 退出码1(环境: 绑定挂载父目录权限 + 无NPU)" },
+        { "case": "upgrade_st", "framework": "pytest", "result": "失败", "passed": 0, "failed": 4, "errors": 0, "fail_detail": "依赖 install, 环境限制" },
+        { "case": "uninstall_st", "framework": "pytest", "result": "失败", "passed": 0, "failed": 0, "errors": 2, "fail_detail": "ERR_NO:0x0095 安装目录父目录权限无效(绑定挂载)" }
+      ],
+      "total": 1733,
+      "passed": 1720,
+      "failed": 11,
+      "errors": 2,
+      "failures": [
+        { "case": "asys_st", "test": "test_asys_analyze_coretrace_one_file_without_symbol_path", "error": "check_file_contents 断言失败(coretrace 解析, 疑环境/闭源符号库相关)" },
+        { "case": "install_st", "test": "test_install[--full/--run/--devel]", "error": ".run 安装退出码1, 绑定挂载父目录权限 + 无NPU" },
+        { "case": "upgrade_st", "test": "升级用例", "error": "依赖安装, 无NPU环境失败" },
+        { "case": "uninstall_st", "test": "test_uninstall", "error": "ERR_NO:0x0095 安装目录父目录权限无效" }
+      ]
+    },
+    "sample": {
+      "status": "成功",
+      "duration_seconds": 9,
+      "note": "完整功能样例(asys info/health/collect, msaicerr 解析, msprof 采集)需 NPU 设备与 .run 安装; 当前无 NPU 且安装ST受绑定挂载权限限制, 故以源码入口 -h 验证工具可加载运行",
+      "results": [
+        { "sample_name": "asys -h", "execution_status": "成功", "output_summary": "输出 asys 全部子命令帮助(collect/launch/diagnose/health/info/analyze/config/profiling); 仅有 NPU 驱动库缺失警告(不影响)", "execution_time": "约3秒" },
+        { "sample_name": "msaicerr -h", "execution_status": "成功(需设ASCEND_INSTALL_PATH)", "output_summary": "输出 msaicerr 参数帮助; 未设 CANN 环境变量时退出码2, 设置后正常", "execution_time": "约3秒" },
+        { "sample_name": "msprof 分析脚本 -h", "execution_status": "成功", "output_summary": "输出 msprof 分析脚本帮助(import/export/query/analyze)", "execution_time": "约3秒" }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "文档推荐的 AscendHub CANN 镜像(swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:...)需 AscendHub 登录认证, 文档未说明公开拉取不可用, 外部开发者无账号无法获取",
+    "init_env.sh 执行 CANN .run 安装时未传 --quiet 参数, 非交互式环境下 EULA 无法接受导致安装失败; 文档/脚本未提示该用法",
+    "文档要求 python >= 3.12.0, 但 openEuler 24.03 LTS 仓库仅提供 python3.11.6; 实际构建与 UT 在 3.11 下可运行, 文档版本要求与默认镜像不匹配",
+    "requirements.txt 中 ruff/torch 等包在默认 pypi.org 源索引查询失败(from versions: none), 文档未给出国内镜像配置建议; 需手动切换清华/阿里等镜像",
+    "绑定挂载目录触发 git 'dubious ownership', 阻断 cmake FetchContent 拉取 cann-cmake; 文档/init_env.sh 未提示容器内需配置 git safe.directory",
+    "install/upgrade/uninstall ST 用例依赖 NPU 设备与安装目录(非绑定挂载)权限, 文档未说明无 NPU 环境下这些用例的预期结果",
+    "README 验证章节未单独列出 ST 用例(install/upgrade/uninstall)对 NPU 与安装态的硬性依赖, 易被误判为代码缺陷"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T15:55:00",
+      "problem": "文档推荐的 AscendHub CANN 镜像公开拉取返回 not found(需登录认证)",
+      "solution": "改用默认 openEuler 24.03 LTS 基础镜像, 并通过仓库 init_env.sh 下载安装 CANN toolkit",
+      "source": "docs/zh/quick_install.md 方式2 + docker pull 实测"
+    },
+    {
+      "timestamp": "2026-06-17T16:25:00",
+      "problem": "init_env.sh 安装 CANN toolkit 失败: .run 打印 EULA 后非交互式无法接受",
+      "solution": "手动执行 ./Ascend-cann-toolkit_8.5.0_linux-x86_64.run --full --install-path=/usr/local/Ascend --quiet(--quiet 即接受 EULA)",
+      "source": ".run --help 输出: 'Using this option means accepting the EULA'"
+    },
+    {
+      "timestamp": "2026-06-17T16:45:00",
+      "problem": "pip 安装 requirements.txt 失败: ruff>=0.14.14 在默认 pypi 源 'from versions: none'",
+      "solution": "切换清华镜像: pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple --extra-index-url https://download.pytorch.org/whl/cpu",
+      "source": "pip index versions ruff -i 清华源 返回 0.14.14 可用"
+    },
+    {
+      "timestamp": "2026-06-17T17:00:00",
+      "problem": "首次构建 cmake 阶段失败: git 'dubious ownership' 阻断 FetchContent 拉取 cann-cmake",
+      "solution": "git config --global --add safe.directory '*' (容器内), 并清理 build/build_out 后重试",
+      "source": "build.log: fatal: detected dubious ownership in repository at '/workspace/build/_deps/cann-cmake-src'"
+    },
+    {
+      "timestamp": "2026-06-17T18:10:00",
+      "problem": "install/upgrade/uninstall ST 用例失败: .run 安装报 ERR_NO:0x0095 安装目录父目录权限无效 + 无 NPU 设备",
+      "solution": "环境限制(无 NPU + 绑定挂载目录权限), 非代码缺陷; 记录为预期外环境失败, 不修改源码",
+      "source": "build/install_st_output.log / uninstall_st_output.log"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_oam-tools_20260617.md"
+}
