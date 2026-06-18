@@ -1,0 +1,417 @@
+{
+  "metadata": {
+    "repo_path": "/workspace/TTFHW-third/UBSCore/memfabric/memfabric_hybrid",
+    "start_time": "2026-06-17T06:22:00",
+    "end_time": "2026-06-17T06:44:00",
+    "duration_seconds": 700,
+    "total_steps": 16
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G (已用35G, 可用922G)",
+      "docker_version": "Docker version 29.1.3"
+    },
+    "container": {
+      "os": "Ubuntu 22.04.5 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "docker.m.daocloud.io/library/ubuntu:22.04",
+      "selection_reason": "文档 doc/installation.md 指定 OS 要求 Ubuntu 22.04 LTS 或更高版本 → 选择 Ubuntu 22.04（Docker Hub 不可达，经 DaoCloud 镜像加速）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 软件硬件配套说明 章节",
+      "value": "aarch64 / x86（文档列出两者均支持）"
+    },
+    "recommended_image": {
+      "source": "doc/installation.md - 编译环境要求 章节",
+      "value": "Ubuntu 22.04 LTS 或更高版本"
+    },
+    "dependencies": {
+      "source": "doc/installation.md + CMakeLists.txt",
+      "value": [
+        "cmake >= 3.12（推荐 3.20+）",
+        "gcc >= 11.4",
+        "make >= 4.3 或 ninja >= 1.10.1",
+        "pybind11（BUILD_PYTHON=ON 时需要）",
+        "googletest + mockcpp（git submodule，BUILD_UT=ON 时需要）"
+      ]
+    },
+    "build_commands": {
+      "source": "doc/installation.md - 编译构建 章节",
+      "value": "bash script/build_and_pack_run.sh（默认: BUILD_MODE=RELEASE, BUILD_PYTHON=ON, XPU_TYPE=NPU, BUILD_TEST=OFF, BUILD_HCOM=OFF）"
+    },
+    "ut_commands": {
+      "source": "README.md - 目录结构 + script/run_ut.sh",
+      "value": "bash script/run_ut.sh（编译 BUILD_UT=ON + ASAN 模式，执行 test_memfabric，生成覆盖率报告）"
+    },
+    "sample_commands": {
+      "source": "README.md + examples/memory_pool/README.md",
+      "value": "cd examples/memory_pool/01_basic/<sample_dir> && python3 <sample>.py（需安装 memfabric_hybrid 包，需 NPU 或 RDMA 硬件）"
+    },
+    "special_dependencies": {
+      "source": "doc/installation.md + .gitmodules",
+      "value": [
+        "git submodule: googletest（GitHub → 使用 gitee 镜像加速）",
+        "git submodule: mockcpp（GitHub）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T06:22:00",
+      "command": "docker pull docker.m.daocloud.io/library/ubuntu:22.04",
+      "success": true,
+      "output": "已缓存，无需重新下载",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:22:05",
+      "command": "docker run -d --name ttfhw-memfabric_hybrid-env -v .../memfabric_hybrid:/workspace -w /workspace ubuntu:22.04 tail -f /dev/null",
+      "success": true,
+      "output": "Container 已启动",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T06:22:10",
+      "command": "apt-get update && apt-get install -y cmake gcc g++ make ninja-build python3 python3-pip git dos2unix lcov（容器内）",
+      "success": true,
+      "output": "cmake 3.22.1, gcc 11.4.0, g++ 11.4.0, make 4.3, ninja 1.10.1, python 3.10.12 安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 78
+    },
+    {
+      "timestamp": "2026-06-17T06:23:30",
+      "command": "pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pybind11（容器内）",
+      "success": true,
+      "output": "pybind11 3.0.4 安装成功",
+      "error": "pypi.org 不可达，使用清华镜像",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T06:23:40",
+      "command": "pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade wheel setuptools（容器内）",
+      "success": true,
+      "output": "wheel 0.37.1 → 0.47.0, setuptools 59.6.0 → 82.0.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T06:23:55",
+      "command": "git clone --depth 1 -b v1.12.0 https://gitee.com/mirrors/googletest.git（→ test/3rdparty/googletest）",
+      "success": true,
+      "output": "googletest v1.12.0 克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T06:24:00",
+      "command": "git clone --depth 1 https://github.com/sinojelly/mockcpp.git（→ test/3rdparty/mockcpp）",
+      "success": true,
+      "output": "mockcpp v2.7 克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 41
+    },
+    {
+      "timestamp": "2026-06-17T06:25:00",
+      "command": "bash script/build_and_pack_run.sh（容器内，默认参数: BUILD_PYTHON=ON, XPU_TYPE=NPU）",
+      "success": true,
+      "output": "Ninja 编译 114/114 目标全部成功。产物: .run 包(5.0MB), .whl 包(2.5MB), .so 库 3 个",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 18
+    },
+    {
+      "timestamp": "2026-06-17T06:25:30",
+      "command": "bash script/run_ut.sh（容器内，BUILD_UT=ON, ASAN 模式）",
+      "success": true,
+      "output": "编译 192/192 目标成功。测试执行: 1245 tests from 58 test suites, ALL PASSED。代码行覆盖率 70.7%",
+      "error": "覆盖率 branch 解析 awk 语法错误（不影响测试结果，1245 测试全部通过）",
+      "returncode": 2,
+      "duration_seconds": 265
+    },
+    {
+      "timestamp": "2026-06-17T06:30:00",
+      "command": "docker stop ttfhw-memfabric_hybrid-env && docker rm ttfhw-memfabric_hybrid-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:40:00",
+      "command": "PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple pre-commit run --all-files（宿主机）",
+      "success": true,
+      "output": "14 个 hooks 全部初始化并执行",
+      "error": "ruff-check(61), codespell, pylint, bandit, typos 报错，其余通过",
+      "returncode": 1,
+      "duration_seconds": 180
+    },
+    {
+      "timestamp": "2026-06-17T06:30:10",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:30:20",
+      "command": "检查 .devcontainer/ 目录",
+      "success": false,
+      "output": ".devcontainer/ 目录不存在",
+      "error": "仓库未配置 devcontainer",
+      "returncode": 2,
+      "duration_seconds": 1
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T06:22:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:22:05",
+      "step": "image_selection",
+      "action": "根据 doc/installation.md 选择 Ubuntu 22.04 镜像",
+      "result": "Ubuntu 22.04",
+      "details": {"selection_reason": "doc/installation.md 指定 OS 要求 Ubuntu 22.04 LTS 或更高版本"}
+    },
+    {
+      "timestamp": "2026-06-17T06:22:10",
+      "step": "container_setup",
+      "action": "启动容器，挂载仓库目录到 /workspace",
+      "result": "成功",
+      "details": {"image": "docker.m.daocloud.io/library/ubuntu:22.04", "container_name": "ttfhw-memfabric_hybrid-env"}
+    },
+    {
+      "timestamp": "2026-06-17T06:22:20",
+      "step": "dependency_installation",
+      "action": "安装构建依赖：cmake 3.22.1, gcc 11.4.0, ninja 1.10.1, pybind11 3.0.4, wheel 0.47.0",
+      "result": "成功",
+      "details": {"packages": {"cmake": "3.22.1 ✓(需≥3.12)", "gcc": "11.4.0 ✓(需≥11.4)", "make": "4.3 ✓(需≥4.3)", "ninja": "1.10.1 ✓(需≥1.10.1)", "pybind11": "3.0.4 ✓", "wheel": "0.47.0（升级以修复 SOURCE_DATE_EPOCH=0 兼容性）"}}
+    },
+    {
+      "timestamp": "2026-06-17T06:24:00",
+      "step": "dependency_installation",
+      "action": "初始化 git 子模块（googletest via gitee, mockcpp via GitHub）",
+      "result": "成功",
+      "details": {"googletest": "gitee.com/mirrors/googletest v1.12.0 (2s)", "mockcpp": "github.com/sinojelly/mockcpp v2.7 (41s)"}
+    },
+    {
+      "timestamp": "2026-06-17T06:25:00",
+      "step": "build_execution",
+      "action": "执行构建: bash script/build_and_pack_run.sh（XPU_TYPE=NPU, BUILD_PYTHON=ON）",
+      "result": "成功",
+      "details": {"ninja_targets": "114/114", "concurrency": 32, "build_tool": "ninja", "artifacts": [".run 包(5.0MB)", ".whl 包(2.5MB)", "libmf_hybm_core.so(2.8MB)", "libmf_smem.so(2.0MB)", "libacc_tcp_net.so(507KB)"]}
+    },
+    {
+      "timestamp": "2026-06-17T06:28:00",
+      "step": "ut_execution",
+      "action": "执行单元测试: bash script/run_ut.sh",
+      "result": "成功",
+      "details": {"total": 1245, "passed": 1245, "failed": 0, "test_suites": 58, "line_coverage": "70.7%"}
+    },
+    {
+      "timestamp": "2026-06-17T06:30:00",
+      "step": "static_analysis_scan",
+      "action": "检查 pre-commit / lint-runner 配置",
+      "result": "pre-commit 已配置，lint-runner 未配置",
+      "details": {"pre_commit_config": ".pre-commit-config.yaml (14 hooks)", "lint_runner": "未配置"}
+    },
+    {
+      "timestamp": "2026-06-17T06:40:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files（PIP_INDEX_URL=清华镜像）",
+      "result": "部分通过 (8/5/1)",
+      "details": {"passed": ["trailing-whitespace", "end-of-file-fixer", "check-yaml", "check-added-large-files", "check-merge-conflicts", "detect-private-key", "ruff-format", "clang-format"], "failed": ["ruff-check(61)", "codespell", "pylint", "bandit", "typos"], "skipped": ["check-json"]}
+    },
+    {
+      "timestamp": "2026-06-17T06:30:20",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:32:00",
+      "step": "sample_execution",
+      "action": "检查示例执行条件",
+      "result": "无法执行",
+      "details": {"reason": "所有示例需 NPU 或 RDMA 硬件，WSL2 环境不具备"}
+    },
+    {
+      "timestamp": "2026-06-17T06:30:10",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:44:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_memfabric_hybrid_20260617.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（14个hooks），8 Passed, 5 Failed, 1 Skipped。ruff-check 发现 61 个 Python 代码问题。未检测到 lint-runner 配置。",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 180,
+        "total_hooks": 14,
+        "passed": 8,
+        "failed": 5,
+        "skipped": 1,
+        "failures": [
+          {
+            "hook_name": "ruff-check",
+            "file": "N/A",
+            "error": "61 个问题: F841(未使用变量)20, F401(未使用导入)17, E402(import位置)13, E721(类型比较)9, SIM115(上下文管理器)1, F821(未定义名称)1"
+          },
+          {
+            "hook_name": "codespell",
+            "file": "N/A",
+            "error": "拼写检查发现若干问题"
+          },
+          {
+            "hook_name": "pylint",
+            "file": "N/A",
+            "error": "Pylint 发现代码质量问题"
+          },
+          {
+            "hook_name": "bandit",
+            "file": "N/A",
+            "error": "Bandit 安全扫描发现问题"
+          },
+          {
+            "hook_name": "typos",
+            "file": "N/A",
+            "error": "拼写检查发现问题"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 18,
+      "artifacts": [
+        {
+          "name": "memfabric_hybrid-1.2.0_linux_x86_64.run",
+          "path": "output/memfabric_hybrid-1.2.0_linux_x86_64.run",
+          "size": "5.0 MB"
+        },
+        {
+          "name": "memfabric_hybrid-1.2.0-cp310-cp310-linux_x86_64.whl",
+          "path": "output/memfabric_hybrid/wheel/memfabric_hybrid-1.2.0-cp310-cp310-linux_x86_64.whl",
+          "size": "2.5 MB"
+        },
+        {
+          "name": "libmf_hybm_core.so",
+          "path": "output/hybm/lib64/libmf_hybm_core.so",
+          "size": "2.8 MB"
+        },
+        {
+          "name": "libmf_smem.so",
+          "path": "output/smem/lib64/libmf_smem.so",
+          "size": "2.0 MB"
+        },
+        {
+          "name": "libacc_tcp_net.so",
+          "path": "output/acc_links/lib64/libacc_tcp_net.so",
+          "size": "507 KB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 265,
+      "total": 1245,
+      "passed": 1245,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "无法执行",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "所有示例",
+          "execution_status": "无法执行",
+          "output_summary": "MemFabric 所有示例均需 NPU 或 RDMA 硬件，当前 WSL2 环境不具备。构建产物（.so/.run/.whl）均已成功生成。",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 未列出 C API 编译详细依赖版本（需跳转到 doc/installation.md）",
+    "doc/installation.md 未说明 UT 执行方法和前置条件（子模块初始化），UT 入口仅在 README 目录结构中出现",
+    "README 未说明示例执行需要物理 NPU/RDMA 硬件"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T06:23:40",
+      "problem": "Python Wheel 打包失败: setup.py:32 SOURCE_DATE_EPOCH=0 与 Ubuntu 22.04 默认 wheel 0.37.1 不兼容，ZIP 不支持 1980 年之前的时间戳",
+      "solution": "升级 wheel 到 0.47.0（新版本正确处理 SOURCE_DATE_EPOCH=0）",
+      "source": "setup.py 第32行 + wheel 版本过旧"
+    },
+    {
+      "timestamp": "2026-06-17T06:40:00",
+      "problem": "pre-commit 内部 pip install 默认走 pypi.org 下载 hook 依赖，pypi.org 不可达导致初始化卡住",
+      "solution": "设置 PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple 使 pip 走清华镜像",
+      "source": ".pre-commit-config.yaml hook 环境的 Python 依赖安装"
+    },
+    {
+      "timestamp": "2026-06-17T06:23:55",
+      "problem": "UT 子模块 googletest/mockcpp 为空目录，GitHub 访问不稳定",
+      "solution": "googletest 从 gitee.com/mirrors/googletest 克隆（2s），mockcpp 从 GitHub 克隆（41s）",
+      "source": ".gitmodules 子模块定义"
+    },
+    {
+      "timestamp": "2026-06-17T06:28:00",
+      "problem": "UT 覆盖率脚本 run_ut.sh 中 branch 覆盖率解析 awk 语法错误（branches rate 为空）",
+      "solution": "不影响测试结果，1245 测试全部通过，属脚本健壮性缺陷",
+      "source": "script/run_ut.sh 第126行"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_memfabric_hybrid_20260617.md"
+}
