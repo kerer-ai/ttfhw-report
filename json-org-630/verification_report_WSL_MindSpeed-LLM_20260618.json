@@ -2,7 +2,7 @@
     "schema_version":  "ttfhw-verify-pro-1.0",
     "report_meta":  {
                         "generated_at":  "2026-06-18T14:33:32",
-                        "report_filename":  "MindSpeed-LLM-master-20260618.json",
+                        "report_filename":  "verification_report_WSL_MindSpeed-LLM_20260618.json",
                         "verifier":  "ttfhw-verify-pro skill (autonomous AI agent)",
                         "verifier_role":  "external-newcomer-developer-simulation",
                         "execution_host":  "192.168.0.13",
