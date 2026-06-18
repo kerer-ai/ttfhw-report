@@ -1,0 +1,476 @@
+{
+  "metadata": {
+    "repo_path": "/mnt/d/code/ttfhw_0617/ge/ge",
+    "repo_url": "https://gitcode.com/cann/ge.git",
+    "start_time": "2026-06-17T20:13:00",
+    "end_time": "2026-06-18T03:33:00",
+    "duration_seconds": 26400,
+    "total_steps": 18
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "336G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2",
+      "npu_available": false
+    },
+    "container": {
+      "os": "Ubuntu 22.04.5 LTS (CANN 开发镜像)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)",
+      "container_name": "ttfhw-ge-env"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "selection_reason": "docs/quick_install.md 的 Docker 部署方式明确推荐该昇腾 CANN 开发镜像（Ubuntu 22.04 + CANN 预装），故优先使用文档推荐镜像；镜像本地已缓存，拉取成功"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "docs/build.md + scripts/check_env.sh",
+      "value": "x86_64 / aarch64（默认 x86_64，本次为 x86_64）"
+    },
+    "recommended_image": {
+      "source": "docs/quick_install.md - 方式二 Docker 部署",
+      "value": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11（Ubuntu 22.04 + CANN 预装）"
+    },
+    "dependencies": {
+      "source": "docs/build.md 第4.2节 + requirements.txt + scripts/init_env.sh + scripts/check_env.sh",
+      "value": [
+        "CANN Toolkit（master 分支需 9.1.0，init_env.sh 自动下载安装）",
+        "GCC >= 7.3.x（镜像内为 11.4.0）",
+        "Python3 >= 3.9.x（镜像内为 3.11.15）",
+        "CMake >= 3.16.0，建议 3.20.0（镜像内为 3.22.1）",
+        "bash >= 5.1.16（镜像内为 5.1.16）",
+        "ccache / autoconf / automake / libtool / gperf / lcov / libasan / patch / graph-easy(可选)",
+        "Python 包: numpy / pybind11>=2.13.6 / jinja2 / setuptools>=59.0.1 / wheel>=0.37.1 / coverage / cloudpickle"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/build.md 第4.3节",
+      "value": "bash build.sh [--ge_compiler|--ge_executor|--dflow]；不指定 --pkg_type 时同时编译三种子包；编译成功后在 build_out/ 生成 cann-<component>_<version>_<arch>.run"
+    },
+    "ut_commands": {
+      "source": "docs/build.md 第4.4节",
+      "value": "bash tests/run_test.sh --ut（全部）或 bash tests/run_test.sh --ut=${TARGET}（推荐指定目标，如 ge_common）"
+    },
+    "sample_commands": {
+      "source": "examples/README.md + docs/build.md 第4.5节",
+      "value": "样例位于 examples/ 下，需先安装 CANN toolkit+ops 包并完成 ATC 模型转换，在昇腾 NPU 设备上执行推理（如 ResNet50、Qwen LLM 等）"
+    },
+    "special_dependencies": {
+      "source": "docs/build.md + scripts/init_env.sh",
+      "value": [
+        "CANN Toolkit 9.1.0：由 init_env.sh 从 https://ascend.devcloud.huaweicloud.com/artifactory/cann-run-mirror/software/master 下载并安装",
+        "pip 使用清华镜像源（init_env.sh 内置 -i https://pypi.tuna.tsinghua.edu.cn/simple）",
+        "编译过程自动通过 git 下载开源第三方库（protobuf/abseil/openssl/grpc/symengine 等）到 output/third_party"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T20:15:00",
+      "command": "git clone https://gitcode.com/cann/ge.git",
+      "success": true,
+      "output": "Cloning into 'ge'... 10957 files, done.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-17T20:20:00",
+      "command": "find . -name '.lint-runner.*' -o -name 'lint-runner.config.*' (扫描 lint-runner 配置)",
+      "success": true,
+      "output": "未找到 lint-runner 相关配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T20:20:30",
+      "command": "ls .devcontainer/ (扫描 devcontainer)",
+      "success": true,
+      "output": "仓库根目录不存在 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T20:21:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "trim trailing whitespace...Failed(自动修复大量文件); fix end of files...Failed(自动修复); check yaml...Passed; check for added large files...Passed; 后续 hook 未在超时窗口内执行到",
+      "error": "全量(10957文件)执行触发自动修复大量文件，IO 开销大，595s 超时未跑完全部 12 个 hook",
+      "returncode": 124,
+      "duration_seconds": 595
+    },
+    {
+      "timestamp": "2026-06-17T20:22:00",
+      "command": "docker pull --platform=amd64 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "success": true,
+      "output": "Image is up to date（本地已缓存）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T20:23:00",
+      "command": "docker run -d --name ttfhw-ge-env -v /mnt/d/code/ttfhw_0617/ge/ge:/workspace -w /workspace <cann-image> tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: d1f8b9429d36...; OS=Ubuntu 22.04.5 LTS, x86_64, 20 cores, 15Gi",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T20:25:00",
+      "command": "bash scripts/check_env.sh (镜像内置 CANN 9.0.0-beta.1)",
+      "success": false,
+      "output": "PASSED:17, ERRORS:12（缺 ccache/autoconf/automake/libtool/gperf/lcov/graph-easy 及 6 个 Python 包；CANN Toolkit 已存在）",
+      "error": "系统工具与 Python 依赖缺失",
+      "returncode": 1,
+      "duration_seconds": 12
+    },
+    {
+      "timestamp": "2026-06-17T20:27:00",
+      "command": "apt-get install -y ccache lcov autoconf automake libtool gperf libgraph-easy-perl patch perl",
+      "success": true,
+      "output": "全部系统工具安装成功（libasan 镜像已自带，libasan4 在 Ubuntu22.04 不存在故跳过）",
+      "error": "首次尝试含 libasan4 失败(Ubuntu22.04 无该包)，剔除后成功；libasan 经 check_env 确认已存在于 /usr/lib/x86_64-linux-gnu",
+      "returncode": 0,
+      "duration_seconds": 119
+    },
+    {
+      "timestamp": "2026-06-17T20:29:00",
+      "command": "pip3 install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple",
+      "success": true,
+      "output": "Successfully installed cloudpickle-3.1.2 coverage-7.14.1 jinja2-3.1.6 numpy-2.4.6 pybind11-2.13.6 wheel-0.47.0 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T20:30:00",
+      "command": "bash scripts/check_env.sh (复检)",
+      "success": true,
+      "output": "PASSED:30, 结论: 环境检查全部通过！可以编译 ge。",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T20:31:00",
+      "command": "bash build.sh -j12 (首次构建，镜像 CANN 9.0.0-beta.1)",
+      "success": false,
+      "output": "CMake 配置阶段 git clone cann-cmake 触发 'dubious ownership' 报错",
+      "error": "fatal: detected dubious ownership in repository at '/workspace/build/.../cann-cmake-src'",
+      "returncode": 1,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T20:32:00",
+      "command": "git config --global --add safe.directory '*' && rm -rf build build_out output",
+      "success": true,
+      "output": "safe.directory 已设置，残留构建产物已清理",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3,
+      "note": "git safe.directory 为环境配置，非源码修改"
+    },
+    {
+      "timestamp": "2026-06-17T20:33:00",
+      "command": "bash build.sh -j12 (第二次构建，CANN 9.0.0-beta.1)",
+      "success": false,
+      "output": "三方库编译完成(protobuf/abseil/openssl/symengine 等)，GE 源码编译阶段失败",
+      "error": "graph_metadef/register/op_tiling/op_tiling_py.cc:617: 'OpImplFunctionsV2' has no member 'IsNullableOutput'; ge_tensor.cc:79 / type_utils_inner.cc:125: 'DT_HIFLOAT4' was not declared",
+      "returncode": 1,
+      "duration_seconds": 1376
+    },
+    {
+      "timestamp": "2026-06-17T21:18:00",
+      "command": "bash scripts/init_env.sh (安装 master 分支所需 CANN 9.1.0)",
+      "success": true,
+      "output": "下载并安装 Ascend-cann-toolkit_9.1.0_linux-x86_64.run 及子包(ncs/graph-autofusion/bisheng-compiler 等)；Development environment ready!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 744,
+      "note": "依据 docs/quick_install.md 方式三-场景1：master 分支需安装最新 CANN 包(9.1.0)，镜像默认 9.0.0-beta.1 不满足。验证 DT_HIFLOAT4/IsNullableOutput 已存在于 9.1.0 头文件"
+    },
+    {
+      "timestamp": "2026-06-18T00:14:00",
+      "command": "git checkout -- . && rm -rf build build_out (保留 output/third_party 缓存) && bash build.sh -j12 (第三次构建，CANN 9.1.0)",
+      "success": true,
+      "output": "===== GE package success: ge-compiler ===== / ge-executor ===== / dflow-executor =====; GE package success!; build end: 2026-06-17 18:28:45(容器时区)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 18903,
+      "note": "复用 output/third_party 三方库缓存(1.4G，含 protobuf/abseil/openssl/symengine)；ge-executor 另需编译 grpc。并发 -j12(=20核×60%)。0 errors"
+    },
+    {
+      "timestamp": "2026-06-18T02:30:00",
+      "command": "bash tests/run_test.sh --ut=ge_common -j12",
+      "success": false,
+      "output": "UT 编译至 41%(已链接 libhybrid_executor.so)，select_targets 规则失败；GraphEngine build failed. 无测试用例执行",
+      "error": "tests/depends/runtime/src/rts_stub.h 重复定义 RT_ENGINE_TYPE_AIC/rtEngineType/rtLaunchKernelAttrId 等，与 CANN 9.1.0 的 acl/acl_rt.h 声明冲突(conflicts with a previous declaration)",
+      "returncode": 1,
+      "duration_seconds": 2963
+    },
+    {
+      "timestamp": "2026-06-18T03:25:00",
+      "command": "样例执行评估 (ls /dev/davinci* / npu-smi)",
+      "success": false,
+      "output": "宿主机无 /dev/davinci* 设备，无 npu-smi；环境无昇腾 NPU 硬件",
+      "error": "样例(ResNet50/Qwen LLM 等)需 Ascend NPU + ops 包 + ATC 模型转换，当前环境无法执行",
+      "returncode": 1,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T03:30:00",
+      "command": "docker rm -f ttfhw-ge-env (清理容器)",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T20:13:00",
+      "step": "start",
+      "action": "开始验证流程，克隆仓库",
+      "result": "已启动",
+      "details": {"repo": "https://gitcode.com/cann/ge.git", "files": 10957}
+    },
+    {
+      "timestamp": "2026-06-17T20:17:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层阅读 docs/build.md、quick_install.md、AGENTS.md、build.sh、check_env.sh、init_env.sh、requirements.txt",
+      "result": "成功",
+      "details": {"sections_read": ["构建", "测试", "示例", "环境准备", "依赖"]}
+    },
+    {
+      "timestamp": "2026-06-17T20:20:00",
+      "step": "static_analysis_scan",
+      "action": "检查 pre-commit 与 lint-runner 配置",
+      "result": "pre-commit 已配置 / lint-runner 未配置",
+      "details": {"pre_commit_config": ".pre-commit-config.yaml", "hooks_total": 12, "lint_runner": "未找到配置"}
+    },
+    {
+      "timestamp": "2026-06-17T20:21:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过 / 执行超时",
+      "details": {"passed": 2, "failed": 2, "not_reached": 8, "duration_seconds": 595, "timeout": true}
+    },
+    {
+      "timestamp": "2026-06-17T20:20:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {"searched": ".devcontainer/", "found": false}
+    },
+    {
+      "timestamp": "2026-06-17T20:22:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "昇腾 CANN 开发镜像 (Ubuntu 22.04 + CANN)",
+      "details": {"image": "swr.cn-sort-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11", "selection_reason": "docs/quick_install.md Docker 部署推荐"}
+    },
+    {
+      "timestamp": "2026-06-17T20:23:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器 ttfhw-ge-env，挂载仓库到 /workspace",
+      "result": "成功",
+      "details": {"os": "Ubuntu 22.04.5 LTS", "arch": "x86_64", "cores": 20}
+    },
+    {
+      "timestamp": "2026-06-17T20:25:00",
+      "step": "dependency_installation",
+      "action": "按 docs/build.md 安装系统依赖与 Python 依赖",
+      "result": "成功",
+      "details": {"apt_packages": ["ccache", "lcov", "autoconf", "automake", "libtool", "gperf", "libgraph-easy-perl", "patch", "perl"], "pip": "requirements.txt(清华源)", "check_env_pass": 30}
+    },
+    {
+      "timestamp": "2026-06-17T20:31:00",
+      "step": "build_attempt",
+      "action": "首次构建(bash build.sh -j12)",
+      "result": "失败",
+      "details": {"error": "git dubious ownership"}
+    },
+    {
+      "timestamp": "2026-06-17T20:32:00",
+      "step": "problem_resolution",
+      "action": "问题定位：容器内 git 因目录属主与运行用户不一致拒绝操作；执行 git config --global --add safe.directory '*'",
+      "result": "已解决",
+      "details": {"solution": "设置 git safe.directory=*（环境配置，非源码修改）"}
+    },
+    {
+      "timestamp": "2026-06-17T20:33:00",
+      "step": "build_attempt",
+      "action": "第二次构建(CANN 9.0.0-beta.1)",
+      "result": "失败",
+      "details": {"error": "DT_HIFLOAT4/IsNullableOutput 未声明，CANN 版本过低"}
+    },
+    {
+      "timestamp": "2026-06-17T21:18:00",
+      "step": "problem_resolution",
+      "action": "问题定位：master 源码需 CANN 9.1.0，镜像为 9.0.0-beta.1；依据 quick_install.md 方式三-场景1 运行 init_env.sh 安装 9.1.0",
+      "result": "已解决",
+      "details": {"solution": "init_env.sh 下载安装 CANN 9.1.0", "verified_symbols": ["DT_HIFLOAT4", "IsNullableOutput"]}
+    },
+    {
+      "timestamp": "2026-06-18T00:14:00",
+      "step": "build_retry",
+      "action": "恢复源码至原始状态，复用三方库缓存，重新构建(CANN 9.1.0, -j12)",
+      "result": "成功",
+      "details": {"concurrency": 12, "concurrency_ratio": "60%", "packages_success": ["ge-compiler", "ge-executor", "dflow-executor"], "errors": 0}
+    },
+    {
+      "timestamp": "2026-06-18T02:30:00",
+      "step": "ut_execution",
+      "action": "执行 UT: bash tests/run_test.sh --ut=ge_common -j12",
+      "result": "失败(编译阶段)",
+      "details": {"total": 0, "passed": 0, "failed": 0, "note": "UT 编译失败，无用例执行；原因: 测试桩 rts_stub.h 与 CANN 9.1.0 acl_rt.h 声明冲突"}
+    },
+    {
+      "timestamp": "2026-06-18T03:25:00",
+      "step": "sample_execution",
+      "action": "评估样例执行可行性",
+      "result": "未执行",
+      "details": {"reason": "环境无昇腾 NPU 硬件，样例需 NPU+ops+ATC"}
+    },
+    {
+      "timestamp": "2026-06-18T03:30:00",
+      "step": "cleanup",
+      "action": "恢复源码、停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T03:33:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_ge_20260618.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（.pre-commit-config.yaml，5 个 repo 共 12 个 hook，含 clang-format/ruff/codespell/OAT）；全量(10957 文件)执行因自动修复大量文件 IO 开销过大，595s 超时未跑完全部 hook；已完成的 4 个 hook 中 2 通过 2 失败。未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过 / 执行超时",
+        "duration_seconds": 595,
+        "total_hooks": 12,
+        "passed": 2,
+        "failed": 2,
+        "skipped": 0,
+        "not_reached": 8,
+        "failures": [
+          {
+            "hook_name": "trailing-whitespace",
+            "error": "大量文件存在行尾多余空白，hook 自动修复(Failed)"
+          },
+          {
+            "hook_name": "end-of-file-fixer",
+            "error": "大量文件末尾缺少换行或有多余内容，hook 自动修复(Failed)"
+          }
+        ],
+        "passed_hooks": ["check-yaml", "check-added-large-files"],
+        "not_reached_hooks": ["check-merge-conflict", "detect-private-key", "check-json", "clang-format", "ruff-check", "ruff-format", "codespell", "oat-check"],
+        "note": "全量 all-files 在 10957 文件仓库上因 trailing-whitespace/end-of-file-fixer/clang-format 自动修复产生大量 IO，超出 595s 超时窗口；表明仓库存在既有的格式化/空白问题"
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库根目录未配置 .devcontainer，不具备 devcontainer 开发容器能力"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 18903,
+      "concurrency": 12,
+      "concurrency_ratio": "60%(20核)",
+      "cann_version": "9.1.0",
+      "artifacts": [
+        {
+          "name": "cann-ge-compiler",
+          "path": "build_out/cann-ge-compiler_9.1.0_linux-x86_64.run",
+          "size": "41 MB (42312374 bytes)"
+        },
+        {
+          "name": "cann-ge-executor",
+          "path": "build_out/cann-ge-executor_9.1.0_linux-x86_64.run",
+          "size": "34 MB (34712424 bytes)"
+        },
+        {
+          "name": "cann-dflow-executor",
+          "path": "build_out/cann-dflow-executor_9.1.0_linux-x86_64.run",
+          "size": "8.2 MB (8515110 bytes)"
+        }
+      ]
+    },
+    "ut": {
+      "status": "失败",
+      "duration_seconds": 2963,
+      "target": "ge_common",
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "failures": [],
+      "note": "UT 编译阶段失败(41%)，无测试用例执行。根因：tests/depends/runtime/src/rts_stub.h 重复定义 rtEngineType/RT_ENGINE_TYPE_AIC/rtLaunchKernelAttrId 等，与 CANN 9.1.0 的 acl/acl_rt.h 声明冲突(conflicts with a previous declaration)。属测试桩与 CANN 运行时头文件的版本兼容性问题，在不修改源码/测试桩的约束下未解决"
+    },
+    "sample": {
+      "status": "未执行",
+      "duration_seconds": 0,
+      "results": [],
+      "note": "样例(ResNet50 图片分类、Qwen LLM、dflow、ES 构图等)均需 Ascend NPU 硬件 + ops 包 + ATC 模型转换后执行推理；当前验证环境无 NPU 设备(/dev/davinci* 与 npu-smi 均不存在)，无法执行样例。此为环境硬件限制，非仓库缺陷"
+    }
+  },
+  "documentation_gaps": [
+    "docs/quick_install.md 的 Docker 路径默认安装 CANN 9.0.0-beta.1，但 master 分支源码需 CANN 9.1.0(DT_HIFLOAT4/IsNullableOutput)；需额外运行 init_env.sh 升级，文档仅在方式三-场景1 说明，Docker 路径未直接提示该版本差距",
+    "docs/build.md 未提及容器内挂载宿主目录时 git 'dubious ownership' 问题及 safe.directory 处置方式",
+    "UT 测试桩(tests/depends/runtime/src/rts_stub.h)与 CANN 9.1.0 acl_rt.h 存在 rtEngineType 等声明冲突，文档未说明 UT 所需的具体 CANN 版本兼容性或桩文件维护要求",
+    "build.md 的 apt 安装示例包含 libasan4，但 Ubuntu 22.04(GCC 11) 无该包，需安装对应版本 libasan(镜像已自带 libasan)，文档未区分 OS 版本"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T20:31:00",
+      "problem": "CMake FetchContent 执行 git clone 时报 'dubious ownership'，容器以 root 运行而 /workspace 挂载目录属主为宿主用户",
+      "solution": "git config --global --add safe.directory '*'（git 环境配置，非源码修改）",
+      "source": "容器挂载宿主目录的属主不一致"
+    },
+    {
+      "timestamp": "2026-06-17T20:33:00",
+      "problem": "GE 源码编译报 'DT_HIFLOAT4' was not declared 与 'OpImplFunctionsV2 has no member IsNullableOutput'，镜像内置 CANN 9.0.0-beta.1 版本过低",
+      "solution": "依据 docs/quick_install.md 方式三-场景1，运行 scripts/init_env.sh 下载安装 master 分支配套的 CANN 9.1.0",
+      "source": "graph_metadef/register/op_tiling/op_tiling_py.cc:617、graph_metadef/graph/normal_graph/ge_tensor.cc:79、scripts/init_env.sh(CANN_VERSION=9.1.0)"
+    },
+    {
+      "timestamp": "2026-06-17T20:27:00",
+      "problem": "apt 安装 libasan4 失败：Ubuntu 22.04 无 libasan4 包",
+      "solution": "剔除 libasan4（镜像已自带对应 GCC 11 的 libasan，check_env 确认 libasan PASS），其余依赖正常安装",
+      "source": "docs/build.md apt 示例(以 gcc 7.5.0/libasan4 为例)"
+    },
+    {
+      "timestamp": "2026-06-18T02:30:00",
+      "problem": "UT 编译失败：测试桩 rts_stub.h 与 CANN 9.1.0 acl/acl_rt.h 重复声明 rtEngineType/RT_ENGINE_TYPE_AIC/rtLaunchKernelAttrId 等导致 'conflicts with a previous declaration'",
+      "solution": "未解决——属测试桩与 CANN 运行时头文件版本兼容性问题，需修改测试桩或对齐 CANN 版本，超出'不改源码'约束与调试预算",
+      "source": "tests/depends/runtime/src/rts_stub.h:17-61 与 /usr/local/Ascend/cann-9.1.0/include/acl/acl_rt.h"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_ge_20260618.md"
+}
