@@ -1,0 +1,313 @@
+{
+  "metadata": {
+    "repo_path": "https://gitcode.com/cann/amct.git (本地: /mnt/d/code/ttfhw_0617/amct/amct)",
+    "start_time": "2026-06-18T11:35:00",
+    "end_time": "2026-06-18T12:25:00",
+    "duration_seconds": 3000,
+    "total_steps": 19,
+    "skill_version_note": "依据更新后的 ttfhw-verify-pro skill：文档未指定构建环境时，先按文档安装厂商 SDK(CANN Toolkit) 并 source 环境变量再构建"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "D: 654G 总量, 336G 可用",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库无 Dockerfile，README/quick_install.md/build.md 均未指定基础镜像，按规则默认使用 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md + build.sh (uname -m) + docs/zh/quick_install.md",
+      "value": "x86_64 / aarch64 双架构支持，本次取宿主机架构 x86_64"
+    },
+    "recommended_image": {
+      "source": "未在文档中找到镜像推荐",
+      "value": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+    },
+    "vendor_sdk_runtime": {
+      "source": "README.md 环境要求表 + docs/zh/quick_install.md 环境安装章节 + version.info",
+      "value": "CANN Toolkit & Ops ≥ 8.5.0（需提前安装 NPU 驱动/固件）；本次按文档场景1从 ascend.devcloud 镜像下载 master 版 Ascend-cann-toolkit_9.1.0_linux-x86_64.run 安装，提供 securec.h/libc_sec 等构建所需头文件与库；安装后 source /usr/local/Ascend/cann/set_env.sh 使 ASCEND_HOME_PATH 生效"
+    },
+    "dependencies": {
+      "source": "README.md 环境要求表 + docs/zh/quick_install.md 前置依赖 + requirements.txt + CMakeLists.txt",
+      "value": [
+        "Python >= 3.9",
+        "PyTorch 2.7.1 或 2.1.0（需配套 torch_npu）",
+        "GCC >= 7.3",
+        "CMake >= 3.16（推荐 3.20）",
+        "patch >= 2.7",
+        "bash >= 5.1.16",
+        "CANN Toolkit & Ops >= 8.5.0（厂商 SDK，提供 securec.h/libc_sec）",
+        "protobuf（由 cann-cmake 自动拉取源码编译）",
+        "pytest-cov（UT 依赖，docs/zh/build.md 指定）"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md 快速开始 + docs/zh/build.md + AGENTS.md",
+      "value": "source /usr/local/Ascend/cann/set_env.sh && bash build.sh --torch （产物位于 build_out/）"
+    },
+    "ut_commands": {
+      "source": "docs/zh/build.md 本地验证 + AGENTS.md",
+      "value": "pip3 install pytest-cov && source /usr/local/Ascend/cann/set_env.sh && bash build.sh -u"
+    },
+    "sample_commands": {
+      "source": "examples/README.md + examples/*.sh",
+      "value": "python -m amct_pytorch.ptq --model ... （examples/ptq_single_npu.sh 等，依赖 NPU + CANN + 已安装 amct_pytorch 包 + 模型权重）"
+    },
+    "special_dependencies": {
+      "source": "docs/zh/quick_install.md + install_graph.sh + cmake/fetch_cann_cmake.cmake",
+      "value": [
+        "CANN Toolkit master 版 .run 包（ascend.devcloud 镜像下载，--quiet 接受 EULA 安装）",
+        "cann-cmake（构建时从 gitcode.com/cann/cmake.git 拉取 master-017）",
+        "protobuf/abseil（构建时由 cann-cmake 自动下载源码编译）",
+        "cann-amct-graph 包（install_graph.sh 从华为云 OBS 下载，仅 --pkg 模式需要）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T11:35:00",
+      "command": "docker run -d --name ttfhw-amct-env -v <repo>:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T11:36:00",
+      "command": "dnf install -y gcc gcc-c++ make cmake patch git wget tar python3-pip python3-devel autoconf automake libtool zlib-devel perl",
+      "success": true,
+      "output": "gcc 12.3.1 / cmake 3.27.9 / patch 2.7.6 / python 3.11.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 252
+    },
+    {
+      "timestamp": "2026-06-18T11:41:00",
+      "command": "wget Ascend-cann-toolkit_9.1.0_linux-x86_64.run (from ascend.devcloud master 镜像)",
+      "success": true,
+      "output": "下载完成，1.5GB",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1084
+    },
+    {
+      "timestamp": "2026-06-18T11:59:00",
+      "command": "./Ascend-cann-toolkit_9.1.0_linux-x86_64.run --quiet --install --install-path=/usr/local/Ascend",
+      "success": true,
+      "output": "Toolkit: Ascend-cann-toolkit_9.1.0 install success；Driver: Not installed（无 NPU 硬件，不影响编译）；source /usr/local/Ascend/cann/set_env.sh",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 96,
+      "note": "提供 securec.h(/usr/local/Ascend/cann-9.1.0/x86_64-linux/include/securec.h) 与 libc_sec.so，解决 tensor_decompose 编译缺失"
+    },
+    {
+      "timestamp": "2026-06-18T12:00:00",
+      "command": "source set_env.sh && bash build.sh --torch -j12",
+      "success": true,
+      "output": "Build success! package amct_pytorch run success；产物 build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz(456K)；libtensor_decompose.so(39K) 编译成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 292
+    },
+    {
+      "timestamp": "2026-06-18T12:05:00",
+      "command": "pip3 install torch==2.7.1+cpu (--no-deps, download.pytorch.org)",
+      "success": true,
+      "output": "torch 2.7.1+cpu 安装成功（conftest.py 对 torch_npu 做 MagicMock，UT 无需真实 torch_npu/NPU）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 220,
+      "note": "requirements.txt 中 torch==2.7.1(CUDA) 与 torch_npu==2.7.1.post4(需 torch==2.7.1+cpu) 冲突无法直接安装；改用 CPU 版 torch 满足 import torch，符合文档 torch 2.7.1 版本要求"
+    },
+    {
+      "timestamp": "2026-06-18T12:09:00",
+      "command": "pip3 install numpy/protobuf/onnx/onnxruntime/scipy/transformers 等 (清华源) + pytest pytest-cov",
+      "success": true,
+      "output": "核心 Python 依赖安装成功；numpy 2.4.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 180
+    },
+    {
+      "timestamp": "2026-06-18T12:12:00",
+      "command": "source set_env.sh && bash build.sh -u -j12",
+      "success": true,
+      "output": "===== 2206 passed, 2 skipped, 1 xfailed, 712 warnings in 209.67s =====；覆盖率 87%(TOTAL 23722 stmts, 2988 missed)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 223
+    },
+    {
+      "timestamp": "2026-06-18T12:25:00",
+      "command": "docker rm -f ttfhw-amct-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T11:35:00",
+      "step": "start",
+      "action": "依据更新后的 skill 重新执行构建与 UT（先装 CANN SDK）",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T11:36:00",
+      "step": "container_setup",
+      "action": "启动容器并安装基础构建依赖",
+      "result": "成功",
+      "details": {"container": "ttfhw-amct-env", "gcc": "12.3.1", "cmake": "3.27.9", "python": "3.11.6"}
+    },
+    {
+      "timestamp": "2026-06-18T11:41:00",
+      "step": "vendor_sdk_install",
+      "action": "按文档下载并安装 CANN Toolkit 9.1.0（master 版），source set_env.sh",
+      "result": "成功",
+      "details": {"package": "Ascend-cann-toolkit_9.1.0_linux-x86_64.run", "source": "ascend.devcloud master 镜像", "ascend_home_path": "/usr/local/Ascend/cann-9.1.0", "provides": ["securec.h", "libc_sec.so"]}
+    },
+    {
+      "timestamp": "2026-06-18T12:00:00",
+      "step": "build_attempt",
+      "action": "执行 bash build.sh --torch -j12（CANN 环境已生效）",
+      "result": "成功",
+      "details": {"concurrency": 12, "concurrency_ratio": "60%", "artifact": "build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz"}
+    },
+    {
+      "timestamp": "2026-06-18T12:05:00",
+      "step": "dependency_installation",
+      "action": "安装 torch 2.7.1+cpu 及其余 Python 依赖（解决 requirements.txt 冲突）",
+      "result": "成功",
+      "details": {"torch": "2.7.1+cpu", "note": "requirements.txt torch/torch_npu 冲突，改用 CPU 版 torch；conftest.py mock torch_npu"}
+    },
+    {
+      "timestamp": "2026-06-18T12:12:00",
+      "step": "ut_execution",
+      "action": "执行 bash build.sh -u -j12",
+      "result": "成功",
+      "details": {"total": 2209, "passed": 2206, "skipped": 2, "xfailed": 1, "failed": 0, "duration": "209.67s", "coverage": "87%"}
+    },
+    {
+      "timestamp": "2026-06-18T12:24:00",
+      "step": "sample_execution",
+      "action": "评估样例可执行性",
+      "result": "不可执行",
+      "details": {"reason": "样例需 NPU 硬件+CANN Ops+模型权重，容器内无 NPU 驱动，仅编译/UT 不依赖 NPU 可通过"}
+    },
+    {
+      "timestamp": "2026-06-18T12:25:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {"container": "ttfhw-amct-env"}
+    },
+    {
+      "timestamp": "2026-06-18T12:25:30",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_amct_20260618.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（3 个 hooks 全部失败），未检测到 lint-runner 配置，未配置 devcontainer",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "失败",
+        "duration_seconds": 27,
+        "total_hooks": 3,
+        "passed": 0,
+        "failed": 3,
+        "skipped": 0,
+        "failures": [
+          {"hook_name": "clang-format", "file": "多个 C/C++ 文件", "error": "clang-format 修改文件（格式不符 Google 规范）"},
+          {"hook_name": "ruff-check", "file": "tests/ 等多个 Python 文件", "error": "364 处违规，主要为 F841/E741"},
+          {"hook_name": "ruff-format", "file": "全仓库 Python 文件", "error": "610 个文件被重新格式化"}
+        ]
+      },
+      "lint_runner": {"configured": false, "config_file": null}
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer 开发容器能力"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 292,
+      "artifacts": [
+        {"name": "amct_pytorch 安装包", "path": "build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz", "size": "456K"},
+        {"name": "libtensor_decompose.so", "path": "amct_pytorch/classic/graph_based/lib/libtensor_decompose.so", "size": "39K"}
+      ],
+      "note": "安装 CANN Toolkit 9.1.0 提供 securec.h/libc_sec 后，bash build.sh --torch 编译成功。此前未装 CANN 时因 securec.h 缺失编译失败——印证 skill 新增原则：文档未指定构建环境用默认镜像时，必须先按文档安装厂商 SDK 再构建。"
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 210,
+      "total": 2209,
+      "passed": 2206,
+      "failed": 0,
+      "skipped": 2,
+      "xfailed": 1,
+      "failures": [],
+      "coverage": "87%（TOTAL 23722 语句，2988 未覆盖）",
+      "note": "conftest.py 对 torch_npu 做 MagicMock，UT 无需真实 NPU/torch_npu；安装 torch 2.7.1+cpu 及其余依赖后 pytest 全部通过。"
+    },
+    "sample": {
+      "status": "不可执行",
+      "duration_seconds": 0,
+      "results": [],
+      "error_detail": "样例（examples/ptq_single_npu.sh 等，调用 python -m amct_pytorch.ptq）依赖 NPU 硬件与驱动(npu-smi)、CANN Ops、模型权重；容器内无 NPU，样例无法端到端运行。但编译产物与 UT 均已验证通过。"
+    }
+  },
+  "documentation_gaps": [
+    "requirements.txt 存在依赖冲突：torch==2.7.1 与 torch_npu==2.7.1.post4（要求 torch==2.7.1+cpu）不兼容，pip3 install -r requirements.txt 直接失败；文档未说明需改用 CPU 版 torch",
+    "README/build.md 给出的 bash build.sh --torch 隐式依赖 CANN 提供的 libc_sec(securec.h)，CMakeLists 路径硬编码为 ${TOP_DIR}/../../abl/libc_sec；文档虽要求安装 CANN 但未明确点出该编译依赖关系，新手易在未装 CANN 时构建失败",
+    "文档未提供基础镜像/Dockerfile，新手需自行准备容器环境",
+    "torch_npu 的安装来源（华为 wheel 源）与 CANN 配套版本在 quick_install.md 中仅给链接，未给出可直接执行的 pip 安装命令",
+    "样例运行前置条件（NPU 型号、CANN Ops 版本、模型权重下载地址）在 examples/README.md 中未集中说明"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-18T12:00:00",
+      "problem": "未安装厂商 SDK 时 bash build.sh --torch 编译 amct_tensor_decompose 失败：vector.cpp:25 fatal error: securec.h: No such file or directory",
+      "solution": "按文档安装 CANN Toolkit 9.1.0（ascend.devcloud master 镜像下载 .run 包，--quiet 安装），source set_env.sh 使 ASCEND_HOME_PATH 生效；CANN 提供 securec.h 与 libc_sec.so 后编译通过",
+      "source": "amct_pytorch/classic/graph_based/amct_tensor_decompose/CMakeLists.txt + docs/zh/quick_install.md"
+    },
+    {
+      "timestamp": "2026-06-18T10:44:00",
+      "problem": "构建首次拉取 cann-cmake 时 git 报 dubious ownership，检出 master-017 失败",
+      "solution": "git config --global --add safe.directory '*'（bind-mount 目录属主与容器用户不一致所致）",
+      "source": "git 报错提示"
+    },
+    {
+      "timestamp": "2026-06-18T12:05:00",
+      "problem": "pip3 install -r requirements.txt 失败，torch==2.7.1(CUDA) 与 torch_npu==2.7.1.post4(需 torch==2.7.1+cpu) 版本冲突",
+      "solution": "改用 torch==2.7.1+cpu（满足文档 torch 2.7.1 版本要求），conftest.py 已对 torch_npu 做 MagicMock 故 UT 无需真实 torch_npu；其余依赖正常安装",
+      "source": "requirements.txt + tests/conftest.py:22-27"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_amct_20260618.md"
+}
