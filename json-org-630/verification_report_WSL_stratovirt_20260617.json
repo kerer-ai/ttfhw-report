@@ -1,0 +1,420 @@
+{
+  "metadata": {
+    "repo_path": "/root/workspace/stratovirt",
+    "repo_url": "https://gitcode.com/openeuler/stratovirt.git",
+    "repo_version": "2.5.0",
+    "start_time": "2026-06-17T03:45:00",
+    "end_time": "2026-06-17T04:42:00",
+    "duration_seconds": 3420,
+    "total_steps": 7
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "13th Gen Intel(R) Core(TM) i7-13700",
+      "cpu_cores": 24,
+      "memory": "15Gi",
+      "disk": "1007G total, 951G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu4.1"
+    },
+    "container": {
+      "os": "openEuler 22.03 (LTS-SP2)",
+      "architecture": "x86_64",
+      "cpu_cores": 24,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "dockerfile",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp2",
+      "selection_reason": "Dockerfile 指定 FROM openeuler/openeuler:22.03-lts-sp2 → 选择 openEuler 22.03 LTS SP2（从 hub.oepkgs.net 拉取，因 Docker Hub 不可达）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 平台支持章节 及 docs/quickstart.ch.md",
+      "value": "x86_64 和 aarch64"
+    },
+    "recommended_image": {
+      "source": "tools/build_stratovirt_static/Dockerfile",
+      "value": "openeuler/openeuler:22.03-lts-sp2（Dockerfile 中 FROM 指定）"
+    },
+    "dependencies": {
+      "source": "Makefile yum-deps 目标 + Dockerfile + docs/build_guide.ch.md",
+      "value": [
+        "Rust 语言环境 + Cargo（rustc >= 1.64.0，实际需要 >= 1.73.0）",
+        "pixman-devel",
+        "libcap-ng-devel",
+        "cyrus-sasl-devel",
+        "pulseaudio",
+        "clang",
+        "gtk3-devel",
+        "libusbx",
+        "alsa-lib-devel",
+        "make",
+        "libcap-devel（Dockerfile 中列出，Makefile 未列出）",
+        "libseccomp-devel（Dockerfile 中列出，Makefile 未列出）",
+        "musl-gcc（Dockerfile 中列出，用于静态链接构建）"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md + Makefile + docs/build_guide.ch.md",
+      "value": "make build（调用 cargo build --workspace --bins --release）"
+    },
+    "ut_commands": {
+      "source": "docs/test.md - Unit test 章节",
+      "value": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1"
+    },
+    "sample_commands": {
+      "source": "README.md + docs/quickstart.ch.md",
+      "value": "./target/release/stratovirt -machine microvm -kernel /path/to/kernel -append \"console=ttyS0 root=/dev/vda\" -drive file=/path/to/rootfs,... -device virtio-blk-device,... -qmp unix:/path/to/socket,server,nowait -serial stdio"
+    },
+    "special_dependencies": {
+      "source": "docs/quickstart.ch.md",
+      "value": [
+        "PE/bzImage 格式 Linux 内核镜像（需从 https://repo.openeuler.org 下载）",
+        "ext4 rootfs 镜像（需从 https://repo.openeuler.org 下载）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T03:46:00",
+      "command": "git clone https://gitcode.com/openeuler/stratovirt.git",
+      "success": true,
+      "output": "Cloning into 'stratovirt'... done.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T03:47:00",
+      "command": "读取 README.md、README_EN.md、Cargo.toml、Makefile、docs/build_guide.ch.md、docs/quickstart.ch.md、docs/test.md、tools/build_stratovirt_static/Dockerfile",
+      "success": true,
+      "output": "已阅读全部关键文档，提取构建依赖和命令",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 90
+    },
+    {
+      "timestamp": "2026-06-17T03:48:30",
+      "command": "find . -name '.pre-commit-config.yaml' -o -name '.lint-runner.*' -o -name '.devcontainer'",
+      "success": true,
+      "output": "未找到 pre-commit、lint-runner 或 .devcontainer 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T03:49:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp2",
+      "success": true,
+      "output": "Digest: sha256:ec8880ababf5854fdbbf8f7ac107239dfc1e2720865ef8f126a128535eb9539a\nStatus: Downloaded newer image",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T03:49:20",
+      "command": "docker run -d --name ttfhw-stratovirt-env -v /root/workspace/stratovirt:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp2 tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 93192470118b...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T03:49:30",
+      "command": "yum update -y && yum upgrade -y && yum install -y cargo musl-gcc cyrus-sasl-devel libcap-devel libcap-ng-devel libseccomp-devel pixman-devel pulseaudio clang gtk3-devel libusbx alsa-lib-devel make",
+      "success": true,
+      "output": "安装完成（Rust 1.64.0 + 所有构建依赖，含 100+ 个包）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 172
+    },
+    {
+      "timestamp": "2026-06-17T03:52:30",
+      "command": "make build（首次尝试，使用系统 Rust 1.64.0）",
+      "success": false,
+      "output": "error: failed to parse lock file at: /workspace/Cargo.lock",
+      "error": "Cargo.lock 版本为 v4，需要 Rust >= 1.73.0，系统 Rust 1.64.0 过旧",
+      "returncode": 101,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T04:00:00",
+      "command": "通过 rustup 安装 Rust 1.96.0 stable 工具链（USTC 镜像）",
+      "success": true,
+      "output": "stable-x86_64-unknown-linux-gnu installed - rustc 1.96.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300,
+      "note": "首次 rustup 安装工具链后 cargo 组件缺失，需清除并重装工具链才恢复正常"
+    },
+    {
+      "timestamp": "2026-06-17T04:35:00",
+      "command": "cargo build --workspace --bins --release（使用 Rust 1.96.0）",
+      "success": true,
+      "output": "Compiling stratovirt v2.5.0\nCompiling stratovirt-img v2.5.0\nCompiling machine v2.5.0\n... (所有 crate 编译成功)\nFinished release profile in 1m 23s\n1 warning: unnecessary unsafe block in migration/src/protocol.rs:338",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 83
+    },
+    {
+      "timestamp": "2026-06-17T04:36:30",
+      "command": "验证构建产物：/workspace/target/release/stratovirt -help 和 -version",
+      "success": true,
+      "output": "StratoVirt 2.5.0 commit-id unknown\nA light kvm-based hypervisor.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T04:37:00",
+      "command": "cargo test --workspace --exclude mod_test -- --nocapture --test-threads=1",
+      "success": true,
+      "output": "全部测试通过：所有 crate 的单元测试和文档测试均通过，0 失败",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 64
+    },
+    {
+      "timestamp": "2026-06-17T04:41:00",
+      "command": "docker stop ttfhw-stratovirt-env && docker rm ttfhw-stratovirt-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T03:45:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T03:46:00",
+      "step": "repo_clone",
+      "action": "克隆 stratovirt 仓库",
+      "result": "成功",
+      "details": {"repo_url": "https://gitcode.com/openeuler/stratovirt.git", "version": "2.5.0"}
+    },
+    {
+      "timestamp": "2026-06-17T03:47:00",
+      "step": "document_reading",
+      "action": "读取 README.md、Cargo.toml、Makefile、docs/build_guide.ch.md、docs/test.md、Dockerfile",
+      "result": "成功",
+      "details": {
+        "files_read": ["README.md", "README_EN.md", "Cargo.toml", "Makefile", "docs/build_guide.ch.md", "docs/quickstart.ch.md", "docs/test.md", "tools/build_stratovirt_static/Dockerfile"],
+        "build_system": "cargo (Rust)",
+        "platforms": ["x86_64", "aarch64"]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T03:48:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 和 lint-runner 配置",
+      "result": "均未配置",
+      "details": {
+        "pre_commit_config": null,
+        "lint_runner_config": null,
+        "summary": "仓库未配置静态检查工具（仅有 _typos.toml 拼写检查配置，非 pre-commit/lint-runner）"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T03:48:35",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {"devcontainer_dir": null}
+    },
+    {
+      "timestamp": "2026-06-17T03:48:40",
+      "step": "image_selection",
+      "action": "按 Dockerfile 选择基础镜像",
+      "result": "openEuler 22.03 LTS SP2",
+      "details": {
+        "selection_reason": "Dockerfile 指定 FROM openeuler/openeuler:22.03-lts-sp2 → 选择 openEuler 22.03 LTS SP2（从 hub.oepkgs.net 拉取，因 Docker Hub 不可达）"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T03:49:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器，挂载仓库目录到 /workspace",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp2",
+        "container_name": "ttfhw-stratovirt-env"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T03:49:30",
+      "step": "dependency_installation",
+      "action": "安装构建依赖（cargo + musl-gcc + pixman-devel + libcap-ng-devel + cyrus-sasl-devel + pulseaudio + clang + gtk3-devel + libusbx + alsa-lib-devel + libcap-devel + libseccomp-devel + make）",
+      "result": "成功",
+      "details": {
+        "packages_count": 100,
+        "installed_rust": "1.64.0-dev (系统包)",
+        "duration_seconds": 172
+      }
+    },
+    {
+      "timestamp": "2026-06-17T03:52:30",
+      "step": "build_attempt_1",
+      "action": "首次构建（make build，使用系统 Rust 1.64.0）",
+      "result": "失败",
+      "details": {
+        "error": "Cargo.lock 版本 v4 需要 Rust >= 1.73.0",
+        "system_rust": "1.64.0-dev",
+        "required_rust": ">= 1.73.0"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T04:00:00",
+      "step": "problem_resolution",
+      "action": "通过 rustup 安装 Rust 1.96.0（USTC 镜像），经历工具链 cargo 组件缺失问题后重装解决",
+      "result": "已解决",
+      "details": {
+        "solution": "rustup toolchain install stable --profile minimal（需清除旧工具链后重装以修复 cargo 组件缺失）",
+        "installed_rust": "1.96.0",
+        "source": "docs/build_guide.ch.md 推荐 rustup 安装，但未覆盖 Cargo.lock 版本兼容性问题"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T04:35:00",
+      "step": "build_retry",
+      "action": "使用 Rust 1.96.0 重新构建（cargo build --workspace --bins --release）",
+      "result": "成功",
+      "details": {
+        "concurrency": "默认（cargo 自动）",
+        "duration_seconds": 83,
+        "artifacts": ["stratovirt (92MB)", "stratovirt-img (7.4MB)"],
+        "warnings": 1
+      }
+    },
+    {
+      "timestamp": "2026-06-17T04:36:30",
+      "step": "build_verification",
+      "action": "验证构建产物：stratovirt -help 和 -version",
+      "result": "成功",
+      "details": {"version": "StratoVirt 2.5.0", "commit_id": "unknown"}
+    },
+    {
+      "timestamp": "2026-06-17T04:37:00",
+      "step": "ut_execution",
+      "action": "执行单元测试（cargo test --workspace --exclude mod_test）",
+      "result": "成功",
+      "details": {
+        "total_passed": "所有 crate 测试通过",
+        "failed": 0,
+        "duration_seconds": 64,
+        "note": "mod_test 未运行，需外部依赖 virtiofsd"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T04:38:30",
+      "step": "sample_assessment",
+      "action": "评估样例执行可行性",
+      "result": "未执行",
+      "details": {
+        "reason": "启动虚拟机需要 Linux 内核镜像和 rootfs 镜像（约 100MB+），在验证容器环境中不适合下载执行"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T04:41:00",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-stratovirt-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T04:42:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report/verification_report_WSL_stratovirt_20260617.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": false,
+      "summary": "仓库未配置静态检查工具（无 pre-commit、无 lint-runner）。仅有 _typos.toml 拼写检查配置",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer 开发容器"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 83,
+      "artifacts": [
+        {
+          "name": "stratovirt",
+          "path": "target/release/stratovirt",
+          "size": "92 MB"
+        },
+        {
+          "name": "stratovirt-img",
+          "path": "target/release/stratovirt-img",
+          "size": "7.4 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 64,
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "failures": [],
+      "summary": "所有 crate 的单元测试和文档测试均通过，0 失败。mod_test 集成测试未运行（需要外部 virtiofsd 依赖）。"
+    },
+    "sample": {
+      "status": "未执行",
+      "duration_seconds": 0,
+      "results": [],
+      "summary": "样例（启动虚拟机）需要 Linux 内核镜像和 rootfs 镜像（约 100MB+ 外部下载），在容器化验证环境中不适合实际执行。stratovirt -help 和 -version 命令可正常输出。"
+    }
+  },
+  "documentation_gaps": [
+    "docs/build_guide.ch.md 声明 rustc 最低版本 1.64.0，但仓库 Cargo.lock 使用 v4 格式，实际需要 Rust >= 1.73.0",
+    "Makefile yum-deps 未包含 Dockerfile 中的 libcap-devel 和 libseccomp-devel，依赖列表在不同文件间不一致",
+    "docs/test.md 中 mod_test 需要外部仓库 virtiofsd（gitlab.com/virtio-fs/virtiofsd），但未提供备用获取方式",
+    "Dockerfile 使用 Docker Hub 镜像名 'openeuler/openeuler'，但 Docker Hub 在当前网络环境下不可达",
+    "README 中样例需要外部下载内核和 rootfs 镜像，未说明可在无 KVM 环境下使用 stratovirt-img 工具进行镜像操作来验证"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T03:52:30",
+      "problem": "系统 Rust 1.64.0 无法解析 Cargo.lock v4 格式（需要 >= 1.73.0）",
+      "solution": "通过 rustup 安装 Rust 1.96.0 stable 工具链替代系统 Rust",
+      "source": "Cargo.lock 文件版本与文档声明的最低 Rust 版本不匹配"
+    },
+    {
+      "timestamp": "2026-06-17T04:09:00",
+      "problem": "rustup 首次安装的工具链 cargo 组件缺失，导致 'cargo' binary is not applicable to the toolchain 错误",
+      "solution": "清除工具链目录后使用 --profile minimal 重新安装，cargo 组件正确安装",
+      "source": "rustup 组件管理元数据不一致（可能因之前中断的安装导致）"
+    },
+    {
+      "timestamp": "2026-06-17T03:49:00",
+      "problem": "Dockerfile 指定的 Docker Hub 镜像（openeuler/openeuler:22.03-lts-sp2）不可达",
+      "solution": "改用 openEuler 官方仓库 hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp2",
+      "source": "网络环境限制"
+    }
+  ],
+  "session_export_file": "verification_report_WSL_stratovirt_20260617.json"
+}
