@@ -1,0 +1,460 @@
+{
+  "metadata": {
+    "repo_path": "/mnt/d/code/ttfhw_0617/metadef/metadef",
+    "repo_url": "https://gitcode.com/cann/metadef.git",
+    "start_time": "2026-06-17T09:50:00",
+    "end_time": "2026-06-17T10:50:02",
+    "duration_seconds": 3602,
+    "total_steps": 16
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "356G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "Ubuntu 22.04.5 LTS (AscendHub CANN 开发镜像)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "selection_reason": "文档 docs/quick_install.md 方式二(Docker部署)明确推荐该昇腾CANN开发镜像，镜像已预装 CANN 9.0.0-beta.1 Toolkit 及编译所需依赖，可免去手动安装 CANN；镜像约 15.4GB。"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md + docs/build.md + build.sh",
+      "value": "x86_64 与 aarch64 双架构支持(本次验证环境为 x86_64)"
+    },
+    "recommended_image": {
+      "source": "docs/quick_install.md 方式二 Docker部署",
+      "value": "昇腾CANN开发镜像 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11 (Ubuntu 22.04, 预装CANN)"
+    },
+    "dependencies": {
+      "source": "docs/build.md 4.2 + scripts/init_env.sh + scripts/check_env.sh",
+      "value": [
+        "CANN Toolkit 9.0.0-beta.1 (提供 securec/runtime/platform/error_manager/msprof 等 cann 包)",
+        "GCC >= 7.3.x (镜像内 11.4.0)",
+        "Python3 >= 3.9.x (镜像内 3.11.15)",
+        "CMake >= 3.16.0，建议 3.20.0 (镜像内 3.22.1)",
+        "ccache / lcov / asan (libasan)",
+        "graph-easy (可选)",
+        "patch / make / git",
+        "autoconf / automake / libtool / gperf (三方库编译)",
+        "Python: pytest>=9.0.1 / coverage>=7.10.0 / pytest-cov>=7.0.0 / pybind11>=2.13.0"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/build.md 4.3 编译",
+      "value": "bash build.sh  (成功后在 build_out/ 生成 cann-metadef_<version>_linux.<arch>.run)"
+    },
+    "ut_commands": {
+      "source": "docs/build.md 4.4 本地验证(UT) + README.md 检查清单",
+      "value": "bash tests/run_test.sh -u"
+    },
+    "sample_commands": {
+      "source": "example/run_example.sh + README.md 快速开始",
+      "value": "bash example/run_example.sh  (构建并运行 tc_ge_irrun_open_api_0014.bin)"
+    },
+    "special_dependencies": {
+      "source": "docs/quick_install.md + scripts/init_env.sh",
+      "value": [
+        "需先 source /usr/local/Ascend/cann/set_env.sh 设置 ASCEND_HOME_PATH",
+        "pip 默认使用清华镜像源 (pypi.tuna.tsinghua.edu.cn)",
+        "init_env.sh 可一键安装系统依赖+CANN+Python依赖"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T09:51:00",
+      "command": "git clone https://gitcode.com/cann/metadef.git",
+      "success": true,
+      "output": "Cloning into 'metadef'... Updating files: 100% (979/979), done.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 6
+    },
+    {
+      "timestamp": "2026-06-17T09:53:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "trim trailing whitespace...Failed; fix end of files...Failed; check yaml...Passed; check for added large files...Passed; check for merge conflicts...Passed; detect private key...Passed; check json...Skipped(no files); clang-format...Failed(files modified); ruff check...Failed; ruff format...Failed; codespell...Failed(exit 65); OAT Compliance Check...Failed(exit 1, 1 license header invalid)",
+      "error": "7 个 hook 未通过：trailing-whitespace / end-of-file-fixer / clang-format / ruff-check / ruff-format / codespell / oat-check。仓库提交代码未通过自身 pre-commit。",
+      "returncode": 1,
+      "duration_seconds": 91
+    },
+    {
+      "timestamp": "2026-06-17T09:54:00",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:54:05",
+      "command": "ls .devcontainer/",
+      "success": true,
+      "output": "未找到 .devcontainer 目录，仓库未配置 devcontainer",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:55:00",
+      "command": "docker pull --platform=amd64 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+      "success": true,
+      "output": "Digest: sha256:0a652d5bf0a193c80d8e9b4a8195bec0da4da25dc898d87527bb197843a0be33; Status: Downloaded newer image; 镜像约 15.4GB",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 900,
+      "note": "拉取含 CANN Toolkit 的大层耗时较长(约15分钟)，为构建关键路径"
+    },
+    {
+      "timestamp": "2026-06-17T10:09:00",
+      "command": "docker run -d --name ttfhw-metadef-env -u root --privileged=true -v <repo>:/workspace -w /workspace <ascendhub cann image> tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 3966d381f8ee...; 容器 OS Ubuntu 22.04.5 LTS, x86_64, 20核, 15Gi",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T10:10:00",
+      "command": "bash scripts/init_env.sh --skip-cann",
+      "success": true,
+      "output": "安装系统依赖(curl/wget/git/cmake/ccache/autoconf/automake/libtool/gperf/openssh-server/python3-dev)与Python依赖(pytest-cov/pybind11)；Development environment ready!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 72,
+      "note": "镜像已含CANN，故使用 --skip-cann 跳过CANN安装(init_env.sh 默认 CANN_VERSION=9.0.0，而镜像源 master 最新为9.1.0，直接下载会404)"
+    },
+    {
+      "timestamp": "2026-06-17T10:11:00",
+      "command": "bash scripts/check_env.sh",
+      "success": false,
+      "output": "PASSED:15  WARNING:1  ERROR:1; 结论: 环境不满足 metadef 编译要求",
+      "error": "[ERROR] 未安装 lcov (build.md 要求安装, 用于代码覆盖率); [WARNING] genhtml 未找到",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T10:11:30",
+      "command": "apt-get install -y lcov libgraph-easy-perl",
+      "success": true,
+      "output": "安装完成；重跑 check_env.sh: PASSED:18, 结论: 环境检查全部通过！可以编译 metadef。",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 11
+    },
+    {
+      "timestamp": "2026-06-17T10:12:00",
+      "command": "bash build.sh -j12",
+      "success": false,
+      "output": "[22%] Performing download step (git clone) for 'cann-cmake-populate'; -- Configuring incomplete, errors occurred!",
+      "error": "fatal: detected dubious ownership in repository at '/workspace/build/_deps/cann-cmake-src'; Failed to checkout tag: 'master-026'; 源于 /workspace 挂载目录属主(uid 1000)与容器运行用户(root)不一致",
+      "returncode": 1,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T10:13:00",
+      "command": "git config --global --add safe.directory '*'  (环境配置,未改源码)",
+      "success": true,
+      "output": "已添加 safe.directory=*；清理上次构建残留 build/ output/ build_out/",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T10:13:30",
+      "command": "bash build.sh -j12",
+      "success": true,
+      "output": "Metadef build success!; Build pkg success: /workspace/output/cann-metadef_9.1.0_linux-x86_64.run; 编译并发 -j12 (20核×60%)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 133
+    },
+    {
+      "timestamp": "2026-06-17T10:35:30",
+      "command": "bash tests/run_test.sh -u -j12",
+      "success": true,
+      "output": "100% tests passed, 0 tests failed out of 3; ut_metadef(337用例)/ut_register(110用例)/ut_sc_check 全部 Passed; Total Test time(real)=6.00s",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 641,
+      "note": "641s 含 UT 编译(abseil-cpp/protobuf/gtest 等三方库)+ctest 执行；ctest 实际执行 6.00s"
+    },
+    {
+      "timestamp": "2026-06-17T10:46:00",
+      "command": "bash example/run_example.sh",
+      "success": false,
+      "output": "make: g++ ... -I /usr/local/Ascend/cann//aarch64-linux/include/graph ...; fatal error: graph.h: No such file or directory; run_example.sh: line 20: ./tc_ge_irrun_open_api_0014.bin: No such file or directory",
+      "error": "样例 Makefile 硬编码 FWK_INCLUDE_DIR=$(ASCEND_PATH)/aarch64-linux/include，x86_64 环境下该路径不存在，导致 graph.h 找不到，编译失败",
+      "returncode": 127,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T10:47:00",
+      "command": "诊断: make FWK_INCLUDE_DIR=/usr/local/Ascend/cann/x86_64-linux/include (命令行覆盖,未改源码)",
+      "success": true,
+      "output": "覆盖为 x86_64-linux/include 后编译成功，生成 ../tc_ge_irrun_open_api_0014.bin (1.4M, 仅有 -Wsign-compare 警告)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3,
+      "note": "证实 aarch64 硬编码路径是样例编译唯一阻塞点"
+    },
+    {
+      "timestamp": "2026-06-17T10:48:00",
+      "command": "./tc_ge_irrun_open_api_0014.bin",
+      "success": false,
+      "output": "[IR run log] Start to initialize ge using ge global options; [IR run log] Initialize ge using ge global options failed",
+      "error": "RC=255；编译型容器(无 --device NPU 设备、无驱动/固件)无法初始化 GE 运行时，样例需 NPU 设备(quick_install.md 场景2)",
+      "returncode": 255,
+      "duration_seconds": 1
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T09:50:00",
+      "step": "start",
+      "action": "开始验证流程，克隆仓库",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T09:51:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层阅读 docs/build.md、quick_install.md、CMakeLists.txt、build.sh、run_test.sh、check_env.sh、init_env.sh",
+      "result": "成功",
+      "details": {"files_read": ["README.md", "docs/build.md", "docs/quick_install.md", "CMakeLists.txt", "build.sh", "tests/run_test.sh", "scripts/init_env.sh", "scripts/check_env.sh", "example/run_example.sh"]}
+    },
+    {
+      "timestamp": "2026-06-17T09:53:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "minimum_pre_commit_version": "4.0.0"}
+    },
+    {
+      "timestamp": "2026-06-17T09:53:30",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "失败",
+      "details": {"total_hooks": 12, "passed": 4, "failed": 7, "skipped": 1, "duration_seconds": 91}
+    },
+    {
+      "timestamp": "2026-06-17T09:54:00",
+      "step": "static_analysis_scan",
+      "action": "检查 lint-runner 配置",
+      "result": "未配置",
+      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+    },
+    {
+      "timestamp": "2026-06-17T09:54:05",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {"searched": ".devcontainer/", "found": false}
+    },
+    {
+      "timestamp": "2026-06-17T09:55:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "AscendHub CANN 开发镜像 (Ubuntu 22.04)",
+      "details": {"selection_reason": "docs/quick_install.md 方式二明确推荐该镜像，预装 CANN 9.0.0-beta.1"}
+    },
+    {
+      "timestamp": "2026-06-17T10:09:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器 ttfhw-metadef-env",
+      "result": "成功",
+      "details": {"image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11", "mount": "/workspace", "scenario": "仅编译构建(场景1)"}
+    },
+    {
+      "timestamp": "2026-06-17T10:10:00",
+      "step": "dependency_installation",
+      "action": "运行 init_env.sh --skip-cann 安装系统与Python依赖",
+      "result": "成功",
+      "details": {"duration_seconds": 72, "skip_cann_reason": "镜像已预装CANN"}
+    },
+    {
+      "timestamp": "2026-06-17T10:11:00",
+      "step": "env_check",
+      "action": "执行 check_env.sh 环境检查",
+      "result": "失败(首次)",
+      "details": {"error": "lcov 未安装"}
+    },
+    {
+      "timestamp": "2026-06-17T10:11:30",
+      "step": "problem_resolution",
+      "action": "安装 lcov / libgraph-easy-perl 后重检",
+      "result": "已解决",
+      "details": {"solution": "apt-get install -y lcov libgraph-easy-perl", "recheck": "PASSED:18 全部通过"}
+    },
+    {
+      "timestamp": "2026-06-17T10:12:00",
+      "step": "build_attempt",
+      "action": "首次构建 bash build.sh -j12",
+      "result": "失败",
+      "details": {"error": "git dubious ownership 导致 cann-cmake 检出失败", "concurrency": 12, "concurrency_ratio": "60%"}
+    },
+    {
+      "timestamp": "2026-06-17T10:13:00",
+      "step": "problem_resolution",
+      "action": "问题定位：/workspace 挂载属主与容器用户不一致，git 拒绝操作；设置 git safe.directory=* (环境配置，未改源码)",
+      "result": "已解决",
+      "details": {"solution": "git config --global --add safe.directory '*'", "source": "git 2.34.1 安全检查"}
+    },
+    {
+      "timestamp": "2026-06-17T10:13:30",
+      "step": "build_retry",
+      "action": "重新构建 bash build.sh -j12",
+      "result": "成功",
+      "details": {"concurrency": 12, "concurrency_ratio": "60%", "duration_seconds": 133, "artifact": "cann-metadef_9.1.0_linux-x86_64.run"}
+    },
+    {
+      "timestamp": "2026-06-17T10:35:30",
+      "step": "ut_execution",
+      "action": "执行单元测试 bash tests/run_test.sh -u -j12",
+      "result": "成功",
+      "details": {"total": 3, "passed": 3, "failed": 0, "gtest_cases": "ut_metadef=337, ut_register=110, 全部通过", "ctest_real_seconds": 6.0, "total_duration_seconds": 641}
+    },
+    {
+      "timestamp": "2026-06-17T10:46:00",
+      "step": "sample_execution",
+      "action": "执行样例 bash example/run_example.sh",
+      "result": "失败",
+      "details": {"build_error": "Makefile 硬编码 aarch64-linux/include，x86_64 下 graph.h 未找到", "runtime_error": "无 NPU 设备/驱动，GE 初始化失败(RC=255)"}
+    },
+    {
+      "timestamp": "2026-06-17T10:49:00",
+      "step": "cleanup",
+      "action": "停止并删除容器，清理构建产物",
+      "result": "成功",
+      "details": {"container_removed": "ttfhw-metadef-env", "repo_dirty_count": 0}
+    },
+    {
+      "timestamp": "2026-06-17T10:50:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_metadef_20260617.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置(12个hooks，4通过/1跳过/7失败)，仓库提交代码未通过自身 pre-commit；未检测到 lint-runner 配置。",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "失败",
+        "duration_seconds": 91,
+        "total_hooks": 12,
+        "passed": 4,
+        "failed": 7,
+        "skipped": 1,
+        "failures": [
+          {"hook_name": "trailing-whitespace", "file": "多个文件", "error": "存在行尾多余空白(autofix 会修改大量文件)"},
+          {"hook_name": "end-of-file-fixer", "file": "多个文件", "error": "文件末尾空白/换行不规范"},
+          {"hook_name": "clang-format", "file": "数百个 .h/.cc 文件", "error": "代码格式不符合 .clang-format 规则(hook 自动改写文件)"},
+          {"hook_name": "ruff-check", "file": "Python 文件", "error": "ruff 检查未通过(自动修复)"},
+          {"hook_name": "ruff-format", "file": "Python 文件", "error": "ruff 格式化未通过(1 file reformatted)"},
+          {"hook_name": "codespell", "file": "classify_rule.yaml/docs/api/*.md/build.sh 等", "error": "拼写问题(commiter/BuildIn/resultIn/datas/build-in/dirver/registerd 等)，exit 65"},
+          {"hook_name": "oat-check", "file": "OAT 合规检查", "error": "1 处 License Header Invalid，exit 1"}
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer，未发现 .devcontainer 目录"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 133,
+      "artifacts": [
+        {"name": "cann-metadef_9.1.0_linux-x86_64.run", "path": "build_out/cann-metadef_9.1.0_linux-x86_64.run", "size": "1.6 MB"},
+        {"name": "device-metadef.tar.gz", "path": "output/device-metadef.tar.gz", "size": "165 KB"},
+        {"name": "libmetadef.so", "path": "build/base/libmetadef.so", "size": "动态库"},
+        {"name": "libexe_graph.so", "path": "build/base/libexe_graph.so", "size": "动态库"},
+        {"name": "libopp_registry.so", "path": "build/base/libopp_registry.so", "size": "动态库"},
+        {"name": "librt2_registry.a", "path": "build/base/librt2_registry.a", "size": "静态库"}
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 641,
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "failures": [],
+      "details": "ctest 3/3 通过(ut_metadef 337 用例、ut_register 110 用例、ut_sc_check)；ctest 实际执行 6.00s，641s 为含 UT 编译的总耗时"
+    },
+    "sample": {
+      "status": "失败",
+      "duration_seconds": 7,
+      "results": [
+        {
+          "sample_name": "tc_ge_irrun_open_api_0014",
+          "execution_status": "失败",
+          "output_summary": "按文档执行 bash example/run_example.sh 时编译失败：样例 Makefile 硬编码 FWK_INCLUDE_DIR=aarch64-linux/include，x86_64 环境下该路径不存在，导致 graph.h 未找到。诊断性覆盖为 x86_64-linux/include(未改源码)后可编译成功(1.4M bin)；运行 .bin 时因编译型容器无 NPU 设备/驱动，GE 初始化失败(RC=255)。",
+          "execution_time": "编译失败(原文档命令); 诊断编译3s; 运行1s"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "样例 example/tc_ge_irrun_open_api_0014/Makefile 硬编码 aarch64-linux/include，未适配 x86_64，文档未说明在 x86_64 下需修改 FWK_INCLUDE_DIR",
+    "scripts/init_env.sh 中 CANN_VERSION 硬编码为 9.0.0，而镜像源 master 分支最新版本为 9.1.0，直接运行 init_env.sh 下载 CANN Toolkit 会 404 失败(使用 AscendHub 镜像可规避此问题)",
+    "docs/build.md 要求安装 lcov，但 init_env.sh(--skip-cann) 未安装 lcov，check_env.sh 报 ERROR，需手动补装",
+    "样例运行依赖 NPU 设备与驱动/固件，仅 quick_install.md 场景2(带 --device)支持；编译型容器(场景1)无法运行样例，文档对此区分清晰但样例本身未在编译场景做适配"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T09:53:00",
+      "problem": "仓库提交的代码未通过自身 pre-commit 检查(7个hook失败：trailing-whitespace/end-of-file-fixer/clang-format/ruff-check/ruff-format/codespell/oat-check)",
+      "solution": "遵循“不改源码”原则，未对仓库做修改，仅记录结果；pre-commit autofix 会改写大量文件，验证后已 git checkout 还原",
+      "source": ".pre-commit-config.yaml + pre-commit run --all-files 输出"
+    },
+    {
+      "timestamp": "2026-06-17T10:12:00",
+      "problem": "首次构建在 cmake 配置阶段失败：git 检出 cann-cmake 时报 'detected dubious ownership'，因 /workspace 挂载目录属主(uid 1000)与容器运行用户(root)不一致",
+      "solution": "在容器内执行 git config --global --add safe.directory '*' (仅环境配置，未改源码)，清理残留后重新构建成功",
+      "source": "git 2.34.1 安全检查 + /workspace 属主 1000:1000"
+    },
+    {
+      "timestamp": "2026-06-17T10:11:00",
+      "problem": "check_env.sh 报 [ERROR] 未安装 lcov，环境不满足编译要求",
+      "solution": "apt-get install -y lcov libgraph-easy-perl，重检 18 项全部 PASS",
+      "source": "scripts/check_env.sh + docs/build.md 依赖列表"
+    },
+    {
+      "timestamp": "2026-06-17T10:46:00",
+      "problem": "样例编译失败：graph.h 未找到",
+      "solution": "未改源码；诊断证实根因为 Makefile 硬编码 aarch64-linux/include，覆盖为 x86_64-linux/include 后可编译成功",
+      "source": "example/tc_ge_irrun_open_api_0014/Makefile: FWK_INCLUDE_DIR := $(ASCEND_PATH)/aarch64-linux/include"
+    },
+    {
+      "timestamp": "2026-06-17T10:48:00",
+      "problem": "样例 .bin 运行失败：GE 初始化失败(RC=255)",
+      "solution": "属环境限制：编译型容器无 NPU 设备/驱动，需按 quick_install.md 场景2 启动带 --device 的容器并安装驱动/固件方可运行",
+      "source": "tc_ge_irrun_open_api_0014.bin 输出 + docs/quick_install.md 场景说明"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_metadef_20260617.md"
+}

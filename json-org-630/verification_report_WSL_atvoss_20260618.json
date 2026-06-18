@@ -1,0 +1,448 @@
+{
+  "metadata": {
+    "repo_path": "/root/workspace/ttfhw-verify-0617/atvoss",
+    "start_time": "2026-06-18T02:00:00",
+    "end_time": "2026-06-18T02:50:00",
+    "duration_seconds": 3000,
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Xeon(R) CPU",
+      "cpu_cores": 12,
+      "memory": "11Gi",
+      "disk": "773G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS-SP3)",
+      "architecture": "x86_64",
+      "cpu_cores": 12,
+      "memory": "11Gi (无限制)"
+    },
+    "image_source": {
+      "type": "cann_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "selection_reason": "文档 quick_start.md 未指定推荐镜像，仅说明需要安装 CANN toolkit 包（CANN 8.5.0 及以上版本）；选择 CANN 9.1.0-beta.1 镜像以满足 master 分支编译需求"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "docs/summary.md - 适用场景章节",
+      "value": "x86_64 和 aarch64"
+    },
+    "recommended_image": {
+      "source": "docs/quick_start.md",
+      "value": "文档未指定推荐镜像，仅说明需手动安装 CANN toolkit 包（从 CANN master OBS 下载）"
+    },
+    "dependencies": {
+      "source": "docs/quick_start.md - 安装依赖章节",
+      "value": [
+        "python >= 3.7.0 (建议 <= 3.10)",
+        "gcc >= 7.3.0",
+        "cmake >= 3.16.0",
+        "pigz >= 2.4 (可选，提升打包速度)",
+        "dos2unix",
+        "gawk",
+        "make",
+        "googletest (仅 UT 依赖，建议 release-1.11.0)"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/quick_start.md - 编译执行章节",
+      "value": "bash scripts/build.sh -DSOC=ascend950 <target_name> (如 rms_norm, abs)"
+    },
+    "ut_commands": {
+      "source": "docs/quick_start.md - UT测试章节",
+      "value": "bash scripts/build.sh -DSOC=ascend950 --host_ut"
+    },
+    "st_commands": {
+      "source": "docs/quick_start.md - ST测试章节",
+      "value": "bash scripts/build.sh -DSOC=ascend950 --st ${st_case_name}; cannsim record ./output/bin/${st_case_name} -s Ascend950 --gen-report"
+    },
+    "sample_commands": {
+      "source": "docs/quick_start.md - 编译执行章节 + 仿真执行章节",
+      "value": "bash scripts/build.sh -DSOC=ascend950 abs; ./output/bin/abs --shape=512,3 (Device运行); cannsim record ./run.sh -s Ascend950 --gen-report (仿真运行)"
+    },
+    "special_dependencies": {
+      "source": "docs/quick_start.md - 手动安装CANN包章节",
+      "value": [
+        "CANN toolkit 包 (从 CANN master OBS 下载，CANN 8.5.0+)",
+        "cannsim (仿真工具，随 CANN toolkit 安装)"
+      ]
+    },
+    "supported_products": {
+      "source": "docs/quick_start.md + docs/summary.md",
+      "value": "Ascend 950PR / Ascend 950DT"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T02:00:00",
+      "command": "git clone https://gitcode.com/cann/atvoss.git",
+      "success": true,
+      "output": "仓库克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-18T02:01:00",
+      "command": "检查 .pre-commit-config.yaml",
+      "success": true,
+      "output": "文件存在，包含 clang-format (v16.0.0) 和 oat-check 两个 hooks",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T02:01:10",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "clang-format: Failed (文件被格式化修改); oat-check: 先报 Failed 后实际 All checks passed (18 files checked)",
+      "error": "clang-format 格式化修改了部分文件；oat-check 首次运行因增量模式检测到未暂存文件报失败，二次运行通过",
+      "returncode": 1,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T02:01:20",
+      "command": "检查 lint-runner 配置",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T02:01:25",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "未找到 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T02:02:00",
+      "command": "docker run -d --name ttfhw-atvoss-env swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "success": true,
+      "output": "CANN 9.1.0-beta.1 容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-18T02:03:00",
+      "command": "检查容器内依赖",
+      "success": true,
+      "output": "gcc 12.3.1, cmake 3.27.9, python 3.12.13, dos2unix, gawk, make, pigz 均已安装",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T02:04:00",
+      "command": "bash scripts/build.sh -DSOC=ascend950 --host_ut",
+      "success": true,
+      "output": "UT 编译并运行成功：test_arguments (1 PASSED), test_elewise_tiling (1 PASSED), test_expr_linearizer (1 PASSED), test_utility (1 PASSED) = 共 4 tests PASSED",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-18T02:06:00",
+      "command": "bash scripts/build.sh -DSOC=ascend950 --example abs",
+      "success": true,
+      "output": "abs 样例编译成功，生成 output/bin/abs",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-18T02:07:00",
+      "command": "cannsim record ./abs_run.sh -s Ascend950 --gen-report (abs 仿真)",
+      "success": true,
+      "output": "仿真运行成功，cannsim.log 输出 'Accuracy verification passed.'",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 150
+    },
+    {
+      "timestamp": "2026-06-18T02:10:00",
+      "command": "bash scripts/build.sh -DSOC=ascend950 --st test_block_cast12",
+      "success": true,
+      "output": "ST 编译成功，生成 output/bin/test_block_cast12",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-18T02:42:00",
+      "command": "cannsim record ./output/bin/test_block_cast12 -s Ascend950 --gen-report (ST 仿真)",
+      "success": true,
+      "output": "ST 仿真运行成功，cannsim.log 输出 'Accuracy verification passed.'",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-18T02:50:00",
+      "command": "docker stop ttfhw-atvoss-env && docker rm ttfhw-atvoss-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T02:00:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T02:01:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层遍历所有文档",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/quick_start.md",
+          "docs/summary.md",
+          "docs/directory_structure.md",
+          "docs/tutorials/developer_guide.md",
+          "docs/api/README.md",
+          "examples/README.md",
+          "examples/python_extension/README.md",
+          "CONTRIBUTING.md",
+          ".pre-commit-config.yaml",
+          "scripts/build.sh"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:01:10",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "clang-format": "Failed (文件被格式化修改)",
+        "oat-check": "通过 (All checks passed, 18 files checked)"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:01:20",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:01:25",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {
+        "config_dir": null,
+        "files": []
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:02:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "CANN 9.1.0-beta.1 (文档未指定，使用已有镜像)",
+      "details": {
+        "selection_reason": "文档 quick_start.md 未指定推荐镜像，仅说明需安装 CANN toolkit 包；选择 CANN 9.1.0-beta.1 镜像以满足编译需求"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:02:00",
+      "step": "container_setup",
+      "action": "启动容器，挂载仓库目录",
+      "result": "成功",
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:03:00",
+      "step": "dependency_check",
+      "action": "检查容器内依赖",
+      "result": "全部满足",
+      "details": {
+        "gcc": "12.3.1 (要求 >= 7.3.0)",
+        "cmake": "3.27.9 (要求 >= 3.16.0)",
+        "python": "3.12.13 (要求 >= 3.7.0)",
+        "dos2unix": "已安装",
+        "gawk": "已安装",
+        "make": "已安装",
+        "pigz": "已安装"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:04:00",
+      "step": "ut_execution",
+      "action": "执行 host_ut 单元测试",
+      "result": "成功",
+      "details": {
+        "command": "bash scripts/build.sh -DSOC=ascend950 --host_ut",
+        "total": 4,
+        "passed": 4,
+        "failed": 0,
+        "tests": ["test_arguments (1 PASSED)", "test_elewise_tiling (1 PASSED)", "test_expr_linearizer (1 PASSED)", "test_utility (1 PASSED)"]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:06:00",
+      "step": "example_build",
+      "action": "编译 abs 样例",
+      "result": "成功",
+      "details": {
+        "command": "bash scripts/build.sh -DSOC=ascend950 --example abs",
+        "artifact": "output/bin/abs"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:07:00",
+      "step": "example_simulation",
+      "action": "仿真运行 abs 样例",
+      "result": "成功",
+      "details": {
+        "command": "cannsim record ./abs_run.sh -s Ascend950 --gen-report",
+        "output": "Accuracy verification passed."
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:10:00",
+      "step": "st_build",
+      "action": "编译 ST 测试 test_block_cast12",
+      "result": "成功",
+      "details": {
+        "command": "bash scripts/build.sh -DSOC=ascend950 --st test_block_cast12",
+        "artifact": "output/bin/test_block_cast12"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:42:00",
+      "step": "st_simulation",
+      "action": "仿真运行 ST 测试",
+      "result": "成功",
+      "details": {
+        "command": "cannsim record ./output/bin/test_block_cast12 -s Ascend950 --gen-report",
+        "output": "Accuracy verification passed."
+      }
+    },
+    {
+      "timestamp": "2026-06-18T02:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T02:51:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_atvoss_20260618.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（2个hooks：clang-format v16.0.0 失败(文件被修改)，oat-check 通过）；未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 5,
+        "total_hooks": 2,
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "clang-format",
+            "file": "多个C++文件",
+            "error": "clang-format 格式化修改了部分文件，说明代码格式与 .clang-format 配置不一致"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 .devcontainer 目录"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 60,
+      "artifacts": [
+        {
+          "name": "abs",
+          "path": "output/bin/abs",
+          "size": "可执行文件"
+        },
+        {
+          "name": "test_block_cast12",
+          "path": "output/bin/test_block_cast12",
+          "size": "可执行文件"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 120,
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "failures": [],
+      "note": "host_ut 包含 4 个测试用例：test_arguments, test_elewise_tiling, test_expr_linearizer, test_utility，全部通过"
+    },
+    "st": {
+      "status": "成功",
+      "duration_seconds": 300,
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "failures": [],
+      "note": "ST 仿真测试 test_block_cast12 通过 cannsim 仿真运行，输出 'Accuracy verification passed.'"
+    },
+    "sample": {
+      "status": "成功",
+      "duration_seconds": 150,
+      "results": [
+        {
+          "sample_name": "abs",
+          "execution_status": "仿真运行成功",
+          "output_summary": "cannsim 仿真运行 abs --shape=32，输出 'Accuracy verification passed.'",
+          "execution_time": "约150秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "文档未推荐具体的 Docker 镜像，仅说明需手动安装 CANN toolkit 包，新手开发者可能不清楚如何选择合适的镜像",
+    "文档未配置 .devcontainer 目录，无法通过 DevContainer 快速搭建开发环境",
+    "文档中 Python 版本建议 <= 3.10，但 CANN 9.1.0-beta.1 镜像自带 Python 3.12，存在版本建议不匹配",
+    "pre-commit 配置中 oat-check hook 使用了已弃用的 stage 名称 'commit'（应为 'pre-commit'），运行时产生 WARNING",
+    "文档 quick_start.md 中源码下载使用 SSH 协议 (git@gitcode.com:cann/atvoss.git)，未提供 HTTPS 方式，新手可能未配置 SSH 密钥"
+  ],
+  "problems_encountered": [],
+  "session_export_file": "verification_session_WSL_atvoss_20260618.md"
+}
