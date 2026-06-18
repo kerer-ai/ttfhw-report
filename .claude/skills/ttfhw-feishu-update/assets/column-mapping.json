@@ -1,116 +1,42 @@
 {
-  "_description": "飞书表格列到 JSON 字段的映射。key 为表格列标，value 为 JSON 路径。可在运行时根据实际表头调整。",
-  "columns": {
-    "仓库名": {
-      "column": "A",
-      "field": "repo_name",
-      "source": "filename",
-      "format": "repo_name_from_filename"
-    },
-    "GitCode URL": {
-      "column": "B",
-      "field": "repo_url",
-      "source": "metadata.repo_url"
-    },
-    "构建状态": {
-      "column": "C",
-      "field": "build_status",
-      "source": "final_results.build.status",
-      "format": "status_label"
-    },
-    "构建命令": {
-      "column": "D",
-      "field": "build_command",
-      "source": "final_results.build.command"
-    },
-    "UT状态": {
-      "column": "E",
-      "field": "ut_status",
-      "source": "final_results.ut.status",
-      "format": "status_label"
-    },
-    "UT总量": {
-      "column": "F",
-      "field": "ut_total",
-      "source": "final_results.ut.total"
-    },
-    "UT通过": {
-      "column": "G",
-      "field": "ut_passed",
-      "source": "final_results.ut.passed"
-    },
-    "UT失败": {
-      "column": "H",
-      "field": "ut_failed",
-      "source": "final_results.ut.failed"
-    },
-    "UT通过率": {
-      "column": "I",
-      "field": "ut_pass_rate",
-      "formula": "passed/total*100",
-      "format": "percent_1_decimal"
-    },
-    "Sample状态": {
-      "column": "J",
-      "field": "sample_status",
-      "source": "final_results.sample.status",
-      "format": "status_label"
-    },
-    "Pre-commit": {
-      "column": "K",
-      "field": "pre_commit",
-      "source": "final_results.static_analysis.pre_commit.configured",
-      "format": "checkmark"
-    },
-    "PC Hooks总数": {
-      "column": "L",
-      "field": "pc_total_hooks",
-      "source": "final_results.static_analysis.pre_commit.total_hooks"
-    },
-    "PC 通过": {
-      "column": "M",
-      "field": "pc_passed",
-      "source": "final_results.static_analysis.pre_commit.passed"
-    },
-    "PC 失败": {
-      "column": "N",
-      "field": "pc_failed",
-      "source": "final_results.static_analysis.pre_commit.failed"
-    },
-    "Lint-runner": {
-      "column": "O",
-      "field": "lint_runner",
-      "source": "final_results.static_analysis.lint_runner.configured",
-      "format": "checkmark"
-    },
-    "LR 启用的规则": {
-      "column": "P",
-      "field": "lr_linters",
-      "source": "final_results.static_analysis.lint_runner.active_linters",
-      "format": "list_join"
-    },
-    "Devcontainer": {
-      "column": "Q",
-      "field": "devcontainer",
-      "source": "final_results.devcontainer.enabled",
-      "format": "checkmark"
-    },
-    "总耗时 (s)": {
-      "column": "R",
-      "field": "total_duration",
-      "source": "metadata.duration_seconds"
-    },
-    "构建耗时 (s)": {
-      "column": "S",
-      "field": "build_duration",
-      "source": "final_results.build.duration_seconds"
-    },
-    "验证时间": {
-      "column": "T",
-      "field": "start_time",
-      "source": "metadata.start_time",
-      "format": "date_only"
-    }
+  "_description": "飞书表格 17 列 (F-V) 到 JSON 归一化字段的映射。基于表格模板 sheet6 的实际列结构。",
+  "spreadsheet": {
+    "token": "ZP68slCR4hWamttGwIDc08GsnZf",
+    "sheet_id": "m66BDJ",
+    "header_row": 1,
+    "data_start_row": 2
+  },
+  "columns": [
+    {"col": "F", "label": "验证结果", "source": "derived", "note": "build+ut+sample 综合判断"},
+    {"col": "G", "label": "总时长", "source": "metadata.duration_seconds", "format": "duration_human"},
+    {"col": "H", "label": "环境准备时长", "source": "derived", "note": "总时长-构建-UT-样例"},
+    {"col": "I", "label": "构建时长", "source": "final_results.build.duration_seconds", "format": "duration_human"},
+    {"col": "J", "label": "测试时长", "source": "final_results.ut.duration_seconds", "format": "duration_human"},
+    {"col": "K", "label": "样例时长", "source": "final_results.sample.duration_seconds", "format": "duration_human"},
+    {"col": "L", "label": "构建", "source": "final_results.build.status", "format": "status_label"},
+    {"col": "M", "label": "构建失败原因", "source": "final_results.build.error", "format": "reason_text"},
+    {"col": "N", "label": "测试", "source": "final_results.ut.status", "format": "status_label"},
+    {"col": "O", "label": "测试失败原因", "source": "final_results.ut.failures", "format": "failures_text"},
+    {"col": "P", "label": "样例执行", "source": "final_results.sample.status", "format": "status_label"},
+    {"col": "Q", "label": "样例失败原因", "source": "derived", "note": "环境判断"},
+    {"col": "R", "label": "pre-commit是否配置", "source": "final_results.static_analysis.pre_commit.configured", "format": "checkmark"},
+    {"col": "S", "label": "pre-commit结果", "source": "final_results.static_analysis.pre_commit", "format": "hooks_summary"},
+    {"col": "T", "label": "devcontainer是否配置", "source": "final_results.devcontainer.enabled", "format": "checkmark"},
+    {"col": "U", "label": "devcontainer结果", "source": "final_results.devcontainer", "format": "devcontainer_summary"},
+    {"col": "V", "label": "验证问题", "source": "problems_encountered", "format": "problems_text"}
+  ],
+  "repo_name_mapping": {
+    "_description": "JSON 文件中的仓库标识 -> 表格行号。注意表格中的命名可能与 JSON 文件名不完全一致。",
+    "ubs-engine": {"row": 2, "sheet_name": "ubs-engine"},
+    "ubs-comm": {"row": 3, "sheet_name": "ubs-comm"},
+    "ubs-virt": {"row": 4, "sheet_name": "ubs-virt"},
+    "ubs-io": {"row": 5, "sheet_name": "ubs-io"},
+    "ubs-mem": {"row": 6, "sheet_name": "ubs-mem"},
+    "pytorch": {"row": 31, "sheet_name": "Ascend/pytorch"},
+    "kernel": {"row": 34, "sheet_name": "Kernel"},
+    "isulad": {"row": 35, "sheet_name": "isula"},
+    "a-tune": {"row": 36, "sheet_name": "A-Tune"},
+    "stratovirt": {"row": 37, "sheet_name": "stratovirt"}
   },
   "status_labels": {
     "success": "成功",
@@ -124,5 +50,14 @@
     "true": "✓",
     "false": "✗",
     "null": "-"
+  },
+  "format_helpers": {
+    "duration_human": "int(sec) → XhXmXs 或 XmXs 或 Xs",
+    "status_label": "映射到 status_labels",
+    "checkmark": "true→✓, false→✗, null→-",
+    "hooks_summary": "N个hooks, X通过 Y失败 Z跳过",
+    "devcontainer_summary": "配置N个文件 或 未配置",
+    "failures_text": "前5条失败: test_name:reason, 截断200字符",
+    "problems_text": "problems_encountered 前3条, 截断200字符"
   }
 }

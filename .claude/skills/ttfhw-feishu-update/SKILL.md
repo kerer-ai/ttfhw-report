@@ -1,177 +1,165 @@
 ---
 name: ttfhw-feishu-update
-description: 基于 json-org-630/ 中的原始验证报告刷新飞书电子表格中的仓库验证状态。使用 lark-cli sheets 命令更新单元格。当用户需要刷新飞书表格、更新验证状态、同步报告数据到飞书时使用。
+description: 基于 json/ 中的归一化验证报告刷新飞书电子表格中的仓库验证状态。使用 lark-cli sheets 命令更新单元格。当用户需要刷新飞书表格、更新验证状态、同步报告数据到飞书时使用。
 ---
 
 # TTFHW 飞书表格刷新
 
 ## 概述
 
-读取 `json-org-630/` 目录中的原始验证报告 JSON 文件，提取每个仓库的核心验证数据，使用飞书 CLI (`lark-cli`) 批量更新飞书电子表格中的单元格。
+读取 `json/` 目录中的**归一化后**验证报告 JSON 文件（状态值已标准化），提取每个仓库的核心验证数据，匹配飞书电子表格中的对应行，使用飞书 CLI (`lark-cli`) 批量更新单元格。
 
 ## 前置条件
 
-飞书 CLI 必须已安装并完成认证：
+飞书 CLI 必须已安装并完成两层认证：
 
 ```bash
-lark-cli auth status          # 检查认证状态
-lark-cli config init --new    # 首次配置（需打开授权链接）
+# 1. 应用配置（bot 身份，用于读取表格）
+lark-cli config init --new
+
+# 2. 用户登录（user 身份，用于写入表格）
+#    bot 无法写入用户创建的表格，必须用 --as user
+lark-cli auth login --scope "sheets:spreadsheet:write_only" --no-wait --json
+#    拿到 URL 和 device_code，用户扫码授权后：
+lark-cli auth login --device-code <code>
 ```
+
+**权限要求**：
+- 应用后台开通：`sheets:spreadsheet:read` + `sheets:spreadsheet:write_only`
+- 用户授权：`sheets:spreadsheet` + `sheets:spreadsheet:write_only`
 
 ## 工作流程
 
 ### 步骤 1：确认目标表格
 
-**必须向用户确认要刷新的表格**。提示用户输入飞书表格 URL，格式如：
+**必须向用户确认要刷新的表格**。提示用户输入飞书表格 URL。默认模板：
 
 ```
-https://vcnpr8ydwid3.feishu.cn/sheets/<spreadsheet_token>?sheet=<sheet_id>
+https://vcnpr8ydwid3.feishu.cn/sheets/ZP68slCR4hWamttGwIDc08GsnZf?sheet=m66BDJ
 ```
 
-从 URL 中提取：
-- `spreadsheet_token`：路径中 `/sheets/` 后的部分
-- `sheet_id`：query 参数 `sheet` 的值
+提取：
+- `spreadsheet_token`：`ZP68slCR4hWamttGwIDc08GsnZf`
+- `sheet_id`：`m66BDJ`
 
-**默认模板**（如用户未提供）：
-- 表格：`https://vcnpr8ydwid3.feishu.cn/sheets/ZP68slCR4hWamttGwIDc08GsnZf?sheet=m66BDJ`
-- spreadsheet_token: `ZP68slCR4hWamttGwIDc08GsnZf`
-- sheet_id: `m66BDJ`
+### 步骤 2：读取表格结构
 
-### 步骤 2：读取当前表格结构
-
-先读取目标 sheet 的前几行，了解表头和数据布局：
+读取完整表头和数据行（范围要足够大，覆盖所有行）：
 
 ```bash
 lark-cli sheets +cells-get \
   --spreadsheet-token <token> \
   --sheet-id <sheet_id> \
-  --range "A1:Z5" \
+  --range "A1:V60" \
   --json
 ```
 
-从返回的数据中识别：
-- 表头行（通常是第 1 行）：确定每列的含义
-- 数据起始行：表头下方的第一行
-- 仓库名所在的列
+从返回数据识别：
+- **表头行**（第 1 行）：确定每列含义
+- **仓库名列**（通常是 C 列）：用于匹配 JSON 数据
+- **数据填充范围**：表头下方的所有行，列 F-V 为待写入区域
 
-### 步骤 3：读取 JSON 验证数据
+### 步骤 3：提取 JSON 数据并构建写入操作
 
-遍历 `json-org-630/` 目录中每个 JSON 文件，提取以下关键字段：
+**数据源**：使用 `json/` 目录（归一化后的数据，状态值已标准化为 success/partial_success/failed/not_run/no_tests）。
 
-```bash
-# 字段提取脚本
-python3 -c "
-import json, os
+用 Python 脚本读取所有 JSON 文件，提取字段，匹配表格行，构建 `+batch-update` 所需的 operations。
 
-REPORT_FIELDS = {
-    'repo_name':     'metadata.repo_path 或文件名推导',
-    'build_status':  'final_results.build.status',
-    'ut_status':     'final_results.ut.status',
-    'sample_status': 'final_results.sample.status',
-    'total_tests':   'final_results.ut.total',
-    'passed_tests':  'final_results.ut.passed',
-    'failed_tests':  'final_results.ut.failed',
-    'build_cmd':     'final_results.build.command',
-    'build_dur':     'final_results.build.duration_seconds',
-    'ut_dur':        'final_results.ut.duration_seconds',
-    'sample_dur':    'final_results.sample.duration_seconds',
-    'total_dur':     'metadata.duration_seconds',
-    'pre_commit':    'final_results.static_analysis.pre_commit.configured',
-    'pc_total':      'final_results.static_analysis.pre_commit.total_hooks',
-    'pc_passed':     'final_results.static_analysis.pre_commit.passed',
-    'pc_failed':     'final_results.static_analysis.pre_commit.failed',
-    'lint_runner':   'final_results.static_analysis.lint_runner.configured',
-    'lr_linters':    'final_results.static_analysis.lint_runner.active_linters',
-    'devcontainer':  'final_results.devcontainer.enabled',
-    'repo_url':      'metadata.repo_url',
-    'branch':        'metadata.branch',
-    'start_time':    'metadata.start_time',
-    'end_time':      'metadata.end_time',
+**关键步骤**：
+1. 读取 `json/` 下所有 JSON 文件
+2. 从文件名提取仓库标识，通过映射表匹配表格行号
+3. 提取归一化后的状态值（已经是标准值，无需再转换）
+4. 构建 `[[{"value": "..."}, ...], ...]` 格式的 cells 数据
+5. 生成 `[{"shortcut": "+cells-set", "input": {...}}, ...]` 格式的 operations
+
+**仓库名映射表**（JSON 文件名 -> 表格行号）：
+
+```python
+# JSON 文件名中的 repo key -> 表格中仓库名 -> 行号
+SHEET_ROWS = {
+    'ubs-engine': 2, 'ubs-comm': 3, 'ubs-virt': 4, 'ubs-io': 5,
+    'ubs-mem': 6, 'pytorch': 31, 'kernel': 34, 'isulad': 35,
+    'a-tune': 36, 'stratovirt': 37,
 }
-"
 ```
 
-### 步骤 4：状态值标准化
+**表格列映射**（F-V 列共 17 列）：
 
-JSON 中的状态值需要转换为飞书表格中使用的标准中文标签：
+| 列 | 内容 | 来源 |
+|----|------|------|
+| F | 验证结果 | 综合判断: build=success AND ut=success AND sample in (success,no_tests) → 成功，否则 build/ut 任一 success/partial → 部分成功 |
+| G | 总时长 | metadata.duration_seconds，格式化为 XhXmXs |
+| H | 环境准备时长 | 总时长 - 构建 - UT - 样例 |
+| I | 构建时长 | final_results.build.duration_seconds |
+| J | 测试时长 | final_results.ut.duration_seconds |
+| K | 样例时长 | final_results.sample.duration_seconds |
+| L | 构建 | final_results.build.status → 中文标签 |
+| M | 构建失败原因 | build.error 或 skip_reason |
+| N | 测试 | final_results.ut.status → 中文标签 |
+| O | 测试失败原因 | ut.failures 详情 或 ut.skip_reason |
+| P | 样例执行 | final_results.sample.status → 中文标签 |
+| Q | 样例失败原因 | 环境不具备 / 需NPU硬件 等 |
+| R | pre-commit是否配置 | static_analysis.pre_commit.configured → ✓/✗/- |
+| S | pre-commit结果 | N个hooks, X通过 Y失败 Z跳过 |
+| T | devcontainer是否配置 | devcontainer.enabled → ✓/✗/- |
+| U | devcontainer结果 | 配置N个文件 / 未配置 |
+| V | 验证问题 | problems_encountered 前3条，截断200字符 |
 
-| JSON 状态 | 表格显示 |
-|-----------|---------|
-| `success` | 成功 |
-| `partial_success` | 部分成功 |
-| `failed` | 失败 |
-| `not_run` | 无法执行 |
-| `no_tests` | 无用例 |
-| `configured: true` | ✓ |
-| `configured: false` | ✗ |
-| `configured: null/undefined` | - |
+状态标签映射：
 
-### 步骤 5：构建批量更新
+```python
+STATUS = {
+    'success': '成功', 'partial_success': '部分成功', 'failed': '失败',
+    'not_run': '无法执行', 'no_tests': '无用例', 'unknown': '未知',
+}
+```
 
-将提取的数据映射到表格的对应列。使用 `lark-cli sheets +batch-update` 一次性提交所有更新：
+### 步骤 4：预览并执行
+
+1. **先 dry-run**：确认数据正确
+2. **用户确认后执行**：
 
 ```bash
+# Dry-run
 lark-cli sheets +batch-update \
   --spreadsheet-token <token> \
-  --sheet-id <sheet_id> \
-  --requests '[
-    {"updateCells": {
-      "range": "B2:D2",
-      "values": [["成功", "99.9%", "✓"]]
-    }},
-    {"updateCells": {
-      "range": "B3:D3",
-      "values": [["部分成功", "96%", "✗"]]
-    }}
-  ]'
+  --operations @feishu-ops.json \
+  --as user --dry-run
+
+# 执行（用户确认后加 --yes）
+lark-cli sheets +batch-update \
+  --spreadsheet-token <token> \
+  --operations @feishu-ops.json \
+  --as user --yes --json
 ```
 
-**关键规则**：
-- 一行一个 `updateCells` 请求，覆盖该仓库的所有数据列
-- 先写后确认：先用 `--dry-run` 预览，用户确认后再执行
-- 大量数据用 JSON 文件传入：`--requests @data.json`
+**注意**：
+- `+batch-update` 是高风险操作，需 `--yes` 确认
+- 必须用 `--as user`（bot 无权限写用户表格）
+- operations 文件路径必须是相对路径（如 `./feishu-ops.json`）
+- 每个 operation 格式：`{"shortcut": "+cells-set", "input": {"sheet_id": "...", "range": "F2:V2", "cells": [[{"value": "..."}, ...]]}}`
 
-### 步骤 6：验证刷新结果
+### 步骤 5：验证
 
-更新后重新读取表格验证数据是否正确：
+更新后读取表格确认：
 
 ```bash
 lark-cli sheets +cells-get \
   --spreadsheet-token <token> \
   --sheet-id <sheet_id> \
-  --range "A1:Z20" \
+  --range "F2:V40" \
   --json
 ```
-
-## 表头-字段映射参考
-
-根据模板 sheet6 的常见列结构，默认映射如下（实际以步骤 2 读取的表头为准）：
-
-| 列 | 内容 | JSON 来源 |
-|----|------|----------|
-| A | 仓库名 | 文件名推导 |
-| B | 整体结果 | derive from build+ut+sample |
-| C | 构建状态 | final_results.build.status |
-| D | UT 状态 | final_results.ut.status |
-| E | Sample 状态 | final_results.sample.status |
-| F | UT 通过率 | ut.passed/ut.total |
-| G | 总耗时 | metadata.duration_seconds |
-| H | 构建命令 | final_results.build.command |
-| I | Pre-commit | static_analysis.pre_commit.configured |
-| J | Pre-commit Hooks | pre_commit.total/passed/failed |
-| K | Lint-runner | static_analysis.lint_runner.configured |
-| L | Devcontainer | devcontainer.enabled |
-
-**实际映射以步骤 2 读取的真实表头为准，灵活调整。**
 
 ## 安全规则
 
-- 更新前必须用 `--dry-run` 预览，经用户确认
-- 批量更新用 `--yes` 跳过确认（仅限用户已确认的预览内容）
-- 不在表格中写入密钥、密码等敏感信息
+- ⚠️ 更新前必须 `--dry-run` 预览
+- ⚠️ 执行前必须用户确认
+- ⚠️ 必须用 `--as user` 写用户表格
+- ⚠️ 不在表格中写入密钥、密码等敏感信息
 
 ## 绑定资源
 
 ### assets/column-mapping.json
 
-表头-字段映射模板，可用于自定义列对应关系。
+表头-字段映射模板，记录了标准列结构与 JSON 字段的对应关系。
