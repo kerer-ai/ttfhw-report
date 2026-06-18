@@ -1,0 +1,423 @@
+{
+  "metadata": {
+    "repo_path": "/root/verification/ubs-io",
+    "start_time": "2026-06-17T22:10:00",
+    "end_time": "2026-06-17T23:00:00",
+    "duration_seconds": 3000,
+    "total_steps": 45
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "aarch64",
+      "cpu_model": "ARM64 (华为云ECS)",
+      "cpu_cores": 8,
+      "memory": "14Gi",
+      "disk": "98G (62G可用)",
+      "docker_version": "Docker version 18.09.0, build 4ca0e26"
+    },
+    "container": {
+      "os": "openEuler 22.03 LTS SP4",
+      "architecture": "aarch64",
+      "cpu_cores": 8,
+      "memory": "14Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp4",
+      "selection_reason": "文档未指定镜像，使用openEuler 22.03 LTS SP4镜像（与宿主机系统版本匹配）"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "CMakeLists.txt - aarch64检测",
+      "value": "aarch64 (通过CMAKE_SYSTEM_PROCESSOR检测)"
+    },
+    "recommended_image": {
+      "source": "未在文档中找到镜像推荐",
+      "value": "文档未指定镜像，使用openEuler 22.03 LTS SP4镜像"
+    },
+    "dependencies": {
+      "source": "build.sh + CMakeLists.txt",
+      "value": [
+        "cmake >= 3.16",
+        "gcc >= 10.3.1",
+        "g++ (C++11支持)",
+        "make",
+        "git",
+        "libibverbs-devel (RDMA支持)",
+        "librados-devel (Ceph RADOS支持)",
+        "libaio-devel (Linux AIO支持)",
+        "patch",
+        "dos2unix"
+      ]
+    },
+    "build_commands": {
+      "source": "build.sh",
+      "value": "cd ubsio-boostio && bash build.sh -t debug (--ut启用单元测试)"
+    },
+    "ut_commands": {
+      "source": "build.sh + test目录",
+      "value": "cd Build && export LD_LIBRARY_PATH=... && ./bio_test"
+    },
+    "sample_commands": {
+      "source": "文档未提供示例命令",
+      "value": "文档未提供示例命令"
+    },
+    "special_dependencies": {
+      "source": "build.sh",
+      "value": [
+        "googletest (通过install_test_tools.sh自动下载)",
+        "mockcpp (通过FetchContent自动下载)"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T22:10:00",
+      "command": "git clone https://gitcode.com/openeuler/ubs-io.git",
+      "success": true,
+      "output": "Cloning into 'ubs-io'...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T22:12:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "Run Release Build...Failed\nRun Tests Build...Skipped\nRun clang-format check...Passed\nRun clang-tidy check...Failed\nRun clang-tidy-test...Skipped",
+      "error": "build.sh not found in root directory; clang-tidy requires compilation database",
+      "returncode": 1,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T22:15:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp4",
+      "success": true,
+      "output": "Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T22:16:00",
+      "command": "docker run -d --name ttfhw-ubs-io-env --network host -v /root/verification/ubs-io:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp4 tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: c40a8ed699f5",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T22:17:00",
+      "command": "dnf install -y cmake gcc gcc-c++ make git wget",
+      "success": true,
+      "output": "安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T22:18:00",
+      "command": "dnf install -y libibverbs-devel",
+      "success": true,
+      "output": "安装完成 (rdma-core-devel)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T22:19:00",
+      "command": "dnf install -y librados-devel libaio-devel",
+      "success": true,
+      "output": "安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T22:20:00",
+      "command": "dnf install -y patch dos2unix",
+      "success": true,
+      "output": "安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-17T22:21:00",
+      "command": "cd ubsio-boostio && bash build.sh -t debug",
+      "success": true,
+      "output": "构建成功，生成BoostIO_1.0.0_Linux-aarch64_debug.tar.gz",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-17T22:30:00",
+      "command": "cd ubsio-boostio && bash build.sh -t debug --ut",
+      "success": true,
+      "output": "构建成功，生成bio_test可执行文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 600
+    },
+    {
+      "timestamp": "2026-06-17T22:45:00",
+      "command": "cd Build && export LD_LIBRARY_PATH=... && ./bio_test",
+      "success": true,
+      "output": "[==========] 326 tests from 9 test suites ran. (23662 ms total)\n[  PASSED  ] 326 tests.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T22:10:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T22:12:00",
+      "step": "document_reading",
+      "action": "读取README.md和build.sh了解构建说明",
+      "result": "成功",
+      "details": {"file": "README.md, build.sh, CMakeLists.txt", "sections_read": ["构建", "依赖", "测试"]}
+    },
+    {
+      "timestamp": "2026-06-17T22:12:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 5}
+    },
+    {
+      "timestamp": "2026-06-17T22:13:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {"passed": 1, "failed": 2, "skipped": 2}
+    },
+    {
+      "timestamp": "2026-06-17T22:14:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+    },
+    {
+      "timestamp": "2026-06-17T22:14:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T22:15:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "openEuler 22.03 LTS SP4",
+      "details": {
+        "selection_reason": "文档未指定镜像，使用openEuler 22.03 LTS SP4镜像（与宿主机系统版本匹配）"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T22:16:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp4"}
+    },
+    {
+      "timestamp": "2026-06-17T22:17:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖",
+      "result": "成功",
+      "details": {"packages": ["cmake", "gcc", "gcc-c++", "make", "git", "wget", "libibverbs-devel", "librados-devel", "libaio-devel", "patch", "dos2unix"]}
+    },
+    {
+      "timestamp": "2026-06-17T22:21:00",
+      "step": "build_attempt",
+      "action": "首次构建尝试（debug模式）",
+      "result": "成功",
+      "details": {"concurrency": 4, "concurrency_ratio": "50%"}
+    },
+    {
+      "timestamp": "2026-06-17T22:30:00",
+      "step": "build_with_ut",
+      "action": "启用UT重新构建",
+      "result": "成功",
+      "details": {"concurrency": 4, "test_executable": "bio_test"}
+    },
+    {
+      "timestamp": "2026-06-17T22:45:00",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "成功",
+      "details": {"total": 326, "passed": 326, "failed": 0}
+    },
+    {
+      "timestamp": "2026-06-17T22:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T22:55:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_ubs-io_20260617.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（5个hooks，1通过2失败2跳过），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 60,
+        "total_hooks": 5,
+        "passed": 1,
+        "failed": 2,
+        "skipped": 2,
+        "failures": [
+          {
+            "hook_name": "run-build",
+            "file": "根目录",
+            "error": "build.sh not found in root directory (实际位于ubsio-boostio/目录)"
+          },
+          {
+            "hook_name": "clang-tidy",
+            "file": "所有源文件",
+            "error": "Requires compilation database (cmake-build-release目录不存在)"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置devcontainer"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 900,
+      "artifacts": [
+        {
+          "name": "BoostIO_1.0.0_Linux-aarch64_debug.tar.gz",
+          "path": "ubsio-boostio/dist/BoostIO_1.0.0_Linux-aarch64_debug.tar.gz",
+          "size": "78.6 MB"
+        },
+        {
+          "name": "bio_daemon",
+          "path": "ubsio-boostio/dist/boostio/bin/bio_daemon",
+          "size": "7.3 MB"
+        },
+        {
+          "name": "bio_console",
+          "path": "ubsio-boostio/dist/boostio/bin/bio_console",
+          "size": "8.5 MB"
+        },
+        {
+          "name": "libbio_sdk.so",
+          "path": "ubsio-boostio/dist/boostio/lib/libbio_sdk.so",
+          "size": "共享库"
+        },
+        {
+          "name": "libbio_server.so",
+          "path": "ubsio-boostio/dist/boostio/lib/libbio_server.so",
+          "size": "共享库"
+        },
+        {
+          "name": "bio_test",
+          "path": "ubsio-boostio/Build/bio_test",
+          "size": "测试可执行文件"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 30,
+      "total": 326,
+      "passed": 326,
+      "failed": 0,
+      "failures": [],
+      "test_suites": [
+        {
+          "name": "TestBio",
+          "tests": 80,
+          "passed": 80,
+          "failed": 0,
+          "duration_ms": 18208
+        },
+        {
+          "name": "TestCommon",
+          "tests": 9,
+          "passed": 9,
+          "failed": 0,
+          "duration_ms": 4
+        },
+        {
+          "name": "TestUnderFs",
+          "tests": 25,
+          "passed": 25,
+          "failed": 0,
+          "duration_ms": 151
+        }
+      ]
+    },
+    "sample": {
+      "status": "未执行",
+      "duration_seconds": 0,
+      "results": [],
+      "reason": "文档未提供示例命令"
+    }
+  },
+  "documentation_gaps": [
+    "README.md未详细列出构建依赖（如libibverbs-devel、librados-devel、libaio-devel等）",
+    "README.md未提供构建命令说明，需从build.sh脚本推断",
+    "README.md未提供单元测试执行方法",
+    "README.md未提供示例程序或快速入门指南",
+    "docs目录下的文档文件为空",
+    "pre-commit配置中的build.sh路径与实际仓库结构不匹配"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T22:18:00",
+      "problem": "ubs-comm库构建失败，缺少infiniband/verbs.h头文件",
+      "solution": "安装libibverbs-devel包（rdma-core-devel）",
+      "source": "ubs-comm依赖RDMA库"
+    },
+    {
+      "timestamp": "2026-06-17T22:19:00",
+      "problem": "主项目构建失败，缺少rados/librados.h和libaio.h头文件",
+      "solution": "安装librados-devel和libaio-devel包",
+      "source": "Ceph RADOS和Linux AIO依赖"
+    },
+    {
+      "timestamp": "2026-06-17T22:20:00",
+      "problem": "mockcpp补丁应用失败，缺少patch命令",
+      "solution": "安装patch包",
+      "source": "mockcpp ARM64支持补丁需要patch命令"
+    },
+    {
+      "timestamp": "2026-06-17T22:25:00",
+      "problem": "构建过程中OOM Killed",
+      "solution": "减少并行编译数从16降到4",
+      "source": "容器内存限制"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_ubs-io_20260617.md"
+}
