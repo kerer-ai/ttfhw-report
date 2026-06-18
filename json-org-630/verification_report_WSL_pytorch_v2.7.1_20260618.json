@@ -1,0 +1,294 @@
+{
+  "report_metadata": {
+    "report_name": "TTFHW 仓库验证报告",
+    "repository": "https://gitcode.com/Ascend/pytorch.git",
+    "branch": "v2.7.1",
+    "verification_date": "2026-06-18",
+    "report_generated_at": "2026-06-18T11:30:00"
+  },
+  "document_reading_summary": {
+    "recommended_image": {
+      "found": true,
+      "value": "quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0",
+      "source": "ci/docker/X86/Dockerfile 中 FROM 指定"
+    },
+    "architecture": {
+      "found": true,
+      "value": "x86_64",
+      "source": "README.md 中区分 x86 和 aarch64 安装方式，ci/docker/X86/ 目录"
+    },
+    "build_dependencies": {
+      "found": true,
+      "value": "pyyaml, setuptools, torch==2.7.1+cpu, numpy, ninja-build, gcc-toolset-14, dos2unix, vim-common",
+      "source": "Dockerfile 和 requirements.txt 中指定"
+    },
+    "build_command": {
+      "found": true,
+      "value": "bash ci/build.sh --python=3.9",
+      "source": "README.md 中 From Source 章节"
+    },
+    "ut_command": {
+      "found": true,
+      "value": "python test_autocast.py 或 python run_test.py -i test_autocast",
+      "source": "test/README.md 中说明"
+    },
+    "sample_command": {
+      "found": true,
+      "value": "examples/ 下有 libtorch_npu, libtorch_resnet 等样例，需 NPU 硬件",
+      "source": "README.md 中 Quick Verification 章节"
+    },
+    "special_dependencies": {
+      "found": true,
+      "value": "CANN 环境（需 NPU 硬件），source /usr/local/Ascend/ascend-toolkit/set_env.sh",
+      "source": "README.md 中 Prerequisites 章节，env.sh 中配置"
+    }
+  },
+  "image_source": {
+    "selected_image": "quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0",
+    "selection_reason": "Dockerfile 指定 FROM quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0，按文档推荐构建 manylinux-builder:v1 镜像",
+    "build_method": "从 ci/docker/X86/Dockerfile 构建新镜像，不使用机器已有镜像"
+  },
+  "static_check": {
+    "pre_commit": {
+      "configured": false,
+      "config_file": "不存在",
+      "result": null
+    },
+    "lint_runner": {
+      "configured": true,
+      "config_file": ".lintrunner.toml",
+      "result": "仓库存在 .lintrunner.toml 配置文件，但容器中未安装 lintrunner 工具，未执行"
+    },
+    "summary": "仓库配置了 lintrunner（.lintrunner.toml），未配置 pre-commit。静态检查工具未在容器中执行"
+  },
+  "devcontainer": {
+    "configured": false,
+    "config_file": "不存在",
+    "summary": "仓库未配置 .devcontainer 目录，不具备 devcontainer 开发容器能力"
+  },
+  "environment_info": {
+    "host": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Xeon(R) Gold 6266C CPU @ 3.00GHz",
+      "cpu_cores": 32,
+      "memory": "62Gi",
+      "disk": "504G（已用378G）",
+      "os": "Huawei Cloud Service (EulerOS/AlmaLinux)",
+      "docker_version": "19.03.11"
+    },
+    "container": {
+      "name": "ttfhw-pytorch-env",
+      "image": "manylinux-builder:v1",
+      "base_image": "quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0",
+      "os": "AlmaLinux 8.10 (Cerulean Leopard)",
+      "architecture": "x86_64",
+      "cpu_cores": 32,
+      "memory": "62Gi",
+      "python_version": "3.9",
+      "gcc_version": "gcc-toolset-14",
+      "cmake_version": "4.0.0"
+    }
+  },
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T10:56:00",
+      "step": "克隆仓库",
+      "action": "git clone --branch v2.7.1 --depth 1",
+      "result": "成功",
+      "details": "克隆 https://gitcode.com/Ascend/pytorch.git v2.7.1 到 /root/ttfhw/pytorch"
+    },
+    {
+      "timestamp": "2026-06-18T10:58:00",
+      "step": "文档阅读理解",
+      "action": "阅读 README.md, README.zh.md, Dockerfile, build.sh, requirements.txt, env.sh",
+      "result": "成功",
+      "details": "提取了镜像、架构、构建依赖、构建命令、UT命令、样例命令、特殊依赖等信息"
+    },
+    {
+      "timestamp": "2026-06-18T10:59:00",
+      "step": "静态检查扫描",
+      "action": "检查 .pre-commit-config.yaml, .lintrunner.toml, .devcontainer/",
+      "result": "部分配置",
+      "details": "无 pre-commit 配置，存在 .lintrunner.toml，无 devcontainer"
+    },
+    {
+      "timestamp": "2026-06-18T11:00:00",
+      "step": "构建 Docker 镜像",
+      "action": "从 ci/docker/X86/Dockerfile 构建 manylinux-builder:v1",
+      "result": "成功",
+      "details": "拉取基础镜像 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0，安装 gcc-toolset-14, ninja-build, dos2unix, pyyaml, setuptools, torch==2.7.1+cpu, numpy 等"
+    },
+    {
+      "timestamp": "2026-06-18T11:10:00",
+      "step": "启动容器",
+      "action": "docker run -d --name ttfhw-pytorch-env -v /root/ttfhw/pytorch:/home/pytorch manylinux-builder:v1",
+      "result": "成功",
+      "details": "容器启动成功，挂载仓库目录到 /home/pytorch"
+    },
+    {
+      "timestamp": "2026-06-18T11:11:00",
+      "step": "首次构建尝试",
+      "action": "bash ci/build.sh --python=3.9",
+      "result": "失败",
+      "details": "CMake 4.0.0 与项目 cmake_minimum_required(VERSION 3.18) 不兼容，需设置 CMAKE_POLICY_VERSION_MINIMUM=3.5"
+    },
+    {
+      "timestamp": "2026-06-18T11:13:00",
+      "step": "修复后重新构建",
+      "action": "设置 CMAKE_POLICY_VERSION_MINIMUM=3.5 后重新执行 bash ci/build.sh --python=3.9",
+      "result": "成功",
+      "details": "编译 1294 个目标，耗时 1337 秒（约22分钟），生成 torch_npu-2.7.1.post5+gitb3dc2ee-cp39-cp39-manylinux_2_28_x86_64.whl（44MB）"
+    },
+    {
+      "timestamp": "2026-06-18T11:36:00",
+      "step": "安装 torch_npu 并测试",
+      "action": "pip3.9 install torch_npu wheel 并执行基本测试",
+      "result": "部分成功",
+      "details": "wheel 安装成功，基本 PyTorch CPU 测试通过，但 torch_npu 导入需要 CANN 库（libhccl.so），无 NPU 硬件无法运行"
+    },
+    {
+      "timestamp": "2026-06-18T11:40:00",
+      "step": "单元测试尝试",
+      "action": "执行 test_autocast.py",
+      "result": "失败",
+      "details": "测试脚本 import torch_npu 需要 libhccl.so（CANN 库），容器中无 NPU 硬件和 CANN 环境"
+    },
+    {
+      "timestamp": "2026-06-18T11:42:00",
+      "step": "清理容器",
+      "action": "docker stop && docker rm ttfhw-pytorch-env",
+      "result": "成功",
+      "details": "容器已停止并删除"
+    }
+  ],
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T10:56:00",
+      "command": "git clone --branch v2.7.1 --depth 1 https://gitcode.com/Ascend/pytorch.git",
+      "success": true,
+      "output": "Cloning into 'pytorch'...",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T11:00:00",
+      "command": "cd /root/ttfhw/pytorch/ci/docker/X86 && docker build -t manylinux-builder:v1 .",
+      "success": true,
+      "output": "Successfully built manylinux-builder:v1",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 600
+    },
+    {
+      "timestamp": "2026-06-18T11:10:00",
+      "command": "docker run -d --name ttfhw-pytorch-env -v /root/ttfhw/pytorch:/home/pytorch manylinux-builder:v1 tail -f /dev/null",
+      "success": true,
+      "output": "4cf67681652566af351536cd65267259df80403759daa976cd913146ec393715",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T11:11:00",
+      "command": "bash ci/build.sh --python=3.9（首次尝试，未设置 CMAKE_POLICY_VERSION_MINIMUM）",
+      "success": false,
+      "output": "CMake 配置阶段失败",
+      "error": "CMake 4.0.0 policy version 不兼容，需要设置 CMAKE_POLICY_VERSION_MINIMUM=3.5",
+      "returncode": 1,
+      "duration_seconds": 72
+    },
+    {
+      "timestamp": "2026-06-18T11:13:00",
+      "command": "CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=19 bash ci/build.sh --python=3.9",
+      "success": true,
+      "output": "编译 1294/1294 目标，生成 torch_npu-2.7.1.post5+gitb3dc2ee-cp39-cp39-manylinux_2_28_x86_64.whl",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 1337
+    },
+    {
+      "timestamp": "2026-06-18T11:36:00",
+      "command": "pip3.9 install torch_npu-2.7.1.post5+gitb3dc2ee-cp39-cp39-manylinux_2_28_x86_64.whl",
+      "success": true,
+      "output": "Successfully installed torch-npu-2.7.1.post5+gitb3dc2ee",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-18T11:37:00",
+      "command": "python3.9 -c 'import torch; x=torch.randn(2,2); y=torch.randn(2,2); print(x.mm(y))'",
+      "success": true,
+      "output": "CPU matrix multiplication result: tensor([[ 1.0815, 0.5483], [-1.0232, 0.0121]])",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T11:38:00",
+      "command": "python3.9 test_autocast.py",
+      "success": false,
+      "output": "ImportError: libhccl.so: cannot open shared object file",
+      "error": "torch_npu 导入需要 CANN 库（libhccl.so），容器中无 NPU 硬件和 CANN 环境",
+      "returncode": 1,
+      "duration_seconds": 3
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "duration_seconds": 1337,
+      "artifacts": [
+        {
+          "name": "torch_npu-2.7.1.post5+gitb3dc2ee-cp39-cp39-manylinux_2_28_x86_64.whl",
+          "path": "/home/pytorch/dist/torch_npu-2.7.1.post5+gitb3dc2ee-cp39-cp39-manylinux_2_28_x86_64.whl",
+          "size": "44MB (45250380 bytes)"
+        }
+      ]
+    },
+    "ut": {
+      "status": "blocked",
+      "duration_seconds": null,
+      "total": null,
+      "passed": null,
+      "failed": null,
+      "details": "单元测试需要 NPU 硬件和 CANN 环境（libhccl.so），容器中无法执行。基本 PyTorch CPU 功能测试通过"
+    },
+    "sample": {
+      "status": "blocked",
+      "duration_seconds": null,
+      "details": "样例（libtorch_npu, libtorch_resnet 等）均需要 NPU 硬件和 CANN 环境，容器中无法执行"
+    }
+  },
+  "problems_encountered": [
+    {
+      "problem": "CMake 4.0.0 与项目 cmake_minimum_required(VERSION 3.18) 不兼容",
+      "solution": "设置环境变量 CMAKE_POLICY_VERSION_MINIMUM=3.5，不修改源码",
+      "resolved": true
+    },
+    {
+      "problem": "torch_npu 导入失败，缺少 libhccl.so（CANN 库）",
+      "solution": "此为硬件依赖问题，需要 Ascend NPU 硬件和 CANN 软件环境才能运行，非构建问题",
+      "resolved": false
+    },
+    {
+      "problem": "pip 安装测试依赖超时（网络问题）",
+      "solution": "手动安装关键依赖 expecttest 和 hypothesis",
+      "resolved": true
+    }
+  ],
+  "documentation_gaps": [
+    "README 未说明 CMake 4.0 兼容性问题及 CMAKE_POLICY_VERSION_MINIMUM 解决方案",
+    "Dockerfile 中基础镜像标签使用具体日期版本（2025.04.26-0），未说明版本选择原因",
+    "test/README.md 未说明 UT 执行的最低硬件要求（NPU + CANN）",
+    "README 中 From Source 章节未提及 CMAKE_POLICY_VERSION_MINIMUM 环境变量需求"
+  ],
+  "overall_assessment": {
+    "build_success": true,
+    "ut_executable": false,
+    "sample_executable": false,
+    "documentation_quality": "良好",
+    "summary": "Ascend Extension for PyTorch (torch_npu) v2.7.1 仓库构建验证完成。从源码构建成功，生成 torch_npu wheel 包（44MB）。构建过程中遇到 CMake 4.0 兼容性问题，通过设置 CMAKE_POLICY_VERSION_MINIMUM=3.5 环境变量解决（未修改源码）。单元测试和样例执行需要 Ascend NPU 硬件和 CANN 软件环境，在纯 CPU 容器中无法运行，这是 NPU 适配项目的预期行为。文档质量良好，提供了完整的构建指南和 Dockerfile，但未说明 CMake 4.0 兼容性问题和 UT 的硬件要求。"
+  }
+}
