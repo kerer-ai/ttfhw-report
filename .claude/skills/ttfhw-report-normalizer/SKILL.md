@@ -161,6 +161,7 @@ rm -rf .next && npm run build
 - **绝不捏造数据。** 缺失用 `"unknown"`（字符串）、`0`（数字）、`[]`（数组）
 - **绝不删除模板字段。** 可增加额外字段，不能删除必需字段
 - **保留原始上下文。** `cann_environment`、`verification_conclusion`、`recommendations` 等额外键与模板字段共存
+- **⚠️ 必须提取 v630 字段到顶层。** `static_analysis` 和 `devcontainer` 常嵌套在源文件 `final_results` 内。归一化时**必须同时放置到 JSON 顶层**，因为飞书刷新和仪表盘组件从 `data['static_analysis']` / `data['devcontainer']` 读取。具体做法：检查 `final_results.static_analysis` 和 `final_results.devcontainer`，如非空则复制到顶层 `data['static_analysis']` / `data['devcontainer']`
 - **逐个阅读每个文件。** 理解内容后再映射，不盲目使用脚本
 - **原始数据无 URL 时留空。** 不要把 `repo_path`（本地路径）填入 `repo_url`
 
