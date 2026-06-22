@@ -518,7 +518,10 @@
     },
     "static_analysis": {
       "enabled": false,
-      "summary": "hmpi 仓库未配置 pre-commit 或 lint-runner"
+      "summary": "hmpi 仓库未配置 pre-commit 或 lint-runner",
+      "pre_commit": {
+        "configured": false
+      }
     },
     "devcontainer": {
       "enabled": false,

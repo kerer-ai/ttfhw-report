@@ -153,8 +153,12 @@ function normalizeToSummary(name: string, data: any): RepoSummary {
   // v630: 静态分析和 devcontainer 状态
   const staticAnalysis = data.final_results?.static_analysis
   const devcontainer = data.final_results?.devcontainer
-  const preCommitStatus: ConfigStatus = staticAnalysis?.pre_commit?.configured !== undefined
-    ? (staticAnalysis.pre_commit.configured ? 'configured' : 'not_configured')
+  // 兼容 configured 和 config_exists 两种键名
+  const preCommitConfigured = staticAnalysis?.pre_commit?.configured !== undefined
+    ? staticAnalysis.pre_commit.configured
+    : staticAnalysis?.pre_commit?.config_exists
+  const preCommitStatus: ConfigStatus = preCommitConfigured !== undefined
+    ? (preCommitConfigured ? 'configured' : 'not_configured')
     : 'unknown'
   const lintRunnerStatus: ConfigStatus = staticAnalysis?.lint_runner?.configured !== undefined
     ? (staticAnalysis.lint_runner.configured ? 'configured' : 'not_configured')
@@ -198,8 +202,8 @@ function normalizeToDetail(name: string, data: any): RepoDetail {
     branch: data.metadata?.branch || data.repo_info?.branch || 'master',
     timeline: extractTimeline(data),
     attempts: extractAttempts(data),
-    buildResult: normalizeBuildResult(data.final_results?.build),
-    utStats: normalizeUtStats(data.final_results?.ut),
+    buildResult: normalizeBuildResult(data.final_results?.build, data.execution_log),
+    utStats: normalizeUtStats(data.final_results?.ut, data.execution_log, data.problems_encountered),
     documentation: normalizeDocChecklist(data.document_reading_summary),
     documentReadingSummary: data.document_reading_summary,
     dependencies: normalizeDependenciesFromDoc(data.document_reading_summary),
@@ -289,7 +293,7 @@ function extractAttempts(data: any): Attempt[] {
 
 // ======================== Build Result ========================
 
-function normalizeBuildResult(build: any): BuildResult {
+function normalizeBuildResult(build: any, executionLog?: any[]): BuildResult {
   if (!build) return { status: 'unknown' }
   const artifacts: Artifact[] = Array.isArray(build.artifacts)
     ? build.artifacts.map((a: any) => ({
@@ -301,12 +305,30 @@ function normalizeBuildResult(build: any): BuildResult {
       }))
     : undefined
 
+  // 合成构建失败原因：优先用 build.error，否则从 execution_log 提取
+  let error = build.error
+  if (!error && executionLog && Array.isArray(executionLog)) {
+    const buildStatus = normalizeStatus(build.status)
+    if (buildStatus === 'failed' || buildStatus === 'partial_success') {
+      // 收集所有失败步骤的错误信息
+      const failures = executionLog
+        .filter((e: any) => !e.success && e.error)
+        .map((e: any) => String(e.error).trim())
+        .filter((s: string) => s.length > 0)
+      if (failures.length > 0) {
+        // 取最后一条（通常是最终失败原因），截断
+        const last = failures[failures.length - 1]
+        error = last.length > 200 ? last.slice(0, 197) + '...' : last
+      }
+    }
+  }
+
   return {
     status: normalizeStatus(build.status),
     buildCommand: build.command || build.build_command,
     durationSeconds: defNum(build.duration_seconds),
     artifacts,
-    error: build.error,
+    error,
     command: build.command,
     concurrency: defNum(build.concurrency),
     durationBreakdown: build.duration_breakdown || undefined,
@@ -315,26 +337,91 @@ function normalizeBuildResult(build: any): BuildResult {
 
 // ======================== UT Stats ========================
 
-function normalizeUtStats(ut: any): UtStats {
+function normalizeUtStats(ut: any, executionLog?: any[], problemsEncountered?: any[]): UtStats {
   if (!ut) return { status: 'unknown' }
   const total = defNum(ut.total)
   const passed = defNum(ut.passed) ?? 0
   const failed = defNum(ut.failed) ?? 0
   const duration = defNum(ut.duration_seconds)
+  const utStatus = normalizeStatus(ut.status)
+
+  // 合成 errorSummary：优先从 ut.failures，否则从 problems_encountered
+  let errorSummary: string | undefined
+  if (ut.failures && Array.isArray(ut.failures) && ut.failures.length > 0) {
+    // 提取前 3 个失败用例的 reason
+    const reasons = ut.failures
+      .map((f: any) => f.reason || f.test_name || '')
+      .filter(Boolean)
+      .slice(0, 3)
+    errorSummary = reasons.length > 0
+      ? `${ut.failures.length}个用例失败: ${reasons.join('; ')}`
+      : `${ut.failures.length}个用例失败`
+  }
+
+  // 合成 skipReason：当值为 null 或 "unknown" 时，从其他来源推导
+  let skipReason: string | undefined = (ut.skip_reason && ut.skip_reason !== 'unknown')
+    ? ut.skip_reason
+    : undefined
+
+  if (!skipReason && utStatus === 'not_run') {
+    // 优先用 ut.reason
+    if (ut.reason && ut.reason !== 'unknown') {
+      skipReason = ut.reason
+    } else {
+      // 从 problems_encountered 或 execution_log 推导
+      skipReason = deriveNotRunReason(executionLog, problemsEncountered)
+    }
+  }
+
+  if (!skipReason && (utStatus === 'partial_success' || utStatus === 'failed')) {
+    // 有失败用例但无 skip_reason，用 errorSummary 替代
+    skipReason = errorSummary || undefined
+  }
+
+  // 如果还是没有 skip_reason，但状态不是 success，尝试从 problems 推导
+  if (!skipReason && utStatus !== 'success' && utStatus !== 'no_tests') {
+    skipReason = deriveNotRunReason(executionLog, problemsEncountered)
+  }
 
   return {
-    status: normalizeStatus(ut.status),
+    status: utStatus,
     totalTests: total,
     passed,
     failed,
     skipped: defNum(ut.skipped) ?? 0,
     durationSeconds: duration,
     testSuites: ut.ut_suite_details,
-    errorSummary: ut.failures?.length ? `${ut.failures.length} failures` : undefined,
+    errorSummary,
     errorDetail: ut.failures?.length ? JSON.stringify(ut.failures) : undefined,
     coveragePercent: ut.coverage_percent,
-    skipReason: ut.skip_reason || undefined,
+    skipReason,
   }
+}
+
+/** 从执行日志和问题记录中推导不可执行/失败的原因 */
+function deriveNotRunReason(executionLog?: any[], problemsEncountered?: any[]): string | undefined {
+  // 先从 problems_encountered 提取最相关的问题
+  if (problemsEncountered && Array.isArray(problemsEncountered) && problemsEncountered.length > 0) {
+    const first = problemsEncountered[0]
+    const problem = first.problem || ''
+    const solution = first.solution || ''
+    const combined = solution ? `${problem}；解决：${solution}` : problem
+    if (combined) return combined.length > 200 ? combined.slice(0, 197) + '...' : combined
+  }
+
+  // 从 execution_log 提取最后一个失败步骤的 error
+  if (executionLog && Array.isArray(executionLog)) {
+    const failures = executionLog
+      .filter((e: any) => !e.success && e.error)
+      .map((e: any) => String(e.error).trim())
+      .filter((s: string) => s.length > 0)
+    if (failures.length > 0) {
+      const last = failures[failures.length - 1]
+      return last.length > 200 ? last.slice(0, 197) + '...' : last
+    }
+  }
+
+  return undefined
 }
 
 // ======================== Documentation ========================

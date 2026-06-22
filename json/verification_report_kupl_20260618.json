@@ -440,7 +440,6 @@
     },
     "static_analysis": {
       "pre_commit": {
-        "config_exists": true,
         "config_file": ".pre-commit-config.yaml",
         "minimum_version": "4.0.0",
         "hooks": [
@@ -453,7 +452,8 @@
           "clang-format (mirrors-clang-format v18.1.8, C/C++文件)"
         ],
         "installed": false,
-        "note": "pre-commit未安装在容器中，clang-format已安装(/usr/bin/clang-format)"
+        "note": "pre-commit未安装在容器中，clang-format已安装(/usr/bin/clang-format)",
+        "configured": true
       },
       "lint_runner": {
         "config_exists": false,
