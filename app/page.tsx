@@ -1,5 +1,6 @@
 import { getAllRepoSummaries, calculateSummaryStats } from '@/lib/data-loader'
 import { ClientDashboard } from '@/components/summary/ClientDashboard'
+import { PipelineSection } from '@/components/summary/PipelineSection'
 
 export default function HomePage() {
   const repos = getAllRepoSummaries()
@@ -16,6 +17,9 @@ export default function HomePage() {
           TTFHW仓库编译验证结果汇总 - {repos.length}个仓库
         </p>
       </header>
+
+      {/* 全流程流水线 */}
+      <PipelineSection />
 
       {/* 客户端仪表盘 */}
       <ClientDashboard repos={repos} stats={stats} />
