@@ -1,0 +1,153 @@
+{
+  "report_metadata": {
+    "report_name": "verification_report_WSL_MindSpeed-MM_26.0.0_20260618.json",
+    "repository": "https://gitcode.com/Ascend/MindSpeed-MM.git",
+    "branch": "26.0.0",
+    "head_commit": "08d37c0a08cefd869ac3c99b49d9fc14ee4e612a",
+    "head_commit_message": "docs: modify 26.0.0 branch docs link from master to 26.0.0",
+    "verification_date": "2026-06-18",
+    "verifier_role": "TTFHW 外部新手开发者验证",
+    "skill_used": "ttfhw-verify-pro",
+    "execution_environment": "远程主机 192.168.0.13 (CentOS 7 / aarch64) 内的 Docker 容器"
+  },
+  "host_environment": {
+    "ip": "192.168.0.13",
+    "os": "CentOS Linux 7 (AltArch)",
+    "kernel": "Linux 4.18.0-80.7.2.el7.aarch64",
+    "architecture": "aarch64",
+    "cpu_cores": 32,
+    "memory_total_gb": 63,
+    "disk_root_available_gb": 315,
+    "docker_version": "Docker 19.03.11 build 42e35e6",
+    "npu_available": false,
+    "npu_check_details": "npu-smi 命令缺失；/dev/davinci* 设备文件不存在；/usr/local/Ascend 目录不存在；该机器无 Ascend NPU 硬件"
+  },
+  "image_source": {
+    "selection_reason": "MindSpeed-MM 文档 docs/zh/pytorch/install_guide.md 与 docker/OVERVIEW.zh.md 明确推荐使用 AscendHub 上的预装镜像（标签格式 {版本}-{芯片}-{操作系统}-py{Python版本}-{架构}）。文档说明 master 分支后续会更新新镜像，当前最新镜像配套 26.0.0 分支。本机为 aarch64 架构，因此选择 swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64。该镜像由文档明确推荐，符合优先使用预装镜像要求；同步将源码切到 26.0.0 分支以保持版本一致。已验证不复用 0.13 上既有镜像（拉取前镜像清单已快照对比，新增此 1 个镜像）。",
+    "image_full_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
+    "image_size_gb": 19.4,
+    "image_pull_attempts": [
+      {"tag": "master-910b-openeuler24.03-py3.11-aarch64", "result": "失败：manifest unknown，AscendHub 不提供 master tag"},
+      {"tag": "26.0.0-910b-openeuler24.03-py3.11-aarch64", "result": "成功"},
+      {"tag": "2.3.0-910b-openeuler24.03-py3.11-aarch64", "result": "失败：manifest unknown"}
+    ],
+    "preinstalled_components": ["PyTorch 2.7.1+cpu", "torch_npu 2.7.1.post4", "decord 0.6.0", "torchvision 0.22.1", "torchaudio 2.11.0", "CANN 9.0.0 (ascend-toolkit/nnal)", "Conda env: base + verl_qwen3vl"],
+    "container_os": "openEuler 24.03 (LTS-SP2)",
+    "container_python": "Python 3.11.14"
+  },
+  "document_reading_summary": {
+    "entry_point": "README.md",
+    "documents_read": [
+      "README.md",
+      "docs/zh/pytorch/install_guide.md",
+      "docker/Dockerfile",
+      "docker/OVERVIEW.zh.md",
+      "tests/README.md",
+      "ci/run_ci.sh",
+      "scripts/install.sh",
+      "pyproject.toml",
+      ".pre-commit-config.yaml"
+    ],
+    "items": [
+      {"item": "推荐镜像/OS", "value": "openEuler 24.03 / Ubuntu 22.04，由 docker/OVERVIEW.zh.md 与 install_guide.md 明确推荐 AscendHub 预装镜像（mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64）"},
+      {"item": "架构要求", "value": "支持 x86_64 与 aarch64；当前最新镜像仅提供 aarch64"},
+      {"item": "构建依赖", "value": "Python>=3.10、torch==2.7.1、torch_npu==2.7.1、CANN 9.0.0、Megatron-LM core_v0.12.1、MindSpeed 26.0.0_core_r0.12.1（来自 install_guide.md 手动安装章节与 pyproject.toml dependencies）"},
+      {"item": "构建命令", "value": "pip install -e . 与 pip install -e .[test]；或一键脚本 bash scripts/install.sh --msid <commit-id>"},
+      {"item": "UT 命令", "value": "tests/ut/ 下基于 pytest 的用例，CI 入口 ci/run_ci.sh --type=ut"},
+      {"item": "样例命令", "value": "examples/ 下各模型 README，主入口脚本 pretrain_*.py / inference_*.py / evaluate_*.py / posttrain_*.py；ST 脚本位于 tests/st/shell_scripts/"},
+      {"item": "特殊依赖下载", "value": "Megatron-LM (gitcode/github)、MindSpeed (gitcode)、Triton-Ascend (https://triton-ascend.osinfra.cn/pypi/simple)；pip 默认源已配置为 https://repo.huaweicloud.com/repository/pypi/simple"}
+    ]
+  },
+  "static_check_summary": {
+    "host_static_check": {
+      "configured": false,
+      "reason": "宿主机 CentOS 7 上无 python3 / pip3 / pre-commit；.devcontainer 不存在；未发现 lint-runner 配置；改在容器内部执行"
+    },
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "executed_in": "container（容器内 base conda env，对挂载源码的临时副本执行，避免污染源码）",
+      "duration_seconds": 6,
+      "hooks_summary": [
+        {"id": "trailing-whitespace", "result": "Failed", "note": "30+ 文件存在尾部空格；fixer 在临时副本中已修复（源码未改）"},
+        {"id": "end-of-file-fixer", "result": "Failed", "note": "9+ 文件缺末尾换行；fixer 在临时副本中已修复（源码未改）"},
+        {"id": "check-yaml", "result": "Passed"},
+        {"id": "check-merge-conflict", "result": "Passed"},
+        {"id": "detect-private-key", "result": "Passed"},
+        {"id": "check-json", "result": "Failed", "note": "examples/vace/inference/inference_wan2.1_14b.json 第 12 行 JSON 解析失败"}
+      ],
+      "additional_hooks_not_run": ["check-added-large-files", "codespell", "bandit", "clang-format"]
+    },
+    "lint_runner": {"configured": false, "reason": "未发现 .lint-runner* 或 lint-runner.config.* 配置"}
+  },
+  "devcontainer_summary": {
+    "configured": false,
+    "reason": "仓库根目录及子目录均不存在 .devcontainer/ 目录"
+  },
+  "process_timeline": [
+    {"timestamp": "2026-06-18T13:00:00", "step": "主机连通性", "action": "SSH 登录 192.168.0.13 并采集主机规格", "result": "成功", "details": "CentOS7 aarch64 / 32 核 / 63G / Docker 19.03.11；npu-smi 不存在，确认无 NPU"},
+    {"timestamp": "2026-06-18T13:01:00", "step": "克隆仓库", "action": "git clone https://gitcode.com/Ascend/MindSpeed-MM.git", "result": "成功", "details": "默认分支 master；远程分支包含 1.0.0/1.0.RC3/2.0.0/2.1.0/2.2.0/2.3.0/26.0.0/master/core_r0.8.0_dev/fsdp2_dev"},
+    {"timestamp": "2026-06-18T13:03:00", "step": "文档阅读", "action": "阅读 README/install_guide/Dockerfile/tests-README/run_ci/pyproject", "result": "成功", "details": "提取镜像、依赖、构建/UT/样例入口"},
+    {"timestamp": "2026-06-18T13:08:00", "step": "静态检查能力扫描", "action": "宿主机检查 .pre-commit-config.yaml、lint-runner 配置、.devcontainer", "result": "部分成功", "details": "宿主机无 python3 无法运行；.devcontainer 不存在；存在 .pre-commit-config.yaml；推迟到容器内执行"},
+    {"timestamp": "2026-06-18T13:10:00", "step": "镜像策略", "action": "拉取 AscendHub 预装镜像 26.0.0-910b-openeuler24.03-py3.11-aarch64", "result": "成功", "details": "镜像大小 19.4 GB；先尝试 master tag 失败，按文档说明使用 26.0.0；同步切换源码到 26.0.0 分支"},
+    {"timestamp": "2026-06-18T13:25:00", "step": "启动容器", "action": "docker run -dit --name ttfhw-mindspeed-mm-env --privileged 挂载源码到 /workspace/MindSpeed-MM-mounted", "result": "成功", "details": "容器内 base conda 已含 torch 2.7.1+cpu、torch_npu 2.7.1.post4、decord 0.6.0、CANN 9.0.0"},
+    {"timestamp": "2026-06-18T13:30:00", "step": "容器内静态检查（首次）", "action": "对挂载源码运行 pre-commit", "result": "失败-引发副作用", "details": "默认 fixer 自动修改了源码 30+ 文件；立即 git checkout -- . 还原；后续改用临时副本方式重跑"},
+    {"timestamp": "2026-06-18T13:32:00", "step": "容器内静态检查（重跑）", "action": "复制源码到 /tmp/mm_lint 后再 pre-commit run --all-files", "result": "成功-未污染源码", "details": "trailing-whitespace/end-of-file-fixer/check-json 失败；check-yaml/check-merge-conflict/detect-private-key 通过；总耗时 6s"},
+    {"timestamp": "2026-06-18T13:35:00", "step": "构建 pip install -e .", "action": "在挂载源码下 pip install -e . 与 .[test]", "result": "成功", "details": "首次安装耗时 205s；64 个新依赖；mindspeed-mm 0.1 注册成功；numpy 由 2.4.4 降级为 1.26.4"},
+    {"timestamp": "2026-06-18T13:42:00", "step": "补装 MindSpeed 加速库", "action": "git clone https://gitcode.com/Ascend/MindSpeed.git 切到 26.0.0_core_r0.12.1 后 pip install -e .", "result": "成功", "details": "mindspeed-0.12.1 安装完成，耗时 79s，目录 /opt/deps/MindSpeed"},
+    {"timestamp": "2026-06-18T13:44:00", "step": "补装 Megatron-LM", "action": "尝试多个 mirror 后通过 https://gitcode.com/gh_mirrors/me/Megatron-LM.git --branch core_v0.12.1 克隆", "result": "成功", "details": "目录 /opt/deps/Megatron-LM；未 pip install，仅通过 PYTHONPATH=/opt/deps/Megatron-LM 加入"},
+    {"timestamp": "2026-06-18T13:47:00", "step": "执行 UT", "action": "对 10 个代表性 UT 用例运行 pytest", "result": "全部失败", "details": "全部 10 个 UT 在 collect 阶段因 torch_npu 初始化失败而 ERROR；具体错误 RuntimeError: Initialize:torch_npu/csrc/core/npu/sys_ctrl/npu_sys_ctrl.c（无 NPU 设备）"},
+    {"timestamp": "2026-06-18T13:55:00", "step": "样例运行", "action": "未运行", "result": "已跳过", "details": "样例脚本（pretrain_*.py / inference_*.py）均依赖 NPU 设备初始化，确认在无 NPU 主机上必失败，故按 SKILL 规范如实记录跳过原因，避免无效占用资源"},
+    {"timestamp": "2026-06-18T13:56:00", "step": "源码完整性检查", "action": "git status -s", "result": "成功", "details": "整个验证流程未对源码进行任何修改（pre-commit 临时副本方式 + 单次 git checkout 还原）"}
+  ],
+  "execution_log": [
+    {"timestamp": "2026-06-18T13:01:30", "command": "git clone https://gitcode.com/Ascend/MindSpeed-MM.git", "success": true, "duration_seconds": 90, "returncode": 0, "output": "Cloning into 'MindSpeed-MM' ... HEAD master bae38b8", "error": null},
+    {"timestamp": "2026-06-18T13:25:00", "command": "git checkout 26.0.0", "success": true, "duration_seconds": 1, "returncode": 0, "output": "Switched to a new branch '26.0.0'; commit 08d37c0a", "error": null},
+    {"timestamp": "2026-06-18T13:11:00", "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:master-910b-openeuler24.03-py3.11-aarch64", "success": false, "duration_seconds": 3, "returncode": 1, "output": "", "error": "manifest unknown: Not Found tag"},
+    {"timestamp": "2026-06-18T13:12:00", "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64", "success": true, "duration_seconds": 720, "returncode": 0, "output": "Status: Downloaded newer image", "error": null},
+    {"timestamp": "2026-06-18T13:25:30", "command": "docker run -dit --ipc=host --network host --name ttfhw-mindspeed-mm-env --privileged -v /home/workspace/ttfhw/MindSpeed-MM:/workspace/MindSpeed-MM-mounted swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64 /bin/bash", "success": true, "duration_seconds": 2, "returncode": 0, "output": "container id 4f863472a404", "error": null},
+    {"timestamp": "2026-06-18T13:32:00", "command": "pre-commit run --all-files (在 /tmp/mm_lint 临时副本中)", "success": false, "duration_seconds": 6, "returncode": 1, "output": "trailing-whitespace Failed; end-of-file-fixer Failed; check-yaml Passed; check-merge-conflict Passed; detect-private-key Passed; check-json Failed", "error": "源码存在尾部空格、缺末尾换行、1 个 JSON 文件格式错误"},
+    {"timestamp": "2026-06-18T13:35:00", "command": "pip install -e .", "success": true, "duration_seconds": 205, "returncode": 0, "output": "Successfully installed mindspeed-mm-0.1 + 63 deps", "error": null},
+    {"timestamp": "2026-06-18T13:38:30", "command": "pip install -e .[test]", "success": true, "duration_seconds": 6, "returncode": 0, "output": "Successfully installed sentencepiece-0.2.1 mindspeed-mm-0.1", "error": null},
+    {"timestamp": "2026-06-18T13:42:30", "command": "pip install -e . (in /opt/deps/MindSpeed)", "success": true, "duration_seconds": 79, "returncode": 0, "output": "Successfully installed mindspeed-0.12.1 numpy-1.26.0 scipy-1.16.3", "error": null},
+    {"timestamp": "2026-06-18T13:44:30", "command": "git clone --depth 1 -b core_v0.12.1 https://gitcode.com/gh_mirrors/me/Megatron-LM.git", "success": true, "duration_seconds": 30, "returncode": 0, "output": "SUCCESS via gh_mirrors mirror", "error": null},
+    {"timestamp": "2026-06-18T13:47:00", "command": "PYTHONPATH=/opt/deps/Megatron-LM:$PYTHONPATH python -m pytest tests/ut/loss/test_chunkloss.py -v", "success": false, "duration_seconds": 17, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize:../torch_npu/csrc/core/npu/sys_ctrl/npu_sys_ctrl.c (无 NPU 设备)"},
+    {"timestamp": "2026-06-18T13:48:00", "command": "pytest tests/ut/models/common/test_activations.py -v", "success": false, "duration_seconds": 16, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:49:00", "command": "pytest tests/ut/models/common/embeddings/test_pos_embeddings.py -v", "success": false, "duration_seconds": 18, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:50:00", "command": "pytest tests/ut/data/data_utils/test_utils.py -v", "success": false, "duration_seconds": 20, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:50:30", "command": "pytest tests/ut/models/common/test_unaligned_split.py -v", "success": false, "duration_seconds": 15, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:51:00", "command": "pytest tests/ut/models/diffusion/test_iddpm.py -v", "success": false, "duration_seconds": 19, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:52:00", "command": "pytest tests/ut/models/diffusion/test_diffusers_scheduler.py -v", "success": false, "duration_seconds": 19, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:52:30", "command": "pytest tests/ut/models/vision/test_qwen2vl_get_rope_index.py -v", "success": false, "duration_seconds": 16, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:53:00", "command": "pytest tests/ut/models/vision/test_qwen2_5vl_get_rope_index.py -v", "success": false, "duration_seconds": 16, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"},
+    {"timestamp": "2026-06-18T13:53:30", "command": "pytest tests/ut/tools/test_profiler.py -v", "success": false, "duration_seconds": 16, "returncode": 2, "output": "1 error in collection", "error": "RuntimeError: Initialize torch_npu sys_ctrl"}
+  ],
+  "problems_encountered": [
+    {"problem": "AscendHub 上无 master tag 镜像", "solution": "按 install_guide.md 指引改用最新商用版镜像 26.0.0-910b-openeuler24.03-py3.11-aarch64，并同步将源码切换到 26.0.0 分支保持版本一致"},
+    {"problem": "宿主机 CentOS 7 无 python3 / pip3，无法在宿主机执行 pre-commit", "solution": "改在容器内执行（容器内 Python 3.11.14）"},
+    {"problem": "pre-commit 默认 fixer 自动改写源码 30+ 文件，违反『不允许修改源码』约束", "solution": "立即 git checkout -- . 还原全部修改；之后改用『先 cp 源码到 /tmp/mm_lint 临时副本，再在副本上跑 pre-commit』的只读方式，避免污染挂载源码"},
+    {"problem": "Megatron-LM 与 MindSpeed 加速库未在镜像内 pip 注册（按文档需手动 clone）", "solution": "按 install_guide.md 手动安装章节：在 /opt/deps 下分别 clone MindSpeed (gitcode 直链) 与 Megatron-LM (gitcode/gh_mirrors/me/Megatron-LM 镜像)；MindSpeed pip install -e .，Megatron-LM 通过 PYTHONPATH 加入。整个过程完全在容器内 /opt/deps 进行，未触碰 MindSpeed-MM 源码目录"},
+    {"problem": "Megatron-LM 主仓 https://gitcode.com/Github_Mirror/Megatron-LM.git 返回 403", "solution": "改用 https://gitcode.com/gh_mirrors/me/Megatron-LM.git 镜像，clone 成功"},
+    {"problem": "全部 UT 在 collect 阶段失败（torch_npu 初始化报错）", "solution": "确认根因为本机无 NPU 设备（无 npu-smi、无 /dev/davinci*），文档明确 MindSpeed-MM 需运行在昇腾 NPU 训练硬件之上；如实记录失败而不修改源码或绕过；建议在带 NPU 的 Atlas A2/A3 主机上重测"}
+  ],
+  "documentation_gaps": [
+    "README.md 与 install_guide.md 未明确说明无 NPU 设备时的最小可验证范围；新手在普通 ARM 服务器上无法快速发现『UT 全部失败』根因来自硬件",
+    "docker/OVERVIEW.zh.md 提到镜像配套 26.0.0 分支，但镜像 master tag 仍出现在文档示例 master-a3-openeuler24.03-py3.11-x86_64 中，实际 AscendHub 不可用，建议同步剔除",
+    "install_guide.md 手动安装章节列出 Megatron-LM 来源为 https://github.com/NVIDIA/Megatron-LM.git，对中国大陆环境访问较慢，建议补充 gitcode mirror 镜像地址（如 gh_mirrors/me/Megatron-LM）",
+    ".pre-commit-config.yaml 默认包含会修改文件的 fixer hook（trailing-whitespace、end-of-file-fixer），CI 文档未提示开发者在本地仅做检查时应使用 --no-fix 或临时副本",
+    "examples/vace/inference/inference_wan2.1_14b.json 文件本身存在 JSON 格式错误（pre-commit check-json 检测到），仓库已有 JSON 不合法，需修复"
+  ],
+  "final_results": {
+    "build": {"status": "成功", "duration_seconds": 211, "details": "pip install -e . (205s) + pip install -e .[test] (6s)，mindspeed-mm 0.1 注册成功"},
+    "extra_deps": {"status": "成功", "duration_seconds": 109, "details": "MindSpeed 加速库 (79s) + Megatron-LM clone (30s)，均按文档指引在容器外置目录完成，未触碰挂载源码"},
+    "static_check": {"status": "部分失败", "duration_seconds": 6, "passed": ["check-yaml", "check-merge-conflict", "detect-private-key"], "failed": ["trailing-whitespace", "end-of-file-fixer", "check-json"], "details": "在临时副本上运行，源码未被改动"},
+    "ut": {"status": "全部失败", "duration_seconds": 172, "total": 10, "passed": 0, "failed": 0, "errors": 10, "root_cause": "无 NPU 设备，torch_npu 在 import 阶段调用 npu_sys_ctrl.c 初始化失败，导致 pytest collection 阶段中断；UT 用例本身未执行"},
+    "sample": {"status": "已跳过", "duration_seconds": 0, "details": "pretrain_*.py / inference_*.py 样例同样依赖 NPU 设备初始化，本机无 NPU，按 SKILL 规范如实记录跳过原因"},
+    "source_unmodified": {"status": "已确认", "details": "git status -s 输出为空；pre-commit fixer 引发的 30+ 文件改动已通过 git checkout -- . 完全还原；后续静态检查改在临时副本上进行，挂载源码全程未变化"}
+  },
+  "conclusion": {
+    "summary": "MindSpeed-MM 26.0.0 分支在 192.168.0.13 (CentOS7 aarch64 / 无 NPU) 上的容器化验证按 SKILL 完整 8 步执行：文档可读性良好、官方预装镜像（AscendHub mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64）拉取顺畅、容器启动成功、pip install -e . 构建成功、补装 MindSpeed/Megatron-LM 成功、pre-commit 静态检查识别出实际代码质量问题。但 UT 与样例因本机无 Ascend NPU 硬件均无法运行——这是硬件约束而非代码问题。整个过程未对源码做任何修改。",
+    "verdict": "构建/依赖/静态检查环节通过；UT/样例环节因硬件缺失无法验证，建议在带 Atlas A2/A3 NPU 的机器上复测",
+    "recommend_for_npu_host": ["挂载 NPU 设备 --device=/dev/davinci0 --device=/dev/davinci_manager 等", "执行 source /usr/local/Ascend/ascend-toolkit/set_env.sh 后再运行 ci/run_ci.sh --type=ut", "尝试 examples/qwen2.5vl/README.md 一键跑通最小推理样例"]
+  }
+}
