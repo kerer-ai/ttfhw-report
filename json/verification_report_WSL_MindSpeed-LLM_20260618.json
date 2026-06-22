@@ -80,44 +80,6 @@
       "value": "bash tests/test_run.sh --ut"
     }
   },
-  "static_analysis": {
-    "enabled": true,
-    "pre_commit": {
-      "configured": true,
-      "config_file": ".pre-commit-config.yaml",
-      "status": "部分通过",
-      "duration_seconds": 188,
-      "total_hooks": 14,
-      "passed": 4,
-      "failed": 10,
-      "skipped": 0,
-      "passed_hooks": ["check-added-large-files", "check-merge-conflict", "detect-private-key", "check-json"],
-      "failures": [
-        {"hook_name": "trailing-whitespace", "error": "存在行尾多余空白"},
-        {"hook_name": "end-of-file-fixer", "error": "部分文件末尾缺少换行"},
-        {"hook_name": "check-yaml", "error": "存在 YAML 解析错误"},
-        {"hook_name": "ruff-check", "error": "Python 代码存在 lint 问题"},
-        {"hook_name": "ruff-format", "error": "代码需重新格式化"},
-        {"hook_name": "codespell", "error": "文档/注释存在拼写错误"},
-        {"hook_name": "pylint", "error": "Python 代码 lint 检查未通过"},
-        {"hook_name": "bandit", "error": "安全检查未通过"},
-        {"hook_name": "typos", "error": "代码标识符/注释存在拼写错误"},
-        {"hook_name": "clang-format", "error": "C/C++ 代码格式不符合规范"}
-      ],
-      "note": "失败 hook 主要为代码风格/拼写/格式化类。部分 hook 会自动修改文件（ruff-format/clang-format/end-of-file-fixer/trailing-whitespace），验证流程完成后已使用 git checkout -- . 完整还原源码，未保留任何修改，严守源码不可修改约束。"
-    },
-    "lint_runner": {
-      "configured": false,
-      "config_file": null,
-      "note": "仓库未发现 .lint-runner* 配置文件"
-    }
-  },
-  "devcontainer": {
-    "enabled": false,
-    "config_dir": null,
-    "config_files": [],
-    "summary": "仓库根目录不存在 .devcontainer/ 目录"
-  },
   "execution_log": [
     {
       "timestamp": "2026-06-18T14:26:00",
@@ -219,63 +181,89 @@
       "step": "clone_repo",
       "action": "克隆 MindSpeed-LLM 仓库",
       "result": "成功",
-      "details": {"branch": "master", "commit": "804c607120d9d1c75ae434be5e67609b21fb22f2"}
+      "details": {
+        "branch": "master",
+        "commit": "804c607120d9d1c75ae434be5e67609b21fb22f2"
+      }
     },
     {
       "timestamp": "2026-06-18T14:26:45",
       "step": "container_setup",
       "action": "启动容器并采集容器规格",
       "result": "成功",
-      "details": {"image": "ascendhub/cann:9.0.0-beta.2-910b-openeuler24.03-py3.11", "container": "ttfhw-mindspeed-llm-env", "os": "openEuler 24.03"}
+      "details": {
+        "image": "ascendhub/cann:9.0.0-beta.2-910b-openeuler24.03-py3.11",
+        "container": "ttfhw-mindspeed-llm-env",
+        "os": "openEuler 24.03"
+      }
     },
     {
       "timestamp": "2026-06-18T14:27:10",
       "step": "static_analysis_scan",
       "action": "执行 pre-commit run --all-files",
       "result": "部分成功",
-      "details": {"passed": 4, "failed": 10, "note": "代码风格类失败为主，自动修改已完整还原"}
+      "details": {
+        "passed": 4,
+        "failed": 10,
+        "note": "代码风格类失败为主，自动修改已完整还原"
+      }
     },
     {
       "timestamp": "2026-06-18T14:30:20",
       "step": "source_restore",
       "action": "撤销 pre-commit 自动修改，恢复源码",
       "result": "成功",
-      "details": {"command": "git checkout -- . && git clean -fdx"}
+      "details": {
+        "command": "git checkout -- . && git clean -fdx"
+      }
     },
     {
       "timestamp": "2026-06-18T14:30:25",
       "step": "dependency_installation",
       "action": "安装 pip 依赖（requirements.txt + editable install）",
       "result": "成功",
-      "details": {"duration": "206s", "note": "NPU C++ 扩展未触发编译，仅 Python 安装"}
+      "details": {
+        "duration": "206s",
+        "note": "NPU C++ 扩展未触发编译，仅 Python 安装"
+      }
     },
     {
       "timestamp": "2026-06-18T14:34:00",
       "step": "build_verification",
       "action": "验证 mindspeed_llm 包导入",
       "result": "失败",
-      "details": {"error": "ModuleNotFoundError: torch_npu", "note": "硬件依赖限制，非代码问题"}
+      "details": {
+        "error": "ModuleNotFoundError: torch_npu",
+        "note": "硬件依赖限制，非代码问题"
+      }
     },
     {
       "timestamp": "2026-06-18T14:34:05",
       "step": "ut_execution",
       "action": "UT collection 尝试",
       "result": "失败-NPU 缺失",
-      "details": {"error": "4 个 UT 模块均因 torch_npu 缺失在 collection 阶段中断", "note": "属于硬件依赖限制，不修改源码"}
+      "details": {
+        "error": "4 个 UT 模块均因 torch_npu 缺失在 collection 阶段中断",
+        "note": "属于硬件依赖限制，不修改源码"
+      }
     },
     {
       "timestamp": "2026-06-18T14:34:20",
       "step": "sample_execution",
       "action": "评估样例可执行性",
       "result": "跳过",
-      "details": {"reason": "examples/ 下样例脚本均强依赖多卡 NPU 与 Megatron-LM 源码，本机条件不满足"}
+      "details": {
+        "reason": "examples/ 下样例脚本均强依赖多卡 NPU 与 Megatron-LM 源码，本机条件不满足"
+      }
     },
     {
       "timestamp": "2026-06-18T14:33:32",
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_MindSpeed-LLM_20260618.json"}
+      "details": {
+        "output_file": "verification_report_WSL_MindSpeed-LLM_20260618.json"
+      }
     }
   ],
   "final_results": {
@@ -304,6 +292,79 @@
     "source_code_integrity": {
       "status": "未修改",
       "details": "git status 验证工作区干净，符合严禁修改源码约束"
+    },
+    "static_analysis": {
+      "enabled": true,
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 188,
+        "total_hooks": 14,
+        "passed": 4,
+        "failed": 10,
+        "skipped": 0,
+        "passed_hooks": [
+          "check-added-large-files",
+          "check-merge-conflict",
+          "detect-private-key",
+          "check-json"
+        ],
+        "failures": [
+          {
+            "hook_name": "trailing-whitespace",
+            "error": "存在行尾多余空白"
+          },
+          {
+            "hook_name": "end-of-file-fixer",
+            "error": "部分文件末尾缺少换行"
+          },
+          {
+            "hook_name": "check-yaml",
+            "error": "存在 YAML 解析错误"
+          },
+          {
+            "hook_name": "ruff-check",
+            "error": "Python 代码存在 lint 问题"
+          },
+          {
+            "hook_name": "ruff-format",
+            "error": "代码需重新格式化"
+          },
+          {
+            "hook_name": "codespell",
+            "error": "文档/注释存在拼写错误"
+          },
+          {
+            "hook_name": "pylint",
+            "error": "Python 代码 lint 检查未通过"
+          },
+          {
+            "hook_name": "bandit",
+            "error": "安全检查未通过"
+          },
+          {
+            "hook_name": "typos",
+            "error": "代码标识符/注释存在拼写错误"
+          },
+          {
+            "hook_name": "clang-format",
+            "error": "C/C++ 代码格式不符合规范"
+          }
+        ],
+        "note": "失败 hook 主要为代码风格/拼写/格式化类。部分 hook 会自动修改文件（ruff-format/clang-format/end-of-file-fixer/trailing-whitespace），验证流程完成后已使用 git checkout -- . 完整还原源码，未保留任何修改，严守源码不可修改约束。"
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null,
+        "note": "仓库未发现 .lint-runner* 配置文件"
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库根目录不存在 .devcontainer/ 目录"
     }
   },
   "documentation_gaps": [
@@ -340,7 +401,9 @@
       "shm_size": "8g"
     },
     "network": "host",
-    "security_options": ["seccomp=unconfined"],
+    "security_options": [
+      "seccomp=unconfined"
+    ],
     "seccomp_unconfined_reason": "宿主机内核为 4.18 (CentOS 7)，与 openEuler 24.03 容器内 glibc 多线程 getaddrinfo 不兼容，默认 seccomp 策略导致 DNS 解析线程创建失败；放宽 seccomp 后容器内网络与 Git 操作恢复正常。"
   },
   "rules_compliance": {

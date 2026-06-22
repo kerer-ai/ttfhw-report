@@ -81,40 +81,6 @@
       ]
     }
   },
-  "static_analysis": {
-    "enabled": true,
-    "pre_commit": {
-      "configured": true,
-      "config_file": ".pre-commit-config.yaml",
-      "status": "部分通过",
-      "duration_seconds": 9,
-      "total_hooks": 13,
-      "passed": 4,
-      "failed": 9,
-      "skipped": 1,
-      "failures": [
-        {"hook_name": "trailing-whitespace", "error": "存在行尾多余空白，hook 自动修改了文件"},
-        {"hook_name": "end-of-file-fixer", "error": "部分文件末尾缺少换行，hook 自动修复"},
-        {"hook_name": "check-yaml", "error": "存在 YAML 解析错误（while parsing a block mapping）"},
-        {"hook_name": "no-commit-to-branch", "error": "当前位于 master 分支，hook 设计为禁止直接提交 main/master（克隆默认分支即触发，属预期）"},
-        {"hook_name": "ruff-check", "error": "Python 代码存在 lint 问题（含 1 个文件非 UTF-8：edge_cloud_ctrl_comm.py 读取失败）"},
-        {"hook_name": "ruff-format", "error": "996 个文件需重新格式化（550 个无需改动）"},
-        {"hook_name": "codespell", "error": "文档/注释存在拼写错误"},
-        {"hook_name": "typos", "error": "代码标识符/注释存在拼写错误（如 faild/thw/spliting/calss/Assgin/invaild 等）"},
-        {"hook_name": "clang-format", "error": "C/C++ 代码格式不符合规范，hook 修改了文件"}
-      ]
-    },
-    "lint_runner": {
-      "configured": false,
-      "config_file": null
-    }
-  },
-  "devcontainer": {
-    "enabled": true,
-    "config_dir": ".devcontainer",
-    "config_files": ["README.md", "cpu/devcontainer.json", "npu/.gitkeeper"],
-    "summary": "已配置 devcontainer。cpu/devcontainer.json 基于华为云 x86 镜像 ascend_mindie_ubuntu_x86（ubuntu24+cann8.5.1+torch2.9.0+py311），含 cpptools/cmake/ruff 等 VSCode 插件，postCreate 安装 ccache/dos2unix 并 source CANN set_env.sh；npu/ 目录仅占位（.gitkeeper），未提供 NPU 专用配置。按用户要求未使用该 devcontainer 镜像"
-  },
   "execution_log": [
     {
       "timestamp": "2026-06-22T00:58:00",
@@ -369,105 +335,160 @@
       "step": "start",
       "action": "开始 MindIE-LLM 仓库验证流程",
       "result": "已启动",
-      "details": {"host_arch": "aarch64", "npu": "Ascend 910B4"}
+      "details": {
+        "host_arch": "aarch64",
+        "npu": "Ascend 910B4"
+      }
     },
     {
       "timestamp": "2026-06-22T00:58:30",
       "step": "document_reading",
       "action": "阅读 README.md、build_guide_llm.md、preparing_software_and_dependencies.md、CMakeLists.txt、build.sh 及 scripts/*",
       "result": "成功",
-      "details": {"key_finding": "本仓为昇腾 NPU 推理引擎，构建需 CANN 8.5.1 + torch/torch_npu 2.9.0；README 主要构建/快速入门内容外链 readthedocs"}
+      "details": {
+        "key_finding": "本仓为昇腾 NPU 推理引擎，构建需 CANN 8.5.1 + torch/torch_npu 2.9.0；README 主要构建/快速入门内容外链 readthedocs"
+      }
     },
     {
       "timestamp": "2026-06-22T01:01:01",
       "step": "static_analysis_scan",
       "action": "检查 .pre-commit-config.yaml 并执行 pre-commit run --all-files",
       "result": "已配置，部分通过",
-      "details": {"total_hooks": 13, "passed": 4, "failed": 9, "skipped_manual": 1}
+      "details": {
+        "total_hooks": 13,
+        "passed": 4,
+        "failed": 9,
+        "skipped_manual": 1
+      }
     },
     {
       "timestamp": "2026-06-22T01:01:40",
       "step": "static_analysis_scan",
       "action": "搜索 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*", ".lintrunner.toml"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*",
+          ".lintrunner.toml"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-22T01:01:50",
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录及配置",
       "result": "已配置",
-      "details": {"config_dir": ".devcontainer", "files": ["README.md", "cpu/devcontainer.json", "npu/.gitkeeper"]}
+      "details": {
+        "config_dir": ".devcontainer",
+        "files": [
+          "README.md",
+          "cpu/devcontainer.json",
+          "npu/.gitkeeper"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-22T01:01:55",
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "openEuler 24.03-LTS-SP1（全新拉取）",
-      "details": {"selection_reason": "devcontainer 推荐 x86 镜像与 aarch64 不符且用户要求规避；预编译第三方依赖目标系统为 openEuler-24.03-LTS-SP1，故全新拉取该官方镜像"}
+      "details": {
+        "selection_reason": "devcontainer 推荐 x86 镜像与 aarch64 不符且用户要求规避；预编译第三方依赖目标系统为 openEuler-24.03-LTS-SP1，故全新拉取该官方镜像"
+      }
     },
     {
       "timestamp": "2026-06-22T01:02:18",
       "step": "container_setup",
       "action": "拉取镜像并启动容器，挂载 NPU 设备与仓库目录",
       "result": "成功",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts-sp1", "container": "ttfhw-MindIE-LLM-env"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts-sp1",
+        "container": "ttfhw-MindIE-LLM-env"
+      }
     },
     {
       "timestamp": "2026-06-22T01:02:56",
       "step": "dependency_installation",
       "action": "安装构建工具（python/cmake/gcc/g++/make）及 pip/wheel/setuptools/pybind11/torch/numpy",
       "result": "成功（pip 源回退至阿里云）",
-      "details": {"toolchain": "Python 3.11.6, gcc 12.3.1, cmake 3.27.9", "torch": "2.9.0+cpu（非 Ascend 配套）"}
+      "details": {
+        "toolchain": "Python 3.11.6, gcc 12.3.1, cmake 3.27.9",
+        "torch": "2.9.0+cpu（非 Ascend 配套）"
+      }
     },
     {
       "timestamp": "2026-06-22T01:05:27",
       "step": "build_attempt",
       "action": "首次 bash build.sh 3rd 编译第三方依赖",
       "result": "失败",
-      "details": {"error": "缺少 xz 工具"}
+      "details": {
+        "error": "缺少 xz 工具"
+      }
     },
     {
       "timestamp": "2026-06-22T01:09:20",
       "step": "problem_resolution",
       "action": "安装 xz；为 lib64 布局的第三方输出创建 lib 软链接；LD_PRELOAD 系统 libcrypto 解决 EVP_md2 符号缺失",
       "result": "已解决",
-      "details": {"fixes": ["dnf install xz", "ln -s lib64 lib（abseil/re2/protobuf/cares/gtest/prometheus）", "LD_PRELOAD=/lib64/libcrypto.so.3.0.12"]}
+      "details": {
+        "fixes": [
+          "dnf install xz",
+          "ln -s lib64 lib（abseil/re2/protobuf/cares/gtest/prometheus）",
+          "LD_PRELOAD=/lib64/libcrypto.so.3.0.12"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-22T01:17:08",
       "step": "build_retry",
       "action": "第 4 次重试 bash build.sh 3rd",
       "result": "成功",
-      "details": {"built": "all_third_party（14 个包）", "size": "318M", "concurrency": 57, "concurrency_ratio": "约 60%"}
+      "details": {
+        "built": "all_third_party（14 个包）",
+        "size": "318M",
+        "concurrency": 57,
+        "concurrency_ratio": "约 60%"
+      }
     },
     {
       "timestamp": "2026-06-22T01:27:04",
       "step": "build_attempt",
       "action": "bash build.sh master 编译核心 C++（默认 cxx11_abi=1）",
       "result": "部分成功（99%）",
-      "details": {"compiled_libs": 12, "failure": "mindieservice_daemon 链接失败：grpc/prometheus 旧 ABI 与源码新 ABI 不匹配"}
+      "details": {
+        "compiled_libs": 12,
+        "failure": "mindieservice_daemon 链接失败：grpc/prometheus 旧 ABI 与源码新 ABI 不匹配"
+      }
     },
     {
       "timestamp": "2026-06-22T01:38:30",
       "step": "build_retry",
       "action": "bash build.sh master --use_cxx11_abi=0 切换 ABI 重试",
       "result": "失败",
-      "details": {"failure": "mindieservice_daemon 链接失败：PyPI torch 新 ABI 与 --use_cxx11_abi=0 冲突（c10/c10d 符号未定义）", "root_cause": "PyPI torch（新 ABI）与 openEuler 预编译 grpc/prometheus（旧 ABI）不可调和，须使用 Ascend 配套 ABI 一致的 torch"}
+      "details": {
+        "failure": "mindieservice_daemon 链接失败：PyPI torch 新 ABI 与 --use_cxx11_abi=0 冲突（c10/c10d 符号未定义）",
+        "root_cause": "PyPI torch（新 ABI）与 openEuler 预编译 grpc/prometheus（旧 ABI）不可调和，须使用 Ascend 配套 ABI 一致的 torch"
+      }
     },
     {
       "timestamp": "2026-06-22T01:54:00",
       "step": "ut_execution",
       "action": "bash build.sh dlt 编译单元测试",
       "result": "失败",
-      "details": {"failure": "MindIE-LLM_utils_ut 链接失败：预编译 gtest 静态库未带 -fPIC（aarch64 重定位错误）；并存在与 master 相同的 torch ABI 冲突"}
+      "details": {
+        "failure": "MindIE-LLM_utils_ut 链接失败：预编译 gtest 静态库未带 -fPIC（aarch64 重定位错误）；并存在与 master 相同的 torch ABI 冲突"
+      }
     },
     {
       "timestamp": "2026-06-22T01:55:00",
       "step": "sample_execution",
       "action": "评估样例可执行性",
       "result": "跳过（前置条件不满足）",
-      "details": {"reason": "样例位于 examples/atb_models，依赖编译安装的 whl 及 NPU 运行时（CANN+torch_npu），构建未完成且无 Ascend 配套依赖，无法运行"}
+      "details": {
+        "reason": "样例位于 examples/atb_models，依赖编译安装的 whl 及 NPU 运行时（CANN+torch_npu），构建未完成且无 Ascend 配套依赖，无法运行"
+      }
     },
     {
       "timestamp": "2026-06-22T01:58:54",
@@ -481,7 +502,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_MindIE-LLM_20260622.json"}
+      "details": {
+        "output_file": "verification_report_WSL_MindIE-LLM_20260622.json"
+      }
     }
   ],
   "final_results": {
@@ -490,15 +513,51 @@
       "duration_seconds": 540,
       "summary": "第三方依赖（bash build.sh 3rd）完整编译成功；核心 C++ 源码编译到 99%，12 个 libmindie*.so 共享库全部编译链接成功；仅最终可执行文件 mindieservice_daemon 链接失败，根因为 PyPI torch（新 C++ ABI）与 openEuler 预编译 grpc/prometheus（旧 ABI）不可调和，须使用文档要求的 Ascend 配套 ABI 一致 torch（需从 hiascend 注册下载，本环境不可获取）",
       "artifacts": [
-        {"name": "all_third_party", "path": "third_party/output/（grpc/protobuf/boost/openssl 等 14 个）", "size": "318 MB"},
-        {"name": "libmindieservice_endpoint.so", "path": "build/src/server/endpoint/", "size": "370 MB"},
-        {"name": "libmindie_scheduler.so", "path": "build/src/scheduler/", "size": "64 MB"},
-        {"name": "libmindie_engine.so", "path": "build/src/engine/", "size": "51 MB"},
-        {"name": "libmindie_llm_utils.so", "path": "src/utils/lib/", "size": "33 MB"},
-        {"name": "libmindie_block_manager.so", "path": "build/src/block_manager/", "size": "30 MB"},
-        {"name": "libmindie_executor.so", "path": "build/src/executor/", "size": "28 MB"},
-        {"name": "libmindie_llm_manager_v2.so", "path": "build/src/llm_manager_v2/", "size": "26 MB"},
-        {"name": "其余 mindie 共享库", "path": "build/src/*、src/utils/log/lib/", "size": "12 个 .so 合计约 683 MB"}
+        {
+          "name": "all_third_party",
+          "path": "third_party/output/（grpc/protobuf/boost/openssl 等 14 个）",
+          "size": "318 MB"
+        },
+        {
+          "name": "libmindieservice_endpoint.so",
+          "path": "build/src/server/endpoint/",
+          "size": "370 MB"
+        },
+        {
+          "name": "libmindie_scheduler.so",
+          "path": "build/src/scheduler/",
+          "size": "64 MB"
+        },
+        {
+          "name": "libmindie_engine.so",
+          "path": "build/src/engine/",
+          "size": "51 MB"
+        },
+        {
+          "name": "libmindie_llm_utils.so",
+          "path": "src/utils/lib/",
+          "size": "33 MB"
+        },
+        {
+          "name": "libmindie_block_manager.so",
+          "path": "build/src/block_manager/",
+          "size": "30 MB"
+        },
+        {
+          "name": "libmindie_executor.so",
+          "path": "build/src/executor/",
+          "size": "28 MB"
+        },
+        {
+          "name": "libmindie_llm_manager_v2.so",
+          "path": "build/src/llm_manager_v2/",
+          "size": "26 MB"
+        },
+        {
+          "name": "其余 mindie 共享库",
+          "path": "build/src/*、src/utils/log/lib/",
+          "size": "12 个 .so 合计约 683 MB"
+        }
       ]
     },
     "ut": {
@@ -509,7 +568,10 @@
       "failed": 0,
       "summary": "bash build.sh dlt 编译 UT，在链接 MindIE-LLM_utils_ut 时失败：预编译 gtest 静态库未带 -fPIC，aarch64 下产生 R_AARCH64_ADR_PREL_PG_HI21 重定位错误，无法链入共享目标；同时存在与主构建相同的 torch ABI 冲突。未生成任何 UT 可执行文件，故无法运行测试用例",
       "failures": [
-        {"target": "MindIE-LLM_utils_ut", "error": "libgtest.a 未以 -fPIC 编译导致链接失败 + torch c10 ABI 符号未定义"}
+        {
+          "target": "MindIE-LLM_utils_ut",
+          "error": "libgtest.a 未以 -fPIC 编译导致链接失败 + torch c10 ABI 符号未定义"
+        }
       ]
     },
     "sample": {
@@ -517,6 +579,71 @@
       "duration_seconds": 0,
       "summary": "样例集中在 examples/atb_models，需先完成 whl 编译安装并具备 NPU 运行时（CANN + torch_npu）。因核心构建未完整产出且缺少 Ascend 配套依赖，前置条件不满足，未执行样例",
       "results": []
+    },
+    "static_analysis": {
+      "enabled": true,
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 9,
+        "total_hooks": 13,
+        "passed": 4,
+        "failed": 9,
+        "skipped": 1,
+        "failures": [
+          {
+            "hook_name": "trailing-whitespace",
+            "error": "存在行尾多余空白，hook 自动修改了文件"
+          },
+          {
+            "hook_name": "end-of-file-fixer",
+            "error": "部分文件末尾缺少换行，hook 自动修复"
+          },
+          {
+            "hook_name": "check-yaml",
+            "error": "存在 YAML 解析错误（while parsing a block mapping）"
+          },
+          {
+            "hook_name": "no-commit-to-branch",
+            "error": "当前位于 master 分支，hook 设计为禁止直接提交 main/master（克隆默认分支即触发，属预期）"
+          },
+          {
+            "hook_name": "ruff-check",
+            "error": "Python 代码存在 lint 问题（含 1 个文件非 UTF-8：edge_cloud_ctrl_comm.py 读取失败）"
+          },
+          {
+            "hook_name": "ruff-format",
+            "error": "996 个文件需重新格式化（550 个无需改动）"
+          },
+          {
+            "hook_name": "codespell",
+            "error": "文档/注释存在拼写错误"
+          },
+          {
+            "hook_name": "typos",
+            "error": "代码标识符/注释存在拼写错误（如 faild/thw/spliting/calss/Assgin/invaild 等）"
+          },
+          {
+            "hook_name": "clang-format",
+            "error": "C/C++ 代码格式不符合规范，hook 修改了文件"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": true,
+      "config_dir": ".devcontainer",
+      "config_files": [
+        "README.md",
+        "cpu/devcontainer.json",
+        "npu/.gitkeeper"
+      ],
+      "summary": "已配置 devcontainer。cpu/devcontainer.json 基于华为云 x86 镜像 ascend_mindie_ubuntu_x86（ubuntu24+cann8.5.1+torch2.9.0+py311），含 cpptools/cmake/ruff 等 VSCode 插件，postCreate 安装 ccache/dos2unix 并 source CANN set_env.sh；npu/ 目录仅占位（.gitkeeper），未提供 NPU 专用配置。按用户要求未使用该 devcontainer 镜像"
     }
   },
   "documentation_gaps": [

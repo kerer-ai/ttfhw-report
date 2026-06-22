@@ -96,39 +96,6 @@
       ]
     }
   },
-  "static_analysis": {
-    "enabled": true,
-    "pre_commit": {
-      "configured": true,
-      "config_file": ".pre-commit-config.yaml",
-      "status": "部分通过（网络问题导致部分hooks无法执行）",
-      "duration_seconds": 120,
-      "total_hooks": 8,
-      "passed": 0,
-      "failed": 8,
-      "skipped": 0,
-      "failures": [
-        {
-          "hook_name": "ruff",
-          "error": "网络超时导致无法下载依赖包"
-        },
-        {
-          "hook_name": "codespell",
-          "error": "网络超时导致无法下载依赖包"
-        }
-      ]
-    },
-    "lint_runner": {
-      "configured": false,
-      "config_file": null
-    }
-  },
-  "devcontainer": {
-    "enabled": true,
-    "config_dir": ".devcontainer",
-    "config_files": ["cpu/devcontainer.json", "npu/ (empty)"],
-    "summary": "已配置CPU开发容器，基于Ubuntu 24.04镜像，包含CANN 8.5.1、PyTorch 2.9.0、Python 3.11"
-  },
   "execution_log": [
     {
       "timestamp": "2026-06-18T10:48:00",
@@ -229,56 +196,75 @@
       "step": "container_setup",
       "action": "Pulling openEuler 24.03 image",
       "result": "success",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+      }
     },
     {
       "timestamp": "2026-06-18T11:00:00",
       "step": "dependency_installation",
       "action": "Installing Python dependencies in openEuler container",
       "result": "failed",
-      "details": {"error": "Network restricted, pip install returns 403 Forbidden"}
+      "details": {
+        "error": "Network restricted, pip install returns 403 Forbidden"
+      }
     },
     {
       "timestamp": "2026-06-18T11:20:00",
       "step": "image_selection",
       "action": "Switching to prebuilt CANN image",
       "result": "success",
-      "details": {"image": "swr.cn-north-4.myhuaweicloud.com/inference/ubuntu:20260302_llm_dt_ubuntu20_cann8.5.1_py310_torch2.1"}
+      "details": {
+        "image": "swr.cn-north-4.myhuaweicloud.com/inference/ubuntu:20260302_llm_dt_ubuntu20_cann8.5.1_py310_torch2.1"
+      }
     },
     {
       "timestamp": "2026-06-18T11:25:00",
       "step": "dependency_installation",
       "action": "Installing Python base dependencies in CANN container",
       "result": "success",
-      "details": {"packages": ["posix_ipc"]}
+      "details": {
+        "packages": [
+          "posix_ipc"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T11:30:00",
       "step": "build_attempt",
       "action": "Building with build.sh master",
       "result": "success",
-      "details": {"command": "bash build.sh master", "artifacts_count": 16}
+      "details": {
+        "command": "bash build.sh master",
+        "artifacts_count": 16
+      }
     },
     {
       "timestamp": "2026-06-18T12:10:00",
       "step": "ut_execution",
       "action": "Building unit tests with build.sh unittest",
       "result": "failed",
-      "details": {"error": "libopenblas link failure: missing libgfortran"}
+      "details": {
+        "error": "libopenblas link failure: missing libgfortran"
+      }
     },
     {
       "timestamp": "2026-06-18T12:25:00",
       "step": "sample_execution",
       "action": "Importing mindie_llm Python package",
       "result": "success",
-      "details": {"command": "python3 -c 'import mindie_llm'"}
+      "details": {
+        "command": "python3 -c 'import mindie_llm'"
+      }
     },
     {
       "timestamp": "2026-06-18T12:35:00",
       "step": "sample_execution",
       "action": "Checking example programs",
       "result": "partial_success",
-      "details": {"note": "Example exists but requires model file"}
+      "details": {
+        "note": "Example exists but requires model file"
+      }
     },
     {
       "timestamp": "2026-06-18T12:38:00",
@@ -422,6 +408,42 @@
           "execution_time": "N/A"
         }
       ]
+    },
+    "static_analysis": {
+      "enabled": true,
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过（网络问题导致部分hooks无法执行）",
+        "duration_seconds": 120,
+        "total_hooks": 8,
+        "passed": 0,
+        "failed": 8,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "ruff",
+            "error": "网络超时导致无法下载依赖包"
+          },
+          {
+            "hook_name": "codespell",
+            "error": "网络超时导致无法下载依赖包"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": true,
+      "config_dir": ".devcontainer",
+      "config_files": [
+        "cpu/devcontainer.json",
+        "npu/ (empty)"
+      ],
+      "summary": "已配置CPU开发容器，基于Ubuntu 24.04镜像，包含CANN 8.5.1、PyTorch 2.9.0、Python 3.11"
     }
   },
   "documentation_gaps": [

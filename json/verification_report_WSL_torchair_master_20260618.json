@@ -295,6 +295,67 @@
       "duration_seconds": 2,
       "results": [],
       "reason": "torchair导入需要NPU硬件和昇腾SDK运行时环境，CPU容器无法运行"
+    },
+    "static_analysis": {
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "hooks": [
+          {
+            "id": "trailing-whitespace",
+            "status": "failed",
+            "details": "修复了2个文件的尾部空白"
+          },
+          {
+            "id": "end-of-file-fixer",
+            "status": "passed"
+          },
+          {
+            "id": "check-yaml",
+            "status": "passed"
+          },
+          {
+            "id": "check-added-large-files",
+            "status": "passed"
+          },
+          {
+            "id": "check-merge-conflict",
+            "status": "passed"
+          },
+          {
+            "id": "detect-private-key",
+            "status": "passed"
+          },
+          {
+            "id": "check-json",
+            "status": "passed"
+          },
+          {
+            "id": "codespell",
+            "status": "passed"
+          },
+          {
+            "id": "bandit",
+            "status": "passed"
+          },
+          {
+            "id": "typos",
+            "status": "passed"
+          }
+        ],
+        "total_hooks": 10,
+        "passed_hooks": 9,
+        "failed_hooks": 1,
+        "duration_seconds": 180
+      },
+      "lint_runner": {
+        "configured": false
+      },
+      "summary": "仓库配置了pre-commit静态检查工具，包含10个hook，9个通过，1个失败（trailing-whitespace修复了2个文件）"
+    },
+    "devcontainer": {
+      "configured": false,
+      "summary": "仓库未配置devcontainer开发容器能力"
     }
   },
   "documentation_gaps": [
@@ -335,35 +396,5 @@
       "source": "构建日志"
     }
   ],
-  "session_export_file": "",
-  "static_analysis": {
-    "pre_commit": {
-      "configured": true,
-      "config_file": ".pre-commit-config.yaml",
-      "hooks": [
-        {"id": "trailing-whitespace", "status": "failed", "details": "修复了2个文件的尾部空白"},
-        {"id": "end-of-file-fixer", "status": "passed"},
-        {"id": "check-yaml", "status": "passed"},
-        {"id": "check-added-large-files", "status": "passed"},
-        {"id": "check-merge-conflict", "status": "passed"},
-        {"id": "detect-private-key", "status": "passed"},
-        {"id": "check-json", "status": "passed"},
-        {"id": "codespell", "status": "passed"},
-        {"id": "bandit", "status": "passed"},
-        {"id": "typos", "status": "passed"}
-      ],
-      "total_hooks": 10,
-      "passed_hooks": 9,
-      "failed_hooks": 1,
-      "duration_seconds": 180
-    },
-    "lint_runner": {
-      "configured": false
-    },
-    "summary": "仓库配置了pre-commit静态检查工具，包含10个hook，9个通过，1个失败（trailing-whitespace修复了2个文件）"
-  },
-  "devcontainer": {
-    "configured": false,
-    "summary": "仓库未配置devcontainer开发容器能力"
-  }
+  "session_export_file": ""
 }
