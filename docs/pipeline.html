@@ -161,13 +161,6 @@ section { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; pad
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.5rem; font-weight: 700; color: #fff; flex-shrink: 0;
 }
-.stage-num::after {
-  content: '';
-  position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
-  width: 2px; height: calc(100% + 3rem);
-  background: linear-gradient(180deg, rgba(124,58,237,0.6), transparent);
-}
-.stage-block:last-child .stage-num::after { display: none; }
 .stage-content {
   background: rgba(26,26,62,0.6); border: 1px solid rgba(124,58,237,0.15);
   border-radius: 16px; padding: 2rem;
