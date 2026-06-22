@@ -516,5 +516,41 @@
       "source": ".clang-tidy 使用 YAML 多行语法 (>），clang-tidy 12.0.1 可能不完全支持"
     }
   ],
-  "session_export_file": "verification_session_WSL_ham_20260618.md"
+  "session_export_file": "verification_session_WSL_ham_20260618.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks，2通过2失败1跳过），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 60,
+      "total_hooks": 5,
+      "passed": 2,
+      "failed": 2,
+      "skipped": 1,
+      "failures": [
+        {
+          "hook_name": "run-build",
+          "file": "N/A",
+          "error": "构建本身成功，但 hook 检测到工作区文件变更（build.sh 生成了 output/ 目录和 tar.gz 包）"
+        },
+        {
+          "hook_name": "clang-tidy",
+          "file": "N/A",
+          "error": "clang-tidy 12.0.1 与 .clang-tidy 配置格式不兼容，报错 'no checks enabled'"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

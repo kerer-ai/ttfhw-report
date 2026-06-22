@@ -485,5 +485,56 @@
       "source": "script/run_ut.sh 第126行"
     }
   ],
-  "session_export_file": "verification_session_WSL_memfabric_hybrid_20260617.md"
+  "session_export_file": "verification_session_WSL_memfabric_hybrid_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（14个hooks），8 Passed, 5 Failed, 1 Skipped。ruff-check 发现 61 个 Python 代码问题。未检测到 lint-runner 配置。",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 180,
+      "total_hooks": 14,
+      "passed": 8,
+      "failed": 5,
+      "skipped": 1,
+      "failures": [
+        {
+          "hook_name": "ruff-check",
+          "file": "N/A",
+          "error": "61 个问题: F841(未使用变量)20, F401(未使用导入)17, E402(import位置)13, E721(类型比较)9, SIM115(上下文管理器)1, F821(未定义名称)1"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "N/A",
+          "error": "拼写检查发现若干问题"
+        },
+        {
+          "hook_name": "pylint",
+          "file": "N/A",
+          "error": "Pylint 发现代码质量问题"
+        },
+        {
+          "hook_name": "bandit",
+          "file": "N/A",
+          "error": "Bandit 安全扫描发现问题"
+        },
+        {
+          "hook_name": "typos",
+          "file": "N/A",
+          "error": "拼写检查发现问题"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

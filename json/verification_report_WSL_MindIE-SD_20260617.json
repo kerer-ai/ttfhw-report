@@ -414,5 +414,33 @@
       "source": "mindiesd/layers/flash_attn/prompt_flash_attn.py 第16行"
     }
   ],
-  "session_export_file": ""
+  "session_export_file": "",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（含 11 hooks），未检测到 lint-runner 配置。pre-commit hooks 包括 ruff、pylint、bandit、markdownlint、clang-format 等。",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "配置存在，因无 Python 开发环境未实际执行",
+      "duration_seconds": 0,
+      "total_hooks": 11,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 11
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": true,
+    "config_dir": ".devcontainer",
+    "config_files": [
+      ".devcontainer/cpu/devcontainer.json",
+      ".devcontainer/npu/.gitkeeper",
+      ".devcontainer/README.md"
+    ],
+    "summary": "已配置 CPU DevContainer，基于华为专用镜像 swr.cn-north-4.myhuaweicloud.com/inference/ascend_mindie_ubuntu_x86，预装 CANN 8.5.1、PyTorch 2.9.0、torch_npu 等完整环境，支持 ccache 加速构建"
+  }
 }

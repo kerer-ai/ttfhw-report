@@ -564,5 +564,13 @@
       "source": "contrib/platform/mellanox/optimized 文件中硬编码了 enable_oshmem_fortran=yes"
     }
   ],
-  "session_export_file": "verification_session_hmpi_20260618.md"
+  "session_export_file": "verification_session_hmpi_20260618.md",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "hmpi 仓库未配置 pre-commit 或 lint-runner"
+  },
+  "devcontainer": {
+    "enabled": false,
+    "summary": "hmpi 仓库未配置 .devcontainer"
+  }
 }

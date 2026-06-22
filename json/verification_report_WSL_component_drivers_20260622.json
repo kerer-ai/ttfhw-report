@@ -272,147 +272,215 @@
       "step": "start",
       "action": "克隆仓库并开始验证流程",
       "result": "已启动",
-      "details": {"repo": "https://gitcode.com/openUBMC/component_drivers.git", "files": 2713}
+      "details": {
+        "repo": "https://gitcode.com/openUBMC/component_drivers.git",
+        "files": 2713
+      }
     },
     {
       "timestamp": "2026-06-22T08:39:49",
       "step": "document_reading",
       "action": "从 README 入口逐层阅读 docs/、meson.build、conanfile.py、libmcpp.wrap",
       "result": "成功",
-      "details": {"recommended_image": "swr.cn-north-4.myhuaweicloud.com/openubmc/ubuntu:24.04.1", "build_tools": ["smart_build.sh", "bingo", "meson"]}
+      "details": {
+        "recommended_image": "swr.cn-north-4.myhuaweicloud.com/openubmc/ubuntu:24.04.1",
+        "build_tools": [
+          "smart_build.sh",
+          "bingo",
+          "meson"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-22T08:40:00",
       "step": "static_analysis_scan",
       "action": "检查 pre-commit 与 lint-runner 配置",
       "result": "未配置",
-      "details": {"pre_commit": false, "lint_runner": false, "note": "仅存在 .clang-format（格式规范）与 .cursorrules，无自动化静态检查框架"}
+      "details": {
+        "pre_commit": false,
+        "lint_runner": false,
+        "note": "仅存在 .clang-format（格式规范）与 .cursorrules，无自动化静态检查框架"
+      }
     },
     {
       "timestamp": "2026-06-22T08:40:30",
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录",
       "result": "未配置",
-      "details": {"devcontainer_dir": false}
+      "details": {
+        "devcontainer_dir": false
+      }
     },
     {
       "timestamp": "2026-06-22T08:41:10",
       "step": "image_selection",
       "action": "选择文档推荐镜像",
       "result": "swr.cn-north-4.myhuaweicloud.com/openubmc/ubuntu:24.04.1",
-      "details": {"selection_reason": "文档第1.1.1节明确推荐，且镜像预置 meson/gcc/conan/bingo/定制luajit"}
+      "details": {
+        "selection_reason": "文档第1.1.1节明确推荐，且镜像预置 meson/gcc/conan/bingo/定制luajit"
+      }
     },
     {
       "timestamp": "2026-06-22T08:43:00",
       "step": "container_setup",
       "action": "启动容器并挂载仓库到 /workspace",
       "result": "成功",
-      "details": {"os": "Ubuntu 24.04.1 LTS", "arch": "x86_64", "cpu_cores": 20, "memory": "15Gi"}
+      "details": {
+        "os": "Ubuntu 24.04.1 LTS",
+        "arch": "x86_64",
+        "cpu_cores": 20,
+        "memory": "15Gi"
+      }
     },
     {
       "timestamp": "2026-06-22T08:43:30",
       "step": "dependency_installation",
       "action": "按文档第1.3.1节安装 meson/boost/gtest，并补充 ninja",
       "result": "成功",
-      "details": {"packages": ["libboost-all-dev", "libgtest-dev", "ninja-build"]}
+      "details": {
+        "packages": [
+          "libboost-all-dev",
+          "libgtest-dev",
+          "ninja-build"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-22T08:44:16",
       "step": "build_attempt",
       "action": "首次 meson setup",
       "result": "失败",
-      "details": {"error": "libmcpp.wrap 使用 SSH 地址克隆失败（Host key verification failed）"}
+      "details": {
+        "error": "libmcpp.wrap 使用 SSH 地址克隆失败（Host key verification failed）"
+      }
     },
     {
       "timestamp": "2026-06-22T08:44:37",
       "step": "problem_resolution",
       "action": "按文档第1.2.2节用 HTTPS 克隆 libmcpp 到 subprojects/libmcpp",
       "result": "已解决",
-      "details": {"solution": "git clone https://gitcode.com/openUBMC/libmcpp.git subprojects/libmcpp", "source": "docs/0.部件驱动开发简介.md 第1.2.2节"}
+      "details": {
+        "solution": "git clone https://gitcode.com/openUBMC/libmcpp.git subprojects/libmcpp",
+        "source": "docs/0.部件驱动开发简介.md 第1.2.2节"
+      }
     },
     {
       "timestamp": "2026-06-22T08:44:54",
       "step": "build_attempt",
       "action": "meson setup（libmcpp 就位后）",
       "result": "失败",
-      "details": {"error": "缺少 sqlite3（libmcpp/mcdatabase 依赖）"}
+      "details": {
+        "error": "缺少 sqlite3（libmcpp/mcdatabase 依赖）"
+      }
     },
     {
       "timestamp": "2026-06-22T08:45:05",
       "step": "problem_resolution",
       "action": "安装 libsqlite3-dev",
       "result": "已解决",
-      "details": {"solution": "apt-get install -y libsqlite3-dev"}
+      "details": {
+        "solution": "apt-get install -y libsqlite3-dev"
+      }
     },
     {
       "timestamp": "2026-06-22T08:45:15",
       "step": "build_configure",
       "action": "meson setup builddir 配置成功",
       "result": "成功",
-      "details": {"build_targets": 277}
+      "details": {
+        "build_targets": 277
+      }
     },
     {
       "timestamp": "2026-06-22T08:45:41",
       "step": "build_attempt",
       "action": "meson compile（retry-0）",
       "result": "失败",
-      "details": {"error": "lauxlib.h 缺失（lua 开发头文件）", "concurrency": 12}
+      "details": {
+        "error": "lauxlib.h 缺失（lua 开发头文件）",
+        "concurrency": 12
+      }
     },
     {
       "timestamp": "2026-06-22T08:48:00",
       "step": "problem_resolution",
       "action": "安装 liblua5.4-dev 与 libluajit-5.1-dev 并清理 builddir 重配",
       "result": "部分解决",
-      "details": {"solution": "提供 lua 头文件，但系统 luajit 仅 5.1 API"}
+      "details": {
+        "solution": "提供 lua 头文件，但系统 luajit 仅 5.1 API"
+      }
     },
     {
       "timestamp": "2026-06-22T08:50:00",
       "step": "build_retry",
       "action": "meson compile（retry-1）",
       "result": "失败",
-      "details": {"error": "drivers/internal 需 Lua 5.3+ API (lua_rawlen/lua_isinteger)，系统 luajit-5.1 不兼容", "progress": "558/1314"}
+      "details": {
+        "error": "drivers/internal 需 Lua 5.3+ API (lua_rawlen/lua_isinteger)，系统 luajit-5.1 不兼容",
+        "progress": "558/1314"
+      }
     },
     {
       "timestamp": "2026-06-22T08:59:55",
       "step": "build_retry",
       "action": "改用文档推荐 bingo build（Conan+Meson 链）",
       "result": "失败",
-      "details": {"error": "bingo 需认证访问 conan 仓 openubmc_dev 拉取定制 luajit B012，外部开发者无凭据"}
+      "details": {
+        "error": "bingo 需认证访问 conan 仓 openubmc_dev 拉取定制 luajit B012，外部开发者无凭据"
+      }
     },
     {
       "timestamp": "2026-06-22T09:00:50",
       "step": "problem_resolution",
       "action": "使用镜像预置的厂商定制 luajit conan 包(B010, 含 compat-5.3)生成 luajit.pc 并注册 ld 路径",
       "result": "已解决",
-      "details": {"solution": "指向 /root/.conan/data/luajit/2.1.0.B010（含 lua_isinteger/lua_rawlen），清理 builddir 重配", "source": "镜像自带 conan 缓存"}
+      "details": {
+        "solution": "指向 /root/.conan/data/luajit/2.1.0.B010（含 lua_isinteger/lua_rawlen），清理 builddir 重配",
+        "source": "镜像自带 conan 缓存"
+      }
     },
     {
       "timestamp": "2026-06-22T09:01:38",
       "step": "build_retry",
       "action": "meson compile（retry-3，lua 问题已解决）",
       "result": "失败",
-      "details": {"error": "wangxun pldm 光模块驱动源码缺陷：power.h 缺少 OpticalModule_Oem 头文件包含", "progress": "764/1314"}
+      "details": {
+        "error": "wangxun pldm 光模块驱动源码缺陷：power.h 缺少 OpticalModule_Oem 头文件包含",
+        "progress": "764/1314"
+      }
     },
     {
       "timestamp": "2026-06-22T09:16:10",
       "step": "build_diagnose",
       "action": "ninja -k 0 全量 keep-going 枚举全部缺陷",
       "result": "失败（仅1处缺陷）",
-      "details": {"total_targets": 1314, "failed": 1, "succeeded": 1313, "defect": "wangxun optical_module/power.cpp 源码缺失 include"}
+      "details": {
+        "total_targets": 1314,
+        "failed": 1,
+        "succeeded": 1313,
+        "defect": "wangxun optical_module/power.cpp 源码缺失 include"
+      }
     },
     {
       "timestamp": "2026-06-22T09:34:39",
       "step": "ut_execution",
       "action": "meson test --no-rebuild 运行全部已构建测试套件",
       "result": "部分通过",
-      "details": {"total": 86, "passed": 85, "failed": 1, "failed_suite": "test_eeprom_abi"}
+      "details": {
+        "total": 86,
+        "passed": 85,
+        "failed": 1,
+        "failed_suite": "test_eeprom_abi"
+      }
     },
     {
       "timestamp": "2026-06-22T09:36:30",
       "step": "sample_execution",
       "action": "查找组件库独立样例",
       "result": "不适用",
-      "details": {"note": "组件库无独立样例可执行文件，文档样例为依赖 devmon 服务的 busctl 演示，超出本仓库单独构建范围"}
+      "details": {
+        "note": "组件库无独立样例可执行文件，文档样例为依赖 devmon 服务的 busctl 演示，超出本仓库单独构建范围"
+      }
     },
     {
       "timestamp": "2026-06-22T09:37:29",
@@ -426,7 +494,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_component_drivers_20260622.json"}
+      "details": {
+        "output_file": "verification_report_WSL_component_drivers_20260622.json"
+      }
     }
   ],
   "final_results": {
@@ -570,5 +640,23 @@
       "source": "eeprom.cpp:570 check_integrity failed: cannot open customer key file /opt/bmc/trust/partner/device_desc_pubkey.bin"
     }
   ],
-  "session_export_file": "unknown"
+  "session_export_file": "unknown",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置自动化静态检查工具：无 .pre-commit-config.yaml，无 lint-runner 配置。仅存在 .clang-format（代码格式规范）与 .cursorrules（编辑器规则），不属于可执行的静态检查框架。",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库根目录不存在 .devcontainer 目录，不具备 devcontainer 开发容器能力。提供了 .vscode/（launch.json、tasks.json）用于本地 VSCode 调试。"
+  }
 }

@@ -267,7 +267,11 @@
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
       }
     },
     {
@@ -277,7 +281,13 @@
       "result": "已配置",
       "details": {
         "config_dir": ".devcontainer",
-        "files": ["devcontainer.json", "Dockerfile", "README.md", "README_en.md", "requirements.txt"],
+        "files": [
+          "devcontainer.json",
+          "Dockerfile",
+          "README.md",
+          "README_en.md",
+          "requirements.txt"
+        ],
         "base_image": "ubuntu:24.04",
         "features": "conda Python 3.12, clangd, cmake, ccache, lcov, zsh"
       }
@@ -416,7 +426,13 @@
     "devcontainer": {
       "enabled": true,
       "config_dir": ".devcontainer",
-      "config_files": ["devcontainer.json", "Dockerfile", "README.md", "README_en.md", "requirements.txt"],
+      "config_files": [
+        "devcontainer.json",
+        "Dockerfile",
+        "README.md",
+        "README_en.md",
+        "requirements.txt"
+      ],
       "summary": "已配置 devcontainer，基于 Ubuntu 24.04 镜像（FROM ubuntu:24.04），内置 conda Python 3.12、clangd、cmake、ccache、lcov 等开发工具，支持 NPU 设备挂载"
     },
     "build": {
@@ -472,5 +488,42 @@
       "source": "docs/quick_start.md 依赖检查章节：pkg-config >= 0.29.0"
     }
   ],
-  "session_export_file": "verification_session_WSL_asc-devkit_20260617.md"
+  "session_export_file": "verification_session_WSL_asc-devkit_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（2个hooks：clang-format v18.1.8 通过，oat-check 失败因参数列表过长）；未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 5,
+      "total_hooks": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "oat-check",
+          "file": "1177个文件",
+          "error": "scripts/oat_check.sh 行150参数列表过长，/usr/bin/python3 参数列表过长导致 exit code 126"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": true,
+    "config_dir": ".devcontainer",
+    "config_files": [
+      "devcontainer.json",
+      "Dockerfile",
+      "README.md",
+      "README_en.md",
+      "requirements.txt"
+    ],
+    "summary": "已配置 devcontainer，基于 Ubuntu 24.04 镜像（FROM ubuntu:24.04），内置 conda Python 3.12、clangd、cmake、ccache、lcov 等开发工具，支持 NPU 设备挂载"
+  }
 }

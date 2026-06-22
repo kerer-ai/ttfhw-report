@@ -498,5 +498,47 @@
       "source": "第三方 OpenSSL 编译配置"
     }
   ],
-  "session_export_file": "verification_session_WSL_MindIE-Motor_20260617.md"
+  "session_export_file": "verification_session_WSL_MindIE-Motor_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（12个 hooks，8个通过，4个失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 45,
+      "total_hooks": 12,
+      "passed": 8,
+      "failed": 4,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "no-commit-to-branch",
+          "error": "分支提交检查失败"
+        },
+        {
+          "hook_name": "ruff check",
+          "error": "Python 代码风格检查发现问题"
+        },
+        {
+          "hook_name": "codespell",
+          "error": "拼写检查发现问题"
+        },
+        {
+          "hook_name": "typos",
+          "error": "拼写检查发现问题"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 开发容器环境"
+  }
 }

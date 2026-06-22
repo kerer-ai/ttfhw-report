@@ -217,21 +217,35 @@
       "step": "document_reading",
       "action": "克隆仓库并读取 README.md、package.json、vite.config.ts",
       "result": "成功",
-      "details": {"files": ["README.md", "package.json", "vite.config.ts"], "project_type": "Vue3 + Vite 前端项目"}
+      "details": {
+        "files": [
+          "README.md",
+          "package.json",
+          "vite.config.ts"
+        ],
+        "project_type": "Vue3 + Vite 前端项目"
+      }
     },
     {
       "timestamp": "2026-06-22T09:46:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 与 lint-runner 配置",
       "result": "未配置",
-      "details": {"pre_commit": false, "lint_runner": false, "note": "仓库使用 ESLint/Prettier/Stylelint，但未配置 pre-commit 或 lint-runner 框架"}
+      "details": {
+        "pre_commit": false,
+        "lint_runner": false,
+        "note": "仓库使用 ESLint/Prettier/Stylelint，但未配置 pre-commit 或 lint-runner 框架"
+      }
     },
     {
       "timestamp": "2026-06-22T09:46:20",
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录及配置",
       "result": "未配置",
-      "details": {"config_dir": null, "files": []}
+      "details": {
+        "config_dir": null,
+        "files": []
+      }
     },
     {
       "timestamp": "2026-06-22T09:47:00",
@@ -247,21 +261,31 @@
       "step": "container_setup",
       "action": "拉取镜像并启动容器，挂载仓库到 /workspace",
       "result": "成功",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container": "ttfhw-webui-env"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container": "ttfhw-webui-env"
+      }
     },
     {
       "timestamp": "2026-06-22T09:48:00",
       "step": "dependency_installation",
       "action": "安装 Node.js LTS 与 npm，并执行 npm install",
       "result": "成功",
-      "details": {"node": "v20.18.2", "npm": "v10.8.2", "packages": 1030, "registry": "npmmirror"}
+      "details": {
+        "node": "v20.18.2",
+        "npm": "v10.8.2",
+        "packages": 1030,
+        "registry": "npmmirror"
+      }
     },
     {
       "timestamp": "2026-06-22T09:50:30",
       "step": "build_attempt",
       "action": "首次构建尝试 npm run build",
       "result": "失败",
-      "details": {"error": "缺少 echarts-gl 依赖（源码 import 但 package.json 未声明）"}
+      "details": {
+        "error": "缺少 echarts-gl 依赖（源码 import 但 package.json 未声明）"
+      }
     },
     {
       "timestamp": "2026-06-22T09:51:30",
@@ -278,28 +302,43 @@
       "step": "build_retry",
       "action": "重新构建 npm run build",
       "result": "成功",
-      "details": {"modules_transformed": 2104, "post_build": "gzip 压缩 423 文件", "dist_size": "13M"}
+      "details": {
+        "modules_transformed": 2104,
+        "post_build": "gzip 压缩 423 文件",
+        "dist_size": "13M"
+      }
     },
     {
       "timestamp": "2026-06-22T09:53:00",
       "step": "ut_execution",
       "action": "执行单元测试 npm run test -- --run",
       "result": "部分失败（1 个时区相关用例）",
-      "details": {"total": 211, "passed": 210, "failed": 1}
+      "details": {
+        "total": 211,
+        "passed": 210,
+        "failed": 1
+      }
     },
     {
       "timestamp": "2026-06-22T09:53:30",
       "step": "problem_resolution",
       "action": "问题定位：date.spec.ts 硬编码 UTC+8 期望值，容器默认 UTC，设置 TZ=Asia/Shanghai 重试",
       "result": "已解决",
-      "details": {"solution": "TZ=Asia/Shanghai 环境变量", "source": "tests/unit/utils/date.spec.ts 第38行"}
+      "details": {
+        "solution": "TZ=Asia/Shanghai 环境变量",
+        "source": "tests/unit/utils/date.spec.ts 第38行"
+      }
     },
     {
       "timestamp": "2026-06-22T09:54:00",
       "step": "ut_execution",
       "action": "设置 TZ=Asia/Shanghai 后重新执行全部单元测试",
       "result": "成功",
-      "details": {"total": 211, "passed": 211, "failed": 0}
+      "details": {
+        "total": 211,
+        "passed": 211,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-22T09:55:00",
@@ -313,7 +352,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_webui_20260622.json"}
+      "details": {
+        "output_file": "verification_report_WSL_webui_20260622.json"
+      }
     }
   ],
   "final_results": {
@@ -405,5 +446,23 @@
       "source": "tests/unit/utils/date.spec.ts 第38行: expect(date.pattern('HH')).toBe('20')"
     }
   ],
-  "session_export_file": "verification_session_WSL_webui_20260622.md"
+  "session_export_file": "verification_session_WSL_webui_20260622.md",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置 pre-commit 或 lint-runner 静态检查框架。仓库虽包含 ESLint(.eslintrc.js)、Prettier(.prettierrc.js)、Stylelint 等格式化工具及 npm 脚本(lint/report)，但不属于本步骤检查的 pre-commit / lint-runner 范畴。",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 开发容器能力"
+  }
 }

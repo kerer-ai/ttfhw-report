@@ -85,7 +85,10 @@
     },
     "special_dependencies": {
       "source": "README.md + doc/building.md",
-      "value": ["Bootstrap JDK (java-1.8.0-openjdk-devel)", "jtreg (测试框架，openEuler 仓库不可用)"]
+      "value": [
+        "Bootstrap JDK (java-1.8.0-openjdk-devel)",
+        "jtreg (测试框架，openEuler 仓库不可用)"
+      ]
     }
   },
   "execution_log": [
@@ -240,7 +243,10 @@
       "step": "repo_clone",
       "action": "克隆 bishengjdk-8 仓库",
       "result": "success",
-      "details": {"repo_url": "https://gitcode.com/openeuler/bishengjdk-8.git", "version": "8.492.8.0.13"}
+      "details": {
+        "repo_url": "https://gitcode.com/openeuler/bishengjdk-8.git",
+        "version": "8.492.8.0.13"
+      }
     },
     {
       "timestamp": "2026-06-17T03:01:30",
@@ -248,9 +254,20 @@
       "action": "读取 README.md、doc/building.md、common/autoconf/libraries.m4 了解构建说明和依赖",
       "result": "success",
       "details": {
-        "files_read": ["README.md", "README_EN.md", "doc/building.md", "common/autoconf/libraries.m4", "Makefile", "configure", "version.txt"],
+        "files_read": [
+          "README.md",
+          "README_EN.md",
+          "doc/building.md",
+          "common/autoconf/libraries.m4",
+          "Makefile",
+          "configure",
+          "version.txt"
+        ],
         "build_system": "configure && make",
-        "platforms": ["Linux/AArch64", "Linux/x86_64"]
+        "platforms": [
+          "Linux/AArch64",
+          "Linux/x86_64"
+        ]
       }
     },
     {
@@ -269,7 +286,9 @@
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录及配置",
       "result": "not_configured",
-      "details": {"devcontainer_dir": null}
+      "details": {
+        "devcontainer_dir": null
+      }
     },
     {
       "timestamp": "2026-06-17T03:04:00",
@@ -309,7 +328,9 @@
       "step": "build_configure_attempt",
       "action": "首次执行 bash ./configure",
       "result": "failed",
-      "details": {"error": "Could not find fontconfig!"}
+      "details": {
+        "error": "Could not find fontconfig!"
+      }
     },
     {
       "timestamp": "2026-06-17T03:08:10",
@@ -372,7 +393,15 @@
       "step": "smoke_test",
       "action": "执行冒烟测试：多文件编译、JAR 打包、程序运行",
       "result": "success",
-      "details": {"tests": ["javac 编译", "java 运行", "jar 打包", "keytool 工具"], "all_passed": true}
+      "details": {
+        "tests": [
+          "javac 编译",
+          "java 运行",
+          "jar 打包",
+          "keytool 工具"
+        ],
+        "all_passed": true
+      }
     },
     {
       "timestamp": "2026-06-17T03:13:00",
@@ -396,7 +425,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "success",
-      "details": {"output_file": "verification_report_WSL_bishengjdk-8_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_bishengjdk-8_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -429,9 +460,18 @@
         }
       ],
       "duration_breakdown": [
-        {"step": "configure (首次，失败)", "duration_seconds": 2},
-        {"step": "configure (重试)", "duration_seconds": 3},
-        {"step": "make all (14核)", "duration_seconds": 217}
+        {
+          "step": "configure (首次，失败)",
+          "duration_seconds": 2
+        },
+        {
+          "step": "configure (重试)",
+          "duration_seconds": 3
+        },
+        {
+          "step": "make all (14核)",
+          "duration_seconds": 217
+        }
       ]
     },
     "ut": {
@@ -445,7 +485,12 @@
       "smoke_test_after_install": {
         "executed": true,
         "status": "success",
-        "tests": ["javac 编译", "java 运行", "jar 打包", "keytool 工具"],
+        "tests": [
+          "javac 编译",
+          "java 运行",
+          "jar 打包",
+          "keytool 工具"
+        ],
         "duration_seconds": 5
       }
     },
@@ -491,5 +536,19 @@
       "source": "openEuler 24.03 仓库无 jtreg 包，GitHub release 下载不可达"
     }
   ],
-  "session_export_file": "verification_report_WSL_bishengjdk-8_20260617.json"
+  "session_export_file": "verification_report_WSL_bishengjdk-8_20260617.json",
+  "static_analysis": {
+    "pre_commit": {
+      "configured": false,
+      "reason": "仓库未配置 .pre-commit-config.yaml"
+    },
+    "lint_runner": {
+      "configured": false,
+      "reason": "仓库未配置 .lint-runner.* 或 lint-runner.config.*"
+    }
+  },
+  "devcontainer": {
+    "configured": false,
+    "reason": "仓库未配置 .devcontainer/ 目录"
+  }
 }

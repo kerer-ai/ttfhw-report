@@ -588,5 +588,66 @@
       "source": "tc_ge_irrun_open_api_0014.bin 输出 + docs/quick_install.md 场景说明"
     }
   ],
-  "session_export_file": "verification_session_WSL_metadef_20260617.md"
+  "session_export_file": "verification_session_WSL_metadef_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置(12个hooks，4通过/1跳过/7失败)，仓库提交代码未通过自身 pre-commit；未检测到 lint-runner 配置。",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "失败",
+      "duration_seconds": 91,
+      "total_hooks": 12,
+      "passed": 4,
+      "failed": 7,
+      "skipped": 1,
+      "failures": [
+        {
+          "hook_name": "trailing-whitespace",
+          "file": "多个文件",
+          "error": "存在行尾多余空白(autofix 会修改大量文件)"
+        },
+        {
+          "hook_name": "end-of-file-fixer",
+          "file": "多个文件",
+          "error": "文件末尾空白/换行不规范"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "数百个 .h/.cc 文件",
+          "error": "代码格式不符合 .clang-format 规则(hook 自动改写文件)"
+        },
+        {
+          "hook_name": "ruff-check",
+          "file": "Python 文件",
+          "error": "ruff 检查未通过(自动修复)"
+        },
+        {
+          "hook_name": "ruff-format",
+          "file": "Python 文件",
+          "error": "ruff 格式化未通过(1 file reformatted)"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "classify_rule.yaml/docs/api/*.md/build.sh 等",
+          "error": "拼写问题(commiter/BuildIn/resultIn/datas/build-in/dirver/registerd 等)，exit 65"
+        },
+        {
+          "hook_name": "oat-check",
+          "file": "OAT 合规检查",
+          "error": "1 处 License Header Invalid，exit 1"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer，未发现 .devcontainer 目录"
+  }
 }

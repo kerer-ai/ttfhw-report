@@ -301,8 +301,18 @@
       "action": "检查 pre-commit 和 lint-runner 配置",
       "result": "两者均未配置",
       "details": {
-        "pre_commit": {"configured": false, "config_file": null},
-        "lint_runner": {"configured": false, "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+        "pre_commit": {
+          "configured": false,
+          "config_file": null
+        },
+        "lint_runner": {
+          "configured": false,
+          "searched_patterns": [
+            ".lint-runner.yaml",
+            ".lint-runner.json",
+            "lint-runner.config.*"
+          ]
+        }
       }
     },
     {
@@ -310,21 +320,27 @@
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录",
       "result": "未配置",
-      "details": {"configured": false}
+      "details": {
+        "configured": false
+      }
     },
     {
       "timestamp": "2026-06-18T10:00:40",
       "step": "image_selection",
       "action": "拉取openEuler 24.03 LTS镜像",
       "result": "成功（本地已缓存）",
-      "details": {"selection_reason": "README推荐Ubuntu但Docker Hub不可达，默认使用openEuler"}
+      "details": {
+        "selection_reason": "README推荐Ubuntu但Docker Hub不可达，默认使用openEuler"
+      }
     },
     {
       "timestamp": "2026-06-18T10:00:42",
       "step": "container_setup",
       "action": "启动容器，挂载仓库目录到/workspace",
       "result": "成功",
-      "details": {"container": "ttfhw-devmon-env"}
+      "details": {
+        "container": "ttfhw-devmon-env"
+      }
     },
     {
       "timestamp": "2026-06-18T10:01:00",
@@ -355,56 +371,77 @@
       "step": "build_attempt_1",
       "action": "首次编译（默认use_shm=true, j12）",
       "result": "失败——lua头文件缺失 + sqlite3符号未定义",
-      "details": {"targets": "~260/1083", "error": "lauxlib.h + sqlite3_preupdate_hook"}
+      "details": {
+        "targets": "~260/1083",
+        "error": "lauxlib.h + sqlite3_preupdate_hook"
+      }
     },
     {
       "timestamp": "2026-06-18T10:07:35",
       "step": "problem_resolution_1",
       "action": "安装luajit-devel + 源码编译sqlite3(with session扩展)",
       "result": "已解决",
-      "details": {"duration": "325s"}
+      "details": {
+        "duration": "325s"
+      }
     },
     {
       "timestamp": "2026-06-18T10:12:55",
       "step": "build_attempt_2",
       "action": "第二次编译（luajit + sqlite3修复后）",
       "result": "失败——lua_isinteger/lua_rawlen未声明",
-      "details": {"targets": "~280/1083", "error": "luajit(Lua 5.1)不支持Lua 5.3+ API"}
+      "details": {
+        "targets": "~280/1083",
+        "error": "luajit(Lua 5.1)不支持Lua 5.3+ API"
+      }
     },
     {
       "timestamp": "2026-06-18T10:15:35",
       "step": "problem_resolution_2",
       "action": "移除luajit，安装lua-devel(Lua 5.4)",
       "result": "部分解决——引入新问题",
-      "details": {"new_problem": "主项目仅查找luajit pkg-config，lua.pc不被识别"}
+      "details": {
+        "new_problem": "主项目仅查找luajit pkg-config，lua.pc不被识别"
+      }
     },
     {
       "timestamp": "2026-06-18T10:15:40",
       "step": "build_attempt_3",
       "action": "第三次编译（Lua 5.4）",
       "result": "失败——libmcapp.so链接缺少-llua",
-      "details": {"targets": "~320/1083", "error": "lua_rawgeti等符号undefined reference"}
+      "details": {
+        "targets": "~320/1083",
+        "error": "lua_rawgeti等符号undefined reference"
+      }
     },
     {
       "timestamp": "2026-06-18T10:17:12",
       "step": "problem_resolution_3",
       "action": "创建luajit.pc重定向到lua5.4 + lua5.4.pc符号链接",
       "result": "已解决",
-      "details": {"solution": "pkg-config luajit → 指向Lua 5.4 -llua5.4"}
+      "details": {
+        "solution": "pkg-config luajit → 指向Lua 5.4 -llua5.4"
+      }
     },
     {
       "timestamp": "2026-06-18T10:17:15",
       "step": "build_attempt_4",
       "action": "第四次编译（luajit.pc重定向后）",
       "result": "失败——circular include导致OpticalModule_Oem未声明",
-      "details": {"targets": "735/1083", "error": "power.h:42 OpticalModule_Oem has not been declared"}
+      "details": {
+        "targets": "735/1083",
+        "error": "power.h:42 OpticalModule_Oem has not been declared"
+      }
     },
     {
       "timestamp": "2026-06-18T10:20:50",
       "step": "build_attempt_5",
       "action": "第五次编译（尝试unidev=true绕过）",
       "result": "失败——相同错误",
-      "details": {"targets": "735/1122", "error": "unidev不改变该代码路径"}
+      "details": {
+        "targets": "735/1122",
+        "error": "unidev不改变该代码路径"
+      }
     },
     {
       "timestamp": "2026-06-18T10:24:40",
@@ -418,7 +455,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_devmon_20260618.json"}
+      "details": {
+        "output_file": "verification_report_WSL_devmon_20260618.json"
+      }
     }
   ],
   "final_results": {
@@ -455,11 +494,31 @@
       "attempts": 5,
       "max_targets_built": "735/1083",
       "artifacts_partial": [
-        {"name": "libmcbase.so", "path": "builddir/subprojects/libmcpp/libraries/mcbase/src/libmcbase.so.1.0.0", "size": "50 MB"},
-        {"name": "libmcengine.so", "path": "builddir/subprojects/libmcpp/libraries/mcengine/src/libmcengine.so", "size": "43 MB"},
-        {"name": "libmcexpr.so", "path": "builddir/subprojects/libmcpp/libraries/mcexpr/src/libmcexpr.so", "size": "18 MB"},
-        {"name": "libmcdbus.so", "path": "builddir/subprojects/libmcpp/libraries/mcdbus/src/libmcdbus.so", "size": "10 MB"},
-        {"name": "libsecfile.so", "path": "builddir/subprojects/libmcpp/libraries/secfile/src/libsecfile.so", "size": "0.8 MB"}
+        {
+          "name": "libmcbase.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcbase/src/libmcbase.so.1.0.0",
+          "size": "50 MB"
+        },
+        {
+          "name": "libmcengine.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcengine/src/libmcengine.so",
+          "size": "43 MB"
+        },
+        {
+          "name": "libmcexpr.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcexpr/src/libmcexpr.so",
+          "size": "18 MB"
+        },
+        {
+          "name": "libmcdbus.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcdbus/src/libmcdbus.so",
+          "size": "10 MB"
+        },
+        {
+          "name": "libsecfile.so",
+          "path": "builddir/subprojects/libmcpp/libraries/secfile/src/libsecfile.so",
+          "size": "0.8 MB"
+        }
       ],
       "blocking_error": {
         "file": "subprojects/libmcpp/libraries/mcbase/include/mc/db/table.h",
@@ -535,5 +594,32 @@
       "source": "component_drivers子项目上游代码缺陷——循环头文件依赖。更深层：devmon与libmcpp子项目的SHM模板接口不一致"
     }
   ],
-  "session_export_file": "verification_report_WSL_devmon_20260618.json"
+  "session_export_file": "verification_report_WSL_devmon_20260618.json",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置静态检查工具（无pre-commit配置，无lint-runner配置）",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null,
+      "total_hooks": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer 开发容器"
+  }
 }

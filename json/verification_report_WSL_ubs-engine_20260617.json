@@ -1049,5 +1049,34 @@
       }
     ],
     "session_export_file": "verification_session_WSL_ubs-engine_20260617.md"
+  },
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks），未检测到 lint-runner 配置。pre-commit hooks 包含构建检查和代码格式/静态分析",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "已配置（未在容器中执行，需要完整构建环境）",
+      "duration_seconds": 0,
+      "total_hooks": 5,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 5,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "active_linters": [],
+      "result": "unknown"
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer 开发容器"
   }
 }

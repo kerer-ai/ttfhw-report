@@ -276,140 +276,212 @@
       "step": "start",
       "action": "克隆仓库并开始验证流程",
       "result": "已启动",
-      "details": {"repo": "https://gitcode.com/cann/graph-autofusion.git", "files": 3396}
+      "details": {
+        "repo": "https://gitcode.com/cann/graph-autofusion.git",
+        "files": 3396
+      }
     },
     {
       "timestamp": "2026-06-17T11:00:00",
       "step": "document_reading",
       "action": "从 README.md 入口逐层阅读 docs/zh/build.md、quick_install.md、AGENTS.md、check_env.sh、CMakeLists.txt",
       "result": "成功",
-      "details": {"sections_read": ["快速入门", "源码构建", "环境部署", "构建与测试"]}
+      "details": {
+        "sections_read": [
+          "快速入门",
+          "源码构建",
+          "环境部署",
+          "构建与测试"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T11:06:00",
       "step": "static_analysis_scan",
       "action": "检查 pre-commit 配置并执行 pre-commit run --all-files",
       "result": "已配置(部分通过)",
-      "details": {"config_file": ".pre-commit-config.yaml", "total_hooks": 12, "passed": 5, "failed": 7, "skipped": 0}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "total_hooks": 12,
+        "passed": 5,
+        "failed": 7,
+        "skipped": 0
+      }
     },
     {
       "timestamp": "2026-06-17T11:07:30",
       "step": "static_analysis_scan",
       "action": "检查 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T11:07:30",
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录及配置",
       "result": "未配置",
-      "details": {"searched": [".devcontainer/", ".devcontainer.json"]}
+      "details": {
+        "searched": [
+          ".devcontainer/",
+          ".devcontainer.json"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T11:08:00",
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "AscendHub CANN 开发镜像",
-      "details": {"selection_reason": "quick_install.md 方式二明确推荐该镜像 (X86, 预集成 CANN)"}
+      "details": {
+        "selection_reason": "quick_install.md 方式二明确推荐该镜像 (X86, 预集成 CANN)"
+      }
     },
     {
       "timestamp": "2026-06-17T11:08:30",
       "step": "container_setup",
       "action": "拉取镜像并启动容器 ttfhw-graph-autofusion-env",
       "result": "成功",
-      "details": {"image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11", "build_only": true}
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.1-910-ubuntu22.04-py3.11",
+        "build_only": true
+      }
     },
     {
       "timestamp": "2026-06-17T11:11:00",
       "step": "dependency_installation",
       "action": "安装 requirements-dev.txt 等 Python 依赖",
       "result": "成功",
-      "details": {"pip_mirror": "清华源", "packages_installed": 30}
+      "details": {
+        "pip_mirror": "清华源",
+        "packages_installed": 30
+      }
     },
     {
       "timestamp": "2026-06-17T11:13:00",
       "step": "build_attempt",
       "action": "首次构建 (CANN 9.0.0-beta.1)",
       "result": "失败",
-      "details": {"error": "bisheng 不支持 dav-3510 + SkSystemArgs 未定义"}
+      "details": {
+        "error": "bisheng 不支持 dav-3510 + SkSystemArgs 未定义"
+      }
     },
     {
       "timestamp": "2026-06-17T11:18:00",
       "step": "problem_resolution",
       "action": "定位: 镜像 CANN 9.0.0-beta.1 版本过旧, master 分支需更新 CANN",
       "result": "已定位",
-      "details": {"source": "docs/zh/quick_install.md 方式三 + build.md 4.2"}
+      "details": {
+        "source": "docs/zh/quick_install.md 方式三 + build.md 4.2"
+      }
     },
     {
       "timestamp": "2026-06-17T11:30:00",
       "step": "problem_resolution",
       "action": "运行 init_env.sh 自动安装最新 CANN",
       "result": "失败",
-      "details": {"error": "init_env.sh 硬编码 CANN_VERSION=9.0.0, master 镜像已仅提供 9.1.0 (404)"}
+      "details": {
+        "error": "init_env.sh 硬编码 CANN_VERSION=9.0.0, master 镜像已仅提供 9.1.0 (404)"
+      }
     },
     {
       "timestamp": "2026-06-17T11:52:00",
       "step": "problem_resolution",
       "action": "手动下载并安装 CANN Toolkit 9.1.0 (master 最新版)",
       "result": "已解决",
-      "details": {"toolkit": "Ascend-cann-toolkit_9.1.0_linux-x86_64.run", "install_path": "/usr/local/Ascend"}
+      "details": {
+        "toolkit": "Ascend-cann-toolkit_9.1.0_linux-x86_64.run",
+        "install_path": "/usr/local/Ascend"
+      }
     },
     {
       "timestamp": "2026-06-17T11:55:29",
       "step": "build_retry",
       "action": "CANN 9.1.0 下重新构建",
       "result": "成功",
-      "details": {"concurrency": 8, "concurrency_ratio": "40% (<=60% 约束)", "duration_seconds": 4976}
+      "details": {
+        "concurrency": 8,
+        "concurrency_ratio": "40% (<=60% 约束)",
+        "duration_seconds": 4976
+      }
     },
     {
       "timestamp": "2026-06-17T13:01:00",
       "step": "install_run_pkg",
       "action": "安装编译生成的 .run 包 (UT 前置要求)",
       "result": "成功",
-      "details": {"run_pkg": "cann-graph-autofusion_9.1.0_linux-x86_64.run", "options": "--full --quiet --pylocal"}
+      "details": {
+        "run_pkg": "cann-graph-autofusion_9.1.0_linux-x86_64.run",
+        "options": "--full --quiet --pylocal"
+      }
     },
     {
       "timestamp": "2026-06-17T13:02:00",
       "step": "problem_resolution",
       "action": "修复 UT 阶段 pip 网络阻塞: 配置全局清华源 + 安装 pytest-xdist",
       "result": "已解决",
-      "details": {"config": "/root/.pip/pip.conf", "missing_pkg": "pytest-xdist>=3.0.0"}
+      "details": {
+        "config": "/root/.pip/pip.conf",
+        "missing_pkg": "pytest-xdist>=3.0.0"
+      }
     },
     {
       "timestamp": "2026-06-17T13:27:00",
       "step": "ut_execution",
       "action": "superkernel py UT",
       "result": "失败",
-      "details": {"error": "No module named 'impl.ops_math' (pows op 在 CANN 9.1.0 中已移除, 版本冲突)"}
+      "details": {
+        "error": "No module named 'impl.ops_math' (pows op 在 CANN 9.1.0 中已移除, 版本冲突)"
+      }
     },
     {
       "timestamp": "2026-06-17T13:34:40",
       "step": "ut_execution",
       "action": "superkernel cpp UT (gtest)",
       "result": "成功",
-      "details": {"total": 1027, "passed": 1027, "failed": 0, "duration_seconds": 227}
+      "details": {
+        "total": 1027,
+        "passed": 1027,
+        "failed": 0,
+        "duration_seconds": 227
+      }
     },
     {
       "timestamp": "2026-06-17T13:39:02",
       "step": "ut_execution",
       "action": "autofuse_framework UT (gtest)",
       "result": "成功",
-      "details": {"total": 2164, "passed": 2150, "skipped": 14, "failed": 0, "duration_seconds": 6575}
+      "details": {
+        "total": 2164,
+        "passed": 2150,
+        "skipped": 14,
+        "failed": 0,
+        "duration_seconds": 6575
+      }
     },
     {
       "timestamp": "2026-06-17T15:25:00",
       "step": "sample_execution",
       "action": "运行 super_kernel runtime_ascendc_only 样例",
       "result": "失败",
-      "details": {"error": "acl_init failed (return 500000)", "reason": "仅编译容器无 NPU 驱动/设备"}
+      "details": {
+        "error": "acl_init failed (return 500000)",
+        "reason": "仅编译容器无 NPU 驱动/设备"
+      }
     },
     {
       "timestamp": "2026-06-17T15:32:00",
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_graph-autofusion_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_graph-autofusion_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -433,9 +505,31 @@
       "skipped": 14,
       "failed": 0,
       "module_results": [
-        {"module": "superkernel cpp UT", "status": "success", "total": 1027, "passed": 1027, "failed": 0, "duration_seconds": 227},
-        {"module": "autofuse_framework UT", "status": "success", "total": 2164, "passed": 2150, "skipped": 14, "failed": 0, "duration_seconds": 6575},
-        {"module": "superkernel py UT", "status": "failed", "total": 0, "passed": 0, "failed": 0, "error": "pytest 采集阶段 ImportError: No module named 'impl.ops_math' (pows op 仅存在于 CANN 9.0.0-beta.1, 与构建所需 CANN 9.1.0 版本冲突)"}
+        {
+          "module": "superkernel cpp UT",
+          "status": "success",
+          "total": 1027,
+          "passed": 1027,
+          "failed": 0,
+          "duration_seconds": 227
+        },
+        {
+          "module": "autofuse_framework UT",
+          "status": "success",
+          "total": 2164,
+          "passed": 2150,
+          "skipped": 14,
+          "failed": 0,
+          "duration_seconds": 6575
+        },
+        {
+          "module": "superkernel py UT",
+          "status": "failed",
+          "total": 0,
+          "passed": 0,
+          "failed": 0,
+          "error": "pytest 采集阶段 ImportError: No module named 'impl.ops_math' (pows op 仅存在于 CANN 9.0.0-beta.1, 与构建所需 CANN 9.1.0 版本冲突)"
+        }
       ],
       "failures": []
     },
@@ -466,13 +560,41 @@
         "failed": 7,
         "skipped": 0,
         "failures": [
-          {"hook_name": "trailing-whitespace", "file": "多个文件", "error": "存在多余尾部空白 (自动修复)"},
-          {"hook_name": "end-of-file-fixer", "file": "多个文件", "error": "文件末尾换行问题 (自动修复)"},
-          {"hook_name": "clang-format", "file": "C++/asc 文件", "error": "不符合 .clang-format 规范"},
-          {"hook_name": "ruff-check", "file": "autofuse/compiler/python/asc_codegen_compile.py 等", "error": "F841/E712 等 lint 问题"},
-          {"hook_name": "ruff-format", "file": "Python 文件", "error": "格式不符合 ruff"},
-          {"hook_name": "codespell", "file": "autofuse/graph_metadef/graph/normal_graph/operator_impl.cc 等", "error": "拼写: ownner/vistor/faild/build-in 等"},
-          {"hook_name": "OAT Compliance Check", "file": "13 个文件", "error": "License Header Invalid (CANN-1.0/InvalidLicense/NoLicenseHeader)"}
+          {
+            "hook_name": "trailing-whitespace",
+            "file": "多个文件",
+            "error": "存在多余尾部空白 (自动修复)"
+          },
+          {
+            "hook_name": "end-of-file-fixer",
+            "file": "多个文件",
+            "error": "文件末尾换行问题 (自动修复)"
+          },
+          {
+            "hook_name": "clang-format",
+            "file": "C++/asc 文件",
+            "error": "不符合 .clang-format 规范"
+          },
+          {
+            "hook_name": "ruff-check",
+            "file": "autofuse/compiler/python/asc_codegen_compile.py 等",
+            "error": "F841/E712 等 lint 问题"
+          },
+          {
+            "hook_name": "ruff-format",
+            "file": "Python 文件",
+            "error": "格式不符合 ruff"
+          },
+          {
+            "hook_name": "codespell",
+            "file": "autofuse/graph_metadef/graph/normal_graph/operator_impl.cc 等",
+            "error": "拼写: ownner/vistor/faild/build-in 等"
+          },
+          {
+            "hook_name": "OAT Compliance Check",
+            "file": "13 个文件",
+            "error": "License Header Invalid (CANN-1.0/InvalidLicense/NoLicenseHeader)"
+          }
         ]
       },
       "lint_runner": {
@@ -533,5 +655,66 @@
       "source": "docs/zh/quick_install.md 方式二场景说明"
     }
   ],
-  "session_export_file": "verification_report_WSL_graph-autofusion_20260617.md"
+  "session_export_file": "verification_report_WSL_graph-autofusion_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置(12 个 hooks, 5 通过 7 失败), 未检测到 lint-runner 配置; 仓库未配置 devcontainer",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 396,
+      "total_hooks": 12,
+      "passed": 5,
+      "failed": 7,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "trailing-whitespace",
+          "file": "多个文件",
+          "error": "存在多余尾部空白 (自动修复)"
+        },
+        {
+          "hook_name": "end-of-file-fixer",
+          "file": "多个文件",
+          "error": "文件末尾换行问题 (自动修复)"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "C++/asc 文件",
+          "error": "不符合 .clang-format 规范"
+        },
+        {
+          "hook_name": "ruff-check",
+          "file": "autofuse/compiler/python/asc_codegen_compile.py 等",
+          "error": "F841/E712 等 lint 问题"
+        },
+        {
+          "hook_name": "ruff-format",
+          "file": "Python 文件",
+          "error": "格式不符合 ruff"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "autofuse/graph_metadef/graph/normal_graph/operator_impl.cc 等",
+          "error": "拼写: ownner/vistor/faild/build-in 等"
+        },
+        {
+          "hook_name": "OAT Compliance Check",
+          "file": "13 个文件",
+          "error": "License Header Invalid (CANN-1.0/InvalidLicense/NoLicenseHeader)"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 开发容器能力"
+  }
 }

@@ -802,5 +802,27 @@
     "configured": false,
     "config_path": "未找到 .devcontainer/ 目录",
     "result": "仓库不具备 devcontainer 开发容器能力"
+  },
+  "static_analysis": {
+    "enabled": false,
+    "summary": "unknown",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "active_linters": [],
+      "result": "unknown"
+    }
   }
 }

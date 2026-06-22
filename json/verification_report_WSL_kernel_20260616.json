@@ -1260,5 +1260,34 @@
         "source": "环境限制"
       }
     ]
+  },
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置静态检查工具（无 .pre-commit-config.yaml，无 lint-runner 配置）。内核仓库依赖内核自身的构建时检查（C=1/C=2 sparse 检查、coccicheck、clang-analyzer 等）",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": 0,
+      "total_hooks": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "active_linters": [],
+      "result": "unknown"
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库不包含 .devcontainer 目录，未配置 devcontainer 开发容器"
   }
 }

@@ -990,5 +990,34 @@
       }
     ],
     "session_export_file": "verification_session_WSL_ubs-comm_20260617.md"
+  },
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库配置了 pre-commit（5个hooks），但未安装 pre-commit 工具，未配置 lint-runner",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "未执行",
+      "duration_seconds": 0,
+      "total_hooks": 5,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 5,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "active_linters": [],
+      "result": "unknown"
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer"
   }
 }

@@ -421,5 +421,46 @@
       "source": ".pre-commit-config.yaml clang-tidy hook"
     }
   ],
-  "session_export_file": "verification_session_WSL_ubturbo_20260618.md"
+  "session_export_file": "verification_session_WSL_ubturbo_20260618.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks，2通过3失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 120,
+      "total_hooks": 5,
+      "passed": 2,
+      "failed": 3,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "run-build-test",
+          "file": "N/A",
+          "error": "run_dt.sh 脚本不存在"
+        },
+        {
+          "hook_name": "clang-tidy",
+          "file": "N/A",
+          "error": "缺少 compilation database (cmake-build-release 目录)"
+        },
+        {
+          "hook_name": "clang-tidy-test",
+          "file": "N/A",
+          "error": "缺少 compilation database (cmake-build-debug 目录)"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

@@ -1801,5 +1801,27 @@
   "devcontainer": {
     "available": false,
     "config_files": []
+  },
+  "static_analysis": {
+    "enabled": false,
+    "summary": "unknown",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "active_linters": [],
+      "result": "unknown"
+    }
   }
 }

@@ -459,5 +459,17 @@
       "source": "database/init.sql"
     }
   ],
-  "session_export_file": ""
+  "session_export_file": "",
+  "static_analysis": {
+    "enabled": false,
+    "pre_commit": {
+      "configured": false
+    },
+    "lint_runner": {
+      "configured": false
+    }
+  },
+  "devcontainer": {
+    "enabled": false
+  }
 }

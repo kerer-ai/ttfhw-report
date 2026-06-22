@@ -281,56 +281,106 @@
       "step": "document_reading",
       "action": "读取 README.md 了解项目概览",
       "result": "成功",
-      "details": {"file": "README.md", "sections_read": ["概述", "核心组件", "目录结构", "快速入门", "学习教程"]}
+      "details": {
+        "file": "README.md",
+        "sections_read": [
+          "概述",
+          "核心组件",
+          "目录结构",
+          "快速入门",
+          "学习教程"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:07:00",
       "step": "document_reading",
       "action": "读取 doc/install_run.md 了解编译和UT入口",
       "result": "成功",
-      "details": {"file": "doc/install_run.md", "sections_read": ["环境准备", "编译", "run包安装", "软件使用"]}
+      "details": {
+        "file": "doc/install_run.md",
+        "sections_read": [
+          "环境准备",
+          "编译",
+          "run包安装",
+          "软件使用"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:07:30",
       "step": "document_reading",
       "action": "读取 CMakeLists.txt 和构建脚本确认编译参数",
       "result": "成功",
-      "details": {"files": ["CMakeLists.txt", "script/build.sh", "script/build_and_pack_run.sh", "script/run_ut.sh"]}
+      "details": {
+        "files": [
+          "CMakeLists.txt",
+          "script/build.sh",
+          "script/build_and_pack_run.sh",
+          "script/run_ut.sh"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:08:00",
       "step": "document_reading",
       "action": "读取 .gitmodules 确认第三方依赖",
       "result": "成功",
-      "details": {"submodules": ["memfabric_hybrid", "spdlog", "cpp-httplib", "nlohmann/json", "prometheus-cpp-lite", "googletest", "mockcpp"]}
+      "details": {
+        "submodules": [
+          "memfabric_hybrid",
+          "spdlog",
+          "cpp-httplib",
+          "nlohmann/json",
+          "prometheus-cpp-lite",
+          "googletest",
+          "mockcpp"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:07:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 13}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 13
+      }
     },
     {
       "timestamp": "2026-06-17T09:07:00",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "部分通过",
-      "details": {"passed": 7, "failed": 5, "skipped": 1}
+      "details": {
+        "passed": 7,
+        "failed": 5,
+        "skipped": 1
+      }
     },
     {
       "timestamp": "2026-06-17T09:07:30",
       "step": "static_analysis_scan",
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:08:00",
       "step": "devcontainer_scan",
       "action": "检查 .devcontainer 目录及 Dockerfile",
       "result": "未配置",
-      "details": {"config_dir": null, "files": []}
+      "details": {
+        "config_dir": null,
+        "files": []
+      }
     },
     {
       "timestamp": "2026-06-17T09:08:00",
@@ -346,84 +396,138 @@
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "docker.m.daocloud.io/library/ubuntu:22.04", "note": "Docker Hub 超时，通过 daocloud 镜像"}
+      "details": {
+        "image": "docker.m.daocloud.io/library/ubuntu:22.04",
+        "note": "Docker Hub 超时，通过 daocloud 镜像"
+      }
     },
     {
       "timestamp": "2026-06-17T09:10:00",
       "step": "dependency_installation",
       "action": "安装文档列出的构建依赖",
       "result": "成功",
-      "details": {"packages": ["cmake 3.22.1", "gcc-11 11.4.0", "python3.11 3.11.15", "pybind11 2.10.3", "ninja 1.10.1", "make 4.3", "git 2.34.1"]}
+      "details": {
+        "packages": [
+          "cmake 3.22.1",
+          "gcc-11 11.4.0",
+          "python3.11 3.11.15",
+          "pybind11 2.10.3",
+          "ninja 1.10.1",
+          "make 4.3",
+          "git 2.34.1"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:34:00",
       "step": "submodule_initialization",
       "action": "初始化 git 子模块（使用 gitcode/gitclone 镜像替换 GitHub）",
       "result": "部分需要手动修复",
-      "details": {"resolved": ["spdlog", "cpp-httplib", "nlohmann/json", "memfabric_hybrid", "googletest"], "need_fix": ["prometheus-cpp-lite", "mockcpp"]}
+      "details": {
+        "resolved": [
+          "spdlog",
+          "cpp-httplib",
+          "nlohmann/json",
+          "memfabric_hybrid",
+          "googletest"
+        ],
+        "need_fix": [
+          "prometheus-cpp-lite",
+          "mockcpp"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:36:00",
       "step": "build_attempt",
       "action": "首次构建尝试",
       "result": "失败",
-      "details": {"error": "prometheus-cpp-lite gitclone版本(v2)目录结构与仓库期望不兼容"}
+      "details": {
+        "error": "prometheus-cpp-lite gitclone版本(v2)目录结构与仓库期望不兼容"
+      }
     },
     {
       "timestamp": "2026-06-17T09:37:00",
       "step": "problem_resolution",
       "action": "创建 prometheus-cpp-lite 目录兼容 symlinks",
       "result": "部分解决",
-      "details": {"solution": "symlink simpleapi/include→include, core/include→include"}
+      "details": {
+        "solution": "symlink simpleapi/include→include, core/include→include"
+      }
     },
     {
       "timestamp": "2026-06-17T09:38:00",
       "step": "build_attempt",
       "action": "第2-3次构建尝试",
       "result": "失败",
-      "details": {"errors": ["tcp_socket.h 缺失(新版依赖)", "std::to_chars ABI 不兼容"]}
+      "details": {
+        "errors": [
+          "tcp_socket.h 缺失(新版依赖)",
+          "std::to_chars ABI 不兼容"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T09:39:00",
       "step": "problem_resolution",
       "action": "从 ghproxy.net 下载 prometheus-cpp-lite 正确版本(commit 48d09c4)替换",
       "result": "已解决",
-      "details": {"solution": "ghproxy.net 下载 GitHub tarball"}
+      "details": {
+        "solution": "ghproxy.net 下载 GitHub tarball"
+      }
     },
     {
       "timestamp": "2026-06-17T09:39:26",
       "step": "build_attempt",
       "action": "第4次构建尝试（正确 prometheus-cpp-lite）",
       "result": "失败",
-      "details": {"error": "spdlogger4c.h:55 int32_t 未声明 (spdlog v1.15.3 不传递 <cstdint>)"}
+      "details": {
+        "error": "spdlogger4c.h:55 int32_t 未声明 (spdlog v1.15.3 不传递 <cstdint>)"
+      }
     },
     {
       "timestamp": "2026-06-17T09:41:00",
       "step": "problem_resolution",
       "action": "设置 CXXFLAGS=\"-include cstdint\" 环境变量规避 int32_t 问题",
       "result": "已解决",
-      "details": {"solution": "export CXXFLAGS=\"-include cstdint\""}
+      "details": {
+        "solution": "export CXXFLAGS=\"-include cstdint\""
+      }
     },
     {
       "timestamp": "2026-06-17T09:41:16",
       "step": "build_retry",
       "action": "第5次构建（RELEASE模式）",
       "result": "成功",
-      "details": {"concurrency": 12, "concurrency_ratio": "60%", "duration_seconds": 95}
+      "details": {
+        "concurrency": 12,
+        "concurrency_ratio": "60%",
+        "duration_seconds": 95
+      }
     },
     {
       "timestamp": "2026-06-17T09:45:11",
       "step": "ut_execution",
       "action": "执行单元测试（DEBUG模式 + 覆盖率）",
       "result": "成功",
-      "details": {"total": 158, "passed": 158, "failed": 0, "errors": 0, "lines_coverage": "78.6%", "branches_coverage": "44.3%", "duration_seconds": 237}
+      "details": {
+        "total": 158,
+        "passed": 158,
+        "failed": 0,
+        "errors": 0,
+        "lines_coverage": "78.6%",
+        "branches_coverage": "44.3%",
+        "duration_seconds": 237
+      }
     },
     {
       "timestamp": "2026-06-17T09:49:30",
       "step": "sample_execution",
       "action": "尝试执行 C++ 和 Python 样例",
       "result": "无法执行",
-      "details": {"reason": "样例需要 Ascend NPU 硬件、CANN 软件栈和完整 MemFabric 运行时，当前 x86_64 Docker 容器不具备这些条件"}
+      "details": {
+        "reason": "样例需要 Ascend NPU 硬件、CANN 软件栈和完整 MemFabric 运行时，当前 x86_64 Docker 容器不具备这些条件"
+      }
     },
     {
       "timestamp": "2026-06-17T09:50:00",
@@ -437,7 +541,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_memcache_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_memcache_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -613,5 +719,56 @@
       "source": "样例依赖完整的 MemFabric + Ascend NPU 运行时"
     }
   ],
-  "session_export_file": "verification_report_WSL_memcache_20260617.json"
+  "session_export_file": "verification_report_WSL_memcache_20260617.json",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（13个hooks，7通过5失败1跳过），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 42,
+      "total_hooks": 13,
+      "passed": 7,
+      "failed": 5,
+      "skipped": 1,
+      "failures": [
+        {
+          "hook_name": "ruff-check",
+          "file": "多个 Python 文件",
+          "error": "Python 代码风格检查未通过"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "多个文件",
+          "error": "拼写检查发现拼写错误"
+        },
+        {
+          "hook_name": "pylint",
+          "file": "多个 Python 文件",
+          "error": "Python 代码质量检查未通过"
+        },
+        {
+          "hook_name": "bandit",
+          "file": "多个 Python 文件",
+          "error": "安全漏洞检查发现 Low severity 问题 2 个"
+        },
+        {
+          "hook_name": "typos",
+          "file": "test/python/memcache/mock_server/server.py:264,266",
+          "error": "typos 发现 'datas' 应为 'data'"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer，未提供 Dockerfile"
+  }
 }

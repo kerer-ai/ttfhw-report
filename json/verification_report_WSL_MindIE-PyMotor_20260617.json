@@ -473,5 +473,30 @@
       "source": "pytest 收集阶段的 ImportError"
     }
   ],
-  "session_export_file": "verification_session_WSL_MindIE-PyMotor_20260617.md"
+  "session_export_file": "verification_session_WSL_MindIE-PyMotor_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（15个hooks），未检测到 lint-runner 配置。pre-commit 包含 Python 代码质量检查（ruff、pylint、bandit）、C++ 代码格式化（clang-format）、拼写检查（codespell、typos）和日志质量检查等",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "已配置（未在容器中执行，因为 apt 锁竞争问题）",
+      "duration_seconds": 0,
+      "total_hooks": 15,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer"
+  }
 }

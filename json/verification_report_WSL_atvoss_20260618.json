@@ -236,7 +236,11 @@
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
       }
     },
     {
@@ -292,7 +296,12 @@
         "total": 4,
         "passed": 4,
         "failed": 0,
-        "tests": ["test_arguments (1 PASSED)", "test_elewise_tiling (1 PASSED)", "test_expr_linearizer (1 PASSED)", "test_utility (1 PASSED)"]
+        "tests": [
+          "test_arguments (1 PASSED)",
+          "test_elewise_tiling (1 PASSED)",
+          "test_expr_linearizer (1 PASSED)",
+          "test_utility (1 PASSED)"
+        ]
       }
     },
     {
@@ -439,5 +448,36 @@
     "文档 quick_start.md 中源码下载使用 SSH 协议 (git@gitcode.com:cann/atvoss.git)，未提供 HTTPS 方式，新手可能未配置 SSH 密钥"
   ],
   "problems_encountered": [],
-  "session_export_file": "verification_session_WSL_atvoss_20260618.md"
+  "session_export_file": "verification_session_WSL_atvoss_20260618.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（2个hooks：clang-format v16.0.0 失败(文件被修改)，oat-check 通过）；未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 5,
+      "total_hooks": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "clang-format",
+          "file": "多个C++文件",
+          "error": "clang-format 格式化修改了部分文件，说明代码格式与 .clang-format 配置不一致"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 目录"
+  }
 }

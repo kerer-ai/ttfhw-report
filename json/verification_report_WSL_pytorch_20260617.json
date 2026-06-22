@@ -1070,5 +1070,36 @@
       }
     ],
     "session_export_file": "verification_report/verification_report_WSL_pytorch_20260617.json"
+  },
+  "static_analysis": {
+    "enabled": true,
+    "summary": "仓库未配置 pre-commit；配置了 lint-runner（.lintrunner.toml），启用 NEWLINE 与 TABS 两个 linter，执行 lintrunner --all-files 全部通过",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": true,
+      "config_file": ".lintrunner.toml",
+      "status": "全部通过",
+      "duration_seconds": 1,
+      "active_linters": [
+        "NEWLINE",
+        "TABS"
+      ],
+      "result": "ok No lint issues."
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 目录"
   }
 }

@@ -313,5 +313,30 @@
     "branch": "v2.7.1",
     "verification_date": "2026-06-18",
     "report_generated_at": "2026-06-18T11:30:00"
+  },
+  "static_analysis": {
+    "enabled": true,
+    "summary": "仓库配置了 lintrunner（.lintrunner.toml），未配置 pre-commit。静态检查工具未在容器中执行",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "not_run",
+      "total_hooks": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": true,
+      "config_file": ".lintrunner.toml",
+      "status": "not_run"
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 目录，不具备 devcontainer 开发容器能力"
   }
 }

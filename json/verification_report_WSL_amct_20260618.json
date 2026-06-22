@@ -271,7 +271,15 @@
       "action": "克隆仓库并阅读 README.md / AGENTS.md / build.md / quick_install.md / CMakeLists.txt / requirements.txt",
       "result": "成功",
       "details": {
-        "sections_read": ["环境要求", "安装&验证", "源码构建", "本地验证", "环境安装", "构建命令", "单元测试"]
+        "sections_read": [
+          "环境要求",
+          "安装&验证",
+          "源码构建",
+          "本地验证",
+          "环境安装",
+          "构建命令",
+          "单元测试"
+        ]
       }
     },
     {
@@ -282,7 +290,11 @@
       "details": {
         "config_file": ".pre-commit-config.yaml",
         "repos": 2,
-        "hooks": ["clang-format(v16.0.0)", "ruff-check(v0.14.14)", "ruff-format(v0.14.14)"]
+        "hooks": [
+          "clang-format(v16.0.0)",
+          "ruff-check(v0.14.14)",
+          "ruff-format(v0.14.14)"
+        ]
       }
     },
     {
@@ -303,7 +315,12 @@
       "action": "检查 lint-runner 配置",
       "result": "未配置",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*", "*lint-runner*"]
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*",
+          "*lint-runner*"
+        ]
       }
     },
     {
@@ -341,7 +358,18 @@
       "action": "安装构建依赖（gcc/cmake/make/patch/python3 等）",
       "result": "成功",
       "details": {
-        "packages": ["gcc", "gcc-c++", "cmake", "make", "patch", "python3", "python3-pip", "git", "wget", "tar"]
+        "packages": [
+          "gcc",
+          "gcc-c++",
+          "cmake",
+          "make",
+          "patch",
+          "python3",
+          "python3-pip",
+          "git",
+          "wget",
+          "tar"
+        ]
       }
     },
     {
@@ -562,5 +590,46 @@
       "source": "requirements.txt + tests/conftest.py"
     }
   ],
-  "session_export_file": "verification_report_WSL_amct_20260618.json"
+  "session_export_file": "verification_report_WSL_amct_20260618.json",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（3 个 hooks 全部失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "failed",
+      "duration_seconds": 120,
+      "total_hooks": 3,
+      "passed": 0,
+      "failed": 3,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "clang-format",
+          "file": "仓库内 C/C++ 文件（基于 .clang-format Google 规范）",
+          "error": "多处 C/C++ 代码不符合 clang-format v16.0.0 规范"
+        },
+        {
+          "hook_name": "ruff-check",
+          "file": "tests/amct_pytorch/testcase_python/single_file/*.py 等多处",
+          "error": "大量 F841(局部变量赋值后未使用)、E741(歧义变量名)、F811(重复定义) 告警"
+        },
+        {
+          "hook_name": "ruff-format",
+          "file": "仓库 Python 文件",
+          "error": "610 个文件需重新格式化，142 个无需改动"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer（无 .devcontainer 目录、无 .devcontainer.json）"
+  }
 }

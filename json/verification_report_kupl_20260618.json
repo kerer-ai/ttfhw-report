@@ -175,7 +175,11 @@
       "result": "success",
       "details": {
         "file": "README.md",
-        "sections_read": ["系统规格", "编译安装", "依赖"]
+        "sections_read": [
+          "系统规格",
+          "编译安装",
+          "依赖"
+        ]
       }
     },
     {
@@ -185,7 +189,12 @@
       "result": "success",
       "details": {
         "file": "build.sh",
-        "options_found": ["--compiler", "--build_kind", "--install_path", "--enable_mma"]
+        "options_found": [
+          "--compiler",
+          "--build_kind",
+          "--install_path",
+          "--enable_mma"
+        ]
       }
     },
     {
@@ -272,7 +281,12 @@
       "result": "success",
       "details": {
         "build_time_seconds": 15.19,
-        "output_files": ["test_omp_main", "test_pthread_main", "test_shm_main", "test_mma_main"]
+        "output_files": [
+          "test_omp_main",
+          "test_pthread_main",
+          "test_shm_main",
+          "test_mma_main"
+        ]
       }
     },
     {
@@ -480,5 +494,31 @@
       "severity": "low"
     }
   ],
-  "session_export_file": "verification_session_kupl_20260618.md"
+  "session_export_file": "verification_session_kupl_20260618.md",
+  "static_analysis": {
+    "pre_commit": {
+      "config_exists": true,
+      "config_file": ".pre-commit-config.yaml",
+      "minimum_version": "4.0.0",
+      "hooks": [
+        "trailing-whitespace (pre-commit-hooks v6.0.0)",
+        "check-json (pre-commit-hooks v6.0.0)",
+        "check-yaml (pre-commit-hooks v6.0.0)",
+        "mixed-line-ending (pre-commit-hooks v6.0.0)",
+        "check-merge-conflict (pre-commit-hooks v6.0.0)",
+        "check-added-large-files (pre-commit-hooks v6.0.0, maxkb=1000)",
+        "clang-format (mirrors-clang-format v18.1.8, C/C++文件)"
+      ],
+      "installed": false,
+      "note": "pre-commit未安装在容器中，clang-format已安装(/usr/bin/clang-format)"
+    },
+    "lint_runner": {
+      "config_exists": false,
+      "note": "未找到.lint-runner或.lintrunner配置文件"
+    }
+  },
+  "devcontainer": {
+    "config_exists": false,
+    "note": "未找到.devcontainer目录"
+  }
 }

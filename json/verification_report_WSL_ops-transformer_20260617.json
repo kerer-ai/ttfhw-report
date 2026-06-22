@@ -179,28 +179,51 @@
       "step": "document_reading",
       "action": "从README入口按链接逐层阅读所有文档",
       "result": "成功",
-      "details": {"files_read": ["README.md", "docs/QUICKSTART.md", "docs/README.md", "docs/zh/install/quick_install.md", "docs/zh/install/compile.md", "docs/zh/install/build.md", "CONTRIBUTING.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/QUICKSTART.md",
+          "docs/README.md",
+          "docs/zh/install/quick_install.md",
+          "docs/zh/install/compile.md",
+          "docs/zh/install/build.md",
+          "CONTRIBUTING.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:40:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 9}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 9
+      }
     },
     {
       "timestamp": "2026-06-17T07:40:00",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "部分通过",
-      "details": {"passed": 5, "failed": 4, "skipped": 0}
+      "details": {
+        "passed": 5,
+        "failed": 4,
+        "skipped": 0
+      }
     },
     {
       "timestamp": "2026-06-17T07:40:05",
       "step": "static_analysis_scan",
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:40:06",
@@ -214,42 +237,61 @@
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "CANN 9.1.0-beta.1 openEuler 24.03",
-      "details": {"selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像"}
+      "details": {
+        "selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像"
+      }
     },
     {
       "timestamp": "2026-06-17T07:40:30",
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"}
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
     },
     {
       "timestamp": "2026-06-17T07:41:00",
       "step": "dependency_installation",
       "action": "安装构建和测试依赖",
       "result": "成功",
-      "details": {"packages": ["pip3: requirements.txt", "pip3: tests/requirements.txt (tensorflow==2.20.0)"]}
+      "details": {
+        "packages": [
+          "pip3: requirements.txt",
+          "pip3: tests/requirements.txt (tensorflow==2.20.0)"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:43:00",
       "step": "build",
       "action": "执行构建: bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
       "result": "成功",
-      "details": {"concurrency": 7, "concurrency_ratio": "58%", "artifact": "cann-ops-transformer-custom_linux-x86_64.run"}
+      "details": {
+        "concurrency": 7,
+        "concurrency_ratio": "58%",
+        "artifact": "cann-ops-transformer-custom_linux-x86_64.run"
+      }
     },
     {
       "timestamp": "2026-06-17T07:54:20",
       "step": "install",
       "action": "安装自定义算子包",
       "result": "失败",
-      "details": {"error": "CANN镜像版本与算子包符号不兼容，libcust_opsproto_rt2.0.so存在undefined symbol，安装验证失败后回滚"}
+      "details": {
+        "error": "CANN镜像版本与算子包符号不兼容，libcust_opsproto_rt2.0.so存在undefined symbol，安装验证失败后回滚"
+      }
     },
     {
       "timestamp": "2026-06-17T07:55:00",
       "step": "ut_execution",
       "action": "执行UT: bash build.sh -u --ophost --ops=add_example",
       "result": "成功",
-      "details": {"total": 3, "passed": 3, "failed": 0}
+      "details": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-17T07:56:00",
@@ -263,7 +305,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_ops-transformer_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_ops-transformer_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -358,5 +402,51 @@
       "source": "安装脚本验证共享库时报错：undefined symbol: _ZN3Ops11Transformer8OpTiling15EnsureNotScalarE"
     }
   ],
-  "session_export_file": "verification_session_WSL_ops-transformer_20260617.md"
+  "session_export_file": "verification_session_WSL_ops-transformer_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（9个hooks，5通过4失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 120,
+      "total_hooks": 9,
+      "passed": 5,
+      "failed": 4,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "check-yaml",
+          "file": "多个YAML文件",
+          "error": "YAML格式检查失败"
+        },
+        {
+          "hook_name": "check-json",
+          "file": "多个runtime_kb.json文件",
+          "error": "JSON解码失败：Extra data（这些JSON文件为CANN算子配置文件，非标准JSON格式）"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "多个C++文件",
+          "error": "文件被clang-format自动格式化，格式与仓库现有代码风格不一致"
+        },
+        {
+          "hook_name": "oat-check",
+          "file": "OAT合规检查",
+          "error": "OAT工具执行失败"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

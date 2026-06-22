@@ -222,28 +222,44 @@
       "step": "clone",
       "action": "克隆 pypto 仓库",
       "result": "成功",
-      "details": {"repo": "https://gitcode.com/cann/pypto"}
+      "details": {
+        "repo": "https://gitcode.com/cann/pypto"
+      }
     },
     {
       "timestamp": "2026-06-18T01:43:00",
       "step": "document_reading",
       "action": "读取 README.md, pyproject.toml, docs/zh/install/",
       "result": "成功",
-      "details": {"files_read": ["README.md", "pyproject.toml", ".pre-commit-config.yaml", "docs/zh/install/prepare_environment.md", "docs/zh/install/build_and_install.md", "docs/zh/invocation/examples_invocation.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "pyproject.toml",
+          ".pre-commit-config.yaml",
+          "docs/zh/install/prepare_environment.md",
+          "docs/zh/install/build_and_install.md",
+          "docs/zh/invocation/examples_invocation.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T01:43:30",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 5}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 5
+      }
     },
     {
       "timestamp": "2026-06-18T01:44:00",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "未执行（网络限制）",
-      "details": {"reason": "容器内无法访问 github.com 下载 pre-commit hooks"}
+      "details": {
+        "reason": "容器内无法访问 github.com 下载 pre-commit hooks"
+      }
     },
     {
       "timestamp": "2026-06-18T01:44:30",
@@ -264,56 +280,94 @@
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "ttfhw-pypto-env"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-pypto-env"
+      }
     },
     {
       "timestamp": "2026-06-18T01:48:00",
       "step": "dependency_installation",
       "action": "安装系统依赖和 Python 构建依赖",
       "result": "成功",
-      "details": {"system_packages": ["cmake", "gcc", "gcc-c++", "make", "python3", "python3-pip", "python3-devel", "git", "wget"]}
+      "details": {
+        "system_packages": [
+          "cmake",
+          "gcc",
+          "gcc-c++",
+          "make",
+          "python3",
+          "python3-pip",
+          "python3-devel",
+          "git",
+          "wget"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T02:00:00",
       "step": "build",
       "action": "pip install . 编译安装 pypto",
       "result": "成功",
-      "details": {"version": "0.2.1", "build_type": "Release", "artifacts": ["pypto_impl.cpython-311-x86_64-linux-gnu.so", "libtile_fwk_*.so"]}
+      "details": {
+        "version": "0.2.1",
+        "build_type": "Release",
+        "artifacts": [
+          "pypto_impl.cpython-311-x86_64-linux-gnu.so",
+          "libtile_fwk_*.so"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T02:10:00",
       "step": "dependency_installation",
       "action": "安装运行时依赖 numpy 和 torch",
       "result": "成功",
-      "details": {"note": "pyproject.toml 中未声明 numpy 和 torch 为运行时依赖，但 import pypto 时需要"}
+      "details": {
+        "note": "pyproject.toml 中未声明 numpy 和 torch 为运行时依赖，但 import pypto 时需要"
+      }
     },
     {
       "timestamp": "2026-06-18T02:20:00",
       "step": "ut_execution",
       "action": "执行 Python UT (ir/operation/operator 模块)",
       "result": "成功",
-      "details": {"total": 116, "passed": 116, "failed": 0}
+      "details": {
+        "total": 116,
+        "passed": 116,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-18T02:25:00",
       "step": "ut_execution",
       "action": "执行 Python UT (interface 模块)",
       "result": "部分成功",
-      "details": {"note": "interface 模块部分测试因 CANN 环境缺失而失败或挂起，跳过该模块"}
+      "details": {
+        "note": "interface 模块部分测试因 CANN 环境缺失而失败或挂起，跳过该模块"
+      }
     },
     {
       "timestamp": "2026-06-18T03:18:00",
       "step": "sample_execution",
       "action": "执行 hello_world 样例 (仿真模式)",
       "result": "成功",
-      "details": {"sample_name": "hello_world", "run_mode": "sim", "output": "✓ Hello world example passed"}
+      "details": {
+        "sample_name": "hello_world",
+        "run_mode": "sim",
+        "output": "✓ Hello world example passed"
+      }
     },
     {
       "timestamp": "2026-06-18T03:20:00",
       "step": "sample_execution",
       "action": "执行 basic_ops 样例 (仿真模式)",
       "result": "成功",
-      "details": {"sample_name": "basic_ops", "run_mode": "sim", "output": "✓ All examples completed successfully!"}
+      "details": {
+        "sample_name": "basic_ops",
+        "run_mode": "sim",
+        "output": "✓ All examples completed successfully!"
+      }
     }
   ],
   "final_results": {
@@ -450,5 +504,31 @@
       "source": "interface 模块部分测试需要 CANN 环境"
     }
   ],
-  "session_export_file": "verification_session_WSL_pypto_20260618.md"
+  "session_export_file": "verification_session_WSL_pypto_20260618.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks），因容器网络限制未能执行；未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "not_run",
+      "duration_seconds": 0,
+      "total_hooks": 5,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 5,
+      "failures": [],
+      "note": "容器内无法访问 github.com 下载 pre-commit hooks，配置文件中包含 check-added-large-files、check-yaml、end-of-file-fixer、trailing-whitespace、clang-format 共5个hooks"
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer"
+  }
 }

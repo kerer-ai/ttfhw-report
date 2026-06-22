@@ -762,5 +762,61 @@
       "source": "build/install_st_output.log / uninstall_st_output.log"
     }
   ],
-  "session_export_file": "verification_session_WSL_oam-tools_20260617.md"
+  "session_export_file": "verification_session_WSL_oam-tools_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置(7个hook, 1通过6失败), 未检测到 lint-runner 配置; pre-commit 首次需联网安装各 hook 隔离环境(clang-format/ruff/pylint/bandit/codespell 等), 耗时较长",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 465,
+      "total_hooks": 7,
+      "passed": 1,
+      "failed": 6,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "clang-format",
+          "file": "多文件(C++/C)",
+          "error": "代码格式不符, hook 自动修改了文件"
+        },
+        {
+          "hook_name": "oat-check",
+          "file": "-",
+          "error": "OAT 合规扫描未通过(扫描65个暂存文件)"
+        },
+        {
+          "hook_name": "ruff",
+          "file": "多文件(.py)",
+          "error": "发现484个问题, --fix 修复262个, 仍剩222个"
+        },
+        {
+          "hook_name": "pylint",
+          "file": "多文件(.py)",
+          "error": "pylint 检查未通过"
+        },
+        {
+          "hook_name": "bandit",
+          "file": "多文件(.py)",
+          "error": "安全扫描(-ll, medium及以上)未通过"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "多文件",
+          "error": "拼写检查未通过"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 开发容器能力"
+  }
 }

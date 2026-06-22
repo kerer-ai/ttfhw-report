@@ -212,63 +212,100 @@
       "step": "clone",
       "action": "git clone https://gitcode.com/Ascend/MindSpeed.git",
       "result": "success",
-      "details": {"branch": "master", "commit": "d9395da", "duration_seconds": 30}
+      "details": {
+        "branch": "master",
+        "commit": "d9395da",
+        "duration_seconds": 30
+      }
     },
     {
       "timestamp": "2026-06-18T11:10:00",
       "step": "document_reading",
       "action": "阅读README.md、Dockerfile、install_guide.md、requirements.txt、setup.py、.pre-commit-config.yaml",
       "result": "success",
-      "details": {"extracted": ["推荐镜像", "架构要求", "构建依赖", "构建命令", "UT命令"]}
+      "details": {
+        "extracted": [
+          "推荐镜像",
+          "架构要求",
+          "构建依赖",
+          "构建命令",
+          "UT命令"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T11:15:00",
       "step": "static_check_scan",
       "action": "检查pre-commit和lint-runner配置",
       "result": "success",
-      "details": {"pre_commit": "已配置14个hook", "lint_runner": "未配置", "devcontainer": "未配置"}
+      "details": {
+        "pre_commit": "已配置14个hook",
+        "lint_runner": "未配置",
+        "devcontainer": "未配置"
+      }
     },
     {
       "timestamp": "2026-06-18T11:16:00",
       "step": "image_selection",
       "action": "拉取CANN基础镜像 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-openeuler24.03-py3.11",
       "result": "success",
-      "details": {"duration_seconds": 300}
+      "details": {
+        "duration_seconds": 300
+      }
     },
     {
       "timestamp": "2026-06-18T11:22:00",
       "step": "container_setup",
       "action": "启动privileged容器并挂载仓库目录",
       "result": "success",
-      "details": {"container_name": "ttfhw-mindspeed-env", "os": "openEuler 24.03 LTS-SP2", "python": "3.11.15"}
+      "details": {
+        "container_name": "ttfhw-mindspeed-env",
+        "os": "openEuler 24.03 LTS-SP2",
+        "python": "3.11.15"
+      }
     },
     {
       "timestamp": "2026-06-18T11:23:00",
       "step": "dependency_installation",
       "action": "安装PyTorch 2.7.1、torch_npu 2.7.1、requirements.txt依赖",
       "result": "success",
-      "details": {"torch": "2.7.1", "torch_npu": "2.7.1", "mirror": "清华镜像源"}
+      "details": {
+        "torch": "2.7.1",
+        "torch_npu": "2.7.1",
+        "mirror": "清华镜像源"
+      }
     },
     {
       "timestamp": "2026-06-18T11:30:00",
       "step": "build",
       "action": "pip install -e . 安装MindSpeed，pip install -e . 安装Megatron-LM",
       "result": "success",
-      "details": {"mindspeed": "0.12.1 editable", "megatron_lm": "core_v0.12.1", "import_verified": true}
+      "details": {
+        "mindspeed": "0.12.1 editable",
+        "megatron_lm": "core_v0.12.1",
+        "import_verified": true
+      }
     },
     {
       "timestamp": "2026-06-18T11:36:00",
       "step": "ut_execution",
       "action": "运行pytest tests_extend/unit_tests/",
       "result": "not_run",
-      "details": {"total": 623, "collected": 226, "errors": 397, "root_cause": "无NPU硬件，torch_npu初始化失败"}
+      "details": {
+        "total": 623,
+        "collected": 226,
+        "errors": 397,
+        "root_cause": "无NPU硬件，torch_npu初始化失败"
+      }
     },
     {
       "timestamp": "2026-06-18T13:24:00",
       "step": "cleanup",
       "action": "停止并删除容器，生成JSON验证报告",
       "result": "success",
-      "details": {"container_removed": "ttfhw-mindspeed-env"}
+      "details": {
+        "container_removed": "ttfhw-mindspeed-env"
+      }
     }
   ],
   "final_results": {
@@ -280,11 +317,26 @@
       "details": "pip install -e . 成功安装MindSpeed 0.12.1，import mindspeed验证通过",
       "artifacts": [],
       "duration_breakdown": [
-        {"step": "pip install torch==2.7.1", "duration_seconds": 180},
-        {"step": "pip install torch_npu==2.7.1", "duration_seconds": 120},
-        {"step": "pip install -r requirements.txt", "duration_seconds": 120},
-        {"step": "pip install -e . (MindSpeed)", "duration_seconds": 30},
-        {"step": "install Megatron-LM", "duration_seconds": 120}
+        {
+          "step": "pip install torch==2.7.1",
+          "duration_seconds": 180
+        },
+        {
+          "step": "pip install torch_npu==2.7.1",
+          "duration_seconds": 120
+        },
+        {
+          "step": "pip install -r requirements.txt",
+          "duration_seconds": 120
+        },
+        {
+          "step": "pip install -e . (MindSpeed)",
+          "duration_seconds": 30
+        },
+        {
+          "step": "install Megatron-LM",
+          "duration_seconds": 120
+        }
       ]
     },
     "ut": {
@@ -312,20 +364,48 @@
         "execution_status": "not_executed",
         "execution_result": "宿主机Python版本过低（Python 2.7），无法安装pre-commit执行检查",
         "hooks": [
-          {"id": "trailing-whitespace"},
-          {"id": "end-of-file-fixer"},
-          {"id": "check-yaml"},
-          {"id": "check-added-large-files"},
-          {"id": "check-merge-conflict"},
-          {"id": "detect-private-key"},
-          {"id": "check-json"},
-          {"id": "ruff-check"},
-          {"id": "ruff-format"},
-          {"id": "codespell"},
-          {"id": "pylint"},
-          {"id": "bandit"},
-          {"id": "typos"},
-          {"id": "clang-format"}
+          {
+            "id": "trailing-whitespace"
+          },
+          {
+            "id": "end-of-file-fixer"
+          },
+          {
+            "id": "check-yaml"
+          },
+          {
+            "id": "check-added-large-files"
+          },
+          {
+            "id": "check-merge-conflict"
+          },
+          {
+            "id": "detect-private-key"
+          },
+          {
+            "id": "check-json"
+          },
+          {
+            "id": "ruff-check"
+          },
+          {
+            "id": "ruff-format"
+          },
+          {
+            "id": "codespell"
+          },
+          {
+            "id": "pylint"
+          },
+          {
+            "id": "bandit"
+          },
+          {
+            "id": "typos"
+          },
+          {
+            "id": "clang-format"
+          }
         ]
       },
       "lint_runner": {
@@ -375,5 +455,65 @@
       "solution": "这是CANN在无NPU硬件环境下的预期行为，stub库仅提供链接占位，无法实际执行"
     }
   ],
-  "session_export_file": ""
+  "session_export_file": "",
+  "static_analysis": {
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "execution_status": "not_executed",
+      "execution_result": "宿主机Python版本过低（Python 2.7），无法安装pre-commit执行检查",
+      "hooks": [
+        {
+          "id": "trailing-whitespace"
+        },
+        {
+          "id": "end-of-file-fixer"
+        },
+        {
+          "id": "check-yaml"
+        },
+        {
+          "id": "check-added-large-files"
+        },
+        {
+          "id": "check-merge-conflict"
+        },
+        {
+          "id": "detect-private-key"
+        },
+        {
+          "id": "check-json"
+        },
+        {
+          "id": "ruff-check"
+        },
+        {
+          "id": "ruff-format"
+        },
+        {
+          "id": "codespell"
+        },
+        {
+          "id": "pylint"
+        },
+        {
+          "id": "bandit"
+        },
+        {
+          "id": "typos"
+        },
+        {
+          "id": "clang-format"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "reason": "仓库未配置lint-runner"
+    }
+  },
+  "devcontainer": {
+    "configured": false,
+    "reason": "仓库未配置.devcontainer目录，不具备devcontainer开发容器能力"
+  }
 }

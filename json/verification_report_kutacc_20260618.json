@@ -223,7 +223,12 @@
       "result": "success",
       "details": {
         "file": "README.md",
-        "sections_read": ["版本配套", "编译安装", "编译运行测试程序", "目录结构"]
+        "sections_read": [
+          "版本配套",
+          "编译安装",
+          "编译运行测试程序",
+          "目录结构"
+        ]
       }
     },
     {
@@ -232,7 +237,12 @@
       "action": "读取CMakeLists.txt和build.sh确认构建配置",
       "result": "success",
       "details": {
-        "files": ["CMakeLists.txt", "src/CMakeLists.txt", "test/functest/CMakeLists.txt", "build.sh"]
+        "files": [
+          "CMakeLists.txt",
+          "src/CMakeLists.txt",
+          "test/functest/CMakeLists.txt",
+          "build.sh"
+        ]
       }
     },
     {
@@ -252,7 +262,11 @@
       "action": "检查仓库lint-runner配置",
       "result": "not_run",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"],
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ],
         "found": false
       }
     },
@@ -289,7 +303,16 @@
       "action": "安装构建依赖",
       "result": "success",
       "details": {
-        "packages": ["cmake", "gcc", "gcc-c++", "make", "numactl-devel", "environment-modules", "git", "python3"]
+        "packages": [
+          "cmake",
+          "gcc",
+          "gcc-c++",
+          "make",
+          "numactl-devel",
+          "environment-modules",
+          "git",
+          "python3"
+        ]
       }
     },
     {
@@ -430,13 +453,41 @@
           "passed": 54,
           "failed": 0,
           "suites": [
-            {"name": "GatingAttentionTest", "tests": 7, "failures": 0},
-            {"name": "GlobalAttentionTest", "tests": 5, "failures": 0},
-            {"name": "InvariantPointTest", "tests": 7, "failures": 0},
-            {"name": "OuterProductMeanTest", "tests": 9, "failures": 0},
-            {"name": "RigidTest", "tests": 6, "failures": 0},
-            {"name": "TransitionTest", "tests": 3, "failures": 0},
-            {"name": "TriangleMultiplicationTest", "tests": 17, "failures": 0}
+            {
+              "name": "GatingAttentionTest",
+              "tests": 7,
+              "failures": 0
+            },
+            {
+              "name": "GlobalAttentionTest",
+              "tests": 5,
+              "failures": 0
+            },
+            {
+              "name": "InvariantPointTest",
+              "tests": 7,
+              "failures": 0
+            },
+            {
+              "name": "OuterProductMeanTest",
+              "tests": 9,
+              "failures": 0
+            },
+            {
+              "name": "RigidTest",
+              "tests": 6,
+              "failures": 0
+            },
+            {
+              "name": "TransitionTest",
+              "tests": 3,
+              "failures": 0
+            },
+            {
+              "name": "TriangleMultiplicationTest",
+              "tests": 17,
+              "failures": 0
+            }
           ]
         },
         "kutacc_comm_test": {
@@ -444,8 +495,16 @@
           "passed": 1,
           "failed": 1,
           "suites": [
-            {"name": "AllGatherTest", "tests": 1, "failures": 0},
-            {"name": "TransposeTest", "tests": 1, "failures": 1}
+            {
+              "name": "AllGatherTest",
+              "tests": 1,
+              "failures": 0
+            },
+            {
+              "name": "TransposeTest",
+              "tests": 1,
+              "failures": 1
+            }
           ]
         }
       }
@@ -468,13 +527,34 @@
         "failed": 0,
         "skipped": 7,
         "hooks": [
-          {"name": "trailing-whitespace", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "check-json", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "check-yaml", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "mixed-line-ending", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "check-merge-conflict", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "check-added-large-files", "repo": "pre-commit-hooks v6.0.0"},
-          {"name": "clang-format", "repo": "mirrors-clang-format v18.1.8"}
+          {
+            "name": "trailing-whitespace",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "check-json",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "check-yaml",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "mixed-line-ending",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "check-merge-conflict",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "check-added-large-files",
+            "repo": "pre-commit-hooks v6.0.0"
+          },
+          {
+            "name": "clang-format",
+            "repo": "mirrors-clang-format v18.1.8"
+          }
         ]
       },
       "lint_runner": {
@@ -513,5 +593,56 @@
       "source": "test/functest/comm/transpose_test.cpp:72"
     }
   ],
-  "session_export_file": "verification_session_kutacc_20260618.md"
+  "session_export_file": "verification_session_kutacc_20260618.md",
+  "static_analysis": {
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "installed": false,
+      "status": "not_run",
+      "duration_seconds": 0,
+      "total_hooks": 7,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 7,
+      "hooks": [
+        {
+          "name": "trailing-whitespace",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "check-json",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "check-yaml",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "mixed-line-ending",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "check-merge-conflict",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "check-added-large-files",
+          "repo": "pre-commit-hooks v6.0.0"
+        },
+        {
+          "name": "clang-format",
+          "repo": "mirrors-clang-format v18.1.8"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "config_exists": false,
+    "note": "未找到.devcontainer目录"
+  }
 }

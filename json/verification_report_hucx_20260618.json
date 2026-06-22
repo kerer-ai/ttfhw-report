@@ -272,14 +272,24 @@
       "step": "document_reading",
       "action": "读取 README.md 了解构建说明和系统要求",
       "result": "成功",
-      "details": {"file": "README.md", "sections_read": ["系统规格", "编译安装", "测试方法"]}
+      "details": {
+        "file": "README.md",
+        "sections_read": [
+          "系统规格",
+          "编译安装",
+          "测试方法"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T08:32:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 和 lint-runner 配置",
       "result": "未配置",
-      "details": {"pre_commit": false, "lint_runner": false}
+      "details": {
+        "pre_commit": false,
+        "lint_runner": false
+      }
     },
     {
       "timestamp": "2026-06-18T08:32:10",
@@ -293,21 +303,40 @@
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "openEuler 22.03 (LTS-SP4)",
-      "details": {"selection_reason": "README明确指定支持openEuler 22.03 (LTS-SP4) AArch64"}
+      "details": {
+        "selection_reason": "README明确指定支持openEuler 22.03 (LTS-SP4) AArch64"
+      }
     },
     {
       "timestamp": "2026-06-18T08:33:00",
       "step": "container_setup",
       "action": "启动容器，挂载仓库目录",
       "result": "成功",
-      "details": {"image": "swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler-22.03-sp4:v1.2"}
+      "details": {
+        "image": "swr.cn-north-4.myhuaweicloud.com/cloud_boostkit/openeuler-22.03-sp4:v1.2"
+      }
     },
     {
       "timestamp": "2026-06-18T08:34:00",
       "step": "dependency_installation",
       "action": "安装构建依赖",
       "result": "成功",
-      "details": {"packages": ["gcc", "gcc-c++", "gfortran", "cmake", "autoconf", "automake", "libtool", "flex", "make", "libibverbs-devel", "librdmacm-devel", "numactl-devel"]}
+      "details": {
+        "packages": [
+          "gcc",
+          "gcc-c++",
+          "gfortran",
+          "cmake",
+          "autoconf",
+          "automake",
+          "libtool",
+          "flex",
+          "make",
+          "libibverbs-devel",
+          "librdmacm-devel",
+          "numactl-devel"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T08:37:00",
@@ -321,49 +350,72 @@
       "step": "build_attempt",
       "action": "首次configure（未启用gtest）",
       "result": "部分成功",
-      "details": {"note": "configure成功但gtest未启用，需添加--enable-gtest选项"}
+      "details": {
+        "note": "configure成功但gtest未启用，需添加--enable-gtest选项"
+      }
     },
     {
       "timestamp": "2026-06-18T08:40:00",
       "step": "build_retry",
       "action": "重新configure并启用gtest",
       "result": "成功",
-      "details": {"configure_options": "--prefix=/root/install/hucx --enable-mt --disable-numa --with-pic --enable-inc --without-java --enable-gtest"}
+      "details": {
+        "configure_options": "--prefix=/root/install/hucx --enable-mt --disable-numa --with-pic --enable-inc --without-java --enable-gtest"
+      }
     },
     {
       "timestamp": "2026-06-18T08:41:00",
       "step": "build_execution",
       "action": "执行make -j10构建",
       "result": "成功",
-      "details": {"concurrency": 10, "concurrency_ratio": "62.5%"}
+      "details": {
+        "concurrency": 10,
+        "concurrency_ratio": "62.5%"
+      }
     },
     {
       "timestamp": "2026-06-18T09:50:00",
       "step": "build_install",
       "action": "执行make install安装",
       "result": "成功",
-      "details": {"install_path": "/root/install/hucx"}
+      "details": {
+        "install_path": "/root/install/hucx"
+      }
     },
     {
       "timestamp": "2026-06-18T09:55:00",
       "step": "ut_execution",
       "action": "执行gtest单元测试",
       "result": "部分成功（崩溃）",
-      "details": {"total": 10708, "ok": 1559, "failed": 2, "skipped": 548, "note": "测试在CMA传输层测试中段错误崩溃，未完成全部测试"}
+      "details": {
+        "total": 10708,
+        "ok": 1559,
+        "failed": 2,
+        "skipped": 548,
+        "note": "测试在CMA传输层测试中段错误崩溃，未完成全部测试"
+      }
     },
     {
       "timestamp": "2026-06-18T10:05:00",
       "step": "sample_execution",
       "action": "执行ucx_info工具验证",
       "result": "成功",
-      "details": {"tools_run": ["ucx_info -v", "ucx_info -d", "io_demo -h"]}
+      "details": {
+        "tools_run": [
+          "ucx_info -v",
+          "ucx_info -d",
+          "io_demo -h"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T10:07:00",
       "step": "sample_execution",
       "action": "编译并运行uct_hello_world样例",
       "result": "编译成功，运行受限",
-      "details": {"note": "容器内无RDMA硬件，self传输层不支持此样例的运行模式"}
+      "details": {
+        "note": "容器内无RDMA硬件，self传输层不支持此样例的运行模式"
+      }
     },
     {
       "timestamp": "2026-06-18T11:55:00",
@@ -377,7 +429,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_hucx_20260618.json"}
+      "details": {
+        "output_file": "verification_report_hucx_20260618.json"
+      }
     }
   ],
   "final_results": {
@@ -528,5 +582,23 @@
       "source": "样例输出'No supported (dev/tl) found'"
     }
   ],
-  "session_export_file": "verification_session_hucx_20260618.json"
+  "session_export_file": "verification_session_hucx_20260618.json",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置 pre-commit 和 lint-runner 静态检查工具",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

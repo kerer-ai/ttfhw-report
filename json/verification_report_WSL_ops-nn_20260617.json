@@ -197,28 +197,52 @@
       "step": "document_reading",
       "action": "从README入口按链接逐层阅读所有文档",
       "result": "成功",
-      "details": {"files_read": ["README.md", "docs/QUICKSTART.md", "docs/README.md", "docs/zh/install/quick_install.md", "docs/zh/install/compile.md", "docs/zh/install/build.md", "docs/zh/invocation/quick_op_invocation.md", "CONTRIBUTING.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/QUICKSTART.md",
+          "docs/README.md",
+          "docs/zh/install/quick_install.md",
+          "docs/zh/install/compile.md",
+          "docs/zh/install/build.md",
+          "docs/zh/invocation/quick_op_invocation.md",
+          "CONTRIBUTING.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T06:50:30",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 7}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 7
+      }
     },
     {
       "timestamp": "2026-06-17T06:50:30",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "部分通过",
-      "details": {"passed": 5, "failed": 2, "skipped": 0}
+      "details": {
+        "passed": 5,
+        "failed": 2,
+        "skipped": 0
+      }
     },
     {
       "timestamp": "2026-06-17T06:51:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T06:51:01",
@@ -232,49 +256,70 @@
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "CANN 9.1.0-beta.1 openEuler 24.03",
-      "details": {"selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像"}
+      "details": {
+        "selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像"
+      }
     },
     {
       "timestamp": "2026-06-17T06:51:30",
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"}
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
     },
     {
       "timestamp": "2026-06-17T06:52:00",
       "step": "dependency_installation",
       "action": "安装构建和测试依赖",
       "result": "成功",
-      "details": {"packages": ["pip3: requirements.txt", "pip3: tests/requirements.txt (tensorflow==2.20.0)"]}
+      "details": {
+        "packages": [
+          "pip3: requirements.txt",
+          "pip3: tests/requirements.txt (tensorflow==2.20.0)"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T06:53:50",
       "step": "build",
       "action": "执行构建: bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
       "result": "成功",
-      "details": {"concurrency": 7, "concurrency_ratio": "58%", "artifact": "cann-ops-nn-custom_linux-x86_64.run"}
+      "details": {
+        "concurrency": 7,
+        "concurrency_ratio": "58%",
+        "artifact": "cann-ops-nn-custom_linux-x86_64.run"
+      }
     },
     {
       "timestamp": "2026-06-17T06:57:30",
       "step": "install",
       "action": "安装自定义算子包",
       "result": "成功",
-      "details": {"install_path": "/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_nn"}
+      "details": {
+        "install_path": "/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_nn"
+      }
     },
     {
       "timestamp": "2026-06-17T06:57:54",
       "step": "sample_execution",
       "action": "运行样例: bash build.sh --run_example add_example eager cust --vendor_name=custom",
       "result": "失败",
-      "details": {"error": "容器内无NPU设备，aclnn调用需要NPU硬件，导致段错误"}
+      "details": {
+        "error": "容器内无NPU设备，aclnn调用需要NPU硬件，导致段错误"
+      }
     },
     {
       "timestamp": "2026-06-17T06:58:10",
       "step": "ut_execution",
       "action": "执行UT: bash build.sh -u --ophost --ops=add_example",
       "result": "成功",
-      "details": {"total": 3, "passed": 3, "failed": 0}
+      "details": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-17T06:59:00",
@@ -288,7 +333,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_ops-nn_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_ops-nn_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -373,5 +420,41 @@
       "source": "docs/zh/install/quick_install.md 提到运行态需安装驱动与固件"
     }
   ],
-  "session_export_file": "verification_session_WSL_ops-nn_20260617.md"
+  "session_export_file": "verification_session_WSL_ops-nn_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（7个hooks，5通过2失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 120,
+      "total_hooks": 7,
+      "passed": 5,
+      "failed": 2,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "check-json",
+          "file": "多个 runtime_kb.json 及 binary.json 文件",
+          "error": "JSON解码失败：Extra data / Duplicate key（这些JSON文件为CANN算子配置文件，非标准JSON格式）"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "870个C++文件",
+          "error": "文件被clang-format自动格式化，格式与仓库现有代码风格不一致"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

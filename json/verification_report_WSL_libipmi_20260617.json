@@ -290,7 +290,13 @@
       "action": "克隆仓库并读取 README.md, meson.build, meson_options.txt, conanfile.py, docs/overview.md",
       "result": "成功",
       "details": {
-        "files_read": ["README.md", "meson.build", "meson_options.txt", "conanfile.py", "docs/overview.md"],
+        "files_read": [
+          "README.md",
+          "meson.build",
+          "meson_options.txt",
+          "conanfile.py",
+          "docs/overview.md"
+        ],
         "key_findings": "C++17 项目，使用 Meson 构建系统，依赖 libmcpp/dbus/glib，测试使用 gtest"
       }
     },
@@ -310,7 +316,11 @@
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"],
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ],
         "found": false
       }
     },
@@ -351,7 +361,16 @@
       "result": "失败",
       "details": {
         "error": "python3-ninja 与 ninja-build 包冲突",
-        "packages_attempted": ["meson", "gcc", "gcc-c++", "boost-devel", "gtest-devel", "ninja-build", "dbus-devel", "glib2-devel"]
+        "packages_attempted": [
+          "meson",
+          "gcc",
+          "gcc-c++",
+          "boost-devel",
+          "gtest-devel",
+          "ninja-build",
+          "dbus-devel",
+          "glib2-devel"
+        ]
       }
     },
     {
@@ -434,7 +453,10 @@
       "action": "安装 luajit-devel 解决 lua 头文件缺失问题",
       "result": "已解决",
       "details": {
-        "packages": ["luajit 2.1.0", "luajit-devel 2.1.0"]
+        "packages": [
+          "luajit 2.1.0",
+          "luajit-devel 2.1.0"
+        ]
       }
     },
     {
@@ -639,5 +661,30 @@
       "source": "libmcpp 子项目 mcapp/src/expression/lua_expression_evaluator.cpp 第34行 和 mcdatabase/src/sqlite_wrapper.cpp 第423行"
     }
   ],
-  "session_export_file": "verification_session_WSL_libipmi_20260617.md"
+  "session_export_file": "verification_session_WSL_libipmi_20260617.md",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置静态检查工具：未检测到 pre-commit 配置，未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null,
+      "total_hooks": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer 开发容器"
+  }
 }

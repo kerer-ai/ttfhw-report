@@ -39,7 +39,15 @@
       "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64",
       "selection_reason": "MindSpeed-MM 文档 docs/zh/pytorch/install_guide.md 与 docker/OVERVIEW.zh.md 明确推荐使用 AscendHub 上的预装镜像（标签格式 {版本}-{芯片}-{操作系统}-py{Python版本}-{架构}）。文档说明 master 分支后续会更新新镜像，当前最新镜像配套 26.0.0 分支。本机为 aarch64 架构，因此选择 swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-mm:26.0.0-910b-openeuler24.03-py3.11-aarch64。该镜像由文档明确推荐，符合优先使用预装镜像要求；同步将源码切到 26.0.0 分支以保持版本一致。已验证不复用 0.13 上既有镜像（拉取前镜像清单已快照对比，新增此 1 个镜像）。",
       "image_size_gb": 19.4,
-      "preinstalled_components": ["PyTorch 2.7.1+cpu", "torch_npu 2.7.1.post4", "decord 0.6.0", "torchvision 0.22.1", "torchaudio 2.11.0", "CANN 9.0.0 (ascend-toolkit/nnal)", "Conda env: base + verl_qwen3vl"]
+      "preinstalled_components": [
+        "PyTorch 2.7.1+cpu",
+        "torch_npu 2.7.1.post4",
+        "decord 0.6.0",
+        "torchvision 0.22.1",
+        "torchaudio 2.11.0",
+        "CANN 9.0.0 (ascend-toolkit/nnal)",
+        "Conda env: base + verl_qwen3vl"
+      ]
     }
   },
   "document_reading_summary": {
@@ -88,7 +96,17 @@
     },
     "documents_read": {
       "source": "验证过程中实际阅读的文档列表",
-      "value": ["README.md", "docs/zh/pytorch/install_guide.md", "docker/Dockerfile", "docker/OVERVIEW.zh.md", "tests/README.md", "ci/run_ci.sh", "scripts/install.sh", "pyproject.toml", ".pre-commit-config.yaml"]
+      "value": [
+        "README.md",
+        "docs/zh/pytorch/install_guide.md",
+        "docker/Dockerfile",
+        "docker/OVERVIEW.zh.md",
+        "tests/README.md",
+        "ci/run_ci.sh",
+        "scripts/install.sh",
+        "pyproject.toml",
+        ".pre-commit-config.yaml"
+      ]
     }
   },
   "execution_log": [
@@ -286,91 +304,166 @@
       "step": "host_check",
       "action": "SSH 登录 192.168.0.13 并采集主机规格",
       "result": "success",
-      "details": {"os": "CentOS7 aarch64", "cpu_cores": 32, "memory": "63G", "docker": "19.03.11", "npu": "不可用"}
+      "details": {
+        "os": "CentOS7 aarch64",
+        "cpu_cores": 32,
+        "memory": "63G",
+        "docker": "19.03.11",
+        "npu": "不可用"
+      }
     },
     {
       "timestamp": "2026-06-18T13:01:00",
       "step": "clone",
       "action": "git clone https://gitcode.com/Ascend/MindSpeed-MM.git",
       "result": "success",
-      "details": {"default_branch": "master", "available_branches": ["1.0.0", "1.0.RC3", "2.0.0", "2.1.0", "2.2.0", "2.3.0", "26.0.0", "master"]}
+      "details": {
+        "default_branch": "master",
+        "available_branches": [
+          "1.0.0",
+          "1.0.RC3",
+          "2.0.0",
+          "2.1.0",
+          "2.2.0",
+          "2.3.0",
+          "26.0.0",
+          "master"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T13:03:00",
       "step": "document_reading",
       "action": "阅读 README/install_guide/Dockerfile/tests-README/run_ci/pyproject",
       "result": "success",
-      "details": {"documents_read": 9, "extracted": ["镜像策略", "依赖列表", "构建/UT/样例入口"]}
+      "details": {
+        "documents_read": 9,
+        "extracted": [
+          "镜像策略",
+          "依赖列表",
+          "构建/UT/样例入口"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-18T13:08:00",
       "step": "static_check_scan",
       "action": "宿主机检查 .pre-commit-config.yaml、lint-runner 配置、.devcontainer",
       "result": "partial_success",
-      "details": {"pre_commit_config": "存在", "lint_runner": "不存在", "devcontainer": "不存在", "host_issue": "宿主机无 python3 无法运行"}
+      "details": {
+        "pre_commit_config": "存在",
+        "lint_runner": "不存在",
+        "devcontainer": "不存在",
+        "host_issue": "宿主机无 python3 无法运行"
+      }
     },
     {
       "timestamp": "2026-06-18T13:10:00",
       "step": "image_selection",
       "action": "选择并拉取 AscendHub 预装镜像 26.0.0-910b-openeuler24.03-py3.11-aarch64",
       "result": "success",
-      "details": {"image_size": "19.4 GB", "attempts": ["master tag 失败", "26.0.0 tag 成功", "2.3.0 tag 失败"], "branch_switch": "源码切换到 26.0.0 分支"}
+      "details": {
+        "image_size": "19.4 GB",
+        "attempts": [
+          "master tag 失败",
+          "26.0.0 tag 成功",
+          "2.3.0 tag 失败"
+        ],
+        "branch_switch": "源码切换到 26.0.0 分支"
+      }
     },
     {
       "timestamp": "2026-06-18T13:25:00",
       "step": "container_setup",
       "action": "docker run 启动容器并挂载源码",
       "result": "success",
-      "details": {"container_name": "ttfhw-mindspeed-mm-env", "mount": "/workspace/MindSpeed-MM-mounted"}
+      "details": {
+        "container_name": "ttfhw-mindspeed-mm-env",
+        "mount": "/workspace/MindSpeed-MM-mounted"
+      }
     },
     {
       "timestamp": "2026-06-18T13:30:00",
       "step": "static_check_attempt1",
       "action": "容器内对挂载源码运行 pre-commit",
       "result": "failed",
-      "details": {"issue": "默认 fixer 自动修改了源码 30+ 文件", "action": "git checkout -- . 还原"}
+      "details": {
+        "issue": "默认 fixer 自动修改了源码 30+ 文件",
+        "action": "git checkout -- . 还原"
+      }
     },
     {
       "timestamp": "2026-06-18T13:32:00",
       "step": "static_check_attempt2",
       "action": "复制源码到 /tmp/mm_lint 后 pre-commit run --all-files",
       "result": "partial_success",
-      "details": {"passed": ["check-yaml", "check-merge-conflict", "detect-private-key"], "failed": ["trailing-whitespace", "end-of-file-fixer", "check-json"], "duration_seconds": 6, "source_intact": true}
+      "details": {
+        "passed": [
+          "check-yaml",
+          "check-merge-conflict",
+          "detect-private-key"
+        ],
+        "failed": [
+          "trailing-whitespace",
+          "end-of-file-fixer",
+          "check-json"
+        ],
+        "duration_seconds": 6,
+        "source_intact": true
+      }
     },
     {
       "timestamp": "2026-06-18T13:35:00",
       "step": "build",
       "action": "pip install -e . 与 pip install -e .[test]",
       "result": "success",
-      "details": {"duration_seconds": 211, "package": "mindspeed-mm 0.1", "new_deps": 64}
+      "details": {
+        "duration_seconds": 211,
+        "package": "mindspeed-mm 0.1",
+        "new_deps": 64
+      }
     },
     {
       "timestamp": "2026-06-18T13:42:00",
       "step": "extra_deps_install",
       "action": "补装 MindSpeed 加速库与 Megatron-LM",
       "result": "success",
-      "details": {"mindspeed": "0.12.1 (79s)", "megatron_lm": "clone via gh_mirrors (30s)", "location": "/opt/deps/"}
+      "details": {
+        "mindspeed": "0.12.1 (79s)",
+        "megatron_lm": "clone via gh_mirrors (30s)",
+        "location": "/opt/deps/"
+      }
     },
     {
       "timestamp": "2026-06-18T13:47:00",
       "step": "ut_execution",
       "action": "对 10 个代表性 UT 用例运行 pytest",
       "result": "not_run",
-      "details": {"total": 10, "passed": 0, "errors": 10, "root_cause": "无 NPU 设备，torch_npu 在 import 阶段初始化失败", "duration_seconds": 172}
+      "details": {
+        "total": 10,
+        "passed": 0,
+        "errors": 10,
+        "root_cause": "无 NPU 设备，torch_npu 在 import 阶段初始化失败",
+        "duration_seconds": 172
+      }
     },
     {
       "timestamp": "2026-06-18T13:55:00",
       "step": "sample_execution",
       "action": "样例运行",
       "result": "not_run",
-      "details": {"reason": "样例脚本均依赖 NPU 设备初始化，确认在无 NPU 主机上必失败，按 SKILL 规范如实记录跳过原因"}
+      "details": {
+        "reason": "样例脚本均依赖 NPU 设备初始化，确认在无 NPU 主机上必失败，按 SKILL 规范如实记录跳过原因"
+      }
     },
     {
       "timestamp": "2026-06-18T13:56:00",
       "step": "source_integrity_check",
       "action": "git status -s 确认源码未被修改",
       "result": "success",
-      "details": {"output": "空，源码全程未变化"}
+      "details": {
+        "output": "空，源码全程未变化"
+      }
     }
   ],
   "final_results": {
@@ -382,10 +475,20 @@
       "details": "pip install -e . (205s) + pip install -e .[test] (6s)，mindspeed-mm 0.1 注册成功；64 个新依赖；numpy 由 2.4.4 降级为 1.26.4",
       "artifacts": [],
       "duration_breakdown": [
-        {"step": "pip install -e .", "duration_seconds": 205},
-        {"step": "pip install -e .[test]", "duration_seconds": 6}
+        {
+          "step": "pip install -e .",
+          "duration_seconds": 205
+        },
+        {
+          "step": "pip install -e .[test]",
+          "duration_seconds": 6
+        }
       ],
-      "extra_deps": {"status": "success", "duration_seconds": 109, "details": "MindSpeed 加速库 (79s) + Megatron-LM clone (30s)，均按文档指引在容器外置目录完成，未触碰挂载源码"}
+      "extra_deps": {
+        "status": "success",
+        "duration_seconds": 109,
+        "details": "MindSpeed 加速库 (79s) + Megatron-LM clone (30s)，均按文档指引在容器外置目录完成，未触碰挂载源码"
+      }
     },
     "ut": {
       "status": "not_run",
@@ -396,16 +499,46 @@
       "errors": 10,
       "root_cause": "无 NPU 设备，torch_npu 在 import 阶段调用 npu_sys_ctrl.c 初始化失败，导致 pytest collection 阶段中断；UT 用例本身未执行",
       "failures": [
-        {"test": "tests/ut/loss/test_chunkloss.py", "error": "RuntimeError: torch_npu sys_ctrl init failed (无 NPU 设备)"},
-        {"test": "tests/ut/models/common/test_activations.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/common/embeddings/test_pos_embeddings.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/data/data_utils/test_utils.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/common/test_unaligned_split.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/diffusion/test_iddpm.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/diffusion/test_diffusers_scheduler.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/vision/test_qwen2vl_get_rope_index.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/models/vision/test_qwen2_5vl_get_rope_index.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"},
-        {"test": "tests/ut/tools/test_profiler.py", "error": "RuntimeError: torch_npu sys_ctrl init failed"}
+        {
+          "test": "tests/ut/loss/test_chunkloss.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed (无 NPU 设备)"
+        },
+        {
+          "test": "tests/ut/models/common/test_activations.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/common/embeddings/test_pos_embeddings.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/data/data_utils/test_utils.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/common/test_unaligned_split.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/diffusion/test_iddpm.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/diffusion/test_diffusers_scheduler.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/vision/test_qwen2vl_get_rope_index.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/models/vision/test_qwen2_5vl_get_rope_index.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        },
+        {
+          "test": "tests/ut/tools/test_profiler.py",
+          "error": "RuntimeError: torch_npu sys_ctrl init failed"
+        }
       ]
     },
     "sample": {
@@ -422,12 +555,33 @@
         "duration_seconds": 6,
         "overall_result": "partial_success",
         "hooks": [
-          {"id": "trailing-whitespace", "result": "failed", "note": "30+ 文件存在尾部空格"},
-          {"id": "end-of-file-fixer", "result": "failed", "note": "9+ 文件缺末尾换行"},
-          {"id": "check-yaml", "result": "success"},
-          {"id": "check-merge-conflict", "result": "success"},
-          {"id": "detect-private-key", "result": "success"},
-          {"id": "check-json", "result": "failed", "note": "examples/vace/inference/inference_wan2.1_14b.json 第 12 行 JSON 解析失败"}
+          {
+            "id": "trailing-whitespace",
+            "result": "failed",
+            "note": "30+ 文件存在尾部空格"
+          },
+          {
+            "id": "end-of-file-fixer",
+            "result": "failed",
+            "note": "9+ 文件缺末尾换行"
+          },
+          {
+            "id": "check-yaml",
+            "result": "success"
+          },
+          {
+            "id": "check-merge-conflict",
+            "result": "success"
+          },
+          {
+            "id": "detect-private-key",
+            "result": "success"
+          },
+          {
+            "id": "check-json",
+            "result": "failed",
+            "note": "examples/vace/inference/inference_wan2.1_14b.json 第 12 行 JSON 解析失败"
+          }
         ]
       },
       "lint_runner": {
@@ -483,5 +637,51 @@
       "solution": "确认根因为本机无 NPU 设备（无 npu-smi、无 /dev/davinci*），文档明确 MindSpeed-MM 需运行在昇腾 NPU 训练硬件之上；如实记录失败而不修改源码或绕过；建议在带 NPU 的 Atlas A2/A3 主机上重测"
     }
   ],
-  "session_export_file": ""
+  "session_export_file": "",
+  "static_analysis": {
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "executed_in": "container",
+      "duration_seconds": 6,
+      "overall_result": "partial_success",
+      "hooks": [
+        {
+          "id": "trailing-whitespace",
+          "result": "failed",
+          "note": "30+ 文件存在尾部空格"
+        },
+        {
+          "id": "end-of-file-fixer",
+          "result": "failed",
+          "note": "9+ 文件缺末尾换行"
+        },
+        {
+          "id": "check-yaml",
+          "result": "success"
+        },
+        {
+          "id": "check-merge-conflict",
+          "result": "success"
+        },
+        {
+          "id": "detect-private-key",
+          "result": "success"
+        },
+        {
+          "id": "check-json",
+          "result": "failed",
+          "note": "examples/vace/inference/inference_wan2.1_14b.json 第 12 行 JSON 解析失败"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "reason": "未发现 .lint-runner* 或 lint-runner.config.* 配置"
+    }
+  },
+  "devcontainer": {
+    "configured": false,
+    "reason": "仓库根目录及子目录均不存在 .devcontainer/ 目录"
+  }
 }

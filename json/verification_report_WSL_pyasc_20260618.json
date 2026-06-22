@@ -260,35 +260,57 @@
       "step": "clone",
       "action": "克隆 pyasc 仓库",
       "result": "成功",
-      "details": {"repo": "https://gitcode.com/cann/pyasc"}
+      "details": {
+        "repo": "https://gitcode.com/cann/pyasc"
+      }
     },
     {
       "timestamp": "2026-06-17T10:36:00",
       "step": "document_reading",
       "action": "读取 README.md, pyproject.toml, docs/quick_start.md",
       "result": "成功",
-      "details": {"files_read": ["README.md", "pyproject.toml", ".pre-commit-config.yaml", "docs/quick_start.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "pyproject.toml",
+          ".pre-commit-config.yaml",
+          "docs/quick_start.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T10:37:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 2}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 2
+      }
     },
     {
       "timestamp": "2026-06-17T10:38:00",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "部分通过",
-      "details": {"passed": 1, "failed": 1, "skipped": 0}
+      "details": {
+        "passed": 1,
+        "failed": 1,
+        "skipped": 0
+      }
     },
     {
       "timestamp": "2026-06-17T10:38:30",
       "step": "static_analysis_scan",
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T10:39:00",
@@ -302,77 +324,127 @@
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "ttfhw-pyasc-env"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-pyasc-env"
+      }
     },
     {
       "timestamp": "2026-06-17T10:42:00",
       "step": "dependency_installation",
       "action": "安装系统依赖和 Python 依赖",
       "result": "成功",
-      "details": {"system_packages": ["cmake", "gcc", "gcc-c++", "make", "python3", "python3-pip", "python3-devel", "git", "wget", "xz", "zlib-devel", "libzstd-devel"]}
+      "details": {
+        "system_packages": [
+          "cmake",
+          "gcc",
+          "gcc-c++",
+          "make",
+          "python3",
+          "python3-pip",
+          "python3-devel",
+          "git",
+          "wget",
+          "xz",
+          "zlib-devel",
+          "libzstd-devel"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T11:00:00",
       "step": "dependency_installation",
       "action": "下载安装 LLVM 19.1.7",
       "result": "成功",
-      "details": {"source": "https://cann-ai.obs.cn-north-4.myhuaweicloud.com/llvm/llvm-19.1.7-x86_64.tar.xz", "install_path": "/tmp/llvm-19.1.7-x86_64"}
+      "details": {
+        "source": "https://cann-ai.obs.cn-north-4.myhuaweicloud.com/llvm/llvm-19.1.7-x86_64.tar.xz",
+        "install_path": "/tmp/llvm-19.1.7-x86_64"
+      }
     },
     {
       "timestamp": "2026-06-17T11:05:00",
       "step": "build_attempt",
       "action": "首次 CMake 配置",
       "result": "失败",
-      "details": {"error": "Could NOT find Python3 (missing: Python3_INCLUDE_DIRS Development.Module)"}
+      "details": {
+        "error": "Could NOT find Python3 (missing: Python3_INCLUDE_DIRS Development.Module)"
+      }
     },
     {
       "timestamp": "2026-06-17T11:06:00",
       "step": "problem_resolution",
       "action": "安装 python3-devel 解决 Python3 开发组件缺失",
       "result": "已解决",
-      "details": {"solution": "dnf install -y python3-devel"}
+      "details": {
+        "solution": "dnf install -y python3-devel"
+      }
     },
     {
       "timestamp": "2026-06-17T11:07:00",
       "step": "build_retry",
       "action": "CMake 配置 + Ninja 构建",
       "result": "成功",
-      "details": {"concurrency": 9, "build_targets": 119, "duration_seconds": 390}
+      "details": {
+        "concurrency": 9,
+        "build_targets": 119,
+        "duration_seconds": 390
+      }
     },
     {
       "timestamp": "2026-06-17T11:20:00",
       "step": "install",
       "action": "pip install -e . 安装 pyasc",
       "result": "成功",
-      "details": {"version": "1.1.1+g4e3cbe2.d20260618"}
+      "details": {
+        "version": "1.1.1+g4e3cbe2.d20260618"
+      }
     },
     {
       "timestamp": "2026-06-17T11:25:00",
       "step": "ut_execution",
       "action": "执行 codegen 模块 Python UT",
       "result": "成功",
-      "details": {"total": 17, "passed": 17, "failed": 0}
+      "details": {
+        "total": 17,
+        "passed": 17,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-17T11:28:00",
       "step": "ut_execution",
       "action": "执行全量 Python UT (含 CANN 依赖测试)",
       "result": "部分成功",
-      "details": {"total": 306, "passed": 19, "failed": 286, "skipped": 1, "failure_reason": "缺少 CANN 环境（bisheng 编译器、ld.lld 链接器）"}
+      "details": {
+        "total": 306,
+        "passed": 19,
+        "failed": 286,
+        "skipped": 1,
+        "failure_reason": "缺少 CANN 环境（bisheng 编译器、ld.lld 链接器）"
+      }
     },
     {
       "timestamp": "2026-06-17T11:30:00",
       "step": "ut_execution",
       "action": "执行 C++ Lit 测试",
       "result": "成功",
-      "details": {"total": 52, "passed": 52, "failed": 0, "skipped": 0, "duration_seconds": 0.12}
+      "details": {
+        "total": 52,
+        "passed": 52,
+        "failed": 0,
+        "skipped": 0,
+        "duration_seconds": 0.12
+      }
     },
     {
       "timestamp": "2026-06-17T11:35:00",
       "step": "sample_execution",
       "action": "执行 add 样例 (仿真模式)",
       "result": "失败",
-      "details": {"error": "缺少 CANN 仿真器运行库 (libruntime_camodel.so)", "note": "样例运行需要 CANN toolkit，在无 NPU 设备的容器中无法运行"}
+      "details": {
+        "error": "缺少 CANN 仿真器运行库 (libruntime_camodel.so)",
+        "note": "样例运行需要 CANN toolkit，在无 NPU 设备的容器中无法运行"
+      }
     }
   ],
   "final_results": {
@@ -502,5 +574,36 @@
       "source": "python/asc/runtime/config.py 第76行: 检查运行时库可用性"
     }
   ],
-  "session_export_file": "verification_session_WSL_pyasc_20260618.md"
+  "session_export_file": "verification_session_WSL_pyasc_20260618.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（2个hooks，1通过1失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 30,
+      "total_hooks": 2,
+      "passed": 1,
+      "failed": 1,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "oat-check",
+          "file": "未知",
+          "error": "OAT 合规检查发现 1 个 License Header Invalid 问题"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer"
+  }
 }

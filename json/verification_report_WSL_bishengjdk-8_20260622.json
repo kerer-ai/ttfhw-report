@@ -319,5 +319,17 @@
     "jtreg 测试工具未安装说明"
   ],
   "problems_encountered": [],
-  "session_export_file": ""
+  "session_export_file": "",
+  "static_analysis": {
+    "enabled": false,
+    "pre_commit": {
+      "configured": false
+    },
+    "lint_runner": {
+      "configured": false
+    }
+  },
+  "devcontainer": {
+    "enabled": false
+  }
 }

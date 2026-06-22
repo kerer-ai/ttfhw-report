@@ -205,28 +205,52 @@
       "step": "document_reading",
       "action": "从README入口按链接逐层阅读所有文档",
       "result": "成功",
-      "details": {"files_read": ["README.md", "docs/QUICKSTART.md", "docs/README.md", "docs/zh/install/quick_install.md", "docs/zh/install/compile.md", "docs/zh/install/build.md", "docs/zh/invocation/quick_op_invocation.md", "CONTRIBUTING.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/QUICKSTART.md",
+          "docs/README.md",
+          "docs/zh/install/quick_install.md",
+          "docs/zh/install/compile.md",
+          "docs/zh/install/build.md",
+          "docs/zh/invocation/quick_op_invocation.md",
+          "CONTRIBUTING.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:20:00",
       "step": "static_analysis_scan",
       "action": "检查仓库 pre-commit 配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 2}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 2
+      }
     },
     {
       "timestamp": "2026-06-17T07:20:00",
       "step": "static_analysis_execution",
       "action": "执行 pre-commit run --all-files",
       "result": "全部通过",
-      "details": {"passed": 2, "failed": 0, "skipped": 0}
+      "details": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
     },
     {
       "timestamp": "2026-06-17T07:20:05",
       "step": "static_analysis_scan",
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
-      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]}
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:20:06",
@@ -240,56 +264,79 @@
       "step": "image_selection",
       "action": "选择基础镜像",
       "result": "CANN 9.1.0-beta.1 openEuler 24.03",
-      "details": {"selection_reason": "docs/zh/install/quick_install.md 行59明确推荐该镜像"}
+      "details": {
+        "selection_reason": "docs/zh/install/quick_install.md 行59明确推荐该镜像"
+      }
     },
     {
       "timestamp": "2026-06-17T07:20:30",
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"}
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
     },
     {
       "timestamp": "2026-06-17T07:21:00",
       "step": "dependency_installation",
       "action": "安装构建和测试依赖",
       "result": "成功",
-      "details": {"packages": ["pip3: requirements.txt（已预装）", "pip3: tests/requirements.txt (tensorflow==2.20.0)"]}
+      "details": {
+        "packages": [
+          "pip3: requirements.txt（已预装）",
+          "pip3: tests/requirements.txt (tensorflow==2.20.0)"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T07:23:00",
       "step": "build",
       "action": "执行构建: bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
       "result": "成功",
-      "details": {"concurrency": 7, "concurrency_ratio": "58%", "artifact": "cann-ops-math-custom_linux-x86_64.run"}
+      "details": {
+        "concurrency": 7,
+        "concurrency_ratio": "58%",
+        "artifact": "cann-ops-math-custom_linux-x86_64.run"
+      }
     },
     {
       "timestamp": "2026-06-17T07:31:10",
       "step": "install",
       "action": "首次安装自定义算子包（未source环境变量）",
       "result": "失败",
-      "details": {"error": "未source set_env.sh导致共享库验证失败，安装回滚，目录为空"}
+      "details": {
+        "error": "未source set_env.sh导致共享库验证失败，安装回滚，目录为空"
+      }
     },
     {
       "timestamp": "2026-06-17T07:32:20",
       "step": "install",
       "action": "重新安装自定义算子包（source环境变量后）",
       "result": "成功",
-      "details": {"install_path": "/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_math"}
+      "details": {
+        "install_path": "/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_math"
+      }
     },
     {
       "timestamp": "2026-06-17T07:32:40",
       "step": "sample_execution",
       "action": "运行样例: bash build.sh --run_example add_example eager cust --vendor_name=custom",
       "result": "失败",
-      "details": {"error": "容器内无NPU设备，aclInit失败（错误码507008/500000）"}
+      "details": {
+        "error": "容器内无NPU设备，aclInit失败（错误码507008/500000）"
+      }
     },
     {
       "timestamp": "2026-06-17T07:33:05",
       "step": "ut_execution",
       "action": "执行UT: bash build.sh -u --ophost --ops=add_example",
       "result": "成功",
-      "details": {"total": 3, "passed": 3, "failed": 0}
+      "details": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      }
     },
     {
       "timestamp": "2026-06-17T07:34:00",
@@ -303,7 +350,9 @@
       "step": "report_generation",
       "action": "生成验证报告",
       "result": "成功",
-      "details": {"output_file": "verification_report_WSL_ops-math_20260617.json"}
+      "details": {
+        "output_file": "verification_report_WSL_ops-math_20260617.json"
+      }
     }
   ],
   "final_results": {
@@ -383,5 +432,30 @@
       "source": "docs/zh/install/quick_install.md 提到运行态需安装驱动与固件"
     }
   ],
-  "session_export_file": "verification_session_WSL_ops-math_20260617.md"
+  "session_export_file": "verification_session_WSL_ops-math_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（2个hooks，全部通过），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "全部通过",
+      "duration_seconds": 5,
+      "total_hooks": 2,
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }

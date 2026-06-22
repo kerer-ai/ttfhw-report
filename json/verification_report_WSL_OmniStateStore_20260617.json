@@ -181,14 +181,23 @@
       "step": "document_reading",
       "action": "读取README.md、installation_guide.md、quick_start.md",
       "result": "成功",
-      "details": {"files_read": ["README.md", "docs/zh/installation_guide.md", "docs/zh/quick_start.md"]}
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/zh/installation_guide.md",
+          "docs/zh/quick_start.md"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T17:48:55",
       "step": "static_analysis_scan",
       "action": "检查仓库pre-commit配置",
       "result": "已配置",
-      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 5}
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 5
+      }
     },
     {
       "timestamp": "2026-06-17T17:49:10",
@@ -211,35 +220,67 @@
       "step": "container_setup",
       "action": "拉取镜像并启动容器",
       "result": "成功",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp3"}
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:22.03-lts-sp3"
+      }
     },
     {
       "timestamp": "2026-06-17T17:52:14",
       "step": "dependency_installation",
       "action": "安装构建依赖",
       "result": "成功",
-      "details": {"packages": ["cmake", "gcc", "gcc-c++", "make", "java-1.8.0-openjdk-devel", "git"]}
+      "details": {
+        "packages": [
+          "cmake",
+          "gcc",
+          "gcc-c++",
+          "make",
+          "java-1.8.0-openjdk-devel",
+          "git"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T17:52:14",
       "step": "build_attempt",
       "action": "首次构建尝试",
       "result": "失败",
-      "details": {"error": "JAVA_HOME环境变量未设置"}
+      "details": {
+        "error": "JAVA_HOME环境变量未设置"
+      }
     },
     {
       "timestamp": "2026-06-17T18:10:19",
       "step": "build_retry",
       "action": "构建测试（debug模式）",
       "result": "失败",
-      "details": {"error": "磁盘空间不足"}
+      "details": {
+        "error": "磁盘空间不足"
+      }
     },
     {
       "timestamp": "2026-06-17T18:41:45",
       "step": "build_success",
       "action": "构建C++部分",
       "result": "成功",
-      "details": {"artifacts": ["libockdbjni-linux64.so", "libbss_common.a", "libbss_db.a", "libbss_kv_table.a", "libslice_table.a", "liblsm_store.a", "libblob_store.a", "libbss_memory.a", "libbss_fresh_table.a", "libbss_executor.a", "libbss_compress.a", "libsnapshot.a", "libspdlog.a", "libboundscheck.so"]}
+      "details": {
+        "artifacts": [
+          "libockdbjni-linux64.so",
+          "libbss_common.a",
+          "libbss_db.a",
+          "libbss_kv_table.a",
+          "libslice_table.a",
+          "liblsm_store.a",
+          "libblob_store.a",
+          "libbss_memory.a",
+          "libbss_fresh_table.a",
+          "libbss_executor.a",
+          "libbss_compress.a",
+          "libsnapshot.a",
+          "libspdlog.a",
+          "libboundscheck.so"
+        ]
+      }
     },
     {
       "timestamp": "2026-06-17T18:42:52",
@@ -258,7 +299,13 @@
         "config_file": ".pre-commit-config.yaml",
         "status": "已配置",
         "hooks_count": 5,
-        "hooks": ["run-build", "run-build-test", "clang-format", "clang-tidy", "clang-tidy-test"]
+        "hooks": [
+          "run-build",
+          "run-build-test",
+          "clang-format",
+          "clang-tidy",
+          "clang-tidy-test"
+        ]
       },
       "lint_runner": {
         "configured": false,
@@ -389,5 +436,32 @@
       "source": "scripts/build.sh中build_all目标需要构建Java部分"
     }
   ],
-  "session_export_file": "verification_session_WSL_OmniStateStore_20260617.md"
+  "session_export_file": "verification_session_WSL_OmniStateStore_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到pre-commit配置（5个hooks），未检测到lint-runner配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "已配置",
+      "hooks_count": 5,
+      "hooks": [
+        "run-build",
+        "run-build-test",
+        "clang-format",
+        "clang-tidy",
+        "clang-tidy-test"
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置devcontainer"
+  }
 }

@@ -235,7 +235,11 @@
       "action": "检查仓库 lint-runner 配置",
       "result": "未配置",
       "details": {
-        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
       }
     },
     {
@@ -269,7 +273,9 @@
       "action": "安装 Python 依赖",
       "result": "成功",
       "details": {
-        "packages": ["pyyaml"]
+        "packages": [
+          "pyyaml"
+        ]
       }
     },
     {
@@ -299,8 +305,16 @@
       "action": "执行单元测试",
       "result": "成功",
       "details": {
-        "nnopbase_utest": {"total": 965, "passed": 965, "failed": 0},
-        "op_common_utest": {"total": 5, "passed": 5, "failed": 0}
+        "nnopbase_utest": {
+          "total": 965,
+          "passed": 965,
+          "failed": 0
+        },
+        "op_common_utest": {
+          "total": 5,
+          "passed": 5,
+          "failed": 0
+        }
       }
     },
     {
@@ -398,5 +412,36 @@
       "source": ".pre-commit-config.yaml 第2行"
     }
   ],
-  "session_export_file": "verification_session_WSL_opbase_20260617.md"
+  "session_export_file": "verification_session_WSL_opbase_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（2个hooks：clang-format、oat-check），但配置文件使用 tab 缩进导致 YAML 解析失败，无法执行；未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "执行失败",
+      "duration_seconds": 0,
+      "total_hooks": 2,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "pre-commit-config",
+          "file": ".pre-commit-config.yaml",
+          "error": "YAML 解析失败：文件使用 tab 缩进而非空格，导致 'found character that cannot start any token' 错误"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
 }
