@@ -9,6 +9,8 @@ import {
   Code, ArrowRight, TrendingUp, CheckCircle,
   Layers, Globe, Monitor, RefreshCw, ArrowLeft,
   Hammer, Container, TestTube, Play, Clock,
+  AlertTriangle, Lightbulb, MessageSquare, Target,
+  GitBranch, Terminal, Shield, Cpu, XCircle,
 } from 'lucide-react'
 
 // ================================================================
@@ -44,7 +46,6 @@ const COMMUNITY_STATS: CommunityStats[] = [
   { community: '其他', total: 3, success: 1, failed: 0, partial: 2, passRate: 33, avgDuration: 2000 },
 ]
 
-// 聚合问题统计
 const PROBLEM_STATS = {
   totalReposWithProblems: 57,
   totalProblems: 213,
@@ -61,7 +62,19 @@ const PROBLEM_STATS = {
 }
 
 // ================================================================
-// Section 3: AI 4-Stage 效率拆解
+// Act 时间轴
+// ================================================================
+
+const ACTS = [
+  { num: 1, title: '为什么做', sub: 'The Problem', icon: Target, time: '~3min', color: 'rose' as const },
+  { num: 2, title: '怎么做', sub: 'The Approach', icon: Layers, time: '~4min', color: 'indigo' as const },
+  { num: 3, title: '深度案例', sub: 'Deep Dive', icon: Play, time: '~6min', color: 'purple' as const },
+  { num: 4, title: '规模化成果', sub: 'Results', icon: BarChart3, time: '~4min', color: 'emerald' as const },
+  { num: 5, title: '带走什么', sub: 'Takeaways', icon: Lightbulb, time: '~3min', color: 'amber' as const },
+]
+
+// ================================================================
+// Act 2: AI 4-Stage 效率拆解
 // ================================================================
 
 const AI_STAGES = [
@@ -119,15 +132,8 @@ const AI_STAGES = [
   },
 ]
 
-const COLOR_MAP: Record<string, { bg: string; text: string; border: string; light: string }> = {
-  indigo: { bg: 'bg-indigo-600', text: 'text-indigo-600', border: 'border-indigo-200', light: 'bg-indigo-50' },
-  emerald: { bg: 'bg-emerald-600', text: 'text-emerald-600', border: 'border-emerald-200', light: 'bg-emerald-50' },
-  purple: { bg: 'bg-purple-600', text: 'text-purple-600', border: 'border-purple-200', light: 'bg-purple-50' },
-  amber: { bg: 'bg-amber-600', text: 'text-amber-600', border: 'border-amber-200', light: 'bg-amber-50' },
-}
-
 // ================================================================
-// Section 6: pytorch AI 验证演示 — 硬编码时间线
+// Act 3: PyTorch AI 验证演示 — 硬编码时间线
 // ================================================================
 
 interface DemoStep {
@@ -239,7 +245,145 @@ const DEMO_STEPS: DemoStep[] = [
 ]
 
 // ================================================================
-// Section 7: AI 能力总结
+// Act 3: 3 个关键时刻 — 跨仓库 AI 修复精选
+// ================================================================
+
+const KEY_MOMENTS = [
+  {
+    repo: 'Ascend/pytorch',
+    problem: 'CMake 3.28+ 策略兼容性',
+    icon: Shield,
+    aiThought: '错误信息显示 cmake_minimum_required 与 policy CMP0167 冲突。这是 CMake 3.28 新增的兼容性检查，不是代码 bug。最优解：设置环境变量覆盖策略版本，不改源码。',
+    aiAction: 'export CMAKE_POLICY_VERSION_MINIMUM=3.5',
+    result: '构建通过，零代码改动',
+    lesson: 'AI 能区分"环境配置问题"和"代码问题"，优先选择无侵入式修复',
+  },
+  {
+    repo: 'Ascend/pytorch',
+    problem: '20 核并发编译 OOM',
+    icon: Cpu,
+    aiThought: 'dmesg 显示 cc1plus 被 OOM Killer 终止，内存耗尽。当前 ninja -j20 并发过高。C++ 模板实例化本身内存密集，大文件需降低并发。',
+    aiAction: 'export MAX_JOBS=4 && ninja -j4（降至 4 核并发）',
+    result: '增量构建成功，内存峰值从 >16GB 降至 ~4GB',
+    lesson: 'AI 能从系统级错误信号（OOM Killer）反向推导资源约束，自动调整策略',
+  },
+  {
+    repo: '多仓库通用',
+    problem: '缺少运行时库依赖',
+    icon: Terminal,
+    aiThought: 'import 报错 "libhccl.so not found"。这不是构建问题——产物正确生成了。运行时库依赖是环境配置问题，不是构建缺陷。',
+    aiAction: 'pip install wheel 成功 → 标记 UT 为 not_run（环境不具备），记录具体缺失的库名和版本',
+    result: '正确区分"构建失败"与"运行环境缺失"，避免误报',
+    lesson: 'AI 能准确判断问题归属——是代码问题还是环境问题，避免无效修复尝试',
+  },
+]
+
+// ================================================================
+// Act 2: AI 决策树
+// ================================================================
+
+const DECISION_TREE = {
+  title: 'AI 遇到构建错误的决策流程',
+  steps: [
+    { label: '捕获错误', detail: '解析 stderr/stdout，提取错误码和关键报错行', icon: Terminal },
+    { label: '归类错误', detail: '匹配已知错误模式：CMake/OOM/依赖/网络/源码', icon: Search },
+    { label: '评估策略', detail: '优先无侵入修复（环境变量/配置）→ 其次依赖安装 → 最后标记需人工', icon: Brain },
+    { label: '执行修复', detail: '应用策略，记录变更内容和决策依据', icon: Wrench },
+    { label: '验证结果', detail: '重新执行失败的步骤，确认修复有效', icon: CheckCircle },
+  ],
+}
+
+// ================================================================
+// Act 4: 失败博物馆 — AI 的边界
+// ================================================================
+
+const FAILURE_MUSEUM = [
+  {
+    icon: Cpu,
+    title: '硬件依赖（NPU）',
+    problem: 'UT 和样例需要 NPU 硬件，x86 环境不具备',
+    aiAttempt: '尝试安装 CANN 模拟器、寻找 CPU-only fallback',
+    outcome: '无法绕过',
+    why: '物理硬件限制，非软件层面可解决。AI 正确标记为 not_run 而非 failed',
+  },
+  {
+    icon: Globe,
+    title: '容器网络/DNS 异常',
+    problem: 'Docker 容器内 DNS 解析失败，无法访问外部 pip/apt 源',
+    aiAttempt: '尝试配置 DNS、使用镜像源、修改 /etc/resolv.conf',
+    outcome: '部分可解决',
+    why: '底层网络基础设施问题，AI 能力受限于容器环境权限',
+  },
+  {
+    icon: GitBranch,
+    title: '仓库源码 Bug',
+    problem: '仓库自身代码存在编译错误（非环境问题）',
+    aiAttempt: '分析编译错误、尝试常见修复模式',
+    outcome: '不修改源码',
+    why: '设计原则：AI 不修改被验证仓库的源码，确保验证结果客观可信',
+  },
+  {
+    icon: Shield,
+    title: '需交互式认证',
+    problem: '私有依赖需要 SSH key 或 token 认证',
+    aiAttempt: '检查本地凭证、尝试匿名访问',
+    outcome: '标记为环境限制',
+    why: '安全性约束：AI 不应处理认证凭证',
+  },
+]
+
+// ================================================================
+// Act 5: 可复用方法论
+// ================================================================
+
+const REUSABLE_PATTERNS = [
+  {
+    icon: FileText,
+    title: '从文档出发，不猜测',
+    desc: 'AI 严格依据 README/构建脚本，不基于"常识"假设。这对保证验证结果客观性至关重要。',
+    applies: '任何需要理解外部代码的场景',
+  },
+  {
+    icon: GitBranch,
+    title: '不修改源码原则',
+    desc: 'AI 只能调整环境变量、构建参数、依赖版本——绝不修改仓库源码。这保证了"验证的是仓库本身"。',
+    applies: '代码审查、CI/CD 验证、兼容性测试',
+  },
+  {
+    icon: BarChart3,
+    title: '每步可追溯',
+    desc: 'AI 记录每步操作的决策依据、耗时、结果。不是黑盒——任何人都可以回溯验证过程。',
+    applies: '合规审计、质量追溯、知识沉淀',
+  },
+  {
+    icon: Layers,
+    title: '标准化输出',
+    desc: '无论输入格式多混乱，AI 将结果归一化为 5 种标准状态。下游消费方（页面、飞书）无需理解原始格式。',
+    applies: '多源数据聚合、自动化报表、系统集成',
+  },
+]
+
+// ================================================================
+// Act 5: 讨论问题
+// ================================================================
+
+const DISCUSSION_QUESTIONS = [
+  {
+    q: '你们的项目中有哪些重复性验证工作可以用类似方式提效？',
+    hint: '想一想：每次发版前需要手动检查的清单、新人 onboarding 时需要跑通的构建流程、跨多个仓库的一致性验证...',
+  },
+  {
+    q: 'AI 辅助开发的边界在哪里——哪些环节适合 AI，哪些必须人来判断？',
+    hint: 'AI 擅长：模式匹配、错误分类、策略执行。人类擅长：架构决策、安全审计、业务正确性判断。',
+  },
+  {
+    q: '如果要把这个流程推广到你的团队，最大的障碍是什么？',
+    hint: '可能是：数据敏感性、环境差异、流程标准化程度、团队对 AI 的信任度...',
+  },
+]
+
+// ================================================================
+// Act 5: AI 能力总结
 // ================================================================
 
 const AI_CAPABILITIES = [
@@ -252,7 +396,19 @@ const AI_CAPABILITIES = [
 ]
 
 // ================================================================
-// 辅助函数
+// 颜色映射
+// ================================================================
+
+const COLOR_MAP: Record<string, { bg: string; text: string; border: string; light: string }> = {
+  indigo: { bg: 'bg-indigo-600', text: 'text-indigo-600', border: 'border-indigo-200', light: 'bg-indigo-50' },
+  emerald: { bg: 'bg-emerald-600', text: 'text-emerald-600', border: 'border-emerald-200', light: 'bg-emerald-50' },
+  purple: { bg: 'bg-purple-600', text: 'text-purple-600', border: 'border-purple-200', light: 'bg-purple-50' },
+  amber: { bg: 'bg-amber-600', text: 'text-amber-600', border: 'border-amber-200', light: 'bg-amber-50' },
+  rose: { bg: 'bg-rose-600', text: 'text-rose-600', border: 'border-rose-200', light: 'bg-rose-50' },
+}
+
+// ================================================================
+// 辅助函数 & 小组件
 // ================================================================
 
 function resultBadge(result: DemoStep['result']) {
@@ -286,15 +442,70 @@ function resultBadge(result: DemoStep['result']) {
   }
 }
 
-// 效率估算
 function getEfficiencyNumbers() {
-  const aiMinutes = Math.round(STATS.avgDuration / 60) // ≈ 69 min
+  const aiMinutes = Math.round(STATS.avgDuration / 60)
   const manualMinutes = 100
-  const multiplier = Math.round((manualMinutes / aiMinutes) * 10) / 10 // ≈ 1.4x
-  const aiTotalHours = Math.round((STATS.total * aiMinutes) / 60) // ≈ 68h
-  const manualTotalHours = STATS.total * 2 // 118h
-  const savedHours = manualTotalHours - aiTotalHours // ≈ 50h
+  const multiplier = Math.round((manualMinutes / aiMinutes) * 10) / 10
+  const aiTotalHours = Math.round((STATS.total * aiMinutes) / 60)
+  const manualTotalHours = STATS.total * 2
+  const savedHours = manualTotalHours - aiTotalHours
   return { aiMinutes, manualMinutes, multiplier, aiTotalHours, manualTotalHours, savedHours }
+}
+
+// ================================================================
+// Speaker Notes 组件
+// ================================================================
+
+function SpeakerNotes({ time, points, transition }: { time: string; points: string[]; transition?: string }) {
+  return (
+    <div className="mt-8 rounded-xl border-l-4 border-l-amber-400 bg-amber-50/60 px-5 py-4">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="text-sm">💬</span>
+        <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">讲者提示</span>
+        <span className="text-xs text-amber-500">· ⏱ {time}</span>
+      </div>
+      <ul className="space-y-1.5">
+        {points.map((p, i) => (
+          <li key={i} className="flex items-start gap-2 text-sm text-amber-800 leading-relaxed">
+            <span className="mt-0.5 shrink-0 text-amber-400">•</span>
+            {p}
+          </li>
+        ))}
+      </ul>
+      {transition && (
+        <p className="mt-3 text-xs text-amber-500 italic border-t border-amber-200 pt-2">
+          🔗 过渡语：{transition}
+        </p>
+      )}
+    </div>
+  )
+}
+
+// ================================================================
+// Transition Bar 组件 — Act 之间的大过渡
+// ================================================================
+
+function ActTransition({ num, title, sub, color }: { num: number; title: string; sub: string; color: string }) {
+  const c = COLOR_MAP[color]
+  return (
+    <div className="py-6 bg-slate-100/50">
+      <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+        <div className="flex items-center gap-4">
+          <span className={`inline-flex h-10 w-10 items-center justify-center rounded-xl ${c.bg} text-lg font-bold text-white shadow-sm`}>
+            {num}
+          </span>
+          <div>
+            <h3 className="text-xl font-bold text-slate-800">{title}</h3>
+            <p className="text-sm text-slate-500">{sub}</p>
+          </div>
+          <div className="ml-auto flex items-center gap-1.5 text-xs text-slate-400">
+            <Clock className="h-3.5 w-3.5" />
+            {ACTS[num - 1]?.time}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 // ================================================================
@@ -307,26 +518,51 @@ export default function SharePage() {
   return (
     <main>
       {/* ================================================================ */}
-      {/* Section 1: Hero */}
+      {/* 🕐 顶部时间轴导航 */}
       {/* ================================================================ */}
-      <section className="bg-gradient-to-b from-indigo-50 via-white to-white py-20">
-        <div className="mx-auto max-w-screen-xl px-6 xl:px-8 text-center">
-          {/* Breadcrumb */}
-          <Link
-            href="/"
-            className="mb-8 inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-indigo-600 transition-colors"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            返回仪表盘
-          </Link>
+      <div className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="flex items-center gap-1 py-3 overflow-x-auto">
+            {ACTS.map((act, i) => {
+              const c = COLOR_MAP[act.color]
+              return (
+                <div key={act.num} className="flex items-center gap-1 shrink-0">
+                  {i > 0 && <ArrowRight className="h-3 w-3 text-slate-300 mx-1" />}
+                  <div className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5">
+                    <span className={`inline-flex h-5 w-5 items-center justify-center rounded-full ${c.bg} text-[10px] font-bold text-white`}>
+                      {act.num}
+                    </span>
+                    <span className="text-xs font-medium text-slate-700">{act.title}</span>
+                    <span className="text-[10px] text-slate-400">{act.time}</span>
+                  </div>
+                </div>
+              )
+            })}
+            <Link
+              href="/"
+              className="ml-auto shrink-0 inline-flex items-center gap-1 text-xs text-slate-400 hover:text-indigo-600 transition-colors"
+            >
+              <ArrowLeft className="h-3 w-3" />
+              仪表盘
+            </Link>
+          </div>
+        </div>
+      </div>
 
+      {/* ================================================================ */}
+      {/* Act 1: 为什么做 (The Problem) — ~3min */}
+      {/* ================================================================ */}
+      <ActTransition num={1} title="为什么做" sub="The Problem" color="rose" />
+
+      {/* Hero */}
+      <section className="bg-gradient-to-b from-rose-50 via-white to-white pt-6 pb-16">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8 text-center">
           {/* Badge */}
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-indigo-100 px-5 py-2 text-sm font-medium text-indigo-700">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-rose-100 px-5 py-2 text-sm font-medium text-rose-700">
             <Brain className="h-4 w-4" />
             AI 辅助业务实践
           </div>
 
-          {/* Title */}
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
             AI 辅助软件构建验证
           </h1>
@@ -338,15 +574,15 @@ export default function SharePage() {
           {/* Key Numbers */}
           <div className="mt-12 grid grid-cols-3 gap-8 max-w-xl mx-auto">
             <div>
-              <div className="text-4xl font-bold text-indigo-600">{STATS.total}+</div>
+              <div className="text-4xl font-bold text-rose-600">{STATS.total}+</div>
               <div className="mt-1 text-sm text-slate-400">仓库全自动验证</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-600">4</div>
+              <div className="text-4xl font-bold text-rose-600">4</div>
               <div className="mt-1 text-sm text-slate-400">AI 驱动阶段</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-600">
+              <div className="text-4xl font-bold text-rose-600">
                 {eff.aiMinutes}min
               </div>
               <div className="mt-1 text-sm text-slate-400">平均每仓库完成</div>
@@ -355,26 +591,346 @@ export default function SharePage() {
         </div>
       </section>
 
-      {/* ================================================================ */}
-      {/* Section 2: Manual vs AI */}
-      {/* ================================================================ */}
-      <section className="py-16 bg-white">
+      {/* Pain Point Story */}
+      <section className="pb-16 bg-white">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          {/* Section Header */}
-          <div className="mb-12 text-center">
+          <div className="mx-auto max-w-3xl">
+            <Card className="border-rose-200 bg-rose-50/30">
+              <div className="flex items-start gap-4">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-rose-100">
+                  <AlertTriangle className="h-6 w-6 text-rose-600" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-rose-800 mb-3">
+                    问题：人工验证 {STATS.total} 个仓库是不可持续的
+                  </h3>
+                  <div className="space-y-3 text-sm text-slate-600 leading-relaxed">
+                    <p>
+                      在 AI 辅助之前，验证一个开源仓库需要约 <strong>{eff.manualMinutes} 分钟</strong>人工投入——
+                      阅读 README、理解构建系统、搭建 Docker 环境、安装依赖、执行构建、
+                      排查错误、运行测试、整理报告。每个步骤都需要人的判断和操作。
+                    </p>
+                    <p>
+                      {STATS.total} 个仓库意味着 <strong>{eff.manualTotalHours} 小时</strong>的重复性工作。
+                      而且：
+                    </p>
+                    <ul className="space-y-2 ml-4">
+                      <li className="flex items-start gap-2">
+                        <XCircle className="h-4 w-4 text-rose-400 shrink-0 mt-0.5" />
+                        <span><strong>标准不统一</strong> — 每个人对"验证通过"的判断标准不同</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <XCircle className="h-4 w-4 text-rose-400 shrink-0 mt-0.5" />
+                        <span><strong>经验难沉淀</strong> — 排查过程没人记录，换了人就重新踩坑</span>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <XCircle className="h-4 w-4 text-rose-400 shrink-0 mt-0.5" />
+                        <span><strong>无法规模化</strong> — 增加新仓库就意味着增加线性的人力投入</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            <SpeakerNotes
+              time="3min"
+              points={[
+                '开场先抛一个互动问题："你上次手动验证一个开源仓库，从 clone 到跑通构建，花了多久？"',
+                '重点讲清楚 59 × 2h = 118h 的不可持续性 — 这不是"努力不够"，而是"模式不对"',
+                '三个痛点（标准不统一、经验难沉淀、无法规模化）是后续 AI 方案要解决的，先埋下伏笔',
+                '这一节要快，3 分钟内进入 Act 2。不要让观众在"问题陈述"阶段停留太久',
+              ]}
+              transition="好，问题很清楚了。那我们是怎么用 AI 解决的？来看看整体方案。"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* Act 2: 怎么做 (The Approach) — ~4min */}
+      {/* ================================================================ */}
+      <ActTransition num={2} title="怎么做" sub="The Approach" color="indigo" />
+
+      {/* 4-Stage Pipeline */}
+      <section className="py-12 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mb-10 text-center">
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-indigo-50 px-4 py-1.5 text-sm font-medium text-indigo-700">
+              <Layers className="h-4 w-4" />
+              全链路 AI 自动化
+            </div>
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              AI 在 4 个阶段替代了什么
+            </h2>
+            <p className="mt-3 text-lg text-slate-500 max-w-2xl mx-auto">
+              从仓库验证到飞书报告，4 个阶段全由 AI 驱动，人只做最终审核
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {AI_STAGES.map((stage) => {
+              const c = COLOR_MAP[stage.color]
+              return (
+                <Card key={stage.num} className={`border-2 ${c.border} ${c.light}/30 flex flex-col`}>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg ${c.bg} text-sm font-bold text-white`}>
+                      {stage.num}
+                    </span>
+                    <stage.icon className={`h-5 w-5 ${c.text}`} />
+                  </div>
+                  <h3 className="text-base font-semibold text-slate-800">{stage.title}</h3>
+                  <code className="mt-1 text-[11px] font-mono text-slate-400">{stage.skill}</code>
+                  <div className="mt-4 rounded-lg bg-slate-50 border border-slate-100 p-3">
+                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-1">
+                      🤖 AI 替代了
+                    </p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{stage.aiReplaces}</p>
+                  </div>
+                  <ul className="mt-4 space-y-2 flex-1">
+                    {stage.highlights.map((h, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <CheckCircle className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${c.text}`} />
+                        <span className="text-xs text-slate-500 leading-relaxed">{h}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* AI Decision Tree */}
+      <section className="pb-14 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mx-auto max-w-3xl">
+            <Card className="border-indigo-100 bg-indigo-50/20">
+              <div className="flex items-center gap-2 mb-4">
+                <GitBranch className="h-5 w-5 text-indigo-500" />
+                <h3 className="text-base font-semibold text-indigo-800">
+                  {DECISION_TREE.title}
+                </h3>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {DECISION_TREE.steps.map((step, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 rounded-lg bg-white border border-indigo-100 px-3 py-2 shadow-sm">
+                      <step.icon className="h-4 w-4 text-indigo-500 shrink-0" />
+                      <div>
+                        <div className="text-xs font-semibold text-slate-700">{step.label}</div>
+                        <div className="text-[11px] text-slate-400 leading-tight">{step.detail}</div>
+                      </div>
+                    </div>
+                    {i < DECISION_TREE.steps.length - 1 && (
+                      <ArrowRight className="h-4 w-4 text-indigo-300 shrink-0" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <SpeakerNotes
+              time="4min"
+              points={[
+                '4 个阶段卡片快速过，每个 ~45 秒。重点不是念卡片，而是让观众感受"全链路"',
+                '决策树是本节亮点——花 1 分钟讲清楚 AI 的 5 步决策循环。这回答了"AI 不是魔法"',
+                '关键信息：AI 优先无侵入修复（环境变量）→ 其次依赖安装 → 最后才标记需人工。这是设计原则',
+              ]}
+              transition="好，方案讲完了。接下来我们看一个真实案例——AI 到底是怎么工作的？"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* Act 3: 深度案例 (Deep Dive) — ~6min */}
+      {/* ================================================================ */}
+      <ActTransition num={3} title="深度案例" sub="Deep Dive" color="purple" />
+
+      {/* PyTorch Demo Timeline */}
+      <section className="py-12 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mb-10 text-center">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-purple-50 px-4 py-1.5 text-sm font-medium text-purple-700">
+              <Play className="h-4 w-4" />
+              实战回放
+            </div>
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              AI 验证全过程演示
+            </h2>
+            <p className="mt-3 text-lg text-slate-500">
+              以{' '}
+              <a href="https://gitcode.com/Ascend/pytorch.git" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
+                Ascend/pytorch
+              </a>{' '}
+              为例 — AI 在无人工干预下完成 11 个步骤，4 次构建尝试，3 次 AI 自主修复后成功
+            </p>
+          </div>
+
+          {/* Timeline */}
+          <div className="relative mx-auto max-w-2xl">
+            <div className="absolute left-8 top-0 bottom-0 w-px bg-slate-200" />
+            <div className="space-y-0">
+              {DEMO_STEPS.map((step, i) => (
+                <div key={i} className="relative flex gap-6 pb-8 last:pb-0">
+                  <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center">
+                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${step.iconBg} shadow-sm ring-4 ring-white`}>
+                      {step.icon}
+                    </div>
+                  </div>
+                  <Card className="flex-1">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h4 className="text-sm font-semibold text-slate-800">
+                            {step.label}
+                          </h4>
+                          {resultBadge(step.result)}
+                          {step.duration && (
+                            <span className="text-xs text-slate-400 font-mono">
+                              {step.duration}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-line">
+                          {step.detail}
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-slate-300 shrink-0 mt-1" />
+                    </div>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Build Duration Breakdown */}
+          <Card className="mt-10 mx-auto max-w-2xl border-purple-100 bg-purple-50/30">
+            <div className="flex items-center gap-2 mb-3">
+              <Brain className="h-4 w-4 text-purple-500" />
+              <span className="text-sm font-semibold text-purple-800">
+                AI 的多轮尝试耗时分解
+              </span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {[
+                { label: '第1次尝试', dur: '38s', status: 'failed' },
+                { label: '第2次尝试', dur: '57s', status: 'failed' },
+                { label: '第3次 OOM', dur: '23m 58s', status: 'failed' },
+                { label: '第4次成功', dur: '5m 35s', status: 'success' },
+              ].map((item, i) => (
+                <div key={i} className="rounded-lg bg-white border border-purple-100 p-3 text-center">
+                  <div className={`text-lg font-bold ${item.status === 'success' ? 'text-emerald-600' : 'text-red-500'}`}>
+                    {item.dur}
+                  </div>
+                  <div className="text-xs text-slate-400 mt-1">{item.label}</div>
+                </div>
+              ))}
+            </div>
+            <p className="mt-3 text-xs text-slate-400 text-center">
+              4 次构建尝试，第 4 次成功 — AI 每次失败后自主调整策略，无需人工介入
+            </p>
+          </Card>
+
+          <SpeakerNotes
+            time="3min (本段)"
+            points={[
+              '快速过时间线，不要逐条念。重点停顿在 3 个 "AI 自主修复" 节点，让观众感受 AI 的决策能力',
+              '第 3 次构建（OOM）是最精彩的转折点——AI 从系统级信号反向推导出资源约束',
+              '最后一句话强调：全程无人干预，AI 自己完成了 4 次尝试-失败-修复循环',
+            ]}
+          />
+        </div>
+      </section>
+
+      {/* 3 Key Moments */}
+      <section className="pb-14 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700">
+                <Lightbulb className="h-4 w-4" />
+                3 个关键时刻
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900">
+                AI 的决策是如何产生的
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                不只讲结果，更要看 AI 的推理过程——它是怎么想的，为什么这样决策
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-5">
+              {KEY_MOMENTS.map((moment, i) => (
+                <Card key={i} className="border-violet-100 hover:border-violet-200 transition-colors">
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100">
+                      <moment.icon className="h-5 w-5 text-violet-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xs font-mono text-violet-500 bg-violet-50 px-2 py-0.5 rounded">
+                          {moment.repo}
+                        </span>
+                        <h4 className="text-sm font-semibold text-slate-800">{moment.problem}</h4>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="rounded-lg bg-purple-50/50 border border-purple-100 p-3">
+                          <span className="text-[11px] font-semibold text-purple-500 uppercase tracking-wide">🧠 AI 推理</span>
+                          <p className="mt-1 text-slate-600 leading-relaxed">{moment.aiThought}</p>
+                        </div>
+                        <div className="rounded-lg bg-emerald-50/50 border border-emerald-100 p-3">
+                          <span className="text-[11px] font-semibold text-emerald-500 uppercase tracking-wide">🔧 AI 行动</span>
+                          <p className="mt-1 font-mono text-xs text-emerald-700">{moment.aiAction}</p>
+                        </div>
+                        <div className="flex items-start gap-2 text-slate-600">
+                          <CheckCircle className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                          <span><strong>结果：</strong>{moment.result}</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-slate-500">
+                          <Lightbulb className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                          <span className="text-xs italic">💡 {moment.lesson}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <SpeakerNotes
+              time="3min (本段)"
+              points={[
+                '3 个案例各 ~1 分钟。核心不是念内容，而是每段引出 "lesson learned"',
+                '案例 1 + 2 是 AI 成功修复，案例 3 是 AI 正确判断"不需要修"——同样重要',
+                '强调 "AI 推理" 部分的思考链——这是 AI 和脚本的本质区别',
+              ]}
+              transition="好，看完了深度案例。那规模化之后，整体效果如何？"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ================================================================ */}
+      {/* Act 4: 规模化成果 (Results at Scale) — ~4min */}
+      {/* ================================================================ */}
+      <ActTransition num={4} title="规模化成果" sub="Results at Scale" color="emerald" />
+
+      {/* Manual vs AI */}
+      <section className="py-12 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mb-10 text-center">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
               <Zap className="h-4 w-4" />
               核心变革
             </div>
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
               从人工验证到 AI 自动化
             </h2>
-            <p className="mt-3 text-lg text-slate-500 max-w-2xl mx-auto">
-              同样的验证任务，AI 不仅更快、更一致，还能发现人类容易遗漏的细节
-            </p>
           </div>
 
-          {/* Two-Column Comparison */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* LEFT: Manual */}
             <div className="rounded-2xl border-2 border-red-100 bg-red-50/30 p-8">
@@ -434,103 +990,40 @@ export default function SharePage() {
           </div>
 
           {/* Efficiency Stats Bar */}
-          <div className="mt-8 rounded-2xl bg-gradient-to-r from-indigo-600 to-blue-600 p-8 text-white">
+          <div className="mt-8 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-white">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
               <div>
                 <div className="text-4xl font-bold">{eff.multiplier}x</div>
-                <div className="mt-1 text-sm text-indigo-100">AI 验证效率提升</div>
+                <div className="mt-1 text-sm text-emerald-100">AI 验证效率提升</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">{eff.aiTotalHours}h</div>
-                <div className="mt-1 text-sm text-indigo-100">AI 完成 {STATS.total} 个仓库</div>
+                <div className="mt-1 text-sm text-emerald-100">AI 完成 {STATS.total} 个仓库</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">{eff.savedHours}h</div>
-                <div className="mt-1 text-sm text-indigo-100">相比人工节省时间</div>
+                <div className="mt-1 text-sm text-emerald-100">相比人工节省时间</div>
               </div>
               <div>
                 <div className="text-4xl font-bold">{STATS.buildPassRate}%</div>
-                <div className="mt-1 text-sm text-indigo-100">构建成功率（AI 自主达成）</div>
+                <div className="mt-1 text-sm text-emerald-100">构建成功率（AI 自主达成）</div>
               </div>
             </div>
           </div>
+
+          <SpeakerNotes
+            time="1min (本段)"
+            points={[
+              '左右对比不用逐条念，观众自己会看。重点喊出 1.4x 和 50h+ 两个数字',
+              '注意：1.4x 看起来不高，但要说明——这已经是保守估算，而且 AI 的可复现性远超人工',
+            ]}
+          />
         </div>
       </section>
 
-      {/* ================================================================ */}
-      {/* Section 3: AI 在 4 个阶段的提效拆解 */}
-      {/* ================================================================ */}
-      <section className="py-16 bg-slate-50">
+      {/* Big Numbers + Charts */}
+      <section className="py-10 bg-slate-50">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          <div className="mb-12 text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
-              <Layers className="h-4 w-4" />
-              全链路 AI 自动化
-            </div>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              AI 在 4 个阶段替代了什么
-            </h2>
-            <p className="mt-3 text-lg text-slate-500 max-w-2xl mx-auto">
-              每个阶段 AI 替代了人的具体动作，以及带来的效率提升
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {AI_STAGES.map((stage) => {
-              const c = COLOR_MAP[stage.color]
-              return (
-                <Card key={stage.num} className={`border-2 ${c.border} ${c.light}/30 flex flex-col`}>
-                  {/* Stage Number + Icon */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className={`inline-flex h-8 w-8 items-center justify-center rounded-lg ${c.bg} text-sm font-bold text-white`}>
-                      {stage.num}
-                    </span>
-                    <stage.icon className={`h-5 w-5 ${c.text}`} />
-                  </div>
-
-                  {/* Title */}
-                  <h3 className="text-base font-semibold text-slate-800">{stage.title}</h3>
-                  <code className="mt-1 text-[11px] font-mono text-slate-400">{stage.skill}</code>
-
-                  {/* AI Replaces */}
-                  <div className="mt-4 rounded-lg bg-slate-50 border border-slate-100 p-3">
-                    <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wide mb-1">
-                      🤖 AI 替代了
-                    </p>
-                    <p className="text-xs text-slate-600 leading-relaxed">{stage.aiReplaces}</p>
-                  </div>
-
-                  {/* Highlights */}
-                  <ul className="mt-4 space-y-2 flex-1">
-                    {stage.highlights.map((h, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle className={`h-3.5 w-3.5 shrink-0 mt-0.5 ${c.text}`} />
-                        <span className="text-xs text-slate-500 leading-relaxed">{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </Card>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ================================================================ */}
-      {/* Section 4: 效率量化大数字 */}
-      {/* ================================================================ */}
-      <section className="py-16 bg-white">
-        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          <div className="mb-12 text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
-              <TrendingUp className="h-4 w-4" />
-              效率量化
-            </div>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              AI 带来了多少提升
-            </h2>
-          </div>
-
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <Card className="text-center py-8 border-l-4 border-l-indigo-500">
               <div className="text-5xl font-bold text-indigo-600">{STATS.total}+</div>
@@ -590,30 +1083,13 @@ export default function SharePage() {
         </div>
       </section>
 
-      {/* ================================================================ */}
-      {/* Section 5: 成果一览 */}
-      {/* ================================================================ */}
-      <section className="py-16 bg-slate-50">
+      {/* Results Overview */}
+      <section className="py-10 bg-slate-50">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          <div className="mb-10 text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-1.5 text-sm font-medium text-green-700">
-              <Globe className="h-4 w-4" />
-              验证成果
-            </div>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              {STATS.total} 个仓库验证结果一览
-            </h2>
-            <p className="mt-3 text-lg text-slate-500">
-              覆盖 {COMMUNITY_STATS.length} 个社区，构建成功率 {STATS.buildPassRate}%
-            </p>
-          </div>
-
-          {/* Stats Cards */}
           <div className="mb-8">
             <StatsOverview stats={STATS} />
           </div>
 
-          {/* Pie Chart + Community Breakdown */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card>
               <h3 className="text-sm font-semibold text-slate-700 mb-4">整体验证结果分布</h3>
@@ -665,107 +1141,122 @@ export default function SharePage() {
         </div>
       </section>
 
-      {/* ================================================================ */}
-      {/* Section 6: AI 验证全过程演示（硬编码 pytorch 时间线） */}
-      {/* ================================================================ */}
-      <section className="py-16 bg-white">
+      {/* Failure Museum */}
+      <section className="pb-14 bg-slate-50">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          {/* Section Header */}
-          <div className="mb-10 text-center">
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-purple-50 px-4 py-1.5 text-sm font-medium text-purple-700">
-              <Play className="h-4 w-4" />
-              实战回放
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-6">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-slate-200 px-4 py-1.5 text-sm font-medium text-slate-600">
+                <AlertTriangle className="h-4 w-4" />
+                失败博物馆
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900">
+                AI 也不是万能的
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                诚实展示 AI 的边界——哪些问题 AI 解决不了，为什么
+              </p>
             </div>
-            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
-              AI 验证全过程演示
-            </h2>
-            <p className="mt-3 text-lg text-slate-500">
-              以{' '}
-              <a href="https://gitcode.com/Ascend/pytorch.git" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 underline">
-                Ascend/pytorch
-              </a>{' '}
-              为例 — AI 在无人工干预下完成 11 个步骤，4 次构建尝试，3 次 AI 自主修复后成功
-            </p>
-          </div>
 
-          {/* Timeline */}
-          <div className="relative mx-auto max-w-2xl">
-            {/* Vertical Line */}
-            <div className="absolute left-8 top-0 bottom-0 w-px bg-slate-200" />
-
-            <div className="space-y-0">
-              {DEMO_STEPS.map((step, i) => (
-                <div key={i} className="relative flex gap-6 pb-8 last:pb-0">
-                  {/* Timeline Dot */}
-                  <div className="relative z-10 flex h-16 w-16 shrink-0 items-center justify-center">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${step.iconBg} shadow-sm ring-4 ring-white`}>
-                      {step.icon}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {FAILURE_MUSEUM.map((item, i) => (
+                <Card key={i} className="border-slate-200 hover:border-slate-300 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100">
+                      <item.icon className="h-5 w-5 text-slate-500" />
                     </div>
-                  </div>
-
-                  {/* Content */}
-                  <Card className="flex-1">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h4 className="text-sm font-semibold text-slate-800">
-                            {step.label}
-                          </h4>
-                          {resultBadge(step.result)}
-                          {step.duration && (
-                            <span className="text-xs text-slate-400 font-mono">
-                              {step.duration}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-slate-500 leading-relaxed whitespace-pre-line">
-                          {step.detail}
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-slate-800">{item.title}</h4>
+                      <p className="mt-1 text-xs text-slate-500">{item.problem}</p>
+                      <div className="mt-2 space-y-1 text-xs">
+                        <p className="text-slate-500">
+                          <span className="font-medium text-slate-600">AI 尝试：</span>{item.aiAttempt}
+                        </p>
+                        <p className="flex items-center gap-1">
+                          <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium ${
+                            item.outcome === '无法绕过' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'
+                          }`}>
+                            {item.outcome}
+                          </span>
+                          <span className="text-slate-400">— {item.why}</span>
                         </p>
                       </div>
-                      <ArrowRight className="h-4 w-4 text-slate-300 shrink-0 mt-1" />
                     </div>
-                  </Card>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Build Duration Breakdown */}
-          <Card className="mt-10 mx-auto max-w-2xl border-indigo-100 bg-indigo-50/30">
-            <div className="flex items-center gap-2 mb-3">
-              <Brain className="h-4 w-4 text-indigo-500" />
-              <span className="text-sm font-semibold text-indigo-800">
-                AI 的多轮尝试耗时分解
-              </span>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {[
-                { label: '第1次尝试', dur: '38s', status: 'failed' },
-                { label: '第2次尝试', dur: '57s', status: 'failed' },
-                { label: '第3次 OOM', dur: '23m 58s', status: 'failed' },
-                { label: '第4次成功', dur: '5m 35s', status: 'success' },
-              ].map((item, i) => (
-                <div key={i} className="rounded-lg bg-white border border-indigo-100 p-3 text-center">
-                  <div className={`text-lg font-bold ${item.status === 'success' ? 'text-emerald-600' : 'text-red-500'}`}>
-                    {item.dur}
                   </div>
-                  <div className="text-xs text-slate-400 mt-1">{item.label}</div>
-                </div>
+                </Card>
               ))}
             </div>
-            <p className="mt-3 text-xs text-slate-400 text-center">
-              4 次构建尝试，第 4 次成功 — AI 每次失败后自主调整策略，无需人工介入
-            </p>
-          </Card>
+
+            <SpeakerNotes
+              time="1min (本段)"
+              points={[
+                '失败博物馆是建立信任的关键——承认 AI 的边界比只说好话更可信',
+                '快速过 4 个卡片（各 ~15 秒），重点落在"不修改源码"原则上——这是设计决策，不是技术限制',
+                '如果时间充裕，可以问观众："你们还遇到过什么 AI 解决不了的场景？" 引发讨论',
+              ]}
+              transition="好，看完了成果和边界。最后，这些经验对你有什么用？"
+            />
+          </div>
         </div>
       </section>
 
       {/* ================================================================ */}
-      {/* Section 7: AI 提效关键能力 */}
+      {/* Act 5: 带走什么 (Takeaways) — ~3min */}
       {/* ================================================================ */}
-      <section className="py-16 bg-slate-50">
+      <ActTransition num={5} title="带走什么" sub="Takeaways" color="amber" />
+
+      {/* Reusable Patterns */}
+      <section className="py-12 bg-white">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          <div className="mb-12 text-center">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-amber-50 px-4 py-1.5 text-sm font-medium text-amber-700">
+                <Target className="h-4 w-4" />
+                可复用方法论
+              </div>
+              <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+                不只是案例，更是可迁移的方法
+              </h2>
+              <p className="mt-2 text-sm text-slate-500">
+                以下 4 个核心原则可以应用到其他 AI 辅助开发场景
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {REUSABLE_PATTERNS.map((pattern, i) => (
+                <Card key={i} className="border-amber-100 hover:border-amber-200 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-100">
+                      <pattern.icon className="h-5 w-5 text-amber-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-semibold text-slate-800">{pattern.title}</h4>
+                      <p className="mt-1 text-xs text-slate-500 leading-relaxed">{pattern.desc}</p>
+                      <p className="mt-2 inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-600">
+                        适用：{pattern.applies}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <SpeakerNotes
+              time="1.5min"
+              points={[
+                '这 4 个方法论是今天分享最重要的 "可带走" 内容。不需要全部展开，挑 1-2 个重点',
+                '推荐重点："不修改源码"和"每步可追溯"——这两个原则最容易被忽视，但最关键',
+                '每张卡片控制在 ~20 秒，快速建立"这些方法论你也能用"的感觉',
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* AI Capabilities */}
+      <section className="py-10 bg-slate-50">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mb-10 text-center">
             <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700">
               <Brain className="h-4 w-4" />
               AI 能力拆解
@@ -773,12 +1264,9 @@ export default function SharePage() {
             <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
               AI 提效的 6 大关键能力
             </h2>
-            <p className="mt-3 text-lg text-slate-500 max-w-2xl mx-auto">
-              不只是"自动化脚本"，而是具备理解、诊断、决策能力的 AI 系统
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-3xl mx-auto">
             {AI_CAPABILITIES.map((cap, i) => (
               <Card key={i} className="group hover:border-indigo-200 hover:shadow-md transition-all">
                 <div className="flex items-start gap-4">
@@ -801,8 +1289,50 @@ export default function SharePage() {
         </div>
       </section>
 
+      {/* Discussion Questions */}
+      <section className="pb-10 bg-slate-50">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-6">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
+                <MessageSquare className="h-4 w-4" />
+                讨论 & Q&A
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900">
+                抛几个问题，大家一起聊聊
+              </h3>
+            </div>
+
+            <div className="space-y-3">
+              {DISCUSSION_QUESTIONS.map((item, i) => (
+                <Card key={i} className="border-blue-100 hover:border-blue-200 transition-colors">
+                  <div className="flex items-start gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
+                      {i + 1}
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-800">{item.q}</p>
+                      <p className="mt-1 text-xs text-slate-400 italic">💡 {item.hint}</p>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <SpeakerNotes
+              time="1.5min + Q&A"
+              points={[
+                '读出这 3 个问题后，给观众 10 秒思考，然后可以说"这些问题没有标准答案，我们可以在会后继续聊"',
+                '问题 1 是行动导向——让每个人想自己的场景。问题 3 是务实导向——识别现实障碍',
+                '如果时间充裕且气氛活跃，可以现场收集 1-2 个回答。否则作为 Q&A 的开场过渡',
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* ================================================================ */}
-      {/* Section 8: 总结与展望 */}
+      {/* Closing: Summary + CTA */}
       {/* ================================================================ */}
       <section className="py-16 bg-gradient-to-b from-slate-50 to-indigo-50">
         <div className="mx-auto max-w-screen-xl px-6 xl:px-8 text-center">
@@ -820,7 +1350,22 @@ export default function SharePage() {
             人只需要审核最终结果，做出决策。
           </p>
 
-          {/* Current Stats */}
+          {/* Core Message */}
+          <div className="mt-8 mx-auto max-w-lg rounded-xl bg-white border-2 border-indigo-200 p-6">
+            <p className="text-base font-semibold text-indigo-800 mb-2">
+              🎯 今天最想传递的核心信息
+            </p>
+            <p className="text-sm text-slate-600 leading-relaxed">
+              AI 不是替代开发者，而是把开发者从"重复性验证"中解放出来，
+              让你专注于真正需要创造力和判断力的工作。
+              <br />
+              <span className="text-indigo-500 font-medium">
+                我们不是用 AI 替代人的思考——而是用 AI 替代"不需要思考"的重复劳动。
+              </span>
+            </p>
+          </div>
+
+          {/* Stats */}
           <div className="mt-10 grid grid-cols-3 gap-6 max-w-lg mx-auto">
             <div className="rounded-xl bg-white border border-indigo-100 p-4">
               <div className="text-2xl font-bold text-indigo-600">{STATS.total}</div>
@@ -837,7 +1382,7 @@ export default function SharePage() {
           </div>
 
           {/* Future */}
-          <div className="mt-10 mx-auto max-w-lg rounded-xl bg-white border border-slate-200 p-6 text-left">
+          <div className="mt-8 mx-auto max-w-lg rounded-xl bg-white border border-slate-200 p-6 text-left">
             <h4 className="text-sm font-semibold text-slate-700 flex items-center gap-2">
               <TrendingUp className="h-4 w-4 text-indigo-500" />
               未来方向
@@ -858,7 +1403,7 @@ export default function SharePage() {
             </ul>
           </div>
 
-          {/* CTA */}
+          {/* CTAs */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/"
