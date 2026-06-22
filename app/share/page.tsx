@@ -453,35 +453,6 @@ function getEfficiencyNumbers() {
 }
 
 // ================================================================
-// Speaker Notes 组件
-// ================================================================
-
-function SpeakerNotes({ time, points, transition }: { time: string; points: string[]; transition?: string }) {
-  return (
-    <div className="mt-8 rounded-xl border-l-4 border-l-amber-400 bg-amber-50/60 px-5 py-4">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-sm">💬</span>
-        <span className="text-xs font-semibold text-amber-700 uppercase tracking-wide">讲者提示</span>
-        <span className="text-xs text-amber-500">· ⏱ {time}</span>
-      </div>
-      <ul className="space-y-1.5">
-        {points.map((p, i) => (
-          <li key={i} className="flex items-start gap-2 text-sm text-amber-800 leading-relaxed">
-            <span className="mt-0.5 shrink-0 text-amber-400">•</span>
-            {p}
-          </li>
-        ))}
-      </ul>
-      {transition && (
-        <p className="mt-3 text-xs text-amber-500 italic border-t border-amber-200 pt-2">
-          🔗 过渡语：{transition}
-        </p>
-      )}
-    </div>
-  )
-}
-
-// ================================================================
 // Transition Bar 组件 — Act 之间的大过渡
 // ================================================================
 
@@ -633,16 +604,6 @@ export default function SharePage() {
               </div>
             </Card>
 
-            <SpeakerNotes
-              time="3min"
-              points={[
-                '开场先抛一个互动问题："你上次手动验证一个开源仓库，从 clone 到跑通构建，花了多久？"',
-                '重点讲清楚 59 × 2h = 118h 的不可持续性 — 这不是"努力不够"，而是"模式不对"',
-                '三个痛点（标准不统一、经验难沉淀、无法规模化）是后续 AI 方案要解决的，先埋下伏笔',
-                '这一节要快，3 分钟内进入 Act 2。不要让观众在"问题陈述"阶段停留太久',
-              ]}
-              transition="好，问题很清楚了。那我们是怎么用 AI 解决的？来看看整体方案。"
-            />
           </div>
         </div>
       </section>
@@ -731,15 +692,6 @@ export default function SharePage() {
               </div>
             </Card>
 
-            <SpeakerNotes
-              time="4min"
-              points={[
-                '4 个阶段卡片快速过，每个 ~45 秒。重点不是念卡片，而是让观众感受"全链路"',
-                '决策树是本节亮点——花 1 分钟讲清楚 AI 的 5 步决策循环。这回答了"AI 不是魔法"',
-                '关键信息：AI 优先无侵入修复（环境变量）→ 其次依赖安装 → 最后才标记需人工。这是设计原则',
-              ]}
-              transition="好，方案讲完了。接下来我们看一个真实案例——AI 到底是怎么工作的？"
-            />
           </div>
         </div>
       </section>
@@ -834,14 +786,6 @@ export default function SharePage() {
             </p>
           </Card>
 
-          <SpeakerNotes
-            time="3min (本段)"
-            points={[
-              '快速过时间线，不要逐条念。重点停顿在 3 个 "AI 自主修复" 节点，让观众感受 AI 的决策能力',
-              '第 3 次构建（OOM）是最精彩的转折点——AI 从系统级信号反向推导出资源约束',
-              '最后一句话强调：全程无人干预，AI 自己完成了 4 次尝试-失败-修复循环',
-            ]}
-          />
         </div>
       </section>
 
@@ -900,15 +844,6 @@ export default function SharePage() {
               ))}
             </div>
 
-            <SpeakerNotes
-              time="3min (本段)"
-              points={[
-                '3 个案例各 ~1 分钟。核心不是念内容，而是每段引出 "lesson learned"',
-                '案例 1 + 2 是 AI 成功修复，案例 3 是 AI 正确判断"不需要修"——同样重要',
-                '强调 "AI 推理" 部分的思考链——这是 AI 和脚本的本质区别',
-              ]}
-              transition="好，看完了深度案例。那规模化之后，整体效果如何？"
-            />
           </div>
         </div>
       </section>
@@ -1011,13 +946,6 @@ export default function SharePage() {
             </div>
           </div>
 
-          <SpeakerNotes
-            time="1min (本段)"
-            points={[
-              '左右对比不用逐条念，观众自己会看。重点喊出 1.4x 和 50h+ 两个数字',
-              '注意：1.4x 看起来不高，但要说明——这已经是保守估算，而且 AI 的可复现性远超人工',
-            ]}
-          />
         </div>
       </section>
 
@@ -1187,15 +1115,6 @@ export default function SharePage() {
               ))}
             </div>
 
-            <SpeakerNotes
-              time="1min (本段)"
-              points={[
-                '失败博物馆是建立信任的关键——承认 AI 的边界比只说好话更可信',
-                '快速过 4 个卡片（各 ~15 秒），重点落在"不修改源码"原则上——这是设计决策，不是技术限制',
-                '如果时间充裕，可以问观众："你们还遇到过什么 AI 解决不了的场景？" 引发讨论',
-              ]}
-              transition="好，看完了成果和边界。最后，这些经验对你有什么用？"
-            />
           </div>
         </div>
       </section>
@@ -1241,14 +1160,6 @@ export default function SharePage() {
               ))}
             </div>
 
-            <SpeakerNotes
-              time="1.5min"
-              points={[
-                '这 4 个方法论是今天分享最重要的 "可带走" 内容。不需要全部展开，挑 1-2 个重点',
-                '推荐重点："不修改源码"和"每步可追溯"——这两个原则最容易被忽视，但最关键',
-                '每张卡片控制在 ~20 秒，快速建立"这些方法论你也能用"的感觉',
-              ]}
-            />
           </div>
         </div>
       </section>
@@ -1319,14 +1230,6 @@ export default function SharePage() {
               ))}
             </div>
 
-            <SpeakerNotes
-              time="1.5min + Q&A"
-              points={[
-                '读出这 3 个问题后，给观众 10 秒思考，然后可以说"这些问题没有标准答案，我们可以在会后继续聊"',
-                '问题 1 是行动导向——让每个人想自己的场景。问题 3 是务实导向——识别现实障碍',
-                '如果时间充裕且气氛活跃，可以现场收集 1-2 个回答。否则作为 Q&A 的开场过渡',
-              ]}
-            />
           </div>
         </div>
       </section>
