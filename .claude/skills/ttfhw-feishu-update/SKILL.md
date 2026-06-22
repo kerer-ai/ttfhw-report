@@ -126,6 +126,20 @@ PYEOF
 | Q | 样例失败原因 | 环境不具备 / 需NPU硬件 等 |
 | R | pre-commit是否配置 | static_analysis.pre_commit.configured → ✓/✗/- |
 | S | pre-commit结果 | N个hooks, X通过 Y失败 Z跳过 |
+
+**⚠️ pre_commit 数据结构**：hooks 计数有两种存放位置，提取时必须两处都检查：
+- **平铺格式**（主要）：`pre_commit.total_hooks` / `.passed` / `.failed` / `.skipped`
+- **嵌套格式**：`pre_commit.results.total` / `.passed` / `.failed` / `.skipped`
+
+```python
+total = pc.get('total_hooks', 0) or pc.get('total', 0) or 0
+passed = pc.get('passed', 0) or 0
+# fallback to nested
+res = pc.get('results', {})
+if isinstance(res, dict):
+    total = total or res.get('total', 0) or res.get('total_hooks', 0) or 0
+    passed = passed or res.get('passed', 0) or 0
+```
 | T | devcontainer是否配置 | devcontainer.enabled → ✓/✗/- |
 | U | devcontainer结果 | 配置N个文件 / 未配置 |
 | V | 验证问题 | problems_encountered 前3条，截断200字符 |
