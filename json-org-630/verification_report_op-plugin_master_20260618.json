@@ -1,0 +1,122 @@
+{
+  "repository": {
+    "name": "op-plugin",
+    "url": "https://gitcode.com/Ascend/op-plugin.git",
+    "branch": "master",
+    "commit": "9f512c2be4ae6f0e4ab52e628098a4471b13ce25"
+  },
+  "verification_meta": {
+    "verifier": "ttfhw-verify-pro",
+    "host": "build-x86-david (192.168.0.14)",
+    "host_os": "CentOS Linux 7 (Core)",
+    "host_arch": "x86_64",
+    "host_cpu_cores": 32,
+    "host_memory_total": "62Gi",
+    "host_disk_root_avail": "92G / 504G",
+    "docker_version": "Docker version 19.03.11, build 42e35e61f3",
+    "start_time": "2026-06-18T13:03:00+08:00",
+    "end_time": "2026-06-18T13:42:00+08:00"
+  },
+  "image_source": {
+    "selected_image": "swr.cn-north-4.myhuaweicloud.com/frameworkptadapter/pytorch_2.7.1_a1_x86_64_builder:20260518",
+    "selection_reason": "用户要求 PyTorch=v2.7.1 + Python=3.10。机器中预装 pytorch_2.7.1_a1_x86_64_builder 镜像，包含 CANN 9.1.0、Python 3.10.16、torch 2.7.1+cpu、GCC 11.2.1，与 docs/zh/install.md 软件配套表完全一致。选用该预装镜像，未拉取或新建镜像。",
+    "image_pulled_from_registry": false,
+    "use_existing_local_image": true
+  },
+  "document_reading_summary": {
+    "readme_entry": "README.md 通过链接指向 docs/zh/install.md 与 ci/build.sh 进行源码编译。",
+    "recommended_image": "文档建议使用 torch_npu 提供的 docker 镜像；本机预装的 pytorch_2.7.1_a1_x86_64_builder 与配套表 (PyTorch 2.7.1, Python 3.10, GCC 11.2) 完全匹配。",
+    "arch_requirement": "未明确限定，按预装镜像选择 x86_64。",
+    "build_dependencies": "依赖 torch_npu/Ascend Extension for PyTorch；ci/build.sh 自动 git clone gitcode.com/ascend/pytorch.git 并初始化全部 submodule。CANN 已位于 /usr/local/Ascend。",
+    "build_command": "bash ci/build.sh --python=3.10 --pytorch=v2.7.1",
+    "ut_command": "test/run_test.py（强依赖 import torch_npu，需 NPU 硬件）。",
+    "samples_command": "examples/cpp_extension_*（base/full/structured/asc/pybind），需 NPU 硬件运行。",
+    "special_dep_download": "ci/build.sh 自动从 gitcode.com / gitee.com / atomgit.com 拉取 torch_npu 主仓与多模块 submodule。"
+  },
+  "static_check": {
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "executed": false,
+      "skip_reason": "宿主 Python 3.6.8 不满足 pre-commit>=4.0 的 Python>=3.9 要求；按规则不污染宿主，跳过执行。",
+      "hooks_declared": [
+        "pre-commit-hooks v4.6.0",
+        "codespell v2.4.1",
+        "bandit 1.9.4",
+        "typos v1.32.0"
+      ]
+    },
+    "lint_runner": {"configured": false},
+    "summary": "仓库已配置 pre-commit；未配置 lint-runner；本次因宿主 Python 版本过低未实际执行 pre-commit。"
+  },
+  "devcontainer": {
+    "available": false,
+    "checked_path": "/home/ttfhw_verify/op-plugin/.devcontainer",
+    "note": "仓库根目录不存在 .devcontainer/ 目录。"
+  },
+  "container_environment": {
+    "container_name": "ttfhw-op-plugin-env",
+    "image": "swr.cn-north-4.myhuaweicloud.com/frameworkptadapter/pytorch_2.7.1_a1_x86_64_builder:20260518",
+    "os": "AlmaLinux 8.10",
+    "arch": "x86_64",
+    "python": "3.10.16",
+    "torch": "2.7.1+cpu",
+    "gcc": "11.2.1",
+    "cmake": "3.18.4",
+    "cann_version": "cann-9.1.0",
+    "mount": "/home/ttfhw_verify/op-plugin -> /workspace"
+  },
+  "process_timeline": [
+    {"timestamp": "2026-06-18T13:03:00+08:00", "step": "克隆仓库", "action": "git clone -b master", "result": "成功", "details": "克隆主分支 HEAD=9f512c2"},
+    {"timestamp": "2026-06-18T13:10:00+08:00", "step": "文档阅读", "action": "阅读 README.md / install.md / ci/build.sh", "result": "成功", "details": "确定构建命令与配套版本。"},
+    {"timestamp": "2026-06-18T13:12:00+08:00", "step": "镜像与静态检查能力调查", "action": "枚举预装镜像，扫描 pre-commit/devcontainer/lint-runner", "result": "成功", "details": "选定 pytorch_2.7.1_a1_x86_64_builder:20260518。"},
+    {"timestamp": "2026-06-18T13:16:00+08:00", "step": "启动容器", "action": "docker run -d --name ttfhw-op-plugin-env ...", "result": "成功", "details": "Python 3.10.16 / torch 2.7.1+cpu / CANN 9.1.0。"},
+    {"timestamp": "2026-06-18T13:17:39+08:00", "step": "执行构建", "action": "MAX_JOBS=19 bash ci/build.sh --python=3.10 --pytorch=v2.7.1", "result": "编译成功，打包失败", "details": "1150 个 ninja 目标全部通过；auditwheel repair 阶段因镜像缺 libccl_dpu.so 失败。"},
+    {"timestamp": "2026-06-18T13:39:38+08:00", "step": "构建结束", "action": "real 21m59s / user 265m16s / sys 25m17s", "result": "退出码 1", "details": "编译产物已落盘。"},
+    {"timestamp": "2026-06-18T13:40:00+08:00", "step": "单元测试 / 样例", "action": "查看 test/run_test.py 与 examples/README.md", "result": "未执行", "details": "需 NPU 硬件且依赖最终 wheel 安装。"},
+    {"timestamp": "2026-06-18T13:42:00+08:00", "step": "清理", "action": "docker rm -f ttfhw-op-plugin-env", "result": "成功", "details": "删除验证容器。"}
+  ],
+  "execution_log": [
+    {"timestamp": "2026-06-18T13:03:00+08:00", "command": "git clone -b master https://gitcode.com/Ascend/op-plugin.git", "success": true, "returncode": 0, "duration_seconds": 12, "output": "Cloning into 'op-plugin'...", "error": ""},
+    {"timestamp": "2026-06-18T13:16:00+08:00", "command": "docker run -d --name ttfhw-op-plugin-env ... pytorch_2.7.1_a1_x86_64_builder:20260518 sleep infinity", "success": true, "returncode": 0, "duration_seconds": 3, "output": "ca5f7c8ac55b...", "error": ""},
+    {"timestamp": "2026-06-18T13:17:39+08:00", "command": "source set_env.sh && MAX_JOBS=19 && time bash ci/build.sh --python=3.10 --pytorch=v2.7.1", "success": false, "returncode": 1, "duration_seconds": 1319, "output": "[1150/1150] 全部目标完成；torch_npu-2.7.1.post5-cp310-cp310-linux_x86_64.whl 已生成；进入 auditwheel repair。", "error": "ValueError: Cannot repair wheel, because required library 'libccl_dpu.so' could not be located"},
+    {"timestamp": "2026-06-18T13:42:00+08:00", "command": "docker rm -f ttfhw-op-plugin-env", "success": true, "returncode": 0, "duration_seconds": 2, "output": "ttfhw-op-plugin-env", "error": ""}
+  ],
+  "final_results": {
+    "build": {
+      "status": "partial_success",
+      "duration_seconds": 1319,
+      "compile_targets_total": 1150,
+      "compile_targets_succeeded": 1150,
+      "artifacts": [
+        {"name": "libtorch_npu.so", "path": "build/pytorch/build/packages/torch_npu/lib/libtorch_npu.so"},
+        {"name": "libnpu_profiler.so", "path": "build/pytorch/build/packages/torch_npu/lib/libnpu_profiler.so"},
+        {"name": "libop_plugin_atb.so", "path": "build/pytorch/build/packages/torch_npu/lib/libop_plugin_atb.so"}
+      ],
+      "wheel_built": "torch_npu-2.7.1.post5-cp310-cp310-linux_x86_64.whl（auditwheel 失败后被清理）",
+      "remarks": "1150 个 ninja 编译目标全部成功；auditwheel repair 失败属镜像运行时库缺失，与源码无关。"
+    },
+    "ut": {"status": "skipped", "duration_seconds": 0, "total": 0, "passed": 0, "failed": 0, "remarks": "test/run_test.py 强依赖 import torch_npu 与 NPU 硬件，且 wheel 未最终生成，跳过。"},
+    "sample": {"status": "skipped", "duration_seconds": 0, "remarks": "examples/cpp_extension_* 均依赖 torch_npu wheel 与 NPU 硬件，跳过。"}
+  },
+  "problems_encountered": [
+    {"problem": "宿主机 Python 3.6.8 不满足 pre-commit>=4.0 的 Python>=3.9 要求", "solution": "记录并跳过宿主级 pre-commit 执行；建议在 Python>=3.9 环境下运行 pre-commit run --all-files。"},
+    {"problem": "auditwheel repair 报 'libccl_dpu.so could not be located' 导致 wheel 打包失败", "solution": "未修改源码；属预装 builder 镜像缺失 CANN 集合通信组件 libccl_dpu.so。可补全 LD_LIBRARY_PATH 指向含该库的 CANN runtime 包，或在 setup.py auditwheel 调用中追加 --exclude libccl_dpu.so 规避。"},
+    {"problem": "无 NPU 硬件，UT 与 examples 无法执行", "solution": "记录跳过原因；UT/样例需在带 Atlas A2/A3 NPU 的整机上执行，并先安装编译产生的 torch_npu wheel。"}
+  ],
+  "documentation_gaps": [
+    "docs/zh/install.md 未明确说明 ci/build.sh 内部会自动 git clone torch_npu 主仓与多模块 submodule，新手开发者首次构建时可能困惑。",
+    "README/install.md 未提示 auditwheel repair 阶段对 libccl_dpu.so 等 CANN 集合通信运行时库的隐式依赖，纯 builder 镜像中默认缺失。",
+    "test/run_test.py 与 examples 未在 README 中显式声明运行所需的 NPU 硬件依赖，新手在 CPU builder 中按文档操作会在最后一步打包失败。"
+  ],
+  "constraints_compliance": {
+    "no_source_code_modification": true,
+    "container_used": true,
+    "use_existing_local_image_only": true,
+    "image_not_pulled_or_rebuilt": true,
+    "compile_concurrency_within_60_percent": true,
+    "compile_concurrency_used": "MAX_JOBS=19 (32 核 * 0.6 ≈ 19)",
+    "host_filesystem_unchanged": true
+  },
+  "summary": "在 192.168.0.14 build-x86-david 节点上，使用机器预装镜像 pytorch_2.7.1_a1_x86_64_builder:20260518 启动容器化构建。严格按 op-plugin master 分支文档 (docs/zh/install.md, ci/build.sh) 执行，PyTorch=v2.7.1、Python=3.10。1150 个编译目标全部通过，生成核心 .so 库；最终 auditwheel repair 阶段因预装镜像缺失 libccl_dpu.so 失败。UT 与样例因无 NPU 硬件未执行。全程未修改任何源码。"
+}
