@@ -137,7 +137,7 @@
       "timestamp": "2026-06-17T01:30:00",
       "command": "docker run -d --name ttfhw-ubs-engine-env -v //d/code/ttfhw_5/ubs-engine:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
       "success": true,
-      "output": "Container ID: <container-id>",
+      "output": "Container ID: a4edf948f505e3c9595fc584e667f2da2d812d831440287e172cb46a811f05e8",
       "error": "",
       "returncode": 0,
       "duration_seconds": 5
@@ -416,7 +416,7 @@
   },
   "documentation_gaps": [
     "README 未列出完整的构建依赖列表，需要查看 ubs-engine.spec 文件才能获取完整依赖",
-    "ubs-comm-devel 依赖需要从源码编译安装，但 README 中未说明，仅在 docs/build_install/构建指导.md 的“其他openEuler版本依赖安装说明”中提及",
+    "ubs-comm-devel 依赖需要从源码编译安装，但 README 中未说明，仅在 docs/build_install/构建指导.md 的"其他openEuler版本依赖安装说明"中提及",
     "示例程序需要运行 ubse 服务才能执行，但文档中未明确说明这一前提条件",
     "构建指导文档中提到的 dnf builddep 命令在 openEuler 24.03 LTS 基础镜像中不可用，需要先安装 dnf-plugins-core"
   ],
