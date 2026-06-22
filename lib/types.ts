@@ -457,3 +457,14 @@ export interface SummaryStats {
   ttfhwPassRate: number;
   buildPassRate: number;
 }
+
+// 分享汇报页面 — 社区维度统计 (硬编码数据使用)
+export interface CommunityStats {
+  community: string;
+  total: number;
+  success: number;
+  failed: number;
+  partial: number;
+  passRate: number;
+  avgDuration: number;
+}
