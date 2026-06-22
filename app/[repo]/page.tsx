@@ -163,7 +163,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
       )}
 
       {/* 静态分析 (v630): 只要 pre_commit 或 lint_runner 任一存在即展示 */}
-      {detail.staticAnalysis && (detail.staticAnalysis.enabled || detail.staticAnalysis.pre_commit?.configured || detail.staticAnalysis.lint_runner?.configured) && (
+      {detail.staticAnalysis && (
         <Card>
           <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <FileSearch className="w-5 h-5 text-indigo-500" />
@@ -174,14 +174,14 @@ export default async function RepoDetailPage({ params }: PageProps) {
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* Pre-commit */}
-            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.pre_commit.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.pre_commit?.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
               <div className="flex items-center gap-2 mb-1">
-                {detail.staticAnalysis.pre_commit.configured
+                {detail.staticAnalysis.pre_commit?.configured
                   ? <CheckCircle className="w-4 h-4 text-green-600" />
                   : <XCircle className="w-4 h-4 text-slate-400" />}
                 <span className="text-sm font-medium">Pre-commit</span>
               </div>
-              {detail.staticAnalysis.pre_commit.configured ? (
+              {detail.staticAnalysis.pre_commit?.configured ? (
                 <div className="mt-1 space-y-1">
                   {detail.staticAnalysis.pre_commit.config_file && (
                     <code className="text-xs bg-white px-2 py-1 rounded block">{detail.staticAnalysis.pre_commit.config_file}</code>
@@ -223,14 +223,14 @@ export default async function RepoDetailPage({ params }: PageProps) {
             </div>
 
             {/* Lint-runner */}
-            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.lint_runner.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
+            <div className={`rounded-lg border p-3 ${detail.staticAnalysis.lint_runner?.configured ? 'bg-green-50 border-green-200' : 'bg-slate-50 border-slate-200'}`}>
               <div className="flex items-center gap-2 mb-1">
-                {detail.staticAnalysis.lint_runner.configured
+                {detail.staticAnalysis.lint_runner?.configured
                   ? <CheckCircle className="w-4 h-4 text-green-600" />
                   : <XCircle className="w-4 h-4 text-slate-400" />}
                 <span className="text-sm font-medium">Lint-runner</span>
               </div>
-              {detail.staticAnalysis.lint_runner.configured && (
+              {detail.staticAnalysis.lint_runner?.configured && (
                 <div className="mt-1 space-y-1">
                   {detail.staticAnalysis.lint_runner.config_file && (
                     <code className="text-xs bg-white px-2 py-1 rounded block">{detail.staticAnalysis.lint_runner.config_file}</code>
@@ -256,7 +256,7 @@ export default async function RepoDetailPage({ params }: PageProps) {
                   )}
                 </div>
               )}
-              {!detail.staticAnalysis.lint_runner.configured && (
+              {!detail.staticAnalysis.lint_runner?.configured && (
                 <span className="text-xs text-slate-500">未配置</span>
               )}
             </div>
