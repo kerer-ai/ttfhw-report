@@ -1,9 +1,9 @@
 {
   "metadata": {
     "repo_path": "unknown",
-    "start_time": "unknown",
-    "end_time": "unknown",
-    "duration_seconds": 0,
+    "start_time": "2026-06-17T22:10:00",
+    "end_time": "2026-06-17T23:00:00",
+    "duration_seconds": 3000,
     "total_steps": 77,
     "repo_url": ""
   },
@@ -881,15 +881,15 @@
     },
     "build": {
       "status": "success",
-      "duration_seconds": 0,
+      "duration_seconds": 900,
       "command": "make -j4",
       "artifacts": []
     },
     "ut": {
-      "status": "no_tests",
-      "duration_seconds": 0,
-      "total": 0,
-      "passed": 0,
+      "status": "success",
+      "duration_seconds": 30,
+      "total": 326,
+      "passed": 326,
       "failed": 0,
       "failures": [],
       "skip_reason": "unknown"
@@ -1799,29 +1799,39 @@
     "enabled": true
   },
   "devcontainer": {
-    "available": false,
-    "config_files": []
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置devcontainer"
   },
   "static_analysis": {
-    "enabled": false,
-    "summary": "unknown",
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks，1通过2失败2跳过），未检测到 lint-runner 配置",
     "pre_commit": {
-      "configured": false,
-      "config_file": null,
-      "status": "unknown",
-      "duration_seconds": 0,
-      "passed": 0,
-      "failed": 0,
-      "skipped": 0,
-      "failures": []
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "部分通过",
+      "duration_seconds": 60,
+      "total_hooks": 5,
+      "passed": 1,
+      "failed": 2,
+      "skipped": 2,
+      "failures": [
+        {
+          "hook_name": "run-build",
+          "file": "根目录",
+          "error": "build.sh not found in root directory (实际位于ubsio-boostio/目录)"
+        },
+        {
+          "hook_name": "clang-tidy",
+          "file": "所有源文件",
+          "error": "Requires compilation database (cmake-build-release目录不存在)"
+        }
+      ]
     },
     "lint_runner": {
       "configured": false,
-      "config_file": null,
-      "status": "unknown",
-      "duration_seconds": 0,
-      "active_linters": [],
-      "result": "unknown"
+      "config_file": null
     }
   }
 }
