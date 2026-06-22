@@ -229,7 +229,38 @@ lark-cli sheets +cells-get \
 - [ ] 步骤 3.5：输出覆盖率报告（未匹配的表格行 + 未匹配的 JSON 文件）
 - [ ] 步骤 4：对**所有已匹配行**生成 operations（不是只生成"新增"的）
 - [ ] 步骤 5：dry-run 预览 → 用户确认 → 执行
-- [ ] 步骤 6：验证写入结果
+- [ ] 步骤 6：验证写入结果 — **抽样读取 3-5 行检查关键列数据合理性**
+
+## 历史Bug与防错机制
+
+以下每个 bug 都曾真实发生，每次执行本 skill 时必须主动规避：
+
+### Bug 1: 行遗漏（硬编码映射）
+**现象**: hccl/metadef/graph-autofusion 等 5 行未被写入。
+**根因**: skill 示例中的 `SHEET_ROWS` 硬编码了 11 个仓库，实际表格有 50+ 行。
+**防错**: ❌ 禁止使用硬编码映射。✅ 必须从表格 C 列动态读取所有行。✅ 步骤 3.5 覆盖率报告强制暴露遗漏。
+
+### Bug 2: pre-commit hooks 全显示 0
+**现象**: 30 个仓库 pre-commit 已配置但 hooks 数显示 "0个hooks, 0通过 0失败 0跳过"。
+**根因**: 所有归一化 JSON 使用平铺格式 (`pre_commit.total_hooks`) 而非嵌套格式 (`pre_commit.results.total`)，但 `extract_precommit()` 只读了嵌套路径。
+**防错**: ✅ 提取数据时必须**同时检查两种结构**（平铺 + 嵌套），以非零值为准。
+```python
+# 正确做法：先读平铺，再 fallback 嵌套
+total = pc.get('total_hooks', 0) or pc.get('total', 0) or 0
+res = pc.get('results', {})
+if isinstance(res, dict):
+    total = total or res.get('total', 0) or res.get('total_hooks', 0) or 0
+```
+
+### Bug 3: 同名仓库模糊匹配冲突
+**现象**: MindIE-LLM 错误匹配到 MindIE-SD 所在行。
+**根因**: "mindielm" 与 "mindiesd" 的模糊匹配得分过于接近，且先到先得无冲突解决。
+**防错**: ✅ 模糊匹配后必须做**冲突检测**：同一 JSON 文件取最高分行，同一表格行取最高分 JSON。✅ 对被冲突淘汰的文件明确报告原因。
+
+### Bug 4: 归一化数据源缺陷传播
+**现象**: ubs-io 时长全为空、UT 326 通过却显示"无用例"。
+**根因**: 归一化后的 JSON 本身就有数据丢失（duration=0、UT 状态错误），飞书刷新原样写入。
+**防错**: ✅ 步骤 6 验证时必须**抽样检查数据合理性**：时长为 0 但构建状态为成功的行应告警，UT 状态与测试数量矛盾应告警。
 
 ## 绑定资源
 
