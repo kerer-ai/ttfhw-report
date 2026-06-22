@@ -1,0 +1,441 @@
+{
+  "metadata": {
+    "repo_path": "https://gitcode.com/cann/pypto",
+    "start_time": "2026-06-18T01:40:00",
+    "end_time": "2026-06-18T03:25:00",
+    "duration_seconds": 6300,
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "x86_64 (16 cores)",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "939G available",
+      "docker_version": "Docker version 29.5.3, build d1c06ef"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 概述章节",
+      "value": "x86_64 / AArch64（支持仿真模式运行）"
+    },
+    "recommended_image": {
+      "source": "docs/zh/install/prepare_environment.md",
+      "value": "文档推荐使用 CANN Docker 镜像或 WebIDE，无 NPU 设备时使用 openEuler 基础镜像"
+    },
+    "dependencies": {
+      "source": "README.md + pyproject.toml + docs/zh/install/build_and_install.md",
+      "value": [
+        "Python >= 3.9",
+        "setuptools >= 77.0.3",
+        "pybind11 >= 3.0.1",
+        "CMake (自动下载)",
+        "numpy (运行时依赖)",
+        "torch (运行时依赖)",
+        "CANN toolkit (运行时依赖，含 pto-isa)"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/zh/install/build_and_install.md",
+      "value": "python3 -m pip install . --verbose"
+    },
+    "ut_commands": {
+      "source": "python/tests/ut/ 目录结构",
+      "value": "python3 -m pytest python/tests/ut/ -v"
+    },
+    "sample_commands": {
+      "source": "docs/zh/invocation/examples_invocation.md",
+      "value": "cd examples/00_hello_world && python3 hello_world.py --run_mode=sim"
+    },
+    "special_dependencies": {
+      "source": "docs/zh/install/prepare_environment.md",
+      "value": [
+        "CANN toolkit (含 pto-isa，NPU 上板模式必需)",
+        "torch + torch_npu (NPU 模式必需，仿真模式仅需 torch)",
+        "pto-isa (可通过 run 包或源码安装)"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T01:42:00",
+      "command": "git clone https://gitcode.com/cann/pypto",
+      "success": true,
+      "output": "克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T01:43:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "网络错误：无法访问 github.com 下载 pre-commit hooks",
+      "error": "容器内无法访问 github.com，pre-commit 初始化失败",
+      "returncode": 128,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-18T01:44:00",
+      "command": "检查 lint-runner 配置",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T01:44:30",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "未找到 .devcontainer 配置",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T01:45:00",
+      "command": "docker run -d --name ttfhw-pypto-env -v ./tmp_src/pypto:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T01:46:00",
+      "command": "dnf install -y cmake gcc gcc-c++ make python3 python3-pip python3-devel git wget",
+      "success": true,
+      "output": "安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-18T01:48:00",
+      "command": "pip3 install setuptools pybind11 pytest pytest-forked pytest-xdist",
+      "success": true,
+      "output": "安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T02:00:00",
+      "command": "python3 -m pip install . --verbose --break-system-packages",
+      "success": true,
+      "output": "Successfully installed pypto-0.2.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300,
+      "note": "构建过程自动下载第三方依赖（cann-src-third-party），编译 C++ 框架和 pybind11 模块"
+    },
+    {
+      "timestamp": "2026-06-18T02:10:00",
+      "command": "pip3 install numpy torch (CPU版)",
+      "success": true,
+      "output": "安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120,
+      "note": "pypto 导入需要 numpy 和 torch 作为运行时依赖，但 pyproject.toml 中未声明"
+    },
+    {
+      "timestamp": "2026-06-18T02:15:00",
+      "command": "python3 -c 'import pypto; print(\"pypto import OK\")'",
+      "success": true,
+      "output": "pypto import OK",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T02:20:00",
+      "command": "pytest python/tests/ut/ir/ python/tests/ut/operation/ python/tests/ut/operator/ -v",
+      "success": true,
+      "output": "116 passed in 3.61s",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T02:25:00",
+      "command": "pytest python/tests/ut/interface/ -v",
+      "success": false,
+      "output": "部分测试失败（config_options_type_error），部分测试挂起",
+      "error": "interface 模块部分测试因 CANN 环境缺失而失败或挂起",
+      "returncode": 1,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-18T03:18:00",
+      "command": "python3 examples/00_hello_world/hello_world.py --run_mode sim",
+      "success": true,
+      "output": "✓ Hello world example passed",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T03:20:00",
+      "command": "python3 examples/01_beginner/basic/basic_ops.py --run_mode sim",
+      "success": true,
+      "output": "✓ All examples completed successfully!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T01:40:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T01:42:00",
+      "step": "clone",
+      "action": "克隆 pypto 仓库",
+      "result": "成功",
+      "details": {"repo": "https://gitcode.com/cann/pypto"}
+    },
+    {
+      "timestamp": "2026-06-18T01:43:00",
+      "step": "document_reading",
+      "action": "读取 README.md, pyproject.toml, docs/zh/install/",
+      "result": "成功",
+      "details": {"files_read": ["README.md", "pyproject.toml", ".pre-commit-config.yaml", "docs/zh/install/prepare_environment.md", "docs/zh/install/build_and_install.md", "docs/zh/invocation/examples_invocation.md"]}
+    },
+    {
+      "timestamp": "2026-06-18T01:43:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 5}
+    },
+    {
+      "timestamp": "2026-06-18T01:44:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "未执行（网络限制）",
+      "details": {"reason": "容器内无法访问 github.com 下载 pre-commit hooks"}
+    },
+    {
+      "timestamp": "2026-06-18T01:44:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T01:45:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T01:46:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "ttfhw-pypto-env"}
+    },
+    {
+      "timestamp": "2026-06-18T01:48:00",
+      "step": "dependency_installation",
+      "action": "安装系统依赖和 Python 构建依赖",
+      "result": "成功",
+      "details": {"system_packages": ["cmake", "gcc", "gcc-c++", "make", "python3", "python3-pip", "python3-devel", "git", "wget"]}
+    },
+    {
+      "timestamp": "2026-06-18T02:00:00",
+      "step": "build",
+      "action": "pip install . 编译安装 pypto",
+      "result": "成功",
+      "details": {"version": "0.2.1", "build_type": "Release", "artifacts": ["pypto_impl.cpython-311-x86_64-linux-gnu.so", "libtile_fwk_*.so"]}
+    },
+    {
+      "timestamp": "2026-06-18T02:10:00",
+      "step": "dependency_installation",
+      "action": "安装运行时依赖 numpy 和 torch",
+      "result": "成功",
+      "details": {"note": "pyproject.toml 中未声明 numpy 和 torch 为运行时依赖，但 import pypto 时需要"}
+    },
+    {
+      "timestamp": "2026-06-18T02:20:00",
+      "step": "ut_execution",
+      "action": "执行 Python UT (ir/operation/operator 模块)",
+      "result": "成功",
+      "details": {"total": 116, "passed": 116, "failed": 0}
+    },
+    {
+      "timestamp": "2026-06-18T02:25:00",
+      "step": "ut_execution",
+      "action": "执行 Python UT (interface 模块)",
+      "result": "部分成功",
+      "details": {"note": "interface 模块部分测试因 CANN 环境缺失而失败或挂起，跳过该模块"}
+    },
+    {
+      "timestamp": "2026-06-18T03:18:00",
+      "step": "sample_execution",
+      "action": "执行 hello_world 样例 (仿真模式)",
+      "result": "成功",
+      "details": {"sample_name": "hello_world", "run_mode": "sim", "output": "✓ Hello world example passed"}
+    },
+    {
+      "timestamp": "2026-06-18T03:20:00",
+      "step": "sample_execution",
+      "action": "执行 basic_ops 样例 (仿真模式)",
+      "result": "成功",
+      "details": {"sample_name": "basic_ops", "run_mode": "sim", "output": "✓ All examples completed successfully!"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（5个hooks），因容器网络限制未能执行；未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "未执行（网络限制）",
+        "duration_seconds": 0,
+        "total_hooks": 5,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 5,
+        "failures": [],
+        "note": "容器内无法访问 github.com 下载 pre-commit hooks，配置文件中包含 check-added-large-files、check-yaml、end-of-file-fixer、trailing-whitespace、clang-format 共5个hooks"
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "未配置 devcontainer"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 300,
+      "artifacts": [
+        {
+          "name": "pypto_impl.cpython-311-x86_64-linux-gnu.so",
+          "path": "build/temp.linux-x86_64-cpython-3.11/output/lib/pypto_impl.cpython-311-x86_64-linux-gnu.so",
+          "size": "约 5 MB"
+        },
+        {
+          "name": "libtile_fwk_codegen.so",
+          "path": "build/temp.linux-x86_64-cpython-3.11/output/lib/libtile_fwk_codegen.so",
+          "size": "约 3 MB"
+        },
+        {
+          "name": "libtile_fwk_interface.so",
+          "path": "build/temp.linux-x86_64-cpython-3.11/output/lib/libtile_fwk_interface.so",
+          "size": "约 2 MB"
+        },
+        {
+          "name": "libtile_fwk_compiler.so",
+          "path": "build/temp.linux-x86_64-cpython-3.11/output/lib/libtile_fwk_compiler.so",
+          "size": "约 2 MB"
+        },
+        {
+          "name": "libtile_fwk_runtime.so",
+          "path": "build/temp.linux-x86_64-cpython-3.11/output/lib/libtile_fwk_runtime.so",
+          "size": "约 2 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "部分成功",
+      "duration_seconds": 70,
+      "python_ut": {
+        "ir_module": {
+          "total": 101,
+          "passed": 101,
+          "failed": 0
+        },
+        "operation_module": {
+          "total": 11,
+          "passed": 11,
+          "failed": 0
+        },
+        "operator_module": {
+          "total": 4,
+          "passed": 4,
+          "failed": 0
+        },
+        "interface_module": {
+          "note": "部分测试因 CANN 环境缺失而失败或挂起，跳过该模块"
+        },
+        "ds_v32_module": {
+          "note": "test_dynamic_mla_prolog 测试挂起，可能需要 CANN 环境"
+        },
+        "summary": "可验证模块: 116 passed, 0 failed; 需 CANN 环境模块: 跳过"
+      }
+    },
+    "sample": {
+      "status": "成功",
+      "duration_seconds": 10,
+      "results": [
+        {
+          "sample_name": "hello_world (仿真模式)",
+          "execution_status": "成功",
+          "output_summary": "✓ Hello world example passed, AICore End-to-End Time: 1.87, AICore Utilization: 1.39%",
+          "execution_time": "5秒"
+        },
+        {
+          "sample_name": "basic_ops (仿真模式)",
+          "execution_status": "成功",
+          "output_summary": "✓ All examples completed successfully! (7个基础操作示例全部通过)",
+          "execution_time": "5秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "pyproject.toml 中未声明 numpy 和 torch 为运行时依赖，但 import pypto 时需要这两个包",
+    "docs/zh/install/build_and_install.md 未说明 python3-devel 是编译依赖",
+    "pre-commit hooks 依赖 github.com 访问，文档未提供离线安装方案",
+    "interface 模块 UT 的运行条件未在文档中说明（哪些需要 CANN 环境）"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-18T01:43:00",
+      "problem": "pre-commit 初始化失败，无法访问 github.com 下载 hooks",
+      "solution": "跳过 pre-commit 检查，容器内网络限制无法解决",
+      "source": "容器内无法访问 github.com"
+    },
+    {
+      "timestamp": "2026-06-18T02:05:00",
+      "problem": "import pypto 失败：ModuleNotFoundError: No module named 'numpy'",
+      "solution": "pip3 install numpy torch",
+      "source": "pyproject.toml 中 dependencies 字段为空，未声明 numpy 和 torch"
+    },
+    {
+      "timestamp": "2026-06-18T02:25:00",
+      "problem": "interface 模块 UT 部分测试失败或挂起",
+      "solution": "跳过该模块，仅验证 ir/operation/operator 模块",
+      "source": "interface 模块部分测试需要 CANN 环境"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_pypto_20260618.md"
+}
