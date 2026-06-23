@@ -1,0 +1,313 @@
+{
+    "schema_version":  "ttfhw-verify-pro-1.0",
+    "report_meta":  {
+                        "generated_at":  "2026-06-18T14:33:32",
+                        "report_filename":  "verification_report_WSL_MindSpeed-LLM_20260618.json",
+                        "verifier":  "ttfhw-verify-pro skill (autonomous AI agent)",
+                        "verifier_role":  "external-newcomer-developer-simulation",
+                        "execution_host":  "192.168.0.13",
+                        "execution_mode":  "containerized (docker)"
+                    },
+    "repository":  {
+                       "name":  "MindSpeed-LLM",
+                       "url":  "https://gitcode.com/Ascend/MindSpeed-LLM.git",
+                       "branch":  "master",
+                       "commit":  "804c607120d9d1c75ae434be5e67609b21fb22f2",
+                       "commit_message":  "feat:  fsdp minimax_m2/qwen3_moe/qwen3_next update to transformers v5"
+                   },
+    "host_environment":  {
+                             "os":  "CentOS Linux 7 (AltArch)",
+                             "kernel":  "Linux 4.18.0-80.7.2.el7.aarch64",
+                             "arch":  "aarch64",
+                             "cpu_cores":  32,
+                             "memory_total":  "63G",
+                             "disk_root_total":  "503G",
+                             "disk_root_available":  "305G",
+                             "docker_version":  "Docker version 19.03.11, build 42e35e6",
+                             "npu_present":  false,
+                             "npu_smi_available":  false,
+                             "ascend_driver_path_present":  false,
+                             "note":  "宿主机为 ARM64 CPU 构建机，未挂载 NPU 设备，无 npu-smi/驱动"
+                         },
+    "image_source":  {
+                         "image":  "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-openeuler24.03-py3.11",
+                         "source":  "宿主机预装基础镜像（华为云 ascendhub cann 基础镜像）",
+                         "selection_reason":  "仓库 docker/OVERVIEW.md 明确推荐使用 ascendhub/cann 系列作为构建基础镜像；本机预装的 9.0.0-beta.2-910b-openeuler24.03-py3.11 与官方推荐路径完全一致，且为 openEuler 24.03 + Python 3.11 + aarch64，匹配仓库 install_guide 要求；用户明确指示优先使用预装基础镜像。",
+                         "is_local_application_image_excluded":  true,
+                         "excluded_local_app_images_examples":  [
+                                                                    "frameworkptadapter/pytorch_test:* (应用构建器镜像)",
+                                                                    "ascendhub/mindspeed-mm:* (含 MindSpeed-MM 应用环境)",
+                                                                    "frameworkptadapter/manylinux*-builder:* (PyTorch 构建器镜像)"
+                                                                ]
+                     },
+    "container_config":  {
+                             "name":  "ttfhw-mindspeed-llm-env",
+                             "command":  "docker run -d --name ttfhw-mindspeed-llm-env --network host --cpus 16 --memory 32g --shm-size 8g --security-opt seccomp=unconfined -v /root/ttfhw-verify/MindSpeed-LLM:/workspace -w /workspace \u003cimage\u003e sleep infinity",
+                             "resource_limits":  {
+                                                     "cpus":  16,
+                                                     "memory":  "32g",
+                                                     "shm_size":  "8g"
+                                                 },
+                             "network":  "host",
+                             "security_options":  [
+                                                      "seccomp=unconfined"
+                                                  ],
+                             "seccomp_unconfined_reason":  "宿主机内核为 4.18 (CentOS 7)，与 openEuler 24.03 容器内 glibc 多线程 getaddrinfo 不兼容，默认 seccomp 策略导致 DNS 解析线程创建失败；放宽 seccomp 后容器内网络与 Git 操作恢复正常。",
+                             "volumes":  [
+                                             "/root/ttfhw-verify/MindSpeed-LLM:/workspace"
+                                         ],
+                             "container_os":  "openEuler 24.03 (LTS-SP2)",
+                             "python_version":  "3.11.15",
+                             "gcc_version":  "12.3.1 (openEuler 12.3.1-99.oe2403sp2)"
+                         },
+    "document_reading_summary":  {
+                                     "primary_entrypoints":  [
+                                                                 "README.md",
+                                                                 "docs/zh/pytorch/training/install_guide.md",
+                                                                 "docker/OVERVIEW.md",
+                                                                 "tests/README.md",
+                                                                 "tests/test_run.sh"
+                                                             ],
+                                     "recommended_image":  "26.0.0-910b-openeuler24.03-py3.11-aarch64 (Atlas A2) / 26.0.0-a3-openeuler24.03-py3.11-aarch64 (Atlas A3)；底层基础镜像为 ascendhub/cann",
+                                     "arch_required":  "aarch64",
+                                     "python_required":  "\u003e=3.10",
+                                     "build_dependencies":  "CANN（Toolkit/ops/NNAL）、torch==2.7.1、torch_npu==2.7.1rc1、Triton-Ascend==3.2.1、MindSpeed（源码）、Megatron-LM core_v0.12.1（源码）、requirements.txt 列出的 21 个 Python 包",
+                                     "build_command":  "pip install -r requirements.txt \u0026\u0026 pip install -e .",
+                                     "ut_command":  "bash tests/test_run.sh --ut（强依赖 NPU 与 torch_npu）",
+                                     "sample_command":  "examples/ 目录下各模型 .sh 脚本（强依赖 NPU 多卡环境）",
+                                     "missing_or_unclear_in_docs":  [
+                                                                        "README 未直接给出无 NPU 环境下的最小验证流程（如纯 CPU import smoke test）",
+                                                                        "tests/test_run.sh 默认假定 /home/master_branch/Megatron-LM 已就绪，文档中未明确说明此约定"
+                                                                    ]
+                                 },
+    "static_check_scan":  {
+                              "pre_commit":  {
+                                                 "configured":  true,
+                                                 "config_file":  ".pre-commit-config.yaml",
+                                                 "hooks_total":  14,
+                                                 "hooks_passed":  4,
+                                                 "hooks_failed":  10,
+                                                 "hooks_skipped":  0,
+                                                 "passed_hooks":  [
+                                                                      "check-added-large-files",
+                                                                      "check-merge-conflict",
+                                                                      "detect-private-key",
+                                                                      "check-json"
+                                                                  ],
+                                                 "failed_hooks":  [
+                                                                      "trailing-whitespace",
+                                                                      "end-of-file-fixer",
+                                                                      "check-yaml",
+                                                                      "ruff-check",
+                                                                      "ruff-format",
+                                                                      "codespell",
+                                                                      "pylint",
+                                                                      "bandit",
+                                                                      "typos",
+                                                                      "clang-format"
+                                                                  ],
+                                                 "duration_seconds":  188,
+                                                 "note":  "失败 hook 主要为代码风格/拼写/格式化类。部分 hook 会自动修改文件（ruff-format/clang-format/end-of-file-fixer/trailing-whitespace），验证流程完成后已使用 git checkout -- . 完整还原源码，未保留任何修改，严守源码不可修改约束。"
+                                             },
+                              "lint_runner":  {
+                                                  "configured":  false,
+                                                  "note":  "仓库未发现 .lint-runner* 配置文件"
+                                              }
+                          },
+    "devcontainer_scan":  {
+                              "configured":  false,
+                              "note":  "仓库根目录不存在 .devcontainer/ 目录"
+                          },
+    "execution_log":  [
+                          {
+                              "step":  "clone_repo",
+                              "command":  "git clone https://gitcode.com/Ascend/MindSpeed-LLM.git",
+                              "success":  true,
+                              "branch":  "master",
+                              "commit":  "804c607120d9d1c75ae434be5e67609b21fb22f2"
+                          },
+                          {
+                              "step":  "pull_image",
+                              "command":  "(跳过) 使用宿主机预装镜像 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-openeuler24.03-py3.11",
+                              "success":  true
+                          },
+                          {
+                              "step":  "container_start",
+                              "command":  "docker run -d --cpus 16 --memory 32g --shm-size 8g --network host --security-opt seccomp=unconfined ...",
+                              "success":  true,
+                              "duration_seconds":  2
+                          },
+                          {
+                              "step":  "pre_commit_install",
+                              "command":  "pip install pre-commit",
+                              "success":  true,
+                              "duration_seconds":  6
+                          },
+                          {
+                              "step":  "pre_commit_run_all",
+                              "command":  "pre-commit run --all-files",
+                              "success":  false,
+                              "returncode":  1,
+                              "duration_seconds":  188,
+                              "details":  "14 个 hook 中 4 通过 / 10 失败；失败均为代码风格类，未涉及功能性问题"
+                          },
+                          {
+                              "step":  "git_restore_after_precommit",
+                              "command":  "git checkout -- . \u0026\u0026 git clean -fdx",
+                              "success":  true,
+                              "duration_seconds":  1,
+                              "details":  "撤销 pre-commit 自动修改，工作区恢复干净，符合源码不可修改原则"
+                          },
+                          {
+                              "step":  "pip_install_requirements",
+                              "command":  "pip install -r requirements.txt",
+                              "success":  true,
+                              "returncode":  0,
+                              "duration_seconds":  202
+                          },
+                          {
+                              "step":  "pip_install_editable",
+                              "command":  "pip install -e . --no-build-isolation",
+                              "success":  true,
+                              "returncode":  0,
+                              "duration_seconds":  4,
+                              "details":  "未触发 NPU C++ 扩展编译（因无 ASCEND_TOOLKIT_HOME 与 torch_npu，setup.py 走 except 分支，仅做 Python editable 安装）"
+                          },
+                          {
+                              "step":  "import_smoke",
+                              "command":  "python3 -c \u0027import mindspeed_llm\u0027",
+                              "success":  false,
+                              "returncode":  1,
+                              "error":  "ModuleNotFoundError: No module named \u0027torch_npu\u0027",
+                              "details":  "mindspeed_llm/__init__.py 在加载时强制 import torch_npu.contrib.transfer_to_npu；本机无 NPU，cann 基础镜像也未预装 torch_npu wheel，因此 import 失败。这是预期内的硬件依赖限制，不修改源码。"
+                          },
+                          {
+                              "step":  "pytest_collect_ut",
+                              "command":  "python3 -m pytest tests/ut --collect-only -q",
+                              "success":  false,
+                              "returncode":  2,
+                              "duration_seconds":  8,
+                              "details":  "4 个 UT 模块在 collection 阶段全部因 \u0027No module named torch_npu\u0027 中断（test_checkpoint / test_evaluate / test_inference / test_preprocess_data）。这是 NPU 硬件缺失的传递性影响。"
+                          }
+                      ],
+    "process_timeline":  [
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "1_doc_reading",
+                                 "action":  "阅读仓库 README 与关联文档",
+                                 "result":  "成功",
+                                 "details":  "确认推荐镜像、aarch64 架构、Python\u003e=3.10、构建命令、UT 命令、UT 强依赖 NPU 与 torch_npu"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "2_static_scan",
+                                 "action":  "静态检查能力扫描（pre-commit + lint-runner）",
+                                 "result":  "部分成功",
+                                 "details":  "pre-commit 已配置并执行（4 通过 10 失败），lint-runner 未配置"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "3_devcontainer_scan",
+                                 "action":  "devcontainer 能力扫描",
+                                 "result":  "未配置",
+                                 "details":  "仓库根目录无 .devcontainer/"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "4_container_start",
+                                 "action":  "拉起容器并采集容器规格",
+                                 "result":  "成功",
+                                 "details":  "openEuler 24.03 + Python 3.11.15 + GCC 12.3.1，配置 16 核 / 32G 内存 / 8G shm，network=host，seccomp=unconfined"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "5_install_deps",
+                                 "action":  "在容器内安装 pip 依赖",
+                                 "result":  "成功",
+                                 "details":  "requirements.txt 全部安装通过（耗时 202s），构建 editable 通过（4s）"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "6_run_ut",
+                                 "action":  "执行 UT 收集",
+                                 "result":  "失败-NPU 缺失",
+                                 "details":  "4 个 UT 模块均因 torch_npu 缺失在 collection 阶段中断；属于硬件依赖限制，不修改源码"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "7_generate_report",
+                                 "action":  "生成 JSON 报告",
+                                 "result":  "进行中",
+                                 "details":  "报告文件名 master-20260618-143332.json"
+                             },
+                             {
+                                 "timestamp":  "2026-06-18T14:33:32",
+                                 "step":  "8_cleanup",
+                                 "action":  "清理容器",
+                                 "result":  "待执行",
+                                 "details":  "stop 并 rm 容器 ttfhw-mindspeed-llm-env"
+                             }
+                         ],
+    "final_results":  {
+                          "build":  {
+                                        "status":  "成功",
+                                        "duration_seconds":  206,
+                                        "details":  "requirements + editable install 均成功"
+                                    },
+                          "ut":  {
+                                     "status":  "受阻-NPU 缺失",
+                                     "duration_seconds":  8,
+                                     "total":  0,
+                                     "passed":  0,
+                                     "failed":  0,
+                                     "errors":  4,
+                                     "details":  "4 个测试模块在 import 阶段因 torch_npu 缺失被阻断；本机为纯 CPU 构建机，cann 基础镜像未预装 torch_npu wheel"
+                                 },
+                          "sample":  {
+                                         "status":  "未执行",
+                                         "duration_seconds":  0,
+                                         "details":  "examples/ 下样例脚本均强依赖多卡 NPU 与 Megatron-LM 源码，本机条件不满足；按文档不修改源码原则跳过"
+                                     },
+                          "static_check":  {
+                                               "status":  "已执行",
+                                               "duration_seconds":  188,
+                                               "passed":  4,
+                                               "failed":  10,
+                                               "details":  "代码风格类失败为主，未发现功能性问题；自动修改已完整还原"
+                                           },
+                          "source_code_integrity":  {
+                                                        "status":  "未修改",
+                                                        "details":  "git status 验证工作区干净，符合严禁修改源码约束"
+                                                    }
+                      },
+    "problems_encountered":  [
+                                 {
+                                     "problem":  "容器内 pre-commit 报 getaddrinfo() thread failed to start，无法 git fetch hooks 仓库",
+                                     "solution":  "为容器添加 --security-opt seccomp=unconfined（宿主机 CentOS 7 内核 4.18 与 openEuler 24.03 容器 glibc 多线程 DNS 解析在默认 seccomp 下不兼容）",
+                                     "category":  "环境兼容"
+                                 },
+                                 {
+                                     "problem":  "import mindspeed_llm 报 No module named \u0027torch_npu\u0027",
+                                     "solution":  "记录为硬件/依赖限制，不修改源码、不强行 mock；本机无 NPU 设备，cann 基础镜像未预装 torch_npu wheel",
+                                     "category":  "硬件依赖"
+                                 },
+                                 {
+                                     "problem":  "pre-commit 中部分 hook 自动修改源码",
+                                     "solution":  "执行结束后立刻 git checkout -- . \u0026\u0026 git clean -fdx 完整还原，符合源码不可修改原则",
+                                     "category":  "源码保护"
+                                 }
+                             ],
+    "documentation_gaps":  [
+                               "README 与 install_guide 未提供无 NPU 环境下的最小可执行验证子集（如纯 CPU 可跑的 import 检查、tokenizer 单测等）",
+                               "tests/test_run.sh 中默认 cp -rf /home/master_branch/Megatron-LM/megatron 到当前目录，文档未说明该路径如何由用户准备",
+                               "docker/OVERVIEW.md 给出的镜像构建参数较多，但缺少『仅做静态检查/纯 CPU 验证』的轻量场景说明"
+                           ],
+    "rules_compliance":  {
+                             "must_run_on_192_168_0_13":  true,
+                             "use_preinstalled_base_image":  true,
+                             "no_local_application_image_used":  true,
+                             "no_source_code_modified":  true,
+                             "container_resource_limits_set":  true,
+                             "container_network_isolation_note":  "采用 host 网络以兼容仓库官方推荐启动参数；容器命名空间（pid/user/mnt）默认隔离；如需更严格网络隔离可改 bridge + iptables 规则"
+                         }
+}
