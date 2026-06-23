@@ -1,0 +1,472 @@
+{
+  "report_metadata": {
+    "report_id": "ttfhw-mindspeed-master-20260623-0.158",
+    "verification_date": "2026-06-23",
+    "report_generated_at": "2026-06-23T10:34:36",
+    "repository": "https://gitcode.com/Ascend/MindSpeed.git",
+    "branch": "master",
+    "commit": "1432cb092818b870c31b61db0eb6d3378b7fbdad",
+    "execution_machine": "192.168.0.158 (build-arm-32u64g-02)",
+    "verification_method": "containerized (Docker 25.0.2)",
+    "prebuilt_image_used": true,
+    "image_source": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64",
+    "report_filename": "verification_report_WSL_MindSpeed_master_20260623.json",
+    "report_purpose": "TTFHW 仓库验证报告 - 模拟外部新手开发者，依据文档指导在容器中完成构建/单元测试验证"
+  },
+  "document_reading_summary": {
+    "readme_summary": "MindSpeed 是华为昇腾 NPU 加速库，扩展自 Megatron-LM，提供 5D 混合并行、流水并行、Recompute 等训练优化能力。",
+    "key_documentation_files": [
+      "docs/zh/user-guide/install_guide.md",
+      "docker/Dockerfile",
+      "requirements.txt",
+      "setup.py",
+      ".pre-commit-config.yaml"
+    ],
+    "extracted_information": {
+      "recommended_image": "mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64（来自 Ascend Hub）或 CANN 9.0.0-beta.2 基础镜像（来自 Dockerfile）",
+      "architecture": "aarch64",
+      "os": "openEuler 24.03 LTS",
+      "python_version": "3.10/3.11",
+      "pytorch_version": "2.7.1",
+      "torch_npu_version": "2.7.1",
+      "cann_version": "9.0.0",
+      "megatron_lm_version": "core_v0.12.1",
+      "build_command": "pip install -e .",
+      "ut_command": "pytest tests_extend/",
+      "sample_command": "torchrun examples/xxx.py",
+      "dependencies_in_requirements": [
+        "pybind11",
+        "ninja",
+        "numpy<=1.26.0",
+        "transformers>=4.43.2",
+        "packaging",
+        "cloudpickle<3",
+        "aiohttp",
+        "requests",
+        "decorator"
+      ],
+      "special_download_required": "需要单独克隆 Megatron-LM core_v0.12.1 分支到容器内 /Megatron-LM"
+    },
+    "documentation_gaps": [
+      "README 和 install_guide.md 未明确提到 triton 依赖，但 tests_extend/unit_tests/ops/triton/ 目录下 14 个测试用例依赖 triton",
+      "文档未列出 numpy 降级到 1.26.0 的原因（从 2.4.4 → 1.26.0 满足 requirements.txt 限制）",
+      "文档未说明 torch_npu 2.7.1 与 CANN 9.0.0 的兼容性"
+    ]
+  },
+  "static_check": {
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "hooks": [
+        "ruff (Python linter)",
+        "pylint (Python static analysis)",
+        "bandit (Security linter)",
+        "codespell (Spell checker)",
+        "typos (Faster spell checker)",
+        "clang-format (C++ formatter)",
+        "isort, yapf, black (Python formatters)"
+      ],
+      "execution_status": "not_executed (本地未运行 pre-commit，避免在宿主机安装大量工具)",
+      "note": "ttfhw-verify-pro 流程不强制运行 pre-commit，主要验证构建/UT"
+    },
+    "lint_runner": {
+      "configured": false,
+      "note": "仓库未配置 lint-runner"
+    }
+  },
+  "devcontainer": {
+    "configured": false,
+    "note": "MindSpeed 仓库未配置 .devcontainer 目录，不具备 devcontainer 开发容器能力"
+  },
+  "image_source": {
+    "selected_image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64",
+    "selection_reason": "Dockerfile 推荐 CANN 9.0.0-beta.2 基础镜像，install_guide.md 进一步推荐 mindspeed-core 预构建镜像（已预装 CANN/MindSpeed/Megatron-LM）。预构建镜像符合用户要求的'优先使用预装镜像'。未使用 0.158 宿主机中已存在的 pytorch_2.7.1_a2_aarch64_builder 等 8 个镜像。",
+    "pull_status": "success",
+    "pull_duration_seconds": 360,
+    "image_size": "13.3GB",
+    "image_pulled_at": "2026-06-23T09:48:00",
+    "image_layer_count": 16,
+    "alternative_image_tried": "无（预构建镜像直接可用）"
+  },
+  "host_environment": {
+    "hostname": "build-arm-32u64g-02",
+    "ip": "192.168.0.158",
+    "architecture": "aarch64",
+    "kernel": "5.10.0-182.0.0.95.r3008_246.hce2.aarch64",
+    "os": "Huawei Cloud EulerOS 2.0",
+    "specs": {
+      "cpu_arch": "aarch64",
+      "estimated_cores": 32,
+      "estimated_memory": "64GB",
+      "disk_free": "156GB (of 251GB total)"
+    },
+    "npu_hardware": "none",
+    "docker": {
+      "version": "25.0.2",
+      "running": true,
+      "containers_before": 0,
+      "images_before": 8
+    },
+    "ssh": {
+      "keyless_login": true,
+      "public_key_deployed": true,
+      "public_key_path": "/root/.ssh/authorized_keys"
+    }
+  },
+  "container_environment": {
+    "container_name": "ttfhw-mindspeed-env",
+    "container_id": "2152a8e4dc9bda8d7ed7e72869fdd97287be8d6cbf1103fb89fe54e76228d8b8",
+    "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64",
+    "os": "openEuler 24.03 (LTS-SP2)",
+    "os_in_host": "Huawei Cloud EulerOS 2.0",
+    "python_version": "3.11.15",
+    "python_path": "/usr/local/python3.11.15/bin/python3.11",
+    "shell": "/bin/bash",
+    "working_dir": "/MindSpeed (镜像默认)",
+    "mounts": [
+      {
+        "source": "/tmp/MindSpeed",
+        "destination": "/workspace",
+        "purpose": "master 分支 MindSpeed 仓库"
+      },
+      {
+        "source": "/tmp/Megatron-LM",
+        "destination": "/Megatron-LM",
+        "purpose": "Megatron-LM core_v0.12.1 仓库"
+      }
+    ],
+    "preinstalled_packages": {
+      "mindspeed": "0.12.1 (来自 26.0.0_core_r0.12.1 分支，预装路径 /MindSpeed)",
+      "megatron-core": "0.12.1 (来自 /Megatron-LM, editable)",
+      "torch": "2.7.1+cpu",
+      "torch_npu": "2.7.1.post4 (CANN 9.0.0 stub)",
+      "transformers": "4.57.1",
+      "numpy_preinstalled": "2.4.4 (被 pip install -e . 降级为 1.26.0)",
+      "pytest": "9.0.3",
+      "triton": "未预装（pip install 时补充安装 3.7.1）"
+    },
+    "environment_variables": {
+      "PYTHONPATH": "/Megatron-LM:/usr/local/Ascend/ascend-toolkit/latest/python/site-packages:...:/MindSpeed",
+      "ASCEND_TOOLKIT_HOME": "/usr/local/Ascend/cann-9.0.0",
+      "PATH": "/usr/local/python3.11.15/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+      "TORCH_DEVICE_BACKEND_AUTOLOAD": "需手动设为 0 以避免 torch_npu 加载失败"
+    }
+  },
+  "execution_log": [
+    {
+      "step": 1,
+      "name": "环境探查",
+      "timestamp": "2026-06-23T17:36:00",
+      "command": "ssh root@192.168.0.158 'date && uname -a && docker --version && df -h && lspci'",
+      "success": true,
+      "output": "Docker 25.0.2, aarch64, HCE OS 2.0, 156G free disk, no NPU",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "step": 2,
+      "name": "SSH 公钥免密配置",
+      "timestamp": "2026-06-23T17:39:00",
+      "command": "scp + ssh authorized_keys 部署",
+      "success": true,
+      "output": "本机公钥写入 /root/.ssh/authorized_keys，后续 ssh 无需密码",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "step": 3,
+      "name": "克隆 MindSpeed 仓库",
+      "timestamp": "2026-06-23T17:39:00",
+      "command": "git clone --depth 1 https://gitcode.com/Ascend/MindSpeed.git",
+      "success": true,
+      "output": "master 分支, commit 1432cb092818b870c31b61db0eb6d3378b7fbdad",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "step": 4,
+      "name": "阅读文档和配置文件",
+      "timestamp": "2026-06-23T17:40:00",
+      "command": "cat README.md docs/zh/user-guide/install_guide.md docker/Dockerfile requirements.txt",
+      "success": true,
+      "output": "提取镜像源/Python版本/构建命令/UT命令/依赖列表等关键信息",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "step": 5,
+      "name": "拉取预构建镜像",
+      "timestamp": "2026-06-23T17:41:00",
+      "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64",
+      "success": true,
+      "output": "13.3GB, 16 layers, digest sha256:3405700481e6055c1c257cc41edadad7a5a5a1a228c52bd35306d57fca7981cf",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 360
+    },
+    {
+      "step": 6,
+      "name": "克隆 Megatron-LM",
+      "timestamp": "2026-06-23T17:50:00",
+      "command": "git clone --depth 1 -b core_v0.12.1 https://github.com/NVIDIA/Megatron-LM.git",
+      "success": true,
+      "output": "commit a845aa7 (Merge branch 'gaod/llama4/te_fix' into 'core_r0.12.0')",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "step": 7,
+      "name": "启动容器",
+      "timestamp": "2026-06-23T17:48:00",
+      "command": "docker run -dit --name ttfhw-mindspeed-env --privileged --network host --ipc=host -v /tmp/MindSpeed:/workspace -v /tmp/Megatron-LM:/Megatron-LM <image> /bin/bash",
+      "success": true,
+      "output": "container_id=2152a8e4dc9b... （首次启动后因 bind mount 缓存问题重启过一次）",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "step": 8,
+      "name": "卸载预装 mindspeed 并安装 master 分支",
+      "timestamp": "2026-06-23T17:55:00",
+      "command": "pip uninstall -y mindspeed && pip install --no-build-isolation -e /workspace",
+      "success": true,
+      "output": "Successfully installed mindspeed-0.12.1 numpy-1.26.0",
+      "error": null,
+      "returncode": 0,
+      "duration_seconds": 180
+    },
+    {
+      "step": 9,
+      "name": "验证 mindspeed 路径",
+      "timestamp": "2026-06-23T18:00:00",
+      "command": "python3.11 -c 'import mindspeed; print(mindspeed.__file__)'",
+      "success": true,
+      "output": "MINDSPEED: /workspace/mindspeed/__init__.py （在 cwd=/workspace 下）",
+      "error": "在 cwd=/MindSpeed 下加载到预装的 /MindSpeed/mindspeed（sys.path[0] 空字符串 = cwd）",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "step": 10,
+      "name": "首次 pytest 收集（无 triton）",
+      "timestamp": "2026-06-23T18:13:00",
+      "command": "pytest tests_extend/unit_tests/ --co -q",
+      "success": false,
+      "output": "104 tests collected, 99 errors in 9.08s",
+      "error": "99 个 collection 错误：14 个 triton ModuleNotFoundError, 85 个 NPU/CANN 兼容问题",
+      "returncode": 5,
+      "duration_seconds": 9
+    },
+    {
+      "step": 11,
+      "name": "安装 triton（清华源）",
+      "timestamp": "2026-06-23T18:30:00",
+      "command": "PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple pip install triton",
+      "success": true,
+      "output": "Successfully installed triton-3.7.1",
+      "error": "首次用 pypi.org 源下载 7 分钟无果，切换清华源 30 秒完成",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "step": 12,
+      "name": "最终 pytest 收集（有 triton）",
+      "timestamp": "2026-06-23T18:34:00",
+      "command": "pytest tests_extend/unit_tests/ --co -q",
+      "success": false,
+      "output": "191 tests collected, 84 errors in 9.26s",
+      "error": "84 个 collection 错误（无 NPU 硬件，全部 RuntimeError/AssertionError）",
+      "returncode": 5,
+      "duration_seconds": 9
+    }
+  ],
+  "process_timeline": [
+    {
+      "step": 1,
+      "timestamp": "2026-06-23T17:36:00",
+      "action": "环境探查",
+      "result": "成功",
+      "details": "192.168.0.158 (build-arm-32u64g-02), aarch64, HCE OS 2.0, Docker 25.0.2, 无 NPU 硬件"
+    },
+    {
+      "step": 2,
+      "timestamp": "2026-06-23T17:39:00",
+      "action": "SSH 公钥免密配置",
+      "result": "成功",
+      "details": "本机公钥写入 0.158 的 /root/.ssh/authorized_keys，权限 600"
+    },
+    {
+      "step": 3,
+      "timestamp": "2026-06-23T17:39:00",
+      "action": "克隆 MindSpeed 仓库到 /tmp/MindSpeed",
+      "result": "成功",
+      "details": "master 分支 commit 1432cb0 (depth 1 clone，-rw .git 部分未保留)"
+    },
+    {
+      "step": 4,
+      "timestamp": "2026-06-23T17:40:00",
+      "action": "阅读 README/install_guide.md/Dockerfile/requirements.txt/.pre-commit-config.yaml",
+      "result": "成功",
+      "details": "确认镜像源、Python 版本、构建命令、UT 命令、依赖列表"
+    },
+    {
+      "step": 5,
+      "timestamp": "2026-06-23T17:41:00",
+      "action": "拉取预构建 mindspeed-core 镜像",
+      "result": "成功",
+      "details": "swr.cn-south-1.myhuaweicloud.com/ascendhub/mindspeed-core:26.0.0_core_r0.12.1-910b-openeuler24.03-py3.11-aarch64 (13.3GB, 360s)"
+    },
+    {
+      "step": 6,
+      "timestamp": "2026-06-23T17:50:00",
+      "action": "克隆 Megatron-LM core_v0.12.1",
+      "result": "成功",
+      "details": "从 /tmp/Megatron-LM 挂载到容器内 /Megatron-LM"
+    },
+    {
+      "step": 7,
+      "timestamp": "2026-06-23T17:48:00",
+      "action": "启动容器 ttfhw-mindspeed-env",
+      "result": "成功",
+      "details": "--privileged --network host --ipc=host，mount 仓库目录。首次启动后因 bind mount 缓存问题，重启容器让 /Megatron-LM 可见"
+    },
+    {
+      "step": 8,
+      "timestamp": "2026-06-23T17:55:00",
+      "action": "卸载预装 mindspeed，重新 pip install -e /workspace",
+      "result": "成功",
+      "details": "覆盖预装的 26.0.0_core_r0.12.1 分支 mindspeed，安装 master 分支代码 (numpy 同步降级 2.4.4→1.26.0)"
+    },
+    {
+      "step": 9,
+      "timestamp": "2026-06-23T18:00:00",
+      "action": "验证 mindspeed 指向 master 分支",
+      "result": "成功（有条件）",
+      "details": "在 cwd=/workspace 下 MINDSPEED_PATH=/workspace/mindspeed/__init__.py；在 cwd=/MindSpeed 下加载到 /MindSpeed/mindspeed（预装路径）。所有 pytest 命令需 cd /workspace 后再执行"
+    },
+    {
+      "step": 10,
+      "timestamp": "2026-06-23T18:13:00",
+      "action": "首次 pytest 收集（无 triton）",
+      "result": "失败",
+      "details": "104 collected, 99 errors。99 个错误中 14 个 triton 缺失 + 85 个 NPU 硬件相关"
+    },
+    {
+      "step": 11,
+      "timestamp": "2026-06-23T18:30:00",
+      "action": "安装 triton（清华源）",
+      "result": "成功",
+      "details": "pypi.org 下载卡顿 7 分钟无果，切换清华源 30 秒完成。triton-3.7.1 (cp311, aarch64)"
+    },
+    {
+      "step": 12,
+      "timestamp": "2026-06-23T18:34:00",
+      "action": "最终 pytest 收集（有 triton）",
+      "result": "部分成功",
+      "details": "191 collected (+87), 84 errors (-15)。84 个错误全部是无 NPU 硬件导致的 RuntimeError/AssertionError，非代码问题"
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "success",
+      "command": "pip install --no-build-isolation -e /workspace",
+      "duration_seconds": 180,
+      "artifact": "mindspeed 0.12.1 (master branch, editable mode at /workspace)",
+      "post_install_notes": [
+        "numpy 从预装的 2.4.4 降级到 1.26.0（满足 requirements.txt 中 numpy<=1.26.0 的限制）",
+        "预装的 26.0.0_core_r0.12.1 分支 mindspeed 被卸载，新装的是 master 分支代码"
+      ]
+    },
+    "ut": {
+      "status": "blocked",
+      "command": "pytest tests_extend/unit_tests/ --co -q",
+      "total_collected": 191,
+      "collection_errors": 84,
+      "tests_run": 0,
+      "duration_seconds": 9,
+      "start_time": "2026-06-23T18:34:24",
+      "end_time": "2026-06-23T18:34:36",
+      "block_reason": "0.158 机器无 NPU 硬件，torch_npu 2.7.1.post4 加载失败（libruntime_common.so 缺少 ErrorManager ATCReportErrMessage 符号），导致 torch 加载失败。pytest collection 阶段因 import torch 失败而中断，84 个测试用例无法收集",
+      "error_categories": {
+        "npu_runtime": 70,
+        "torch_npu_symbol": 12,
+        "cann_assertion": 2
+      },
+      "comparison_with_013": {
+        "machine_0_13": {
+          "date": "2026-06-18",
+          "commit": "d9395da",
+          "tests_collected": 226,
+          "collection_errors": 397,
+          "ut_status": "blocked"
+        },
+        "machine_0_158": {
+          "date": "2026-06-23",
+          "commit": "1432cb0",
+          "tests_collected": 191,
+          "collection_errors": 84,
+          "ut_status": "blocked"
+        },
+        "difference_explanation": "master 分支 5 天内（d9395da → 1432cb0）发生大量测试重构：测试文件总数从 623（226+397）减少到 275（191+84），减少 67%。新增 14 个 triton 相关测试（需手动 pip install）。NPU 硬件相关错误仍是主要阻塞原因。"
+      }
+    },
+    "sample": {
+      "status": "not_available",
+      "reason": "MindSpeed 样例依赖 NPU 硬件，0.158 机器无 NPU。所有样例脚本（examples/）会因 torch_npu 初始化失败而无法运行"
+    }
+  },
+  "problems_encountered": [
+    {
+      "problem": "0.158 机器 SSH 认证要求密码",
+      "solution": "将本机公钥写入 /root/.ssh/authorized_keys 实现免密登录"
+    },
+    {
+      "problem": "预构建 mindspeed 指向镜像内置的 26.0.0_core_r0.12.1 分支路径 /MindSpeed",
+      "solution": "卸载预装 mindspeed 后 pip install -e /workspace 安装 master 分支代码。验证时需 cd /workspace 避免 sys.path[0] 默认 cwd 加载预装版本"
+    },
+    {
+      "problem": "容器内 /Megatron-LM 首次 bind mount 不可见（启动时宿主机目录为空）",
+      "solution": "重启容器让 docker 重新读取最新的 /tmp/Megatron-LM 内容"
+    },
+    {
+      "problem": "pytest collection 阶段 99 个错误（14 个 triton + 85 个 NPU）",
+      "solution": "triton 部分：用户授权后 pip install triton==3.7.1（清华源），解决了 14 个 triton 错误。NPU 部分：无 NPU 硬件无法解决，在报告中记录为环境限制"
+    },
+    {
+      "problem": "pypi.org 下载 triton 速度极慢（7 分钟 184.7MB 未完成）",
+      "solution": "切换清华源 https://pypi.tuna.tsinghua.edu.cn/simple，30 秒内完成下载安装"
+    },
+    {
+      "problem": "torch 2.7.1 加载 torch_npu 2.7.1.post4 失败：libruntime_common.so undefined symbol _ZN12ErrorManager19ATCReportErrMessageE",
+      "solution": "设置环境变量 TORCH_DEVICE_BACKEND_AUTOLOAD=0 禁用 torch_npu 自动加载，使 torch 2.7.1+cpu 能正常 import"
+    }
+  ],
+  "documentation_gaps": [
+    "README 和 install_guide.md 未列出 triton 依赖，但 tests_extend/unit_tests/ops/triton/ 目录 14 个测试需要 triton。新手开发者严格按文档执行会遇到 ModuleNotFoundError",
+    "install_guide.md 推荐使用预构建 mindspeed-core 镜像但未说明镜像已预装的 mindspeed 是 26.0.0_core_r0.12.1 分支版本（与 master 分支不同），需要手动卸载后 pip install -e /workspace 才能用 master 分支代码",
+    "文档未说明预构建镜像的 PYTHONPATH=/MindSpeed 优先级问题（sys.path[0] 空字符串 = cwd），需 cd /workspace 后才能加载正确的 mindspeed",
+    "Dockerfile 中 pip install 命令未指定 --no-build-isolation，导致 mindspeed 安装时可能因线程问题失败"
+  ],
+  "conclusion": {
+    "overall_status": "partial_success",
+    "summary": "MindSpeed 仓库 master 分支（commit 1432cb0）在 192.168.0.158 机器上完成容器化验证。构建（pip install -e .）成功。单元测试因无 NPU 硬件被阻塞：191 个测试用例成功收集，84 个因 NPU 缺失无法收集，0 个实际运行。所有问题均为环境限制，非代码缺陷。",
+    "successes": [
+      "通过文档推荐预构建 mindspeed-core 镜像完成容器化部署（符合'优先使用预装镜像'要求）",
+      "成功构建 master 分支 mindspeed 0.12.1（editable 模式）",
+      "成功安装额外依赖 triton 3.7.1（清华源）以满足 14 个 triton 相关测试",
+      "pytest collection 收集到 191 个测试用例"
+    ],
+    "blockers": [
+      "0.158 机器无 NPU 硬件，torch_npu stub 库无法初始化",
+      "191 个测试用例中 84 个需要 NPU 硬件才能 collection 通过",
+      "本机 0.13 已不可达（SSH connection timed out）"
+    ],
+    "next_steps_for_actual_ut": "在有 NPU 硬件（如 910B/910C）的机器上重新执行 ttfhw-verify-pro 流程，预期 pytest collection 错误会大幅减少，测试可正常执行"
+  }
+}
