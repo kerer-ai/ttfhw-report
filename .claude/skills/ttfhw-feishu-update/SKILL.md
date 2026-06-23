@@ -119,11 +119,11 @@ PYEOF
 | J | 测试时长 | final_results.ut.duration_seconds |
 | K | 样例时长 | final_results.sample.duration_seconds |
 | L | 构建 | final_results.build.status → 中文标签 |
-| M | 构建失败原因 | build.error 或 skip_reason |
+| M | 构建失败原因 | ⚠️ 见下方「失败原因提取」 |
 | N | 测试 | final_results.ut.status → 中文标签 |
-| O | 测试失败原因 | ut.failures / ut.skip_reason |
+| O | 测试失败原因 | ⚠️ 见下方「失败原因提取」 |
 | P | 样例执行 | final_results.sample.status → 中文标签 |
-| Q | 样例失败原因 | 环境不具备 / 需NPU硬件 等 |
+| Q | 样例失败原因 | ⚠️ 见下方「失败原因提取」 |
 | R | pre-commit是否配置 | static_analysis.pre_commit.configured → ✓/✗/- |
 | S | pre-commit结果 | N个hooks, X通过 Y失败 Z跳过 |
 
@@ -143,6 +143,147 @@ if isinstance(res, dict):
 | T | devcontainer是否配置 | devcontainer.enabled → ✓/✗/- |
 | U | devcontainer结果 | 配置N个文件 / 未配置 |
 | V | 验证问题 | problems_encountered 前3条，截断200字符 |
+
+### ⚠️ 失败原因提取（M/O/Q 列）
+
+`build.error` 和 `ut.skip_reason` 经常为 `null` 或 `"unknown"`，**不能直接取空值**。必须按以下优先级逐级 fallback：
+
+```python
+def extract_build_fail_reason(build, execution_log, problems):
+    """M列：构建失败原因"""
+    status = build.get('status', '')
+    if status == 'success':
+        return ''  # 成功不写原因
+
+    # 1. 直接用 build.error / build.reason
+    error = build.get('error') or build.get('reason')
+    if error and error != 'unknown':
+        return truncate(str(error), 200)
+
+    # 2. 从 execution_log 提取最后一个失败步骤的 error
+    if execution_log:
+        for step in reversed(execution_log):
+            if not step.get('success') and step.get('error'):
+                err = str(step['error']).strip()
+                if err:
+                    return truncate(err, 200)
+
+    # 3. 从 problems_encountered 提取第一个问题的 problem+solution
+    if problems:
+        p = problems[0]
+        text = p.get('problem', '')
+        if p.get('solution'):
+            text += '；解决：' + str(p['solution'])
+        if text.strip():
+            return truncate(text.strip(), 200)
+
+    return ''
+
+def extract_test_fail_reason(ut, execution_log, problems):
+    """O列：测试失败原因"""
+    status = ut.get('status', '')
+    if status == 'success' or status == 'no_tests':
+        return ''  # 成功/无用例不写原因
+
+    # 1. 有 failures 详情 → 提取前3条
+    failures = ut.get('failures')
+    if failures and isinstance(failures, list) and len(failures) > 0:
+        reasons = []
+        for f in failures[:3]:
+            r = f.get('reason') or f.get('test_name') or ''
+            if r:
+                reasons.append(str(r)[:80])
+        if reasons:
+            return truncate(f'{len(failures)}个用例失败: ' + '; '.join(reasons), 200)
+
+    # 2. 用 skip_reason（排除 "unknown"）
+    skip = ut.get('skip_reason')
+    if skip and skip != 'unknown':
+        return truncate(str(skip), 200)
+
+    # 3. 用 ut.reason
+    reason = ut.get('reason')
+    if reason and reason != 'unknown':
+        return truncate(str(reason), 200)
+
+    # 4. 从 execution_log 提取相关错误
+    if execution_log:
+        for step in reversed(execution_log):
+            if not step.get('success') and step.get('error'):
+                err = str(step['error']).strip()
+                if err and ('test' in err.lower() or 'ut' in err.lower() or 'fail' in err.lower()):
+                    return truncate(err, 200)
+        # 任意最后一个错误
+        for step in reversed(execution_log):
+            if not step.get('success') and step.get('error'):
+                return truncate(str(step['error']).strip(), 200)
+
+    # 5. 从 problems_encountered
+    if problems:
+        p = problems[0]
+        text = p.get('problem', '')
+        if p.get('solution'):
+            text += '；解决：' + str(p['solution'])
+        if text.strip():
+            return truncate(text.strip(), 200)
+
+    # 6. 对于 not_run：衍生通用原因
+    if status == 'not_run':
+        return '需要 NPU 硬件或 CANN 环境，当前 x86_64 CPU 环境不具备'
+
+    return ''
+
+def extract_sample_fail_reason(sample, problems, execution_log):
+    """Q列：样例失败原因"""
+    status = sample.get('status', '')
+    if status == 'success' or status == 'no_tests':
+        return ''
+
+    # 1. 直接用 sample.reason
+    reason = sample.get('reason')
+    if reason and reason != 'unknown':
+        return truncate(str(reason), 200)
+
+    # 2. 从 sample.results 提取失败样例
+    results = sample.get('results')
+    if results and isinstance(results, list):
+        failures = [r for r in results if r.get('execution_status') not in ('success', 'unknown', 'passed')]
+        if failures:
+            names = [f.get('sample_name', '') for f in failures[:3]]
+            return truncate('失败样例: ' + ', '.join(names), 200)
+
+    # 3. 从 smoke_test_after_install 提取
+    smoke = sample.get('smoke_test_after_install')
+    if smoke and isinstance(smoke, dict):
+        status_s = smoke.get('status', '')
+        if status_s and 'fail' in str(status_s).lower():
+            interp = smoke.get('interpretation', '')
+            return truncate(str(status_s) + (' — ' + str(interp) if interp else ''), 200)
+
+    # 4. 从 problems_encountered
+    if problems:
+        p = problems[0]
+        text = p.get('problem', '')
+        if text.strip():
+            return truncate(text.strip(), 200)
+
+    # 5. 对于 not_run：衍生通用原因
+    if status == 'not_run':
+        return '需要 NPU 硬件 / 环境不具备'
+
+    return ''
+
+def truncate(s, max_len):
+    """截断到 max_len 字符，保留完整 UTF-8"""
+    if len(s) <= max_len:
+        return s
+    return s[:max_len-3] + '...'
+```
+
+**关键规则：**
+- 状态为 `success` 的不写原因（留空），不管是否有 error 字段
+- `skip_reason` 值为 `"unknown"` 时视为无数据，继续 fallback
+- 所有原因截断到 200 字符以内
 
 **综合判断逻辑**：
 
@@ -261,6 +402,42 @@ if isinstance(res, dict):
 **现象**: ubs-io 时长全为空、UT 326 通过却显示"无用例"。
 **根因**: 归一化后的 JSON 本身就有数据丢失（duration=0、UT 状态错误），飞书刷新原样写入。
 **防错**: ✅ 步骤 6 验证时必须**抽样检查数据合理性**：时长为 0 但构建状态为成功的行应告警，UT 状态与测试数量矛盾应告警。
+
+### Bug 5: pre-commit 键名变体导致显示"-"
+**现象**: kupl 原始数据有 pre-commit（7 个 hooks），飞书表格却显示"-未配置"。
+**根因**: 不同验证运行产出的 pre-commit 键名不统一 — 多数用 `configured`，kupl 用 `config_exists`。归一化 skill 透传原始键名不做标准化，ops 生成脚本只检查 `pc.get('configured')`，`config_exists: true` 掉入 else 分支显示 "-"。
+**防错**: ✅ `extract_precommit()` 必须同时检查 `configured` 和 `config_exists` 两个键名，以非 None 值为准。
+```python
+pc_configured = pc.get('configured')
+if pc_configured is None:
+    pc_configured = pc.get('config_exists')
+```
+
+### Bug 6: devcontainer 键名变体导致显示"-"
+**现象**: torchair/MindSpeed-MM/MindSpeed/bishengjdk-8 四个仓库原始数据 devcontainer 已标记为未配置，飞书表格却显示"-"。
+**根因**: 归一化后 devcontainer 用 `configured: false`，ops 生成脚本只检查 `dc.get('enabled')`。`configured` ≠ `enabled`，`None` 落入 else 显示 "-"。
+**防错**: ✅ `extract_devcontainer()` 必须同时检查 `enabled` 和 `configured` 两个键名。
+```python
+dc_enabled = dc.get('enabled')
+if dc_enabled is None:
+    dc_enabled = dc.get('configured')
+```
+
+### 系统性改进：步骤 4 增加数据校验层
+
+以上 Bug 5/6 的深层根因是：ops 生成脚本**假设归一化数据使用单一键名**，但归一化 skill 并未对子字段键名做标准化。
+在步骤 4 生成 operations 前，增加校验步骤：
+
+```python
+# 在所有文件匹配完成后、生成 operations 之前，扫描关键字段的键名变体
+KEY_VARIANTS = {
+    'pre_commit.configured': ['configured', 'config_exists'],
+    'devcontainer.enabled': ['enabled', 'configured'],
+}
+# 输出告警：发现非预期键名时，列出文件名和实际键名
+```
+
+**长期修复**：在 `ttfhw-report-normalizer` 中将子字段键名标准化（`config_exists` → `configured`，`devcontainer.configured` → `devcontainer.enabled`），从源头消除变体。
 
 ## 绑定资源
 

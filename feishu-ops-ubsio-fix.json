@@ -1,0 +1,64 @@
+[
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F5:V5",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "50m0s"
+          },
+          {
+            "value": "34m30s"
+          },
+          {
+            "value": "15m0s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "0个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": ""
+          }
+        ]
+      ]
+    }
+  }
+]
