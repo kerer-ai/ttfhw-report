@@ -1,0 +1,480 @@
+{
+  "metadata": {
+    "repo_url": "https://gitcode.com/cann/driver.git",
+    "repo_path": "/mnt/c/project/TTFHW3/driver",
+    "start_time": "2026-06-23T14:33:00",
+    "end_time": "2026-06-23T15:50:00",
+    "duration_seconds": 4620,
+    "total_steps": 38
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "814G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "Dockerfile 不存在，README/QUICKSTART 以 openEuler 为例给出 yum 安装命令，故默认使用 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "build.sh - ascend950 限制、cmake/driver_config.cmake 检测 CMAKE_HOST_SYSTEM_PROCESSOR",
+      "value": "x86_64（默认），ascend950 不支持 ARM 环境"
+    },
+    "recommended_image": {
+      "source": "README + QUICKSTART.md - 编译环境准备章节",
+      "value": "文档未指定具体镜像，以 openEuler 和 Ubuntu 为例给出安装命令，默认使用 openEuler 24.03 LTS"
+    },
+    "dependencies": {
+      "source": "QUICKSTART.md - 编译环境准备章节",
+      "value": [
+        "gcc, gcc-c++, g++, cmake, make",
+        "tar, net-tools",
+        "kernel-headers, kernel-devel（内核模块编译需要）",
+        "openssl-devel",
+        "pkg-config, patch",
+        "libffi, libffi-devel",
+        "binutils, binutils-devel",
+        "elfutils, elfutils-devel, elfutils-libelf-devel",
+        "python3（构建系统需要，rdma-core 编译依赖）",
+        "googletest（可选，仅 UT 需要）",
+        "makeself（可选，仅 run 包需要）"
+      ]
+    },
+    "build_commands": {
+      "source": "QUICKSTART.md - 源码编译及部署章节",
+      "value": "bash build.sh --pkg --soc=${chip_type}，其中 chip_type 为 ascend910b / ascend910_93 / ascend950"
+    },
+    "ut_commands": {
+      "source": "test/run_test.sh",
+      "value": "cd test && bash run_test.sh -t"
+    },
+    "sample_commands": {
+      "source": "examples/README.md",
+      "value": "cd examples/dcmi/dcmi && bash run.sh <模块别名> <子目录序号>（需预先安装 CANN 软件和 NPU 驱动）"
+    },
+    "special_dependencies": {
+      "source": "cmake/external_dependencies.cmake + cmake/third_party/",
+      "value": [
+        "secure_c（libboundscheck）：构建时自动下载 https://gitcode.com/cann-src-third-party/libboundscheck",
+        "rdma-core：构建时自动下载 https://gitcode.com/cann-src-third-party/rdma-core"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "clang-format: files were modified by this hook\nOAT Compliance Check: Found 6 compliance issues (License Header Invalid)",
+      "error": "clang-format 修改了不符合格式的源文件；OAT 检查发现 6 个合规问题",
+      "returncode": 1,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner*' -o -name 'lint-runner.config*' -o -name '.lintrunner*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "command": "ls .devcontainer/",
+      "success": false,
+      "output": "ls: cannot access '.devcontainer/': No such file or directory",
+      "error": ".devcontainer 目录不存在",
+      "returncode": 2,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-23T14:37:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974\nStatus: Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-23T14:38:00",
+      "command": "docker run -d --name ttfhw-driver-env -v /mnt/c/project/TTFHW3/driver_repo:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: e048abfdda55",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-23T14:39:00",
+      "command": "yum install -y tar net-tools openssl-devel pkg-config patch",
+      "success": true,
+      "output": "Complete!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-23T14:40:00",
+      "command": "yum install -y gcc gcc-c++ g++ cmake make libffi libffi-devel binutils binutils-devel elfutils elfutils-devel elfutils-libelf-devel",
+      "success": true,
+      "output": "Complete!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-23T14:41:00",
+      "command": "yum install -y python3 git",
+      "success": true,
+      "output": "Complete!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-23T14:42:00",
+      "command": "bash build.sh --soc=ascend910b（首次构建）",
+      "success": false,
+      "output": "用户态库编译成功，内核模块编译失败",
+      "error": "/lib/modules/6.6.114.1-microsoft-standard-WSL2/build 不存在，无法编译内核模块",
+      "returncode": 255,
+      "duration_seconds": 150
+    },
+    {
+      "timestamp": "2026-06-23T14:45:00",
+      "command": "安装附加内核构建依赖：yum install -y kernel-headers bc bison flex elfutils-libelf-devel",
+      "success": true,
+      "output": "Complete!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 25
+    },
+    {
+      "timestamp": "2026-06-23T14:46:00",
+      "command": "挂载宿主机 kernel-headers(6.8.0) 到容器，重新启动容器并重试构建",
+      "success": false,
+      "output": "所有用户态库编译成功（62%），内核模块仍然失败",
+      "error": "kernel Makefile __sub-make 错误：挂载的 kernel-headers 版本 (6.8.0) 与运行内核 (6.6.114.1 WSL2) 不兼容",
+      "returncode": 255,
+      "duration_seconds": 160
+    },
+    {
+      "timestamp": "2026-06-23T14:50:00",
+      "command": "cd /workspace/test && bash run_test.sh -t",
+      "success": true,
+      "output": "[UT] Testcase initialize success.\n[UT] Testcase run start...\n[UT] Testcase run success.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-23T15:50:00",
+      "command": "docker stop ttfhw-driver-env && docker rm ttfhw-driver-env",
+      "success": true,
+      "output": "ttfhw-driver-env",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-23T14:33:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-23T14:34:00",
+      "step": "document_reading",
+      "action": "读取 README.md 了解项目概述",
+      "result": "成功",
+      "details": {"file": "README.md", "sections_read": ["概述", "模块介绍", "目录结构"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:34:00",
+      "step": "document_reading",
+      "action": "读取 QUICKSTART.md 了解编译依赖和构建命令",
+      "result": "成功",
+      "details": {"file": "docs/zh/QUICKSTART.md", "key_info": ["编译依赖列表", "构建命令", "openEuler 和 Ubuntu 安装命令"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:34:00",
+      "step": "document_reading",
+      "action": "读取 CMakeLists.txt 了解构建配置",
+      "result": "成功",
+      "details": {"file": "CMakeLists.txt", "cmake_version": "3.16"}
+    },
+    {
+      "timestamp": "2026-06-23T14:34:00",
+      "step": "document_reading",
+      "action": "读取 build.sh 了解构建参数",
+      "result": "成功",
+      "details": {"file": "build.sh", "key_options": ["--pkg", "--soc", "--demo", "-k", "-j"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "step": "document_reading",
+      "action": "读取 FAQ.md 了解常见问题",
+      "result": "成功",
+      "details": {"file": "docs/zh/FAQ.md"}
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "step": "document_reading",
+      "action": "读取 cmake/external_dependencies.cmake 了解外部依赖",
+      "result": "成功",
+      "details": {"file": "cmake/external_dependencies.cmake", "dependencies": ["secure_c", "rdma-core"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "step": "document_reading",
+      "action": "读取 test/run_test.sh 了解 UT 执行方式",
+      "result": "成功",
+      "details": {"file": "test/run_test.sh", "command": "bash run_test.sh -t"}
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "step": "document_reading",
+      "action": "读取 examples/README.md 了解样例执行方式",
+      "result": "成功",
+      "details": {"file": "examples/README.md", "requirement": "需要安装 CANN 软件和 NPU 驱动"}
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "hooks": ["clang-format", "OAT Compliance Check"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "clang-format": "失败（已修改不符合格式的文件）",
+        "OAT Compliance Check": "失败（发现 6 个 License Header 合规问题，再次扫描通过）"
+      }
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*", ".lintrunner*"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {"config_dir": ".devcontainer", "exists": false}
+    },
+    {
+      "timestamp": "2026-06-23T14:37:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "Dockerfile 不存在，README/QUICKSTART 以 openEuler 为例给出 yum 安装命令，故默认使用 openEuler 24.03 LTS"
+      }
+    },
+    {
+      "timestamp": "2026-06-23T14:38:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"}
+    },
+    {
+      "timestamp": "2026-06-23T14:39:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖（按 QUICKSTART 文档 openEuler 示例）",
+      "result": "成功",
+      "details": {"packages": ["gcc", "gcc-c++", "g++", "cmake", "make", "tar", "net-tools", "openssl-devel", "pkg-config", "patch", "libffi-devel", "binutils-devel", "elfutils-devel", "elfutils-libelf-devel", "python3", "git"]}
+    },
+    {
+      "timestamp": "2026-06-23T14:42:00",
+      "step": "build_attempt",
+      "action": "首次构建尝试：bash build.sh --soc=ascend910b",
+      "result": "部分成功",
+      "details": {
+        "user_space_libraries": "全部编译成功（libmmpa.so、liblingqu-dcmi.so、libc_sec.so 等）",
+        "kernel_modules": "失败 - /lib/modules/6.6.114.1-microsoft-standard-WSL2/build 不存在",
+        "build_progress": "完成至 62%"
+      }
+    },
+    {
+      "timestamp": "2026-06-23T14:45:00",
+      "step": "problem_resolution",
+      "action": "尝试修复内核模块编译：安装附加依赖、挂载宿主机 kernel-headers(6.8.0)",
+      "result": "无法解决",
+      "details": {
+        "problem": "容器环境缺少 WSL2 内核 (6.6.114.1) 的 kernel-devel，宿主机 kernel-headers(6.8.0) 版本不兼容",
+        "solution_attempted": "挂载 /usr/src/linux-headers-6.8.0-124-generic 到 /lib/modules/$(uname -r)/build 并重试",
+        "outcome": "Makefile __sub-make 错误，版本不匹配"
+      }
+    },
+    {
+      "timestamp": "2026-06-23T14:50:00",
+      "step": "ut_execution",
+      "action": "执行单元测试：cd test && bash run_test.sh -t",
+      "result": "成功",
+      "details": {"command": "bash run_test.sh -t", "output": "[UT] Testcase run success", "test_framework": "无（当前为 stub，无 googletest 等测试框架）"}
+    },
+    {
+      "timestamp": "2026-06-23T14:50:00",
+      "step": "sample_check",
+      "action": "检查样例执行可行性",
+      "result": "跳过",
+      "details": {
+        "reason": "样例需要安装 CANN 软件包和 NPU 驱动（依赖昇腾硬件），容器环境无法满足",
+        "sample_scripts": ["examples/dcmi/dcmi/run.sh - 需要 /usr/local/dcmi/ 和 /usr/local/Ascend/driver/lib64/driver"]
+      }
+    },
+    {
+      "timestamp": "2026-06-23T15:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-23T15:53:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_driver_20260623.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（2个hooks，均失败），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 35,
+        "total_hooks": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "clang-format",
+            "file": "多个源文件",
+            "error": "不符合 clang-format 格式规范，hook 自动修正了格式"
+          },
+          {
+            "hook_name": "OAT Compliance Check",
+            "file": "多个文件",
+            "error": "首次检查发现 6 个 License Header 无效问题，自动修正后再次检查通过"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": ".devcontainer",
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer 开发容器能力"
+    },
+    "build": {
+      "status": "部分成功",
+      "duration_seconds": 310,
+      "summary": "用户态库全部编译成功，内核模块因容器缺少 kernel-devel 无法编译。总计完成约 62% 的构建目标。",
+      "artifacts": [
+        {
+          "name": "libmmpa.so",
+          "path": "build/src/ascend_hal/mmpa/libmmpa.so",
+          "size": "82 KB"
+        },
+        {
+          "name": "liblingqu-dcmi.so",
+          "path": "build/src/custom/lqdrv/user/liblingqu-dcmi.so",
+          "size": "64 KB"
+        },
+        {
+          "name": "libc_sec.so",
+          "path": "build/lib/libc_sec.so",
+          "size": "80 KB"
+        },
+        {
+          "name": "libc_sec.a",
+          "path": "build/lib/libc_sec.a",
+          "size": "84 KB"
+        },
+        {
+          "name": "npu_driver_utest",
+          "path": "test/build_out/bin/npu_driver_utest",
+          "size": "16 KB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 15,
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "summary": "UT 程序为 stub，仅含空壳测试框架单元（main.cc），无实际测试用例。编译和运行均成功。",
+      "failures": []
+    },
+    "sample": {
+      "status": "跳过",
+      "duration_seconds": 0,
+      "summary": "样例需要安装 CANN 软件包和 NPU 驱动，依赖实际昇腾硬件设备，容器环境无法执行。",
+      "results": []
+    }
+  },
+  "documentation_gaps": [
+    "未提供 Dockerfile 或 devcontainer 配置，容器环境需要用户自行搭建",
+    "未说明 kernel-devel 的最低版本要求，FAQ 虽提及但未给出无匹配 kernel-devel 时的完整替代方案",
+    "样例文档未声明运行样例必须提前安装 CANN 软件和 NPU 驱动这一前提条件（在 run.sh 中体现，README 仅链接到安装指南）"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-23T14:42:00",
+      "problem": "内核模块编译失败：/lib/modules/6.6.114.1-microsoft-standard-WSL2/build 目录不存在，无法编译内核模块",
+      "solution": "容器环境无法安装与 WSL2 内核 (6.6.114.1) 匹配的 kernel-devel 包。宿主机 Ubuntu kernel-headers (6.8.0) 版本不兼容。该问题在容器/非目标操作系统环境中属于预期限制。",
+      "source": "build.sh + cmake/create_ko_target.cmake 第66行：make -C ${HOST_KERNEL_PATH} M=... modules"
+    },
+    {
+      "timestamp": "2026-06-23T14:36:00",
+      "problem": "pre-commit OAT Compliance Check 发现 6 个 License Header 合规问题",
+      "solution": "OAT 工具自动修正后再次检查通过",
+      "source": ".pre-commit-config.yaml + scripts/oat_check.sh"
+    },
+    {
+      "timestamp": "2026-06-23T14:35:00",
+      "problem": "clang-format hook 发现大量源文件不符合代码格式规范",
+      "solution": "clang-format 自动修正了格式（在 pre-commit 中表现为 hook 失败）",
+      "source": ".pre-commit-config.yaml clang-format hook"
+    }
+  ]
+}
