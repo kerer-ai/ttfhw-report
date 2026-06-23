@@ -9,7 +9,7 @@ import {
   Code, ArrowRight, TrendingUp, CheckCircle,
   Layers, Globe, Monitor, RefreshCw, ArrowLeft,
   Hammer, Container, TestTube, Play, Clock,
-  AlertTriangle, Lightbulb, MessageSquare, Target,
+  AlertTriangle, Lightbulb, Package, Sparkles, Target,
   GitBranch, Terminal, Shield, Cpu, XCircle,
 } from 'lucide-react'
 
@@ -364,21 +364,117 @@ const REUSABLE_PATTERNS = [
 ]
 
 // ================================================================
-// Act 5: 讨论问题
+// Act 5: Agent-Ready 仓库 — 从验证到标准
 // ================================================================
 
-const DISCUSSION_QUESTIONS = [
+const AGENT_READY_DIMENSIONS = [
   {
-    q: '你们的项目中有哪些重复性验证工作可以用类似方式提效？',
-    hint: '想一想：每次发版前需要手动检查的清单、新人 onboarding 时需要跑通的构建流程、跨多个仓库的一致性验证...',
+    icon: FileText,
+    title: '文档清晰度',
+    question: 'AI 能否从文档中自动提取构建命令、依赖列表和测试入口？',
+    goal: 'README 中明确标注构建命令（如 `bash ci/build.sh`）、依赖清单（requirements.txt / CMakeLists.txt）、测试入口（如 `pytest tests/`）',
+    antiPattern: '构建步骤隐藏在 CI 脚本深层、依赖分散在多个文件且未在 README 中索引、只有口头/飞书传递的"构建指南"',
+    color: 'indigo' as const,
   },
   {
-    q: 'AI 辅助开发的边界在哪里——哪些环节适合 AI，哪些必须人来判断？',
-    hint: 'AI 擅长：模式匹配、错误分类、策略执行。人类擅长：架构决策、安全审计、业务正确性判断。',
+    icon: Container,
+    title: '环境可复现性',
+    question: 'AI 能否在无人指导的情况下复现构建和运行环境？',
+    goal: '提供 Dockerfile / devcontainer.json / nix flake，声明系统级依赖和版本（如 cmake >= 3.20, gcc-11）',
+    antiPattern: '依赖宿主机预装的工具链、没有容器化方案、环境配置只在"老员工的机器上能跑"',
+    color: 'emerald' as const,
   },
   {
-    q: '如果要把这个流程推广到你的团队，最大的障碍是什么？',
-    hint: '可能是：数据敏感性、环境差异、流程标准化程度、团队对 AI 的信任度...',
+    icon: Package,
+    title: '依赖完整性',
+    question: '所有依赖是否显式声明，AI 能否一键安装？',
+    goal: 'Python: requirements.txt + setup.py；C++: CMakeLists.txt find_package；系统依赖: Dockerfile 中 apt/yum install；版本号固定而非 `latest`',
+    antiPattern: '代码中 import 了但未声明的包、私有源未配置访问方式、版本用 `latest` 导致不可复现',
+    color: 'amber' as const,
+  },
+  {
+    icon: TestTube,
+    title: '测试可执行性',
+    question: '测试入口是否标准化，AI 能否发现、运行并解析测试结果？',
+    goal: '测试命令在 README 中明确标注、输出格式标准化（JUnit XML / JSON）、区分单元测试（无硬件依赖）和集成测试（需硬件）',
+    antiPattern: '测试需要特殊硬件但未声明、测试入口藏在 Makefile 深层 target、测试失败只输出堆栈无结构化报告',
+    color: 'purple' as const,
+  },
+  {
+    icon: Shield,
+    title: '代码规范一致性',
+    question: '项目是否有自动化规范检查，AI 生成的代码能否自动符合项目风格？',
+    goal: '配置 .pre-commit-config.yaml / .clang-format / .eslintrc / ruff.toml，CI 强制检查，pre-commit hook 自动修复格式问题',
+    antiPattern: '代码风格靠"人工 Review"维护、没有格式化配置、同一仓库内不同文件风格不一致导致 AI 代码风格飘忽',
+    color: 'rose' as const,
+  },
+]
+
+const AGENT_READY_SCENARIO = {
+  before: [
+    { time: '9:00', text: '打开 README，从头开始阅读理解项目' },
+    { time: '9:30', text: '克隆代码，手动尝试构建' },
+    { time: '10:00', text: '构建失败，对照错误日志逐条排查' },
+    { time: '10:30', text: '在飞书/Slack 问同事"这个报错什么意思"' },
+    { time: '11:00', text: '发现缺少某个系统依赖，手动 apt install' },
+    { time: '11:30', text: '环境问题解决，重新构建' },
+    { time: '12:00', text: '终于跑通构建。半天过去了。' },
+  ],
+  after: [
+    { time: '9:00', text: '"AI，帮我搭建这个项目的开发环境" — 发送仓库 URL' },
+    { time: '9:01', text: 'AI 拉取代码 → 阅读文档 → 分析环境需求' },
+    { time: '9:02', text: 'AI 启动容器 → 安装所有依赖' },
+    { time: '9:03', text: 'AI 执行构建，遇错自动诊断修复' },
+    { time: '9:05', text: '构建成功，冒烟测试通过，环境就绪' },
+    { time: '9:06', text: '开发者开始写今天的第一行业务代码' },
+  ],
+}
+
+const AGENT_READY_PRACTICES = [
+  {
+    step: 'Step 1',
+    title: '把"构建指令"写在 AI 能找到的地方',
+    icon: Terminal,
+    problem: '9 个仓库的构建命令藏在 CI 脚本里，AI 需要扫描多层 YAML 才能找到',
+    action: '在 README 中用一个独立段落明确写出：`构建：bash ci/build.sh --release`',
+    impact: 'AI 首次构建成功率从 ~60% 提升到 ~90%',
+    color: 'indigo' as const,
+  },
+  {
+    step: 'Step 2',
+    title: '用 devcontainer 而不是"手动搭环境"',
+    icon: Container,
+    problem: '15 个仓库缺少容器化配置，AI 需要自行选择基础镜像并安装系统依赖',
+    action: '在仓库根目录放置 .devcontainer/devcontainer.json，声明系统依赖和 VS Code 扩展',
+    impact: '环境准备时间从平均 12min 降至 <1min，且 100% 可复现',
+    color: 'emerald' as const,
+  },
+  {
+    step: 'Step 3',
+    title: '锁定依赖版本，固定到具体版本号',
+    icon: Package,
+    problem: '11 个仓库的依赖声明使用了 `latest` 或版本范围 `>=`，AI 在不同时间拉取到不同版本导致结果不一致',
+    action: 'Python: pip freeze > requirements.txt 并提交；C++: CMakeLists.txt 中固定 find_package 版本；系统依赖: Dockerfile 中固定包版本',
+    impact: '消除了"昨天能跑今天不行"的依赖漂移问题',
+    color: 'amber' as const,
+  },
+  {
+    step: 'Step 4',
+    title: '把 pre-commit 配好，让 AI 帮你遵守规范',
+    icon: Shield,
+    problem: '18 个仓库没有 pre-commit 配置，AI 生成的代码风格无法自动校准',
+    action: '配置 .pre-commit-config.yaml：至少包含 trailing-whitespace、end-of-file-fixer、语言特定的 linter/formatter',
+    impact: 'AI 生成代码的风格一致性从"靠运气"变成"靠机制"',
+    color: 'rose' as const,
+  },
+  {
+    step: 'Step 5',
+    title: '区分"无硬件测试"和"需硬件测试"',
+    icon: TestTube,
+    problem: '22 个仓库的测试需要 NPU/GPU，但 README 未区分，AI 需要反复尝试才能判断',
+    action: '在 README 测试章节标注：`单元测试（无硬件依赖）：pytest tests/unit` vs `集成测试（需要 NPU）：pytest tests/integration --device npu`',
+    impact: 'AI 不再浪费时间尝试无法执行的测试，验证时间缩短 ~40%',
+    color: 'purple' as const,
   },
 ]
 
@@ -1200,36 +1296,194 @@ export default function SharePage() {
         </div>
       </section>
 
-      {/* Discussion Questions */}
-      <section className="pb-10 bg-slate-50">
-        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
-          <div className="mx-auto max-w-3xl">
-            <div className="mb-6">
-              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-1.5 text-sm font-medium text-blue-700">
-                <MessageSquare className="h-4 w-4" />
-                讨论 & Q&A
-              </div>
-              <h3 className="text-2xl font-semibold text-slate-900">
-                抛几个问题，大家一起聊聊
-              </h3>
-            </div>
+      {/* ================================================================ */}
+      {/* Agent-Ready 仓库 — 从验证到标准 */}
+      {/* ================================================================ */}
 
-            <div className="space-y-3">
-              {DISCUSSION_QUESTIONS.map((item, i) => (
-                <Card key={i} className="border-blue-100 hover:border-blue-200 transition-colors">
-                  <div className="flex items-start gap-3">
-                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-600">
-                      {i + 1}
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-800">{item.q}</p>
-                      <p className="mt-1 text-xs text-slate-400 italic">💡 {item.hint}</p>
+      {/* 洞察：TTFHW 真正在测什么 */}
+      <section className="py-12 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mb-10 text-center">
+            <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-violet-50 px-4 py-1.5 text-sm font-medium text-violet-700">
+              <Sparkles className="h-4 w-4" />
+              洞察
+            </div>
+            <h2 className="text-3xl font-semibold tracking-tight text-slate-900">
+              TTFHW 真正在测什么：仓库的 Agent-Ready 程度
+            </h2>
+            <p className="mt-3 text-lg text-slate-500 max-w-2xl mx-auto">
+              每次验证表面上是"构建能不能过"，实质上是在测试一个更深层的问题——
+              <strong>这个仓库对 AI Agent 有多友好？</strong>
+              一个 Agent 能否独立理解它、搭建它、跑通它？
+            </p>
+          </div>
+
+          {/* 5 Dimensions Scorecard */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 max-w-5xl mx-auto">
+            {AGENT_READY_DIMENSIONS.map((dim, i) => {
+              const c = COLOR_MAP[dim.color]
+              return (
+                <Card key={i} className={`border-l-4 ${c.border} hover:shadow-md transition-shadow`}>
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${c.light}`}>
+                      <dim.icon className={`h-5 w-5 ${c.text}`} />
                     </div>
+                    <h4 className="text-sm font-semibold text-slate-800">{dim.title}</h4>
+                  </div>
+                  <p className="text-xs text-slate-500 leading-relaxed mb-3">
+                    🤖 <span className="font-medium text-slate-600">{dim.question}</span>
+                  </p>
+                  <div className="rounded-md bg-emerald-50/50 border border-emerald-100 p-2.5 mb-2">
+                    <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">✅ Agent-Ready 标准</p>
+                    <p className="text-xs text-slate-600 leading-relaxed">{dim.goal}</p>
+                  </div>
+                  <div className="rounded-md bg-red-50/50 border border-red-100 p-2.5">
+                    <p className="text-[10px] font-semibold text-red-500 uppercase tracking-wide mb-1">❌ 常见反模式</p>
+                    <p className="text-xs text-slate-500 leading-relaxed">{dim.antiPattern}</p>
                   </div>
                 </Card>
-              ))}
+              )
+            })}
+          </div>
+
+          {/* Takeaway */}
+          <p className="mt-8 text-center text-sm text-slate-400 max-w-2xl mx-auto">
+            这 5 个维度构成了仓库的 <strong className="text-slate-600">Agent-Ready 评分卡</strong>。
+            59 个仓库的实际验证数据显示：维度覆盖越完整，AI 首次构建成功率越高，人工介入次数越少。
+          </p>
+        </div>
+      </section>
+
+      {/* 具象场景：Agent-Ready 仓库的一天 */}
+      <section className="pb-14 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-sky-50 px-4 py-1.5 text-sm font-medium text-sky-700">
+                <Play className="h-4 w-4" />
+                具象场景
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900">
+                同一件事，两个世界的区别
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                新人要开始在一个新仓库上开发功能，从拿到 repo URL 到跑通构建开始写代码——
+                Agent-Ready 到底改变了什么？
+              </p>
             </div>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* BEFORE */}
+              <Card className="border-red-100 bg-red-50/20">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-red-100">
+                    <Clock className="h-4 w-4 text-red-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-red-700">传统模式</h4>
+                    <p className="text-xs text-red-400">非 Agent-Ready 仓库 · 总耗时 ~3h</p>
+                  </div>
+                </div>
+                <div className="relative pl-6 border-l-2 border-red-200 space-y-3">
+                  {AGENT_READY_SCENARIO.before.map((item, i) => (
+                    <div key={i} className="relative">
+                      <div className="absolute -left-[calc(1.5rem+3px)] top-0.5 h-2.5 w-2.5 rounded-full border-2 border-red-200 bg-white" />
+                      <p className="text-xs text-slate-400 font-mono">{item.time}</p>
+                      <p className="text-sm text-slate-600">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              {/* AFTER */}
+              <Card className="border-emerald-100 bg-emerald-50/20">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+                    <Zap className="h-4 w-4 text-emerald-500" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-semibold text-emerald-700">Agent-Ready 模式</h4>
+                    <p className="text-xs text-emerald-400">Agent-Ready 仓库 · 总耗时 ~5min</p>
+                  </div>
+                </div>
+                <div className="relative pl-6 border-l-2 border-emerald-200 space-y-3">
+                  {AGENT_READY_SCENARIO.after.map((item, i) => (
+                    <div key={i} className="relative">
+                      <div className="absolute -left-[calc(1.5rem+3px)] top-0.5 h-2.5 w-2.5 rounded-full border-2 border-emerald-200 bg-emerald-100" />
+                      <p className="text-xs text-slate-400 font-mono">{item.time}</p>
+                      <p className="text-sm text-slate-700">{item.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </div>
+
+            <p className="mt-4 text-center text-xs text-slate-400">
+              差距不是 AI 有多聪明——而是仓库有没有为 AI 准备好。
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 如何让你的仓库 Agent-Ready */}
+      <section className="pb-14 bg-white">
+        <div className="mx-auto max-w-screen-xl px-6 xl:px-8">
+          <div className="mx-auto max-w-3xl">
+            <div className="mb-8">
+              <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-sm font-medium text-emerald-700">
+                <Wrench className="h-4 w-4" />
+                立刻就能做
+              </div>
+              <h3 className="text-2xl font-semibold text-slate-900">
+                让你的仓库进入 Agent-Ready 状态
+              </h3>
+              <p className="mt-2 text-sm text-slate-500">
+                来自 59 个仓库的实际验证数据——以下 5 步是影响最大的改进点，按优先级排列
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {AGENT_READY_PRACTICES.map((practice, i) => {
+                const c = COLOR_MAP[practice.color]
+                return (
+                  <Card key={i} className={`border-l-4 ${c.border} hover:shadow-sm transition-shadow`}>
+                    <div className="flex items-start gap-4">
+                      <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${c.light}`}>
+                        <practice.icon className={`h-5 w-5 ${c.text}`} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className={`text-[10px] font-bold ${c.text} bg-white border ${c.border} rounded px-1.5 py-0.5`}>
+                            {practice.step}
+                          </span>
+                          <h4 className="text-sm font-semibold text-slate-800">{practice.title}</h4>
+                        </div>
+                        <div className="space-y-1.5 mt-2 text-xs">
+                          <div className="flex items-start gap-2">
+                            <span className="text-red-400 shrink-0 mt-0.5">⚠️</span>
+                            <span className="text-slate-500"><strong>现状：</strong>{practice.problem}</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-emerald-500 shrink-0 mt-0.5">→</span>
+                            <span className="text-slate-600"><strong>做法：</strong>{practice.action}</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-indigo-500 shrink-0 mt-0.5">📈</span>
+                            <span className="text-slate-500"><strong>效果：</strong>{practice.impact}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                )
+              })}
+            </div>
+
+            <p className="mt-6 text-center text-sm text-slate-500">
+              完成这 5 步之后，你的仓库就可以通过{' '}
+              <code className="text-xs bg-slate-100 px-1.5 py-0.5 rounded text-indigo-600">/ttfhw-verify-pro</code>{' '}
+              一键验证——AI 将独立完成构建全流程，你只需要审核结果。
+            </p>
           </div>
         </div>
       </section>
