@@ -1,6 +1,6 @@
 #!/bin/bash
 # TTFHW 批量验证调度器（并发版）
-# ── 职责：队列管理 + git 操作 + 并发调度 claude session ──
+# ── 职责：队列管理 + 并发调度 claude session ──
 # ── 验证执行由 ttfhw-verify-runner skill 负责 ──
 # 中断后可随时重新运行，队列文件是唯一状态
 
@@ -136,19 +136,6 @@ print('NONE')
 " 2>/dev/null
 }
 
-claim_and_push() {
-  local CLAIMED
-  CLAIMED=$(claim_one)
-  if [ "$CLAIMED" = "NONE" ]; then
-    return 1
-  fi
-  git add "$QUEUE_FILE" >/dev/null 2>&1
-  git commit -m "queue: claim $(echo "$CLAIMED" | cut -d'|' -f1)" >/dev/null 2>&1 || true
-  git push origin main >/dev/null 2>&1 || true
-  echo "$CLAIMED"
-  return 0
-}
-
 update_status() {
   local REPO="$1" NEW_STATUS="$2" NOTE="$3"
   python3 -c "
@@ -273,7 +260,6 @@ build_prompt() {
 
 验证和归一化都完成后，你必须自行更新 verification-queue.yaml 中 ${REPO} 的状态：
 
-  git pull origin main --rebase
   python3 -c "
   import yaml
   with open('verification-queue.yaml') as f:
@@ -286,11 +272,6 @@ build_prompt() {
   with open('verification-queue.yaml', 'w') as f:
       yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
   "
-  git add verification-queue.yaml json-org-openeuler/ json/ docs/
-  git commit -m "verify: ${REPO} <done|failed>"
-  git push origin main
-
-如果 git push 冲突，git pull --rebase 后重试一次。
 
 退出前输出以下结构化结果（必须包含实际状态值）:
 [TTFHVV_RESULT]
@@ -379,23 +360,14 @@ ROUND=0
 while true; do
   ROUND=$((ROUND + 1))
 
-  # 同步队列
   echo ""
-  echo "──── 第 $ROUND 轮：同步队列 ────"
-  git pull origin main --rebase 2>&1 || {
-    echo "  ⚠️ pull 冲突"
-    git checkout --theirs "$QUEUE_FILE" 2>/dev/null || true
-    git add "$QUEUE_FILE" >/dev/null 2>&1
-    git commit -m "resolve queue conflict" >/dev/null 2>&1 || true
-  }
+  echo "──── 第 $ROUND 轮 ────"
 
   # 重置崩溃残留
   STALE=$(reset_stale_running)
   if [ -n "$STALE" ]; then
     echo "  🔄 $STALE"
-    git add "$QUEUE_FILE" >/dev/null 2>&1
-    git commit -m "queue: reset stale" >/dev/null 2>&1 || true
-    git push origin main >/dev/null 2>&1 || true
+    :  # 本地重置完成
   fi
 
   # 检查是否还有待处理任务
@@ -427,7 +399,7 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   echo "──── 领取任务（最多 $MAX_CONCURRENCY 个）────"
   TASKS=()
   for i in $(seq 1 "$MAX_CONCURRENCY"); do
-    CLAIMED=$(claim_and_push)
+    CLAIMED=$(claim_one)
     if [ $? -ne 0 ] || [ -z "$CLAIMED" ] || [ "$CLAIMED" = "NONE" ]; then
       break
     fi
@@ -471,9 +443,8 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   echo ""
   echo "──── 本轮完成，验证产出 ────"
 
-  # 只验证产出（状态已由各 session 独立 git push）
-  # 若 session 未成功推送则脚本兜底
-  git pull origin main --rebase 2>&1 || true
+  # 只验证产出（状态已由各 session 独立更新到本地 YAML）
+  # 若 session 未更新则脚本兜底
 
   for TASK in "${TASKS[@]}"; do
     R=$(echo "$TASK" | cut -d'|' -f1)
@@ -506,9 +477,7 @@ print('no')
       else
         echo "  ⚠️ session 已标记完成但产出验证失败"
         update_status "$R" "failed" "产出验证失败"
-        git add "$QUEUE_FILE" >/dev/null 2>&1
-        git commit -m "queue: $R failed (output verification)" >/dev/null 2>&1 || true
-        git push origin main >/dev/null 2>&1 || true
+        :  # 本地状态已由 update_status 写入
       fi
     else
       # session 未自行更新 → 脚本兜底
@@ -525,9 +494,7 @@ print('no')
         echo "  ❌ 产出验证失败"
         update_status "$R" "failed" "session 正常退出但未产出有效 JSON"
       fi
-      git add "$QUEUE_FILE" >/dev/null 2>&1
-      git commit -m "queue: $R status (fallback)" >/dev/null 2>&1 || true
-      git push origin main >/dev/null 2>&1 || true
+      :  # 本地状态已由 update_status 写入
     fi
 
     TOTAL=$((TOTAL + 1))
