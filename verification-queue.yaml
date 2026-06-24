@@ -12,8 +12,8 @@ queue:
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
-  status: pending
-  note: previous session crashed, retry
+  status: running
+  note: ''
 - repo: stratovirt
   url: https://gitcode.com/openeuler/stratovirt.git
   branch: master
