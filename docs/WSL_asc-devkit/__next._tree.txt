@@ -1,2 +1,2 @@
 :HL["/ttfhw-report/_next/static/chunks/0_o1mczden~q1.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"repo","param":{"type":"d","key":"WSL_asc-devkit","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"M_4ryIum8_e88XnJ6CbK6"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"repo","param":{"type":"d","key":"WSL_asc-devkit","siblings":null},"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"AH6rzWKANQ1g6d9sJLl7R"}

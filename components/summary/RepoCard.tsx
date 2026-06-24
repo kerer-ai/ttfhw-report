@@ -3,6 +3,7 @@ import { RepoSummary } from '@/lib/types'
 import { Card } from '@/components/ui/Card'
 import { Badge, StatusBadge } from '@/components/ui/Badge'
 import { formatDuration } from '@/lib/utils'
+import { sitePath } from '@/lib/site-config'
 import { cn } from '@/lib/utils'
 
 interface RepoCardProps {
@@ -20,7 +21,7 @@ export function RepoCard({ repo }: RepoCardProps) {
   }
 
   return (
-    <Link href={`/${repo.name}`}>
+    <Link href={sitePath(`/${repo.name}`)}>
       <Card className={cn(
         'repo-card border-l-4 hover:border-l-4',
         borderColor[repo.result] || borderColor.unknown,
