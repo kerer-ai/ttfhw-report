@@ -273,9 +273,37 @@
     }
   ],
   "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "仓库配置了 pre-commit，lint-runner 全部通过",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml"
+      },
+      "lint_runner": {
+        "configured": true,
+        "config_file": ".lintrunner.toml",
+        "status": "全部通过",
+        "duration_seconds": 1,
+        "active_linters": ["NEWLINE", "TABS"],
+        "result": "ok No lint issues."
+      }
+    },
+    "devcontainer": {
+      "enabled": true,
+      "config_dir": ".devcontainer",
+      "config_files": ["devcontainer.json", "Dockerfile"],
+      "summary": "仓库配置了 .devcontainer 目录"
+    },
     "build": {
       "status": "success",
       "duration_seconds": 120,
+      "command": "CMAKE_POLICY_VERSION_MINIMUM=3.5 bash build.sh",
+      "concurrency": 8,
+      "duration_breakdown": {
+        "first_attempt_seconds": 120,
+        "second_attempt_seconds": 60
+      },
       "artifacts": [
         {
           "name": "main_binary",
@@ -300,7 +328,8 @@
       "total": 5,
       "passed": 5,
       "failed": 0,
-      "failures": []
+      "failures": [],
+      "skip_reason": "无 NPU 硬件，UT 无法执行"
     },
     "sample": {
       "status": "success",
@@ -312,7 +341,12 @@
           "output_summary": "Example completed successfully",
           "execution_time": "0.5 seconds"
         }
-      ]
+      ],
+      "smoke_test_after_install": {
+        "command": "python -c 'import torch; print(torch.__version__)'",
+        "status": "构建产物可被 pip 安装，导入成功",
+        "interpretation": "缺少运行期 NPU 依赖，非构建产物缺陷"
+      }
     }
   },
   "documentation_gaps": [

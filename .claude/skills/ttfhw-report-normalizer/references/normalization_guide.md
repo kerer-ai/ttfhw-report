@@ -157,7 +157,7 @@ session_export_file   — 字符串
 
 **检测方法**：
 ```bash
-node -e "JSON.parse(require('fs').readFileSync('json-org/xxx.json','utf-8'))"
+node -e "JSON.parse(require('fs').readFileSync('json-org-openeuler/xxx.json','utf-8'))"
 ```
 如果报 `position N (line X column Y)`，阅读对应行，找中文文本中出现的裸 `"`。
 
@@ -166,14 +166,14 @@ node -e "JSON.parse(require('fs').readFileSync('json-org/xxx.json','utf-8'))"
 ```bash
 node -e "
 const fs = require('fs');
-let raw = fs.readFileSync('json-org/file.json', 'utf-8');
+let raw = fs.readFileSync('json-org-openeuler/file.json', 'utf-8');
 // 定位损坏行，将中文引号的 \" 替换为 Unicode 弯引号
 // 注意保留 JSON 字符串真正的结束 \" 
 // 例：...在\"环境要求\"...提及\"CANN >= 8.5.0\"\"...
 //   → ...在"环境要求"...提及"CANN >= 8.5.0"\"...
 raw = raw.replace('损坏的原文', '修复后的原文');
 JSON.parse(raw); // 验证修复
-fs.writeFileSync('json-org/file.json', raw, 'utf-8');
+fs.writeFileSync('json-org-openeuler/file.json', raw, 'utf-8');
 "
 ```
 
@@ -268,3 +268,99 @@ JSON.parse(raw);
 
 **已知需要排除的元数据键（不做为子组件）：**
 `status`、`reason`、`note`、`summary`、`duration_seconds`、`failures`、`failure_reason`、`pass_rate`、`skipped`、`test_cases`、`test_suites`、`execution_time_seconds`、`notes`、`errors`、`blocked`、`coverage` 等。
+
+---
+
+## 归一化后验证清单（步骤 8 增强版）
+
+以下验证项来自 2026-06-22 会话中发现的实际 bug，每条都是血的教训。
+
+### 结构完整性
+
+```python
+# 9 键必须存在
+required_keys = ['metadata','machine_spec','document_reading_summary','execution_log',
+    'process_timeline','final_results','documentation_gaps','problems_encountered','session_export_file']
+for k in required_keys:
+    assert k in data, f"Missing key: {k}"
+
+# final_results 3 个子键
+for sub in ['build','ut','sample']:
+    assert sub in data['final_results'], f"Missing final_results.{sub}"
+```
+
+### v630 字段提取验证（防 Bug 1: 48 文件 static_analysis 丢失）
+
+```python
+# static_analysis 和 devcontainer 必须存在于顶层（非空时）
+# 飞书刷新和仪表盘只读 data['static_analysis']，不读 data['final_results']['static_analysis']
+sa = data.get('static_analysis')
+dc = data.get('devcontainer')
+# 如果源文件 final_results 中有但顶层为空 → BUG
+assert sa is not None, "static_analysis missing from top level"
+assert dc is not None, "devcontainer missing from top level"
+```
+
+### 时长合理性验证（防 Bug 2: ubs-io 3000s→0）
+
+```python
+meta = data['metadata']
+dur = meta.get('duration_seconds', 0) or 0
+start = meta.get('start_time', '')
+end = meta.get('end_time', '')
+
+# 如果有 start/end 但 duration=0，计算时间差填充
+if dur == 0 and start != 'unknown' and end != 'unknown':
+    # 尝试从 start/end 计算（ISO 8601 格式）
+    from datetime import datetime
+    try:
+        t1 = datetime.fromisoformat(start)
+        t2 = datetime.fromisoformat(end)
+        calc_dur = int((t2 - t1).total_seconds())
+        if calc_dur > 0:
+            print(f"WARNING: duration=0 but start-end diff={calc_dur}s, source data lost?")
+    except: pass
+
+# build duration 合理性
+build = data['final_results']['build']
+if build.get('status') == 'success' and (build.get('duration_seconds', 0) or 0) == 0:
+    print(f"WARNING: build success but duration=0, check source")
+```
+
+### UT 状态语义验证（防 Bug 3: 326 passed → no_tests）
+
+```python
+ut = data['final_results']['ut']
+ut_status = ut.get('status', '')
+ut_total = ut.get('total', 0) or 0
+ut_passed = ut.get('passed', 0) or 0
+
+# no_tests 仅当真的没有测试用例时使用
+if ut_status == 'no_tests' and ut_total > 0:
+    print(f"ERROR: UT status=no_tests but total={ut_total}, should be success/partial_success/failed/not_run")
+
+# not_run 仅用于环境限制
+if ut_status == 'not_run' and ut_total > 0 and ut_passed > 0:
+    print(f"WARNING: UT not_run but {ut_passed} tests passed, should be partial_success?")
+
+# 状态与数值一致性
+if ut_status == 'success' and ut.get('failed', 0) > 0:
+    print(f"WARNING: UT status=success but failed={ut.get('failed')}")
+```
+
+### pre_commit 双格式冗余（防 Bug 4: 消费者读错路径）
+
+```python
+# 归一化输出时，pre_commit 数据既写平铺字段也写 results 子对象
+# 确保飞书刷新无论读哪种格式都能取到数据
+pc = data.get('static_analysis', {}).get('pre_commit', {})
+if pc and pc.get('configured'):
+    # 确保有 results 冗余
+    if 'results' not in pc:
+        pc['results'] = {
+            'total': pc.get('total_hooks', 0),
+            'passed': pc.get('passed', 0),
+            'failed': pc.get('failed', 0),
+            'skipped': pc.get('skipped', 0),
+        }
+```

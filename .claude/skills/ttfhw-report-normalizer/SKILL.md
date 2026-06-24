@@ -1,11 +1,11 @@
 ---
 name: ttfhw-report-normalizer
-description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归一化为统一模板结构并放入 json/ 目录，然后清理重建项目。支持两种模式：不带参数全量比对 json-org/ 和 json/ 目录，自动识别新增文件并归一化；传递文件名则仅归一化指定文件。当 json-org/ 中有新增的原始 JSON 文件需要归一化、或需要处理特定验证报告时，应使用此技能。
+description: 将 json-org-openeuler/ 目录中新增的 ttfhw-verify 原始验证报告归一化为统一模板结构并放入 json/ 目录，然后清理重建项目。支持两种模式：不带参数全量比对 json-org-openeuler/ 和 json/ 目录，自动识别新增文件并归一化；传递文件名则仅归一化指定文件。当 json-org-openeuler/ 中有新增的原始 JSON 文件需要归一化、或需要处理特定验证报告时，应使用此技能。
 ---
 
 # TTFHW 报告 JSON 归一化
 
-将 `json-org/` 中的原始验证报告归一化为统一模板结构，放入 `json/` 目录，最后清理重建项目。
+将 `json-org-openeuler/` 中的原始验证报告归一化为统一模板结构，放入 `json/` 目录，最后清理重建项目。
 
 ## 调用方式
 
@@ -15,7 +15,7 @@ description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归
 /ttfhw-report-normalizer
 ```
 
-对比 `json-org/`（原始）和 `json/`（归一化）两个目录的全部文件，通过仓库标识匹配自动识别新增的原始文件，逐个归一化后放入 `json/`，最后清理旧的静态页面并重新构建。
+对比 `json-org-openeuler/`（原始）和 `json/`（归一化）两个目录的全部文件，通过仓库标识匹配自动识别新增的原始文件，逐个归一化后放入 `json/`，最后清理旧的静态页面并重新构建。
 
 ### 模式二：指定文件（带文件名参数）
 
@@ -23,11 +23,11 @@ description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归
 /ttfhw-report-normalizer verification_report_WSL_hcomm_20260520.json
 ```
 
-仅对 `json-org/` 下指定的**一个**原始文件进行归一化，输出到 `json/` 目录，清理并重新构建。
+仅对 `json-org-openeuler/` 下指定的**一个**原始文件进行归一化，输出到 `json/` 目录，清理并重新构建。
 
 ## 使用场景
 
-- `json-org/` 目录中新增了原始验证报告 JSON 文件
+- `json-org-openeuler/` 目录中新增了原始验证报告 JSON 文件
 - 需要将原始报告转换为仪表盘可渲染的统一格式
 - 新的验证运行产生了不同格式的报告文件
 
@@ -37,7 +37,7 @@ description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归
 
 **全量比对模式（不带参数）：**
 
-对比 `json-org/` 和 `json/` 两个目录，找出所有新增的原始文件：
+对比 `json-org-openeuler/` 和 `json/` 两个目录，找出所有新增的原始文件：
 
 - 提取每个文件名去掉 `verification_report_` 前缀和日期后缀后的 **仓库标识**
 - 检查 `json/` 中是否存在同仓库标识的归一化文件
@@ -45,16 +45,16 @@ description: 将 json-org/ 目录中新增的 ttfhw-verify 原始验证报告归
 
 ```bash
 # 提取仓库标识并比对
-ls json-org/ | sed 's/verification_report_//;s/_\d\{8\}\(_\d\{6\}\)\?\.json$//;s/\.json$//' | sort > /tmp/org_keys.txt
+ls json-org-openeuler/ | sed 's/verification_report_//;s/_\d\{8\}\(_\d\{6\}\)\?\.json$//;s/\.json$//' | sort > /tmp/org_keys.txt
 ls json/ | sed 's/verification_report_//;s/_\d\{8\}\(_\d\{6\}\)\?\.json$//;s/\.json$//' | sort > /tmp/norm_keys.txt
 comm -23 /tmp/org_keys.txt /tmp/norm_keys.txt
 ```
 
-根据输出的仓库标识列表，找到 `json-org/` 中对应的完整文件名，逐个处理。
+根据输出的仓库标识列表，找到 `json-org-openeuler/` 中对应的完整文件名，逐个处理。
 
 **指定文件模式（带文件名参数）：**
 
-直接对 `json-org/<filename>` 这一个文件进行处理。
+直接对 `json-org-openeuler/<filename>` 这一个文件进行处理。
 
 ### 2. 阅读模板
 
@@ -161,8 +161,46 @@ rm -rf .next && npm run build
 - **绝不捏造数据。** 缺失用 `"unknown"`（字符串）、`0`（数字）、`[]`（数组）
 - **绝不删除模板字段。** 可增加额外字段，不能删除必需字段
 - **保留原始上下文。** `cann_environment`、`verification_conclusion`、`recommendations` 等额外键与模板字段共存
+- **⚠️ 必须提取 v630 字段到顶层。** `static_analysis` 和 `devcontainer` 常嵌套在源文件 `final_results` 内。归一化时**必须同时放置到 JSON 顶层**，因为飞书刷新和仪表盘组件从 `data['static_analysis']` / `data['devcontainer']` 读取。具体做法：检查 `final_results.static_analysis` 和 `final_results.devcontainer`，如非空则复制到顶层 `data['static_analysis']` / `data['devcontainer']`
 - **逐个阅读每个文件。** 理解内容后再映射，不盲目使用脚本
 - **原始数据无 URL 时留空。** 不要把 `repo_path`（本地路径）填入 `repo_url`
+- **⚠️ 必须校验数值合理性。** 写入归一化 JSON 前，检查：`duration_seconds` 不为 0 时与 `start_time`/`end_time` 一致性；UT `total`/`passed`/`failed` 与 `status` 不矛盾（如 passed=326 不应 status=no_tests）；build `status=success` 但 `duration_seconds=0` 应视为可疑。
+
+## 历史Bug与防错机制
+
+以下每个 bug 都曾真实发生（2026-06-22 会话），每次归一化时必须主动规避：
+
+### Bug 1: static_analysis/devcontainer 未提取到顶层（影响 48/60 文件）
+**现象**: 飞书表格 pre-commit/devcontainer 列显示 `-` / `未配置`，但原始数据中明确配置了。
+**根因**: 归一化时把源文件的 `final_results` 整体复制，里面嵌套的 `static_analysis` 和 `devcontainer` 没有同时提升到 JSON 顶层。飞书刷新和仪表盘只读顶层 `data['static_analysis']`。
+**防错**: ✅ 步骤 7 构建 JSON 时，**显式检查并提取**：
+```python
+if data['final_results'].get('static_analysis'):
+    data['static_analysis'] = data['final_results']['static_analysis']
+if data['final_results'].get('devcontainer'):
+    data['devcontainer'] = data['final_results']['devcontainer']
+```
+✅ 步骤 8 验证时增加检查：`assert data.get('static_analysis') is not None`，如为空但源文件有数据则告警。
+
+### Bug 2: 时长数据丢失（ubs-io: 3000s→0）
+**现象**: 飞书表格 G-K 列全部为空，但原始数据有完整的 start_time/end_time/duration_seconds。
+**根因**: 归一化 Agent 未能正确提取 `metadata.duration_seconds` 和 `final_results.build/ut/sample.duration_seconds`。
+**防错**: ✅ 步骤 8 验证时增加**合理性检查**：
+- `duration_seconds` 与 `start_time`/`end_time` 差值不矛盾（差值 = duration ± 120s 容差）
+- 如果 `build.status == 'success'` 且 `build.duration_seconds == 0`，检查源文件是否有时长数据
+
+### Bug 3: UT 状态语义错误（326 测试全通过 → no_tests）
+**现象**: ubs-io 原始数据 UT 326/326/0 全部通过（"成功"），归一化为 `no_tests`。
+**根因**: Agent 误判了 UT 数据的存在性。`no_tests` 意味着"仓库没有测试用例"，而非"测试未执行"或"测试失败"。
+**防错**: ✅ 状态映射的语义检查：
+- `no_tests` 仅当 UT 确实没有用例时使用（total=0 且源文件明确说明"无测试"）
+- 如果 `total > 0`（无论 passed/failed 多少），状态不能是 `no_tests`
+- `not_run` 用于环境限制（无 NPU、无 GPU），`no_tests` 用于仓库本身没有测试
+
+### Bug 4: pre_commit 数据结构假设错误
+**现象**: 飞书显示 "0个hooks"，实际有 5 个 hooks（1通过 2失败 2跳过）。
+**根因**: 归一化后的 `pre_commit` 使用平铺格式（`total_hooks`/`passed`/`failed`/`skipped` 在 `pre_commit` 对象顶层），但飞书刷新的提取函数只读了嵌套的 `pre_commit.results.total` 路径。
+**防错（跨 skill）**: ✅ 归一化 skill 在步骤 7 输出 pre_commit 时，**两种格式都写**——平铺字段 + `results` 子对象冗余备份 —— 确保下游消费者无论读哪种格式都能取到数据。
 
 ## 资源
 
