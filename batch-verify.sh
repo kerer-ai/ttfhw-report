@@ -63,14 +63,14 @@ while true; do
     git commit -m "resolve queue conflict" || true
   }
 
-  if ! grep -q '⏳' "$QUEUE_FILE"; then
-    FAILED_COUNT=$(grep -c '❌' "$QUEUE_FILE" 2>/dev/null || echo 0)
+  if ! grep -q '| ⏳ |' "$QUEUE_FILE"; then
+    FAILED_COUNT=$(grep -c '| ❌ |' "$QUEUE_FILE" 2>/dev/null || echo 0)
     if [ "$FAILED_COUNT" -gt 0 ]; then
       echo ""
       echo "═══════════════════════════════════════════"
       echo "  ⚠️  队列已空，$FAILED_COUNT 个失败需人工介入："
       echo "═══════════════════════════════════════════"
-      grep '❌' "$QUEUE_FILE"
+      grep '| ❌ |' "$QUEUE_FILE"
     else
       echo ""
       echo "═══════════════════════════════════════════"
@@ -82,8 +82,8 @@ while true; do
 
   COUNT=$((COUNT + 1))
 
-  NEXT=$(grep '⏳' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | //' | cut -d'|' -f1 | xargs)
-  NEXT_URL=$(grep '⏳' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | [^|]* | //' | cut -d'|' -f1 | xargs)
+  NEXT=$(grep '| ⏳ |' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | //' | cut -d'|' -f1 | xargs)
+  NEXT_URL=$(grep '| ⏳ |' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | [^|]* | //' | cut -d'|' -f1 | xargs)
 
   LOG_FILE="$LOG_DIR/${NEXT}_$(date +%Y%m%d_%H%M%S).log"
 
