@@ -1,14 +1,26 @@
 #!/bin/bash
-# TTFHW 批量验证调度器 — 每仓库独立 session，不间断自动接力
+# TTFHW 批量验证调度器
+# ── 职责：队列管理 + git 操作 + 调度 claude session ──
+# ── 验证执行（容器/编译/UT/归一化）由 ttfhw-batch-verify skill 负责 ──
 # 中断后可随时重新运行，队列文件是唯一状态
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
+# ═══════════════════════════════════════════
+# 配置
+# ═══════════════════════════════════════════
+
 QUEUE_FILE="verification-queue.yaml"
 TIMEOUT_HOURS=4
 TODAY=$(date +%Y%m%d)
 LOG_DIR=".claude/batch-logs"
+
+# 远程验证机器（可选，留空则 WSL 本地执行）
+# 所有队列中的仓库默认使用此配置，单个仓库可在 YAML 中覆盖
+REMOTE_IP=""            # 例: "10.10.1.100"
+REMOTE_USER=""          # 例: "root"，免密 SSH 登录
+
 mkdir -p "$LOG_DIR"
 
 # ═══════════════════════════════════════════
@@ -32,7 +44,10 @@ with open('$QUEUE_FILE') as f:
     data = yaml.safe_load(f)
 for r in data['queue']:
     if r['status'] == 'pending':
-        print(f\"{r['repo']}|{r['url']}|{r['branch']}\")
+        remote = r.get('remote', {})
+        rip = remote.get('ip', '') if remote else ''
+        ruser = remote.get('user', '') if remote else ''
+        print(f\"{r['repo']}|{r['url']}|{r['branch']}|{rip}|{ruser}\")
         break
 " 2>/dev/null
 }
@@ -66,7 +81,6 @@ for r in failed:
 " 2>/dev/null
 }
 
-# 将 stale running 任务重置为 pending（上次会话崩溃残留）
 reset_stale_running() {
   python3 -c "
 import yaml
@@ -117,14 +131,55 @@ verify_output() {
 }
 
 # ═══════════════════════════════════════════
+# 构建 claude -p 的 prompt
+# ═══════════════════════════════════════════
+
+build_prompt() {
+  local REPO="$1"
+  local URL="$2"
+  local BRANCH="$3"
+  local RIP="$4"
+  local RUSER="$5"
+
+  local ENV_DESC="WSL 本地 Docker"
+  local REMOTE_FLAG=""
+  if [ -n "$RIP" ]; then
+    ENV_DESC="远程机器 $RIP"
+    REMOTE_FLAG="
+     远程机器 IP: $RIP
+     远程用户:   ${RUSER:-root}
+     认证方式:   免密 SSH"
+  fi
+
+  cat <<PROMPT
+执行 /ttfhw-batch-verify 技能。
+
+仓库信息:
+  仓库名:  $REPO
+  URL:    $URL
+  分支:    $BRANCH
+
+验证环境: $ENV_DESC$REMOTE_FLAG
+
+⚠️ 关键约束:
+1. 在容器内编译，并发 = CPU核数 × 20%
+2. 容器名必须为 ${REPO}-ttfhw
+3. 产出: json-org-openeuler/verification_report_WSL_${REPO}_*.json
+4. 产出: json/verification_report_WSL_${REPO}_*.json
+5. 不操作 git，不更新队列文件，只做验证 + 归一化
+PROMPT
+}
+
+# ═══════════════════════════════════════════
 # 主循环
 # ═══════════════════════════════════════════
 
 echo "═══════════════════════════════════════════"
 echo "  TTFHW 批量验证调度器"
-echo "  队列文件: $QUEUE_FILE"
-echo "  日期:     $TODAY"
-echo "  日志目录: $LOG_DIR"
+echo "  队列文件:  $QUEUE_FILE"
+echo "  默认环境:  ${REMOTE_IP:-WSL 本地}"
+echo "  日期:      $TODAY"
+echo "  日志目录:  $LOG_DIR"
 echo "═══════════════════════════════════════════"
 
 COUNT=0
@@ -178,6 +233,12 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   NEXT=$(echo "$TASK" | cut -d'|' -f1)
   NEXT_URL=$(echo "$TASK" | cut -d'|' -f2)
   NEXT_BRANCH=$(echo "$TASK" | cut -d'|' -f3)
+  NEXT_RIP=$(echo "$TASK" | cut -d'|' -f4)
+  NEXT_RUSER=$(echo "$TASK" | cut -d'|' -f5)
+
+  # 仓库级远程配置覆盖全局默认
+  RIP="${NEXT_RIP:-$REMOTE_IP}"
+  RUSER="${NEXT_RUSER:-$REMOTE_USER}"
 
   LOG_FILE="$LOG_DIR/${NEXT}_$(date +%Y%m%d_%H%M%S).log"
 
@@ -186,14 +247,20 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   echo "  第 $COUNT 个: $NEXT"
   echo "  URL:       $NEXT_URL"
   echo "  分支:      $NEXT_BRANCH"
+  if [ -n "$RIP" ]; then
+    echo "  远程机器:  ${RUSER:+$RUSER@}$RIP"
+  else
+    echo "  环境:      WSL 本地"
+  fi
   echo "  日志:      $LOG_FILE"
   echo "  时间:      $(date '+%Y-%m-%d %H:%M:%S')"
   echo "═══════════════════════════════════════════"
 
-  # 清理残留 worktree
-  git worktree remove .claude/worktrees/"$NEXT" --force 2>/dev/null || true
-  git branch -D "verify/$NEXT" 2>/dev/null || true
+  # 同步远端最新队列状态
   git pull origin main --rebase 2>&1 || true
+  # 提交本地可能的未提交修改（上次残留）
+  git add "$QUEUE_FILE" 2>/dev/null || true
+  git commit -m "checkpoint before $NEXT" 2>/dev/null || true
 
   # 标记为 running 并推送
   update_status "$NEXT" "running" ""
@@ -203,23 +270,12 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
 
   START_TS=$(date +%s)
 
-  # ── 执行验证（单次，不重试）──
-  # 不加 set -e，超时/失败由 EXIT_CODE 捕获
+  # ── 执行验证（skill 只管验证+归一化，不管队列/git）──
+  PROMPT=$(build_prompt "$NEXT" "$NEXT_URL" "$NEXT_BRANCH" "$RIP" "$RUSER")
+
   timeout ${TIMEOUT_HOURS}h claude -p \
     --dangerously-skip-permissions \
-    "使用 /ttfhw-batch-verify 技能完成任务。
-
-     你的唯一目标是：为仓库 $NEXT（$NEXT_URL）在分支 $NEXT_BRANCH 上生成验证报告 JSON 文件。
-
-     ⚠️ 关键约束：
-     1. 全程不询问、不确认、不犹豫，直接执行
-     2. 必须产出: json-org-openeuler/verification_report_*_${NEXT}_*.json
-     3. 必须产出: json/verification_report_*_${NEXT}_*.json
-     4. 完成后将 verification-queue.yaml 中 $NEXT 的状态改为 done（成功）或 failed（失败）
-     5. 通过 python3 + yaml 更新队列文件，不要手动编辑
-     6. git push 队列状态和报告文件到远端
-     7. 退出前用 ls 验证两个 JSON 文件确实存在
-     8. 如果文件不存在，你就是没完成" \
+    "$PROMPT" \
     > "$LOG_FILE" 2>&1
 
   EXIT_CODE=$?
@@ -251,9 +307,9 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     update_status "$NEXT" "failed" "session 正常退出但未产出有效 JSON"
   fi
 
-  # 推送队列更新
-  git add "$QUEUE_FILE" 2>/dev/null
-  git commit -m "queue: $NEXT done" 2>/dev/null || true
+  # 推送队列 + 报告文件
+  git add "$QUEUE_FILE" json-org-openeuler/ json/ docs/ 2>/dev/null || true
+  git commit -m "verify: $NEXT complete" 2>/dev/null || true
   git push origin main 2>/dev/null || true
 
   echo "  队列已更新" | tee -a "$LOG_FILE"
