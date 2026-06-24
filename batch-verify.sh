@@ -1,6 +1,6 @@
 #!/bin/bash
 # TTFHW 批量验证调度器 — 每仓库独立 session，不间断自动接力
-set -e
+# 中断后可随时重新运行，队列文件是唯一状态
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
@@ -11,8 +11,10 @@ TODAY=$(date +%Y%m%d)
 LOG_DIR=".claude/batch-logs"
 mkdir -p "$LOG_DIR"
 
-# ── YAML 辅助函数 ──
-# 检查是否有 pending 任务
+# ═══════════════════════════════════════════
+# YAML 辅助函数
+# ═══════════════════════════════════════════
+
 has_pending() {
   python3 -c "
 import yaml
@@ -23,7 +25,6 @@ print(len(pending))
 " 2>/dev/null
 }
 
-# 获取下一个 pending 任务: 输出 "repo|url|branch"
 next_task() {
   python3 -c "
 import yaml
@@ -36,7 +37,6 @@ for r in data['queue']:
 " 2>/dev/null
 }
 
-# 更新任务状态
 update_status() {
   local REPO="$1"
   local NEW_STATUS="$2"
@@ -55,7 +55,6 @@ with open('$QUEUE_FILE', 'w') as f:
 " 2>/dev/null
 }
 
-# 列出失败任务
 list_failed() {
   python3 -c "
 import yaml
@@ -67,7 +66,29 @@ for r in failed:
 " 2>/dev/null
 }
 
-# ── 产出验证 ──
+# 将 stale running 任务重置为 pending（上次会话崩溃残留）
+reset_stale_running() {
+  python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+reset = []
+for r in data['queue']:
+    if r['status'] == 'running':
+        r['status'] = 'pending'
+        r['note'] = 'previous session crashed, retry'
+        reset.append(r['repo'])
+with open('$QUEUE_FILE', 'w') as f:
+    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+if reset:
+    print(f\"Reset stale tasks: {', '.join(reset)}\")
+" 2>/dev/null
+}
+
+# ═══════════════════════════════════════════
+# 产出验证
+# ═══════════════════════════════════════════
+
 verify_output() {
   local REPO="$1"
   local RAW_FILE=$(ls -t json-org-openeuler/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
@@ -95,6 +116,10 @@ verify_output() {
   return 0
 }
 
+# ═══════════════════════════════════════════
+# 主循环
+# ═══════════════════════════════════════════
+
 echo "═══════════════════════════════════════════"
 echo "  TTFHW 批量验证调度器"
 echo "  队列文件: $QUEUE_FILE"
@@ -109,10 +134,19 @@ while true; do
   echo "[$(date +%H:%M:%S)] pull 同步远端队列..."
   git pull origin main --rebase 2>&1 || {
     echo "  ⚠️ pull 冲突，尝试解决..."
-    git checkout --theirs "$QUEUE_FILE" 2>/dev/null
-    git add "$QUEUE_FILE"
-    git commit -m "resolve queue conflict" || true
+    git checkout --theirs "$QUEUE_FILE" 2>/dev/null || true
+    git add "$QUEUE_FILE" 2>/dev/null || true
+    git commit -m "resolve queue conflict" 2>/dev/null || true
   }
+
+  # 重置上次崩溃残留的 running 任务
+  STALE=$(reset_stale_running)
+  if [ -n "$STALE" ]; then
+    echo "  🔄 $STALE"
+    git add "$QUEUE_FILE" 2>/dev/null
+    git commit -m "queue: reset stale running tasks" 2>/dev/null || true
+    git push origin main 2>/dev/null || true
+  fi
 
   PENDING=$(has_pending)
   if [ "$PENDING" = "0" ] || [ -z "$PENDING" ]; then
@@ -156,16 +190,23 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   echo "  时间:      $(date '+%Y-%m-%d %H:%M:%S')"
   echo "═══════════════════════════════════════════"
 
-  # 清理残留
-  git worktree remove .claude/worktrees/"$NEXT" --force 2>/dev/null; true
-  git branch -D "verify/$NEXT" 2>/dev/null; true
+  # 清理残留 worktree
+  git worktree remove .claude/worktrees/"$NEXT" --force 2>/dev/null || true
+  git branch -D "verify/$NEXT" 2>/dev/null || true
   git pull origin main --rebase 2>&1 || true
+
+  # 标记为 running 并推送
+  update_status "$NEXT" "running" ""
+  git add "$QUEUE_FILE" 2>/dev/null
+  git commit -m "queue: claim $NEXT" 2>/dev/null || true
+  git push origin main 2>/dev/null || true
 
   START_TS=$(date +%s)
 
-  # ── 执行（单次，不重试）──
+  # ── 执行验证（单次，不重试）──
+  # 不加 set -e，超时/失败由 EXIT_CODE 捕获
   timeout ${TIMEOUT_HOURS}h claude -p \
-    --permission-mode bypassPermissions \
+    --dangerously-skip-permissions \
     "使用 /ttfhw-batch-verify 技能完成任务。
 
      你的唯一目标是：为仓库 $NEXT（$NEXT_URL）在分支 $NEXT_BRANCH 上生成验证报告 JSON 文件。
@@ -185,12 +226,14 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   END_TS=$(date +%s)
   DURATION=$(( (END_TS - START_TS) / 60 ))
 
-  # ── 验证产出并记录 ──
-  echo "" | tee -a "$LOG_FILE"
-  echo "──────────────────────────────────────────" | tee -a "$LOG_FILE"
-  echo "  完成时间: $(date '+%Y-%m-%d %H:%M:%S')" | tee -a "$LOG_FILE"
-  echo "  耗时:     ${DURATION} 分钟" | tee -a "$LOG_FILE"
-  echo "  退出码:   $EXIT_CODE" | tee -a "$LOG_FILE"
+  # ── 验证产出并更新队列 ──
+  {
+    echo ""
+    echo "──────────────────────────────────────────"
+    echo "  完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "  耗时:     ${DURATION} 分钟"
+    echo "  退出码:   $EXIT_CODE"
+  } | tee -a "$LOG_FILE"
 
   git pull origin main --rebase 2>&1 || true
 
@@ -208,18 +251,13 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     update_status "$NEXT" "failed" "session 正常退出但未产出有效 JSON"
   fi
 
-  git add "$QUEUE_FILE"
-  git commit -m "queue: $NEXT $(python3 -c "
-import yaml
-with open('$QUEUE_FILE') as f:
-    data = yaml.safe_load(f)
-for r in data['queue']:
-    if r['repo'] == '$NEXT':
-        print(r['status'])
-        break
-")" || true
-  git push origin main || true
+  # 推送队列更新
+  git add "$QUEUE_FILE" 2>/dev/null
+  git commit -m "queue: $NEXT done" 2>/dev/null || true
+  git push origin main 2>/dev/null || true
 
   echo "  队列已更新" | tee -a "$LOG_FILE"
+  echo ""
+  echo "  💡 随时重新运行 ./batch-verify.sh 继续下一个仓库"
   sleep 10
 done
