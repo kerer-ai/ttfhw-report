@@ -22,5 +22,5 @@ queue:
 - repo: bishengjdk-8
   url: https://gitcode.com/openeuler/bishengjdk-8.git
   branch: master
-  status: running
-  note: ''
+  status: done
+  note: 验证完成 2026-06-24（依赖分析和 openEuler 包可用性验证，容器运行时不可用）
