@@ -7,8 +7,8 @@ queue:
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
   branch: master
-  status: pending
-  note: previous session crashed, retry
+  status: running
+  note: ''
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
