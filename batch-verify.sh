@@ -18,8 +18,8 @@ LOG_DIR=".claude/batch-logs"
 
 # 远程验证机器（可选，留空则 WSL 本地执行）
 # 所有队列中的仓库默认使用此配置，单个仓库可在 YAML 中覆盖
-REMOTE_IP=""            # 例: "10.10.1.100"
-REMOTE_USER=""          # 例: "root"，免密 SSH 登录
+REMOTE_IP="192.168.9.114"
+REMOTE_USER="root"
 
 mkdir -p "$LOG_DIR"
 
