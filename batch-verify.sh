@@ -5,39 +5,82 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
-QUEUE_FILE="verification-queue.md"
+QUEUE_FILE="verification-queue.yaml"
 TIMEOUT_HOURS=4
 TODAY=$(date +%Y%m%d)
 LOG_DIR=".claude/batch-logs"
 mkdir -p "$LOG_DIR"
 
-echo "═══════════════════════════════════════════"
-echo "  TTFHW 批量验证调度器"
-echo "  队列文件: $QUEUE_FILE"
-echo "  日期:     $TODAY"
-echo "  日志目录: $LOG_DIR"
-echo "═══════════════════════════════════════════"
+# ── YAML 辅助函数 ──
+# 检查是否有 pending 任务
+has_pending() {
+  python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+pending = [r for r in data['queue'] if r['status'] == 'pending']
+print(len(pending))
+" 2>/dev/null
+}
 
-COUNT=0
+# 获取下一个 pending 任务: 输出 "repo|url|branch"
+next_task() {
+  python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['status'] == 'pending':
+        print(f\"{r['repo']}|{r['url']}|{r['branch']}\")
+        break
+" 2>/dev/null
+}
+
+# 更新任务状态
+update_status() {
+  local REPO="$1"
+  local NEW_STATUS="$2"
+  local NOTE="$3"
+  python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['repo'] == '$REPO':
+        r['status'] = '$NEW_STATUS'
+        r['note'] = '$NOTE'
+        break
+with open('$QUEUE_FILE', 'w') as f:
+    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+" 2>/dev/null
+}
+
+# 列出失败任务
+list_failed() {
+  python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+failed = [r for r in data['queue'] if r['status'] == 'failed']
+for r in failed:
+    print(f\"  ❌ {r['repo']:20s} {r.get('note', '')}\")
+" 2>/dev/null
+}
 
 # ── 产出验证 ──
 verify_output() {
   local REPO="$1"
-  local RAW_FILE=""
-  local NORM_FILE=""
+  local RAW_FILE=$(ls -t json-org-openeuler/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
+  local NORM_FILE=$(ls -t json/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
 
-  RAW_FILE=$(ls -t json-org-openeuler/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
   if [ -z "$RAW_FILE" ]; then
     echo "  ❌ 原始报告未生成"
     return 1
   fi
-
-  NORM_FILE=$(ls -t json/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
   if [ -z "$NORM_FILE" ]; then
     echo "  ❌ 归一化报告未生成"
     return 1
   fi
-
   if ! python3 -c "import json; json.load(open('$RAW_FILE'))" 2>/dev/null; then
     echo "  ❌ 原始报告 JSON 损坏: $RAW_FILE"
     return 1
@@ -52,7 +95,15 @@ verify_output() {
   return 0
 }
 
-# ── 主循环 ──
+echo "═══════════════════════════════════════════"
+echo "  TTFHW 批量验证调度器"
+echo "  队列文件: $QUEUE_FILE"
+echo "  日期:     $TODAY"
+echo "  日志目录: $LOG_DIR"
+echo "═══════════════════════════════════════════"
+
+COUNT=0
+
 while true; do
   echo ""
   echo "[$(date +%H:%M:%S)] pull 同步远端队列..."
@@ -63,14 +114,21 @@ while true; do
     git commit -m "resolve queue conflict" || true
   }
 
-  if ! grep -q '| ⏳ |' "$QUEUE_FILE"; then
-    FAILED_COUNT=$(grep -c '| ❌ |' "$QUEUE_FILE" 2>/dev/null || echo 0)
-    if [ "$FAILED_COUNT" -gt 0 ]; then
+  PENDING=$(has_pending)
+  if [ "$PENDING" = "0" ] || [ -z "$PENDING" ]; then
+    FAILED=$(python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+print(len([r for r in data['queue'] if r['status'] == 'failed']))
+" 2>/dev/null || echo 0)
+
+    if [ "$FAILED" -gt 0 ]; then
       echo ""
       echo "═══════════════════════════════════════════"
-      echo "  ⚠️  队列已空，$FAILED_COUNT 个失败需人工介入："
+      echo "  ⚠️  队列已空，$FAILED 个失败需人工介入："
       echo "═══════════════════════════════════════════"
-      grep '| ❌ |' "$QUEUE_FILE"
+      list_failed
     else
       echo ""
       echo "═══════════════════════════════════════════"
@@ -82,8 +140,10 @@ while true; do
 
   COUNT=$((COUNT + 1))
 
-  NEXT=$(grep '| ⏳ |' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | //' | cut -d'|' -f1 | xargs)
-  NEXT_URL=$(grep '| ⏳ |' "$QUEUE_FILE" | head -1 | sed 's/.*| ⏳ | [^|]* | //' | cut -d'|' -f1 | xargs)
+  TASK=$(next_task)
+  NEXT=$(echo "$TASK" | cut -d'|' -f1)
+  NEXT_URL=$(echo "$TASK" | cut -d'|' -f2)
+  NEXT_BRANCH=$(echo "$TASK" | cut -d'|' -f3)
 
   LOG_FILE="$LOG_DIR/${NEXT}_$(date +%Y%m%d_%H%M%S).log"
 
@@ -91,6 +151,7 @@ while true; do
   echo "═══════════════════════════════════════════"
   echo "  第 $COUNT 个: $NEXT"
   echo "  URL:       $NEXT_URL"
+  echo "  分支:      $NEXT_BRANCH"
   echo "  日志:      $LOG_FILE"
   echo "  时间:      $(date '+%Y-%m-%d %H:%M:%S')"
   echo "═══════════════════════════════════════════"
@@ -107,16 +168,17 @@ while true; do
     --permission-mode bypassPermissions \
     "使用 /ttfhw-batch-verify 技能完成任务。
 
-     你的唯一目标是：为仓库 $NEXT（$NEXT_URL）生成验证报告 JSON 文件。
+     你的唯一目标是：为仓库 $NEXT（$NEXT_URL）在分支 $NEXT_BRANCH 上生成验证报告 JSON 文件。
 
      ⚠️ 关键约束：
      1. 全程不询问、不确认、不犹豫，直接执行
      2. 必须产出: json-org-openeuler/verification_report_*_${NEXT}_*.json
      3. 必须产出: json/verification_report_*_${NEXT}_*.json
-     4. 完成后将 verification-queue.md 中 $NEXT 行状态改为 ✅（成功）或 ❌（失败）
-     5. git push 队列状态和报告文件到远端
-     6. 退出前用 ls 验证两个 JSON 文件确实存在
-     7. 如果文件不存在，你就是没完成" \
+     4. 完成后将 verification-queue.yaml 中 $NEXT 的状态改为 done（成功）或 failed（失败）
+     5. 通过 python3 + yaml 更新队列文件，不要手动编辑
+     6. git push 队列状态和报告文件到远端
+     7. 退出前用 ls 验证两个 JSON 文件确实存在
+     8. 如果文件不存在，你就是没完成" \
     > "$LOG_FILE" 2>&1
 
   EXIT_CODE=$?
@@ -134,32 +196,30 @@ while true; do
 
   if [ $EXIT_CODE -eq 124 ]; then
     echo "  ❌ 超时（${TIMEOUT_HOURS}h），已终止" | tee -a "$LOG_FILE"
-    STATUS="❌"
-    NOTE="超时 ${TIMEOUT_HOURS}h"
+    update_status "$NEXT" "failed" "超时 ${TIMEOUT_HOURS}h"
   elif [ $EXIT_CODE -ne 0 ]; then
     echo "  ❌ session 异常退出 (exit=$EXIT_CODE)" | tee -a "$LOG_FILE"
-    STATUS="❌"
-    NOTE="session 异常退出 (exit=$EXIT_CODE)"
+    update_status "$NEXT" "failed" "session 异常退出 (exit=$EXIT_CODE)"
   elif verify_output "$NEXT"; then
     echo "  ✅ 验证通过" | tee -a "$LOG_FILE"
-    STATUS="✅"
-    NOTE=""
+    update_status "$NEXT" "done" "验证通过 $(date +%Y-%m-%d)"
   else
     echo "  ❌ 产出验证失败" | tee -a "$LOG_FILE"
-    STATUS="❌"
-    NOTE="session 正常退出但未产出有效 JSON"
+    update_status "$NEXT" "failed" "session 正常退出但未产出有效 JSON"
   fi
 
-  # ── 更新队列 ──
-  if grep -q "🔄.*$NEXT" "$QUEUE_FILE" 2>/dev/null; then
-    sed -i "s/| 🔄 | $NEXT | .* | .* |/| $STATUS | $NEXT | $NEXT_URL | master | $NOTE |/" "$QUEUE_FILE"
-  else
-    sed -i "s/| ⏳ | $NEXT | .* | .* |/| $STATUS | $NEXT | $NEXT_URL | master | $NOTE |/" "$QUEUE_FILE"
-  fi
   git add "$QUEUE_FILE"
-  git commit -m "queue: $NEXT $STATUS ($NOTE)" || true
+  git commit -m "queue: $NEXT $(python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['repo'] == '$NEXT':
+        print(r['status'])
+        break
+")" || true
   git push origin main || true
 
-  echo "  队列已更新: $STATUS" | tee -a "$LOG_FILE"
+  echo "  队列已更新" | tee -a "$LOG_FILE"
   sleep 10
 done

@@ -27,16 +27,24 @@ shell 循环
 
 ## 队列文件
 
-仓库根目录下 `verification-queue.md`：
+仓库根目录下 `verification-queue.yaml`：
 
-```markdown
-| 状态 | 仓库 | Git URL | 分支 | 备注 |
-|------|------|---------|------|------|
-| ⏳ | kernel | https://gitcode.com/openeuler/kernel.git | master | |
-| ✅ | iSulad | https://gitcode.com/openeuler/iSulad.git | master | 2026-06-24 通过 |
+```yaml
+queue:
+  - repo: kernel
+    url: https://gitcode.com/openeuler/kernel.git
+    branch: OLK-6.6
+    status: pending       # pending | running | done | failed
+    note: ""
+
+  - repo: iSulad
+    url: https://gitcode.com/openeuler/iSulad.git
+    branch: master
+    status: done
+    note: "验证通过 2026-06-24"
 ```
 
-**状态：** `⏳` 等待 → `🔄` 进行中 → `✅` 完成 / `❌` 失败
+**状态：** `pending` 等待 → `running` 进行中 → `done` 完成 / `failed` 失败
 
 ## ⚠️ 完成定义（Definition of Done）
 
@@ -61,15 +69,25 @@ git pull origin main --rebase
 
 ### 步骤 1：领取任务
 
-读取 `verification-queue.md`，找到第一个 `⏳` 行，提取仓库名和 Git URL。
+读取 `verification-queue.yaml`，找到第一个 `status: pending` 的任务，提取 repo、url、branch。
 
-**没有 `⏳` 时：** 全部 ✅ → 输出 "ALL_DONE"。有 ❌ → 输出失败列表。
+**没有 pending 时：** 全部 done → 输出 "ALL_DONE"。有 failed → 输出失败列表。
 
 **领取后立即推送锁定：**
 
 ```bash
-sed -i '0,/⏳/{s/⏳/🔄/}' verification-queue.md
-git add verification-queue.md
+python3 -c "
+import yaml
+with open('verification-queue.yaml') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['status'] == 'pending':
+        r['status'] = 'running'
+        break
+with open('verification-queue.yaml', 'w') as f:
+    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+"
+git add verification-queue.yaml
 git commit -m "queue: claim <repo-name> for verification"
 git push origin main
 ```
@@ -110,16 +128,25 @@ ls -l json/verification_report_*_<repo-name>_*.json
 
 修改队列状态：
 
-- 验证成功 → `✅`
-- 验证失败 → `❌`，备注列写失败原因
+- 验证成功 → `done`，note 写"验证通过 YYYY-MM-DD"
+- 验证失败 → `failed`，note 写失败原因
 
 ```bash
-git add verification-queue.md json-org-openeuler/ json/ docs/
+python3 -c "
+import yaml
+with open('verification-queue.yaml') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['repo'] == '<repo-name>':
+        r['status'] = 'done'  # or 'failed'
+        r['note'] = '验证通过 $(date +%Y-%m-%d)'
+        break
+with open('verification-queue.yaml', 'w') as f:
+    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+"
+git add verification-queue.yaml json-org-openeuler/ json/ docs/
 git commit -m "verify: complete <repo-name> verification
-
-- Status: <success|failed>
-- Report: json/verification_report_WSL_<repo-name>_<date>.json
-
+...
 Co-Authored-By: Claude <noreply@anthropic.com>"
 git push origin main
 ```

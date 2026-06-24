@@ -1,0 +1,34 @@
+# TTFHW 批量验证队列
+# 使用方式: ./batch-verify.sh 自动领取并执行
+# 状态值: pending | running | done | failed
+
+queue:
+  - repo: kernel
+    url: https://gitcode.com/openeuler/kernel.git
+    branch: OLK-6.6
+    status: pending
+    note: ""
+
+  - repo: iSulad
+    url: https://gitcode.com/openeuler/iSulad.git
+    branch: master
+    status: pending
+    note: ""
+
+  - repo: A-Tune
+    url: https://gitcode.com/openeuler/A-Tune.git
+    branch: master
+    status: pending
+    note: ""
+
+  - repo: stratovirt
+    url: https://gitcode.com/openeuler/stratovirt.git
+    branch: master
+    status: pending
+    note: ""
+
+  - repo: bishengjdk-8
+    url: https://gitcode.com/openeuler/bishengjdk-8.git
+    branch: master
+    status: pending
+    note: ""
