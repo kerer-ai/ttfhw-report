@@ -142,9 +142,9 @@ claim_and_push() {
   if [ "$CLAIMED" = "NONE" ]; then
     return 1
   fi
-  git add "$QUEUE_FILE" 2>/dev/null
-  git commit -m "queue: claim $(echo "$CLAIMED" | cut -d'|' -f1)" 2>/dev/null || true
-  git push origin main 2>/dev/null || true
+  git add "$QUEUE_FILE" >/dev/null 2>&1
+  git commit -m "queue: claim $(echo "$CLAIMED" | cut -d'|' -f1)" >/dev/null 2>&1 || true
+  git push origin main >/dev/null 2>&1 || true
   echo "$CLAIMED"
   return 0
 }
@@ -302,6 +302,21 @@ EOF
 # 主流程
 # ═══════════════════════════════════════════
 
+# Ctrl+C 时杀掉所有后台 claude 进程
+cleanup() {
+  echo ""
+  echo "正在停止所有后台验证任务..."
+  jobs -p 2>/dev/null | while read pid; do
+    kill -TERM "$pid" 2>/dev/null || true
+    pkill -P "$pid" 2>/dev/null || true
+  done
+  wait 2>/dev/null || true
+  echo "已停止。running 任务下次启动会自动重置为 pending。"
+  rm -rf "$STATUS_DIR"
+  exit 130
+}
+trap cleanup SIGINT SIGTERM
+
 echo "═══════════════════════════════════════════"
 echo "  TTFHW 批量验证调度器（并发版）"
 echo "  队列文件:  $QUEUE_FILE"
@@ -323,17 +338,17 @@ while true; do
   git pull origin main --rebase 2>&1 || {
     echo "  ⚠️ pull 冲突"
     git checkout --theirs "$QUEUE_FILE" 2>/dev/null || true
-    git add "$QUEUE_FILE" 2>/dev/null
-    git commit -m "resolve queue conflict" 2>/dev/null || true
+    git add "$QUEUE_FILE" >/dev/null 2>&1
+    git commit -m "resolve queue conflict" >/dev/null 2>&1 || true
   }
 
   # 重置崩溃残留
   STALE=$(reset_stale_running)
   if [ -n "$STALE" ]; then
     echo "  🔄 $STALE"
-    git add "$QUEUE_FILE" 2>/dev/null
-    git commit -m "queue: reset stale" 2>/dev/null || true
-    git push origin main 2>/dev/null || true
+    git add "$QUEUE_FILE" >/dev/null 2>&1
+    git commit -m "queue: reset stale" >/dev/null 2>&1 || true
+    git push origin main >/dev/null 2>&1 || true
   fi
 
   # 检查是否还有待处理任务
@@ -441,9 +456,9 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     TOTAL=$((TOTAL + 1))
   done
 
-  git add "$QUEUE_FILE" json-org-openeuler/ json/ docs/ 2>/dev/null || true
-  git commit -m "verify: round $ROUND complete ($TOTAL total)" 2>/dev/null || true
-  git push origin main 2>/dev/null || true
+  git add "$QUEUE_FILE" json-org-openeuler/ json/ docs/ >/dev/null 2>&1 || true
+  git commit -m "verify: round $ROUND complete ($TOTAL total)" >/dev/null 2>&1 || true
+  git push origin main >/dev/null 2>&1 || true
 
   echo ""
   echo "  本轮结束，共完成 $TOTAL 个"
