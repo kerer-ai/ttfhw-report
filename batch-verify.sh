@@ -241,16 +241,40 @@ build_prompt() {
 
 验证环境: $ENV$EXTRA
 
-编译并发配置:
-  编译线程比例: CPU核数 × ${BUILD_RATIO}%
+编译并发: CPU核数 × ${BUILD_RATIO}%（至少为1），容器名 ${REPO}-ttfhw
 
-⚠️ 关键约束:
-1. 容器内编译并发 = CPU核数 × ${BUILD_RATIO}%（向下取整，至少为1）
-2. 容器名必须为 ${REPO}-ttfhw
-3. 产出: json-org-openeuler/verification_report_WSL_${REPO}_*.json
-4. 产出: json/verification_report_WSL_${REPO}_*.json
-5. 不操作 git，不更新队列文件，只做验证 + 归一化
-6. 完成后输出 [TTFHVV_RESULT] 结构化结果
+══════════════════════════════════════
+⚠️ 运行模式：无人值守自动化流水线
+══════════════════════════════════════
+
+1. 全程禁止询问、确认、停顿。遇到选择直接用最合理的默认方案。
+2. 无论仓库验证成功或失败，都必须生成完整的 JSON 报告。
+   构建失败、UT 不通过、Docker 不可用——这些都是有效结果，如实记录即可。
+3. 不要因为某个步骤失败就提前退出。完成所有能做的步骤，把失败原因写入
+   problems_encountered，然后继续后面的步骤。
+4. 如果 Docker 不可用，尝试在宿主机直接编译（安装对应依赖后执行构建命令）；
+   如果宿主机环境也不满足，记录原因到报告中，状态标记为 not_run。
+5. 在容器/宿主机内每一步安装依赖、编译、测试都必须记录 execution_log
+   （timestamp + command + success + output + duration_seconds）。
+
+══════════════════════════════════════
+⚠️ 完成标准（必须全部满足才能退出）
+══════════════════════════════════════
+
+必须产出两个文件：
+  json-org-openeuler/verification_report_WSL_${REPO}_*.json
+  json/verification_report_WSL_${REPO}_*.json
+
+退出前执行 ls 确认两个文件确实存在。文件不存在 = 你没完成。
+
+不要操作 git，不要更新 verification-queue.yaml。
+
+退出前输出以下结构化结果（必须包含实际状态值）:
+[TTFHVV_RESULT]
+repo=${REPO}
+build=<success|failed|not_run>
+ut=<success|failed|partial_success|not_run>
+sample=<success|failed|partial_success|not_run>
 PROMPT
 }
 
