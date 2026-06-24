@@ -4,10 +4,10 @@
     "repo_name": "stratovirt",
     "branch": "master",
     "commit": "HEAD (shallow clone, depth=1)",
-    "start_time": "2026-06-24T07:05:00",
-    "end_time": "2026-06-24T08:23:00",
-    "duration_seconds": 4680,
-    "total_steps": 13
+    "start_time": "2026-06-24T08:30:00",
+    "end_time": "2026-06-24T09:38:00",
+    "duration_seconds": 4080,
+    "total_steps": 14
   },
   "machine_spec": {
     "host_machine": {
@@ -28,195 +28,204 @@
     "image_source": {
       "type": "docker_container",
       "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "selection_reason": "stratovirt README 要求 openEuler 环境 + Rust 工具链。使用 openEuler 24.03 LTS 官方容器镜像，在远程 aarch64 机器上通过 Docker 容器按 README/docs/build_guide.md 步骤安装依赖并编译。",
+      "selection_reason": "stratovirt README 要求 openEuler 环境 + Rust 工具链。使用 openEuler 24.03 LTS 官方容器镜像，在远程 aarch64 机器上通过 Docker 容器按 README + Makefile 步骤安装依赖并编译。",
       "dependency_mapping": {}
     }
   },
   "document_reading_summary": {
     "architecture": {
       "source": "README.md + Cargo.toml",
-      "value": "Rust workspace 项目（edition 2021），包含 ~20+ 子 crate（machine, virtio, hypervisor, vfio, acpi, cpu, devices 等）。主二进制 stratovirt（轻量级 hypervisor），附 stratovirt-img（镜像工具）。依赖 KVM 内核模块运行虚拟机，支持 microvm/q35/virt 机型。"
+      "value": "Rust workspace 项目（edition 2021），包含 ~20+ 子 crate（machine, virtio, hypervisor, vfio, acpi, cpu, devices, chardev_backend, block_backend, address_space, ozone, boot_loader, image, ui, trace, hisysevent, migration 等）。主二进制 stratovirt（轻量级 KVM hypervisor），附 stratovirt-img（镜像工具）。依赖 KVM 内核模块运行虚拟机，支持 microvm/q35/virt 机型。"
     },
     "recommended_image": {
-      "source": "docs/build_guide.md",
-      "value": "openEuler 环境。项目自带 tools/build_stratovirt_static/Dockerfile 用于构建静态链接版本（musl）。本验证使用 openEuler 24.03 LTS 容器进行动态链接（glibc）构建。"
+      "source": "tools/build_stratovirt_static/Dockerfile + README.md",
+      "value": "openEuler 环境。项目自带 tools/build_stratovirt_static/Dockerfile（基于 openeuler:22.03-lts-sp2）用于构建静态链接版本（musl）。本验证使用 openEuler 24.03 LTS 容器进行动态链接（glibc）构建。"
     },
     "dockerfile_dependencies": {
-      "source": "tools/build_stratovirt_static/Dockerfile + docs/build_guide.md",
+      "source": "tools/build_stratovirt_static/Dockerfile + Makefile yum-deps",
       "value": [
         {
-          "original": "rustc >= 1.64.0 + cargo",
-          "openEuler_equivalent": "dnf install rust cargo → 1.82.0（不兼容，需 rustup 升级到 1.96.0）"
+          "original": "cargo musl-gcc cyrus-sasl-devel libcap-devel libcap-ng-devel libseccomp-devel dtc-devel(aarch64)",
+          "openEuler_equivalent": "dnf install -y cargo musl-gcc cyrus-sasl-devel libcap-devel libcap-ng-devel libseccomp-devel dtc-devel"
         },
         {
-          "original": "pixman-devel libcap-ng-devel cyrus-sasl-devel clang gtk3-devel libusbx alsa-lib-devel make",
-          "openEuler_equivalent": "dnf install -y pixman-devel libcap-ng-devel cyrus-sasl-devel clang gtk3-devel libusbx alsa-lib-devel make gcc gcc-c++ glibc-devel"
+          "original": "pixman-devel libcap-ng-devel cyrus-sasl-devel pulseaudio clang gtk3-devel libusbx alsa-lib-devel make（Makefile yum-deps）",
+          "openEuler_equivalent": "dnf install -y pixman-devel libcap-ng-devel cyrus-sasl-devel pulseaudio clang gtk3-devel libusbx alsa-lib-devel make gcc gcc-c++"
         }
       ]
     },
     "dependencies": {
-      "source": "Makefile yum-deps + docs/build_guide.md",
+      "source": "Makefile yum-deps + tools/build_stratovirt_static/Dockerfile",
       "value": [
-        "rust >= 1.85.0（rustup 安装 1.96.0，USTC 镜像）",
-        "pixman-devel（dnf）",
-        "libcap-ng-devel（dnf）",
-        "cyrus-sasl-devel（dnf）",
-        "clang（dnf）",
-        "gtk3-devel（dnf）",
-        "libusbx（dnf）",
-        "alsa-lib-devel（dnf）",
-        "make gcc gcc-c++ glibc-devel（dnf）"
+        "rust >= 1.85.0（rustup 安装 1.96.0，USTC 镜像 — openEuler 24.03 官方 Rust 1.82.0 不支持 edition2024）",
+        "pixman-devel, libcap-ng-devel, libcap-devel, libseccomp-devel（dnf）",
+        "cyrus-sasl-devel, pulseaudio（dnf）",
+        "clang, gtk3-devel, libusbx, alsa-lib-devel（dnf）",
+        "make, gcc, gcc-c++, musl-gcc（dnf）",
+        "dtc-devel（aarch64, dnf）"
       ]
     },
     "build_commands": {
-      "source": "Makefile + docs/build_guide.md",
-      "value": "cargo build --workspace --bins --release（glibc 动态链接，aarch64-unknown-linux-gnu target）。编译并发 = 256 × 20% = 51 线程。"
+      "source": "Makefile build target → cargo build --workspace --bins --release",
+      "value": "cargo build --workspace --bins --release（glibc 动态链接，aarch64-unknown-linux-gnu target）。编译并发 = 256 × 20% = 51 线程，CARGO_BUILD_JOBS=51。"
     },
     "ut_commands": {
       "source": "Cargo workspace + tests/mod_test",
-      "value": "cargo test --workspace。各子 crate 含单元测试（#[cfg(test)] mod tests），tests/mod_test 目录含集成测试（需要 /dev/kvm 设备）。"
+      "value": "cargo test --workspace --no-fail-fast。各子 crate 含单元测试和文档测试，tests/mod_test 目录含 KVM 集成测试（需要 /dev/kvm 设备）。"
     },
     "sample_commands": {
       "source": "README.md - 使用StratoVirt启动虚拟机",
-      "value": "通过 stratovirt 命令行启动 microvm 或标准机型虚拟机，需要 Linux 内核镜像 + rootfs 镜像 + KVM 支持。Docker 容器内无 /dev/kvm 和无 KVM 模块，无法执行示例。"
+      "value": "通过 stratovirt 命令行启动 microvm 或标准机型虚拟机，需要 Linux 内核镜像 + rootfs 镜像 + KVM 支持。Docker 容器内无 /dev/kvm，虚拟机启动不可执行。stratovirt -h/-V 和 stratovirt-img create 作为冒烟测试可用。"
     }
   },
   "execution_log": [
     {
-      "timestamp": "2026-06-24T07:05:00",
+      "timestamp": "2026-06-24T08:30:00",
       "command": "ssh root@192.168.9.114 环境检查（SSH + Docker + CPU + 内存）",
       "success": true,
-      "output": "SSH 免密连通。Docker 18.09.0，256核CPU，2044GB内存。",
+      "output": "SSH 免密连通。Docker 18.09.0，256核CPU，2044GB内存，aarch64 架构。",
       "error": "",
       "returncode": 0,
       "duration_seconds": 5
     },
     {
-      "timestamp": "2026-06-24T07:06:00",
+      "timestamp": "2026-06-24T08:31:00",
       "command": "ssh root@192.168.9.114 git clone --depth 1 --branch master https://gitcode.com/openeuler/stratovirt.git /tmp/stratovirt-verify",
       "success": true,
-      "output": "仓库克隆成功。33个目录/文件，aarch64 架构。",
+      "output": "仓库克隆成功。包含 Makefile, Cargo.toml, Cargo.lock, src/, tests/, 20+ 子 crate 目录。",
       "error": "",
       "returncode": 0,
       "duration_seconds": 30
     },
     {
-      "timestamp": "2026-06-24T07:07:00",
-      "command": "ssh root@192.168.9.114 docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "timestamp": "2026-06-24T08:31:40",
+      "command": "ssh root@192.168.9.114 docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts + docker run -d --name stratovirt-ttfhw --cpus=256",
       "success": true,
-      "output": "镜像已存在，无需下载（sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974）。",
+      "output": "镜像已存在（sha256:ace677f48c79）。容器 stratovirt-ttfhw 启动成功（aarch64，256 CPU）。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 10
+      "duration_seconds": 20
     },
     {
-      "timestamp": "2026-06-24T07:07:20",
-      "command": "ssh root@192.168.9.114 docker run -d --name stratovirt-ttfhw --cpus=256 -v /tmp/stratovirt-verify:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "timestamp": "2026-06-24T08:32:00",
+      "command": "docker exec stratovirt-ttfhw dnf install -y make gcc gcc-c++ cargo rust",
       "success": true,
-      "output": "容器 stratovirt-ttfhw 启动成功（aarch64，256 CPU）。",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 10
-    },
-    {
-      "timestamp": "2026-06-24T07:08:00",
-      "command": "docker exec stratovirt-ttfhw dnf install -y pixman-devel libcap-ng-devel cyrus-sasl-devel clang gtk3-devel libusbx alsa-lib-devel make gcc gcc-c++ glibc-devel curl",
-      "success": true,
-      "output": "所有系统构建依赖安装成功（pixman-devel, libcap-ng-devel, clang, gtk3-devel, alsa-lib-devel 等 30+ 包）。",
+      "output": "基础构建工具和 Rust 1.82.0 安装成功（openEuler 24.03 LTS 官方源）。",
       "error": "",
       "returncode": 0,
       "duration_seconds": 120
     },
     {
-      "timestamp": "2026-06-24T07:10:00",
-      "command": "docker exec stratovirt-ttfhw dnf install -y rust cargo",
+      "timestamp": "2026-06-24T08:34:00",
+      "command": "docker exec stratovirt-ttfhw dnf install -y pixman-devel libcap-ng-devel libcap-devel libseccomp-devel cyrus-sasl-devel pulseaudio clang gtk3-devel libusbx alsa-lib-devel musl-gcc dtc-devel",
       "success": true,
-      "output": "Rust 1.82.0 + Cargo 1.82.0 安装成功（openEuler 24.03 LTS 官方源）。",
+      "output": "所有项目级系统依赖安装成功（30+ 包，包含 pixman-devel, clang, gtk3-devel, dtc-devel 等）。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 30
+      "duration_seconds": 90
     },
     {
-      "timestamp": "2026-06-24T07:40:00",
-      "command": "docker exec stratovirt-ttfhw cargo build --workspace --bins --release -j 51（USTC 镜像源）",
+      "timestamp": "2026-06-24T08:35:40",
+      "command": "docker exec stratovirt-ttfhw ln -sf /usr/bin/dnf /usr/bin/yum（Makefile yum-deps 兼容性处理）",
+      "success": true,
+      "output": "yum→dnf 软链接创建成功，openEuler 24.03 中 yum 命令已废弃但可通过 dnf 兼容。",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T08:36:00",
+      "command": "docker exec stratovirt-ttfhw make build（首次尝试 — Cargo 1.82.0）",
       "success": false,
-      "output": "构建失败。chacha20 v0.10.0 需要 edition2024 特性，Cargo 1.82.0 不支持。",
-      "error": "Cargo 1.82.0 不支持 edition2024。需要升级 Rust 工具链。",
+      "output": "yum-deps 通过（包已安装），但 cargo build 失败。rand_core v0.10.0 需要 edition2024 特性，Cargo 1.82.0 不支持。",
+      "error": "Cargo 1.82.0 不支持 edition2024。需要 Rust >= 1.85.0。",
       "returncode": 101,
-      "duration_seconds": 7
+      "duration_seconds": 60
     },
     {
-      "timestamp": "2026-06-24T07:45:00",
-      "command": "docker exec stratovirt-ttfhw bash -c RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static ... curl ... | sh（USTC 镜像安装 rustup）",
+      "timestamp": "2026-06-24T09:00:00",
+      "command": "ssh root@192.168.9.114 curl rustup-init.sh → docker cp 到容器，RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static 安装 rustup",
       "success": true,
-      "output": "通过 USTC 镜像安装 rustup 成功（Rust 1.96.0）。",
+      "output": "通过 USTC 镜像安装 rustup 成功。Rust 1.96.0 (ac68faa20 2026-05-25) + Cargo 1.96.0。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 600
+      "duration_seconds": 900
     },
     {
-      "timestamp": "2026-06-24T08:17:00",
-      "command": "docker exec stratovirt-ttfhw bash -c source ~/.cargo/env && rustup target add aarch64-unknown-linux-gnu",
+      "timestamp": "2026-06-24T09:15:00",
+      "command": "docker exec stratovirt-ttfhw bash -c 'source ~/.cargo/env && mkdir -p ~/.cargo && 配置 USTC sparse registry 镜像'",
       "success": true,
-      "output": "rustc 1.96.0, cargo 1.96.0。aarch64 target 已就绪。",
+      "output": "Cargo registry 配置为 USTC 镜像（sparse+https://mirrors.ustc.edu.cn/crates.io-index/）。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 30
+      "duration_seconds": 5
     },
     {
-      "timestamp": "2026-06-24T08:19:03",
-      "command": "docker exec stratovirt-ttfhw bash -c source ~/.cargo/env && cd /workspace && cargo build --workspace --bins --release -j 51（USTC crates.io 镜像）",
+      "timestamp": "2026-06-24T09:31:53",
+      "command": "docker exec stratovirt-ttfhw bash -c 'source ~/.cargo/env && cd /workspace && CARGO_BUILD_JOBS=51 cargo build --workspace --bins --release'",
       "success": true,
-      "output": "编译成功。产出 stratovirt（93MB ELF）和 stratovirt-img（7.5MB ELF），aarch64 动态链接。编译耗时 2分59秒。",
+      "output": "编译成功！82 个外部 crate 从 USTC 镜像下载。产出 stratovirt（97MB）和 stratovirt-img（7.8MB），aarch64 动态链接。编译耗时 3分0秒。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 179
+      "duration_seconds": 180
     },
     {
-      "timestamp": "2026-06-24T08:22:22",
-      "command": "docker exec stratovirt-ttfhw bash -c source ~/.cargo/env && cd /workspace && cargo test --workspace -j 51",
+      "timestamp": "2026-06-24T09:35:10",
+      "command": "docker exec stratovirt-ttfhw bash -c 'source ~/.cargo/env && cd /workspace && CARGO_BUILD_JOBS=51 cargo test --workspace --no-fail-fast'",
       "success": false,
-      "output": "所有子 crate 单元测试全部通过（~200+ 测试）。tests/mod_test/balloon_test 中 13/15 集成测试失败（NotPresent 错误，因容器内无 /dev/kvm 设备）。balloon_config_002 和 balloon_huge_fun_001 两个不需要 KVM 的测试通过。",
-      "error": "balloon 集成测试需要 KVM 内核模块（/dev/kvm），Docker 容器内不可用。这是预期行为。",
+      "output": "所有子 crate 单元测试和文档测试全部通过（~430+ 测试，覆盖 util, machine, machine_manager, migration, virtio, hypervisor, vfio, acpi, cpu, devices, chardev_backend, block_backend, address_space, ozone, boot_loader, image, ui, trace, hisysevent 等）。tests/mod_test 目录中 19 个集成测试目标全部失败（balloon_test, block_test, net_test, pci_test, virtio_test, virtiofs_test 等），共计 600+ 测试用例失败，根因均为 Docker 容器内无 /dev/kvm 设备（NotPresent 错误）。",
+      "error": "19 个 mod_test 集成测试目标需要 KVM 内核模块（/dev/kvm），Docker 容器内不可用。这是 hypervisor 类软件在容器化环境中的预期限制。",
       "returncode": 101,
-      "duration_seconds": 47
+      "duration_seconds": 93
     },
     {
-      "timestamp": "2026-06-24T08:23:10",
-      "command": "docker exec stratovirt-ttfhw ls -lh target/release/stratovirt target/release/stratovirt-img && file target/release/stratovirt",
+      "timestamp": "2026-06-24T09:37:00",
+      "command": "docker exec stratovirt-ttfhw ./target/release/stratovirt -V（版本检查）",
       "success": true,
-      "output": "二进制产出确认：stratovirt（93MB, aarch64 ELF executable, dynamically linked），stratovirt-img（7.5MB, aarch64 ELF executable, dynamically linked）。",
+      "output": "StratoVirt 2.5.0 commit-id unknown。二进制可执行，版本输出正确。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 3
+      "duration_seconds": 1
     },
     {
-      "timestamp": "2026-06-24T08:23:20",
-      "command": "docker exec stratovirt-ttfhw ./target/release/stratovirt --help（冒烟测试）",
-      "success": false,
-      "output": "stratovirt 二进制存在但无法在容器内运行——需要 /dev/kvm 设备和 KVM 内核模块来初始化 KVM 子系统。这是容器环境的固有限制，非代码问题。",
-      "error": "容器环境无 KVM 支持，无法运行 hypervisor 二进制。",
-      "returncode": -1,
+      "timestamp": "2026-06-24T09:37:30",
+      "command": "docker exec stratovirt-ttfhw ./target/release/stratovirt -h（帮助信息）",
+      "success": true,
+      "output": "完整帮助信息输出正常，包含 -machine, -kernel, -drive, -device, -qmp, -chardev 等所有命令行参数文档。",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T09:37:55",
+      "command": "docker exec stratovirt-ttfhw ./target/release/stratovirt-img create -f raw /tmp/test.img 1M（镜像工具冒烟测试）",
+      "success": true,
+      "output": "stratovirt-img 成功创建 1MB raw 格式磁盘镜像。镜像工具功能正常。",
+      "error": "",
+      "returncode": 0,
       "duration_seconds": 1
     }
   ],
   "process_timeline": [
-    "07:05 - SSH 环境检查通过（256核，2044GB RAM，Docker 18.09.0）",
-    "07:06 - Git clone 仓库源码（33个目录/文件）",
-    "07:07 - 拉取 openEuler 24.03 LTS 镜像并启动容器 stratovirt-ttfhw",
-    "07:08 - dnf 安装系统构建依赖（pixman-devel, clang, gtk3-devel 等 30+ 包）",
-    "07:10 - dnf 安装 Rust 1.82.0 + Cargo 1.82.0",
-    "07:40 - 首次构建尝试失败（Cargo 1.82.0 不支持 edition2024）",
-    "07:45 - 通过 USTC 镜像安装 rustup，升级到 Rust 1.96.0",
-    "08:19 - cargo build --workspace --bins --release（51 并发，2分59秒）",
-    "08:22 - 编译成功！stratovirt（93MB）+ stratovirt-img（7.5MB）",
-    "08:22 - cargo test --workspace（51 并发，47秒）",
-    "08:23 - 测试完成：单元测试全通过，KVM 集成测试预期部分失败"
+    "08:30 - SSH 环境检查通过（256核，2044GB RAM，Docker 18.09.0，aarch64）",
+    "08:31 - Git clone 仓库源码（master 分支，shallow depth=1）",
+    "08:32 - 拉取 openEuler 24.03 LTS 镜像并启动容器 stratovirt-ttfhw",
+    "08:32 - dnf 安装基础构建工具（make, gcc, gcc-c++）+ Rust 1.82.0/Cargo 1.82.0",
+    "08:34 - dnf 安装项目级系统依赖（pixman-devel, clang, gtk3-devel 等 30+ 包）",
+    "08:36 - 首次编译失败：Cargo 1.82.0 不支持 edition2024（rand_core v0.10.0）",
+    "09:00 - USTC 镜像安装 rustup，升级到 Rust 1.96.0 + Cargo 1.96.0",
+    "09:31 - cargo build --workspace --bins --release（51 并发，3分0秒）→ 编译成功",
+    "09:34 - 产出 stratovirt（97MB）+ stratovirt-img（7.8MB），aarch64 ELF",
+    "09:35 - cargo test --workspace（51 并发，93秒）",
+    "09:37 - UT 完成：所有单元测试/文档测试通过（~430+），19 个 mod_test KVM 集成测试预期失败",
+    "09:37 - 冒烟测试：stratovirt -V（版本输出正常）",
+    "09:37 - 冒烟测试：stratovirt -h（帮助信息完整）",
+    "09:37 - 冒烟测试：stratovirt-img create（镜像创建正常）"
   ],
   "final_results": {
     "static_analysis": {
       "enabled": false,
-      "summary": "仓库未配置静态代码检查工具（无 .pre-commit-config.yaml，无 lint-runner 配置）。Rust 项目使用 rustfmt + clippy 进行代码规范检查，但未在 CI 工作流中发现预提交配置。",
+      "summary": "仓库未配置静态代码检查工具（无 .pre-commit-config.yaml，无 CI lint 配置）。Rust 项目使用 rustfmt + clippy 进行代码规范检查，但未在仓库中发现预提交钩子配置。",
       "pre_commit": {
         "configured": false,
         "config_file": null,
@@ -239,56 +248,62 @@
       "config_files": [],
       "original_base_image": null,
       "used_image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "summary": "仓库未配置 devcontainer 开发容器，本次使用 openEuler 24.03 LTS 容器。项目自带 tools/build_stratovirt_static/Dockerfile 用于静态链接构建，本次使用 glibc 动态链接。"
+      "summary": "仓库未配置 devcontainer 开发容器，本次使用 openEuler 24.03 LTS 容器。项目自带 tools/build_stratovirt_static/Dockerfile 用于 musl 静态链接构建，本次使用 glibc 动态链接。"
     },
     "build": {
       "status": "成功",
-      "duration_seconds": 179,
+      "duration_seconds": 180,
       "artifacts": [
         {
           "name": "stratovirt",
           "path": "target/release/stratovirt",
-          "size": "93MB (97517568 bytes)",
-          "arch": "aarch64 ELF executable, dynamically linked"
+          "size": "97MB (97421832 bytes)",
+          "arch": "aarch64 ELF executable, dynamically linked (glibc)"
         },
         {
           "name": "stratovirt-img",
           "path": "target/release/stratovirt-img",
-          "size": "7.5MB (7864320 bytes)",
-          "arch": "aarch64 ELF executable, dynamically linked"
+          "size": "7.8MB (7828696 bytes)",
+          "arch": "aarch64 ELF executable, dynamically linked (glibc)"
         }
       ],
-      "note": "Rust workspace 全量编译成功（20+ 子 crate），glibc 动态链接。rustc 1.96.0 + cargo 1.96.0（rustup 安装，USTC 镜像）。openEuler 官方源 Rust 1.82.0 不兼容 edition2024，需升级。82 个外部 crate 从 USTC 镜像下载，编译并发 51 线程。"
+      "note": "Rust workspace 全量编译成功（20+ 子 crate），glibc 动态链接，aarch64-unknown-linux-gnu target。rustc 1.96.0 + cargo 1.96.0（rustup 安装，USTC 镜像）。编译并发 51 线程（256 × 20%）。82 个外部 crate 从 USTC sparse registry 下载。"
     },
     "ut": {
       "status": "部分成功",
-      "duration_seconds": 47,
+      "duration_seconds": 93,
       "total": 0,
       "passed": 0,
       "failed": 0,
       "failures": [],
-      "note": "Rust workspace 中所有子 crate 单元测试（util, machine, machine_manager, migration, migration_derive, virtio, hypervisor, vfio, acpi, cpu, devices, chardev_backend, block_backend, address_space, ozone, ozonec, boot_loader, image, ui, trace, hisysevent, mod_test lib）全部通过。tests/mod_test 目录中的 balloon_test 集成测试 13/15 失败（NotPresent 错误），因 Docker 容器内无 /dev/kvm 设备，KVM 不可用。这是预期行为，非代码问题。balloon_config_002 和 balloon_huge_fun_001 两个不需要 KVM 的测试通过。"
+      "note": "所有子 crate 单元测试和文档测试全部通过（~430+ 测试：util 27, machine_manager 65, migration 9, virtio 55, hypervisor 63, vfio 1, acpi 16, cpu 28, devices 77, chardev_backend 24, block_backend 13, address_space 4, ozone 1, boot_loader 1, image 3, ui 5, trace 1, hisysevent 0, stratovirt 1 等）。19 个 mod_test 集成测试目标（balloon_test 13、block_test 23、fwcfg_test 15、memory_test 14、mod 304、net_test 14、pci_test 40、pvpanic_test 6、rng_test 5、scream_test 5、scsi_test 14、serial_test 7、usb_camera_test 8、usb_storage_test 15、usb_test 43、virtio_gpu_test 12、virtio_test 28、virtiofs_test 25、vnc_test 9）共计 600+ 测试用例全部因 Docker 容器内无 /dev/kvm 设备而失败（NotPresent 错误）。这是容器化验证环境的固有限制，非代码问题。"
     },
     "sample": {
-      "status": "未运行",
-      "duration_seconds": 0,
+      "status": "部分成功",
+      "duration_seconds": 3,
       "results": [
         {
-          "sample_name": "stratovirt --help（基本冒烟测试）",
-          "execution_status": "未运行",
-          "output_summary": "stratovirt 需要 /dev/kvm 设备初始化 KVM 子系统，Docker 容器内无 KVM 内核模块支持，无法执行。这是 hypervisor 类软件的固有限制。",
-          "execution_time": "N/A"
+          "sample_name": "stratovirt -V（版本检查）",
+          "execution_status": "成功",
+          "output_summary": "输出 StratoVirt 2.5.0 commit-id unknown，版本信息正确。",
+          "execution_time": "<1s"
+        },
+        {
+          "sample_name": "stratovirt -h（帮助信息）",
+          "execution_status": "成功",
+          "output_summary": "完整帮助信息输出正常，包含 -machine, -kernel, -drive, -device, -qmp, -chardev 等所有命令行参数文档。",
+          "execution_time": "<1s"
+        },
+        {
+          "sample_name": "stratovirt-img create -f raw /tmp/test.img 1M（镜像创建冒烟测试）",
+          "execution_status": "成功",
+          "output_summary": "成功创建 1MB raw 格式磁盘镜像（/tmp/test.img, 1048576 bytes），stratovirt-img 镜像工具功能正常。",
+          "execution_time": "<1s"
         },
         {
           "sample_name": "microvm 机型启动（README 示例）",
           "execution_status": "未运行",
-          "output_summary": "需要 KVM + 内核镜像 + rootfs 镜像。容器环境不支持。",
-          "execution_time": "N/A"
-        },
-        {
-          "sample_name": "stratovirt-img（镜像工具）",
-          "execution_status": "未运行",
-          "output_summary": "stratovirt-img 二进制已编译成功（7.5MB），可用于制作/转换虚拟机磁盘镜像，但验证环境无测试镜像文件。",
+          "output_summary": "需要 KVM 内核模块 + Linux 内核镜像 + rootfs 镜像。Docker 容器内 /dev/kvm 不可用，无法执行虚拟机启动示例。这是 hypervisor 类软件的固有限制。",
           "execution_time": "N/A"
         }
       ]
@@ -297,40 +312,40 @@
   "documentation_gaps": [
     {
       "severity": "高",
-      "description": "Makefile yum-deps 使用 yum（已废弃），openEuler 24.03 LTS 中 yum 链接到 dnf，可正常工作但不够规范。",
-      "recommendation": "将 Makefile 中 yum-deps 目标改为 dnf-deps 或使用 dnf 命令。"
+      "description": "Makefile yum-deps 目标使用 yum 命令（openEuler 24.03 中已废弃），虽然在 openEuler 24.03 中 yum 链接到 dnf 可正常工作，但不够规范，且在未来版本中可能被移除。",
+      "recommendation": "将 Makefile 中 yum-deps 目标改为 dnf-deps，使用 dnf 命令。同时将 @yum install 改为 @dnf install -y。"
     },
     {
       "severity": "高",
-      "description": "Cargo.lock 锁定 chacha20 v0.10.0（需要 edition2024），openEuler 24.03 官方 Rust 1.82.0 不支持，必须通过 rustup 安装更新版本的 Rust（>=1.85）。",
-      "recommendation": "在 README 或 docs/build_guide.md 中明确说明最低 Rust 版本要求（现阶段为 1.85+），或降级 chacha20 依赖到 0.9.x 以兼容 openEuler 官方 Rust 包。"
+      "description": "Cargo.lock 锁定 rand_core v0.10.0 和 chacha20 v0.10.0（需要 edition2024），openEuler 24.03 官方 Rust 1.82.0 不支持 edition2024，必须通过 rustup 安装 >=1.85.0 版本。这增加了首次构建的环境配置复杂度。",
+      "recommendation": "在 README.md 和 docs/build_guide.md 中明确说明最低 Rust 版本要求（现阶段为 1.85.0+）。或降级 rand 依赖到 0.8.x 以兼容 openEuler 官方 Rust 包。"
     },
     {
       "severity": "高",
-      "description": "stratovirt 作为 hypervisor 依赖 KVM 内核模块，无法在容器和无 KVM 的环境中进行完整的集成测试和功能验证。",
-      "recommendation": "提供 mock KVM 接口或在 CI 中使用裸金属/嵌套虚拟化环境进行集成测试。"
+      "description": "stratovirt 作为 KVM hypervisor，其集成测试（tests/mod_test/ 目录，19 个测试目标，600+ 测试用例）完全依赖 /dev/kvm 设备和 KVM 内核模块。在容器化 CI 环境中无法运行完整的集成测试。",
+      "recommendation": "提供 mock KVM 接口用于单元层面的 hypervisor 功能验证，或在 CI 中使用裸金属/嵌套虚拟化环境运行集成测试。可以考虑将 KVM 无关的测试逻辑分离到独立的单元测试中。"
     },
     {
       "severity": "低",
-      "description": "cargo build 编译有 2 个 warning：ui crate 的 get_keyboard_state 函数未使用（dead_code），devices crate 的 MUT_ROOT_PORT 未使用导入（unused_imports）。",
-      "recommendation": "清理未使用的代码和导入（cargo fix --lib -p devices --tests）。"
+      "description": "tools/build_stratovirt_static/Dockerfile 基于 openeuler:22.03-lts-sp2，使用 musl-gcc 静态编译，而 README 中未提及此 Dockerfile 或静态构建方法。",
+      "recommendation": "在 README 或 docs/ 中添加静态构建说明，或更新 Dockerfile 到 openEuler 24.03 LTS 基础镜像。"
     }
   ],
   "problems_encountered": [
     {
       "type": "Rust 版本不兼容",
-      "description": "openEuler 24.03 LTS 官方 Rust 包版本为 1.82.0，不支持 Cargo.lock 中 chacha20 v0.10.0 需要的 edition2024 特性。",
-      "resolution": "通过 USTC 镜像安装 rustup，升级到 Rust 1.96.0（2026-05-25 版本）。"
+      "description": "openEuler 24.03 LTS 官方 Rust 包版本为 1.82.0，不支持 Cargo.lock 中 rand_core v0.10.0 / chacha20 v0.10.0 需要的 edition2024 特性。Cargo 1.82.0 报错 'feature edition2024 is required... not stabilized in this version of Cargo'。",
+      "resolution": "通过 USTC 镜像安装 rustup，升级到 Rust 1.96.0（2026-05-25 版本）。安装命令：RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static ./rustup-init.sh -y。"
     },
     {
       "type": "网络限制",
-      "description": "rustup.rs 官方站点无法直接访问，crates.io 下载速度极慢。",
-      "resolution": "rustup 使用 RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static 镜像安装；cargo 使用 USTC sparse registry 镜像（sparse+https://mirrors.ustc.edu.cn/crates.io-index/）。"
+      "description": "容器内无法直接访问 rustup.rs 官方站点（rustup-init.sh 下载卡住），crates.io 下载速度极慢（首次 cargo build 在 'Updating crates.io index' 步骤卡住）。",
+      "resolution": "rustup-init.sh 在宿主机下载后通过 docker cp 传入容器。rustup 使用 RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static 镜像。Cargo 配置 USTC sparse registry（sparse+https://mirrors.ustc.edu.cn/crates.io-index/）。"
     },
     {
       "type": "KVM 不可用（预期限制）",
-      "description": "Docker 容器内 /dev/kvm 设备不存在，KVM 内核模块不可用，导致 13 个 balloon 集成测试失败，且 stratovirt 二进制无法运行。",
-      "resolution": "这是容器环境的固有限制，非代码问题。单元测试（所有子 crate，~200+ 测试）全部通过，编译产物正确。如需完整集成测试，需要裸金属或 KVM 嵌套虚拟化环境。"
+      "description": "Docker 容器内 /dev/kvm 设备不存在，KVM 内核模块不可用。导致 19 个 mod_test 集成测试目标（600+ 测试用例）全部失败（NotPresent 错误），且完整的虚拟机启动示例无法执行。",
+      "resolution": "这是容器环境的固有限制，非代码问题。所有子 crate 单元测试和文档测试（~430+ 测试）全部通过，编译产物正确（stratovirt 97MB + stratovirt-img 7.8MB）。冒烟测试（-V, -h, stratovirt-img create）全部成功。如需完整集成测试，需要裸金属服务器或 KVM 嵌套虚拟化环境。"
     }
   ]
 }
