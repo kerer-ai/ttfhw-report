@@ -2,8 +2,8 @@ queue:
 - repo: kernel
   url: https://gitcode.com/openeuler/kernel.git
   branch: OLK-6.6
-  status: running
-  note: ''
+  status: done
+  note: 验证通过 2026-06-24（宿主机构建，Docker 不可用）
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
   branch: master
