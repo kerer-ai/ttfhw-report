@@ -7,7 +7,7 @@
 
 | 状态 | 仓库 | Git URL | 分支 | 备注 |
 |------|------|---------|------|------|
-| 🔄 | kernel | https://gitcode.com/openeuler/kernel.git | master | |
+| ⏳ | kernel | https://gitcode.com/openeuler/kernel.git | master | |
 | ⏳ | iSulad | https://gitcode.com/openeuler/iSulad.git | master | |
 | ⏳ | A-Tune | https://gitcode.com/openeuler/A-Tune.git | master | |
 | ⏳ | stratovirt | https://gitcode.com/openeuler/stratovirt.git | master | |
