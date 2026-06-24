@@ -2,25 +2,25 @@ queue:
 - repo: kernel
   url: https://gitcode.com/openeuler/kernel.git
   branch: OLK-6.6
-  status: running
-  note: ''
+  status: pending
+  note: previous session crashed, retry
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
   branch: master
-  status: running
-  note: ''
+  status: pending
+  note: previous session crashed, retry
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
-  status: running
-  note: ''
+  status: pending
+  note: previous session crashed, retry
 - repo: stratovirt
   url: https://gitcode.com/openeuler/stratovirt.git
   branch: master
-  status: running
-  note: ''
+  status: pending
+  note: previous session crashed, retry
 - repo: bishengjdk-8
   url: https://gitcode.com/openeuler/bishengjdk-8.git
   branch: master
-  status: running
-  note: ''
+  status: pending
+  note: previous session crashed, retry
