@@ -19,7 +19,8 @@ TODAY=$(date +%Y%m%d)
 LOG_DIR=".claude/batch-logs"
 STATUS_DIR=".claude/batch-status"
 
-REMOTE_IP="192.168.9.114"
+MODE="local"              # local | remote
+REMOTE_IP=""              # --mode remote 时必须指定
 REMOTE_USER="root"
 MAX_CONCURRENCY=5
 BUILD_RATIO=20
@@ -35,25 +36,29 @@ usage() {
 TTFHW 批量验证调度器 — 从队列文件领取仓库，并发启动独立 session 验证。
 
 选项:
+  -m, --mode MODE          验证环境: local（默认）| remote
   -j, --concurrency N     最大并发数（默认: 5）
   -b, --build-ratio N     容器内编译线程比例，CPU核数 × N%（默认: 20）
-  --remote-ip IP          远程验证机器 IP（默认: $REMOTE_IP）
-  --remote-user USER      远程机器 SSH 用户（默认: $REMOTE_USER）
+  --remote-ip IP          远程机器 IP（--mode remote 时必填）
+  --remote-user USER      远程 SSH 用户（默认: root，需免密）
   -h, --help              显示此帮助信息
 
 示例:
-  ./batch-verify.sh                                    # 默认 5 并发，20% 编译
-  ./batch-verify.sh -j 10                              # 10 并发
-  ./batch-verify.sh -j 3 -b 30                         # 3 并发，30% 编译线程
-  ./batch-verify.sh --remote-ip 10.0.0.1 -j 8          # 指定远程机器，8 并发
+  ./batch-verify.sh                                            # 本地，5 并发
+  ./batch-verify.sh -j 10 -b 30                               # 本地，10 并发
+  ./batch-verify.sh --mode remote --remote-ip 192.168.9.114   # 远程，5 并发
 
-队列文件: $QUEUE_FILE（YAML 格式，每仓库可单独指定 remote）
+队列文件: $QUEUE_FILE（YAML 格式，每仓库可单独指定 remote 覆盖全局配置）
 EOF
   exit 0
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    -m|--mode)
+      MODE="$2"; shift 2 ;;
+    --mode=*)
+      MODE="${1#*=}"; shift ;;
     -j|--concurrency)
       MAX_CONCURRENCY="$2"; shift 2 ;;
     --concurrency=*)
@@ -78,6 +83,14 @@ while [[ $# -gt 0 ]]; do
 done
 
 # 参数校验
+if [[ "$MODE" != "local" && "$MODE" != "remote" ]]; then
+  echo "错误: --mode 必须为 local 或 remote（当前: $MODE）"
+  exit 1
+fi
+if [[ "$MODE" == "remote" && -z "$REMOTE_IP" ]]; then
+  echo "错误: --mode remote 时必须指定 --remote-ip"
+  exit 1
+fi
 if ! [[ "$MAX_CONCURRENCY" =~ ^[0-9]+$ ]] || [ "$MAX_CONCURRENCY" -lt 1 ]; then
   echo "错误: 并发数必须为正整数（当前: $MAX_CONCURRENCY）"
   exit 1
@@ -292,7 +305,7 @@ EOF
 echo "═══════════════════════════════════════════"
 echo "  TTFHW 批量验证调度器（并发版）"
 echo "  队列文件:  $QUEUE_FILE"
-echo "  远程机器:  ${REMOTE_USER}@${REMOTE_IP}"
+echo "  验证环境:  $MODE$([[ "$MODE" == "remote" ]] && echo " (${REMOTE_USER}@${REMOTE_IP})")"
 echo "  最大并发:  $MAX_CONCURRENCY"
 echo "  编译比例:  ${BUILD_RATIO}%"
 echo "  日期:      $TODAY"
