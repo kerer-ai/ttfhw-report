@@ -1,37 +1,26 @@
-# TTFHW 批量验证队列
-# 使用方式: ./batch-verify.sh 自动领取并执行
-# 状态值: pending | running | done | failed
-#
-# 每仓库可选 remote 字段指定远程验证机器（覆盖脚本顶部全局 REMOTE_IP）
-#   remote:
-#     ip: 10.10.1.100
-#     user: root        # 可选，默认 root，需免密 SSH
-#
-# 不配置 remote 则默认 WSL 本地 Docker 执行
-
 queue:
 - repo: kernel
   url: https://gitcode.com/openeuler/kernel.git
   branch: OLK-6.6
-  status: done
-  note: 验证通过 2026-06-24
+  status: pending
+  note: ''
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
   branch: master
-  status: done
-  note: 验证通过 2026-06-24
+  status: pending
+  note: ''
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
-  status: done
-  note: 验证通过 2026-06-24
+  status: pending
+  note: ''
 - repo: stratovirt
   url: https://gitcode.com/openeuler/stratovirt.git
   branch: master
-  status: done
-  note: 验证通过 2026-06-24
+  status: pending
+  note: ''
 - repo: bishengjdk-8
   url: https://gitcode.com/openeuler/bishengjdk-8.git
   branch: master
-  status: done
-  note: 验证通过 2026-06-24
+  status: pending
+  note: ''
