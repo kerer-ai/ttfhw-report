@@ -7,12 +7,8 @@
 
 | 状态 | 仓库 | Git URL | 分支 | 备注 |
 |------|------|---------|------|------|
-| ⏳ | | | | |
-
-<!--
-  示例行（使用时删除本注释）:
-  | ⏳ | amct | https://gitcode.com/cann/amct.git | master | |
-  | ⏳ | driver | https://gitcode.com/cann/driver.git | master | 需要 GPU |
-  | ✅ | hccl | https://gitcode.com/cann/hccl.git | master | 2026-06-23 验证通过 |
-  | ❌ | hcomm | https://gitcode.com/cann/hcomm.git | master | 构建失败: 缺少 libfoo |
--->
+| ⏳ | kernel | https://gitcode.com/openeuler/kernel.git | master | |
+| ⏳ | iSulad | https://gitcode.com/openeuler/iSulad.git | master | |
+| ⏳ | A-Tune | https://gitcode.com/openeuler/A-Tune.git | master | |
+| ⏳ | stratovirt | https://gitcode.com/openeuler/stratovirt.git | master | |
+| ⏳ | bishengjdk-8 | https://gitcode.com/openeuler/bishengjdk-8.git | master | |
