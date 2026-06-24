@@ -157,7 +157,7 @@ session_export_file   — 字符串
 
 **检测方法**：
 ```bash
-node -e "JSON.parse(require('fs').readFileSync('json-org/xxx.json','utf-8'))"
+node -e "JSON.parse(require('fs').readFileSync('json-org-openeuler/xxx.json','utf-8'))"
 ```
 如果报 `position N (line X column Y)`，阅读对应行，找中文文本中出现的裸 `"`。
 
@@ -166,14 +166,14 @@ node -e "JSON.parse(require('fs').readFileSync('json-org/xxx.json','utf-8'))"
 ```bash
 node -e "
 const fs = require('fs');
-let raw = fs.readFileSync('json-org/file.json', 'utf-8');
+let raw = fs.readFileSync('json-org-openeuler/file.json', 'utf-8');
 // 定位损坏行，将中文引号的 \" 替换为 Unicode 弯引号
 // 注意保留 JSON 字符串真正的结束 \" 
 // 例：...在\"环境要求\"...提及\"CANN >= 8.5.0\"\"...
 //   → ...在"环境要求"...提及"CANN >= 8.5.0"\"...
 raw = raw.replace('损坏的原文', '修复后的原文');
 JSON.parse(raw); // 验证修复
-fs.writeFileSync('json-org/file.json', raw, 'utf-8');
+fs.writeFileSync('json-org-openeuler/file.json', raw, 'utf-8');
 "
 ```
 
