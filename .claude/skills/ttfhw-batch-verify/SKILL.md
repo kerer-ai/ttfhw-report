@@ -38,6 +38,19 @@ shell 循环
 
 **状态：** `⏳` 等待 → `🔄` 进行中 → `✅` 完成 / `❌` 失败
 
+## ⚠️ 完成定义（Definition of Done）
+
+以下 **3 个条件全部满足** 才算完成，缺一不可：
+
+```
+1. json-org-openeuler/verification_report_*_<repo>_*.json  存在且为合法 JSON
+2. json/verification_report_*_<repo>_*.json                 存在且为合法 JSON
+3. verification-queue.md 中该仓库状态已改为 ✅ 或 ❌ 并 git push
+```
+
+如果只做了第 3 项但前两项不满足 → **你没有完成，必须重做**。
+如果前两项满足但第 3 项没做 → shell 脚本的兜底逻辑会补救。
+
 ## 工作流程（7 步，全自动无交互）
 
 ### 步骤 0：同步队列
@@ -79,9 +92,19 @@ git worktree add .claude/worktrees/<repo-name> -b verify/<repo-name>
 - 报告归一化（调用 `ttfhw-report-normalizer`）→ 归一化报告写入 `json/`
 - 清理重建 → `npm run build`
 
-### 步骤 4：归档结果
+### 步骤 4：自检验证（⚠️ 标记完成前必须执行）
 
-验证报告和归一化报告已生成到对应目录。
+**这是最关键的一步。不做这一步不得标记 ✅。**
+
+```bash
+# 必须用 ls 确认两个文件真实存在
+ls -l json-org-openeuler/verification_report_*_<repo-name>_*.json
+ls -l json/verification_report_*_<repo-name>_*.json
+```
+
+如果任一文件不存在 → **你没有完成**，返回步骤 3 重新执行验证。
+
+如果两个文件都存在 → 继续步骤 5。
 
 ### 步骤 5：标记完成
 
