@@ -22,5 +22,5 @@ queue:
 - repo: bishengjdk-8
   url: https://gitcode.com/openeuler/bishengjdk-8.git
   branch: master
-  status: pending
-  note: previous session crashed, retry
+  status: running
+  note: ''
