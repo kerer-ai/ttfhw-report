@@ -39,3 +39,4 @@ tmp_src/
 
 # archived/unused files
 tmp/
+__pycache__/
