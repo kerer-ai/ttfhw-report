@@ -7,8 +7,8 @@ queue:
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
   branch: master
-  status: running
-  note: ''
+  status: done
+  note: 验证通过 2026-06-24 (宿主机构建，Docker不可用)
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
