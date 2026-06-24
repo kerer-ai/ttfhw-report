@@ -4,22 +4,88 @@
 # ── 验证执行由 ttfhw-verify-runner skill 负责 ──
 # 中断后可随时重新运行，队列文件是唯一状态
 
+set -o pipefail
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 cd "$SCRIPT_DIR"
 
 # ═══════════════════════════════════════════
-# 配置
+# 默认配置
 # ═══════════════════════════════════════════
 
 QUEUE_FILE="verification-queue.yaml"
 TIMEOUT_HOURS=4
 TODAY=$(date +%Y%m%d)
 LOG_DIR=".claude/batch-logs"
-STATUS_DIR=".claude/batch-status"   # 后台任务状态文件
+STATUS_DIR=".claude/batch-status"
 
 REMOTE_IP="192.168.9.114"
 REMOTE_USER="root"
-MAX_CONCURRENCY=5                    # 最大并发数
+MAX_CONCURRENCY=5
+BUILD_RATIO=20
+
+# ═══════════════════════════════════════════
+# CLI 参数解析
+# ═══════════════════════════════════════════
+
+usage() {
+  cat <<EOF
+用法: ./batch-verify.sh [选项]
+
+TTFHW 批量验证调度器 — 从队列文件领取仓库，并发启动独立 session 验证。
+
+选项:
+  -j, --concurrency N     最大并发数（默认: 5）
+  -b, --build-ratio N     容器内编译线程比例，CPU核数 × N%（默认: 20）
+  --remote-ip IP          远程验证机器 IP（默认: $REMOTE_IP）
+  --remote-user USER      远程机器 SSH 用户（默认: $REMOTE_USER）
+  -h, --help              显示此帮助信息
+
+示例:
+  ./batch-verify.sh                                    # 默认 5 并发，20% 编译
+  ./batch-verify.sh -j 10                              # 10 并发
+  ./batch-verify.sh -j 3 -b 30                         # 3 并发，30% 编译线程
+  ./batch-verify.sh --remote-ip 10.0.0.1 -j 8          # 指定远程机器，8 并发
+
+队列文件: $QUEUE_FILE（YAML 格式，每仓库可单独指定 remote）
+EOF
+  exit 0
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -j|--concurrency)
+      MAX_CONCURRENCY="$2"; shift 2 ;;
+    --concurrency=*)
+      MAX_CONCURRENCY="${1#*=}"; shift ;;
+    -b|--build-ratio)
+      BUILD_RATIO="$2"; shift 2 ;;
+    --build-ratio=*)
+      BUILD_RATIO="${1#*=}"; shift ;;
+    --remote-ip)
+      REMOTE_IP="$2"; shift 2 ;;
+    --remote-ip=*)
+      REMOTE_IP="${1#*=}"; shift ;;
+    --remote-user)
+      REMOTE_USER="$2"; shift 2 ;;
+    --remote-user=*)
+      REMOTE_USER="${1#*=}"; shift ;;
+    -h|--help)
+      usage ;;
+    *)
+      echo "未知选项: $1（-h 查看帮助）"; exit 1 ;;
+  esac
+done
+
+# 参数校验
+if ! [[ "$MAX_CONCURRENCY" =~ ^[0-9]+$ ]] || [ "$MAX_CONCURRENCY" -lt 1 ]; then
+  echo "错误: 并发数必须为正整数（当前: $MAX_CONCURRENCY）"
+  exit 1
+fi
+if ! [[ "$BUILD_RATIO" =~ ^[0-9]+$ ]] || [ "$BUILD_RATIO" -lt 1 ] || [ "$BUILD_RATIO" -gt 100 ]; then
+  echo "错误: 编译线程比例必须在 1-100 之间（当前: $BUILD_RATIO）"
+  exit 1
+fi
 
 mkdir -p "$LOG_DIR" "$STATUS_DIR"
 
@@ -37,8 +103,6 @@ print(len(pending))
 " 2>/dev/null
 }
 
-# 原子领取：找到 pending → 标记 running → 写入 → 输出 "repo|url|branch|rip|ruser"
-# 调用方负责 git add/commit/push
 claim_one() {
   python3 -c "
 import yaml
@@ -60,23 +124,20 @@ print('NONE')
 }
 
 claim_and_push() {
-  # 本地原子领取
-  local CLAIMED=$(claim_one)
+  local CLAIMED
+  CLAIMED=$(claim_one)
   if [ "$CLAIMED" = "NONE" ]; then
     return 1
   fi
-  # 推送锁定
   git add "$QUEUE_FILE" 2>/dev/null
-  git commit -m "queue: claim $(echo $CLAIMED | cut -d'|' -f1)" 2>/dev/null || true
+  git commit -m "queue: claim $(echo "$CLAIMED" | cut -d'|' -f1)" 2>/dev/null || true
   git push origin main 2>/dev/null || true
   echo "$CLAIMED"
   return 0
 }
 
 update_status() {
-  local REPO="$1"
-  local NEW_STATUS="$2"
-  local NOTE="$3"
+  local REPO="$1" NEW_STATUS="$2" NOTE="$3"
   python3 -c "
 import yaml
 with open('$QUEUE_FILE') as f:
@@ -126,8 +187,9 @@ if reset:
 
 verify_output() {
   local REPO="$1"
-  local RAW_FILE=$(ls -t json-org-openeuler/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
-  local NORM_FILE=$(ls -t json/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
+  local RAW_FILE NORM_FILE
+  RAW_FILE=$(ls -t json-org-openeuler/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
+  NORM_FILE=$(ls -t json/verification_report_*_${REPO}_*.json 2>/dev/null | head -1)
 
   [ -z "$RAW_FILE" ]  && { echo "  ❌ 原始报告未生成"; return 1; }
   [ -z "$NORM_FILE" ] && { echo "  ❌ 归一化报告未生成"; return 1; }
@@ -140,7 +202,7 @@ verify_output() {
 }
 
 # ═══════════════════════════════════════════
-# 构建 prompt
+# 构建 prompt（build_ratio 传入 skill）
 # ═══════════════════════════════════════════
 
 build_prompt() {
@@ -166,8 +228,11 @@ build_prompt() {
 
 验证环境: $ENV$EXTRA
 
+编译并发配置:
+  编译线程比例: CPU核数 × ${BUILD_RATIO}%
+
 ⚠️ 关键约束:
-1. 在容器内编译，并发 = CPU核数 × 20%
+1. 容器内编译并发 = CPU核数 × ${BUILD_RATIO}%（向下取整，至少为1）
 2. 容器名必须为 ${REPO}-ttfhw
 3. 产出: json-org-openeuler/verification_report_WSL_${REPO}_*.json
 4. 产出: json/verification_report_WSL_${REPO}_*.json
@@ -187,8 +252,10 @@ run_single() {
 
   echo "[$(date +%H:%M:%S)] $REPO 开始..." | tee "$STATUS_FILE"
 
-  local PROMPT=$(build_prompt "$REPO" "$URL" "$BRANCH" "$RIP" "$RUSER")
-  local START_TS=$(date +%s)
+  local PROMPT
+  PROMPT=$(build_prompt "$REPO" "$URL" "$BRANCH" "$RIP" "$RUSER")
+  local START_TS
+  START_TS=$(date +%s)
 
   timeout ${TIMEOUT_HOURS}h claude -p \
     --dangerously-skip-permissions \
@@ -196,8 +263,9 @@ run_single() {
     > "$LOG_FILE" 2>&1
 
   local EXIT_CODE=$?
-  local END_TS=$(date +%s)
-  local DURATION=$(( (END_TS - START_TS) / 60 ))
+  local END_TS DURATION
+  END_TS=$(date +%s)
+  DURATION=$(( (END_TS - START_TS) / 60 ))
 
   {
     echo ""
@@ -207,7 +275,6 @@ run_single() {
     echo "  退出码:   $EXIT_CODE"
   } >> "$LOG_FILE"
 
-  # 写入结构化状态文件供主进程读取
   cat > "$STATUS_FILE" <<EOF
 REPO=$REPO
 EXIT_CODE=$EXIT_CODE
@@ -227,6 +294,7 @@ echo "  TTFHW 批量验证调度器（并发版）"
 echo "  队列文件:  $QUEUE_FILE"
 echo "  远程机器:  ${REMOTE_USER}@${REMOTE_IP}"
 echo "  最大并发:  $MAX_CONCURRENCY"
+echo "  编译比例:  ${BUILD_RATIO}%"
 echo "  日期:      $TODAY"
 echo "═══════════════════════════════════════════"
 
@@ -283,7 +351,7 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   echo ""
   echo "──── 领取任务（最多 $MAX_CONCURRENCY 个）────"
   TASKS=()
-  for i in $(seq 1 $MAX_CONCURRENCY); do
+  for i in $(seq 1 "$MAX_CONCURRENCY"); do
     CLAIMED=$(claim_and_push)
     if [ $? -ne 0 ] || [ -z "$CLAIMED" ] || [ "$CLAIMED" = "NONE" ]; then
       break
@@ -314,7 +382,6 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
 
     echo "  🚀 $R ($U @ $B)"
 
-    # 后台执行
     run_single "$R" "$U" "$B" "$RIP_FINAL" "$RUSR_FINAL" &
     PIDS+=($!)
   done
@@ -323,13 +390,12 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
 
   # ── 等待所有任务完成 ──
   for PID in "${PIDS[@]}"; do
-    wait $PID 2>/dev/null || true
+    wait "$PID" 2>/dev/null || true
   done
 
   echo ""
   echo "──── 本轮完成，验证产出并更新队列 ────"
 
-  # ── 逐个验证产出、更新状态 ──
   git pull origin main --rebase 2>&1 || true
 
   for TASK in "${TASKS[@]}"; do
@@ -345,7 +411,7 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     echo ""
     echo "  ── $R ──"
 
-    if [ "$EXIT_CODE" = "124" ] || [ "$EXIT_CODE" = "124" ]; then
+    if [ "$EXIT_CODE" = "124" ]; then
       echo "  ❌ 超时（${TIMEOUT_HOURS}h）"
       update_status "$R" "failed" "超时 ${TIMEOUT_HOURS}h"
     elif [ "$EXIT_CODE" != "0" ]; then
@@ -362,7 +428,6 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     TOTAL=$((TOTAL + 1))
   done
 
-  # 推送队列更新
   git add "$QUEUE_FILE" json-org-openeuler/ json/ docs/ 2>/dev/null || true
   git commit -m "verify: round $ROUND complete ($TOTAL total)" 2>/dev/null || true
   git push origin main 2>/dev/null || true
@@ -372,5 +437,4 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   sleep 10
 done
 
-# 清理状态目录
 rm -rf "$STATUS_DIR"
