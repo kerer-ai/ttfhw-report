@@ -1,9 +1,6 @@
 ---
-name: ttfhw-batch-verify
-description: |
-  单仓库验证执行器 — 负责在 WSL 本地或远程机器上启动 openEuler 容器执行验证，
-  完成后归一化报告。不管理队列，不操作 git，只做验证 + 归一化两件事。
-  触发: "/ttfhw-batch-verify", "验证并归一化 XXX"
+name: ttfhw-verify-runner
+description: 单仓库验证执行器 — 在 WSL 本地或远程机器上启动 openEuler 容器执行验证，完成后归一化报告。不管理队列，不操作 git，只做验证 + 归一化两件事。
 ---
 
 # TTFHW 单仓库验证执行器
@@ -11,7 +8,7 @@ description: |
 ## 职责边界
 
 ```
-ttfhw-batch-verify 只管两件事：
+ttfhw-verify-runner 只管两件事：
   1. ttfhw-verify-openeuler  → 仓库验证，产出原始 JSON
   2. ttfhw-report-normalizer  → 报告归一化，产出归一化 JSON
 

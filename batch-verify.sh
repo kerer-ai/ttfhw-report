@@ -152,7 +152,7 @@ build_prompt() {
   fi
 
   cat <<PROMPT
-执行 /ttfhw-batch-verify 技能。
+执行 /ttfhw-verify-runner 技能。
 
 仓库信息:
   仓库名:  $REPO
