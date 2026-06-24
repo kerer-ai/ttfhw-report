@@ -3,12 +3,12 @@
     "repo_path": "https://gitcode.com/openeuler/A-Tune.git",
     "repo_name": "A-Tune",
     "repo_url": "https://gitcode.com/openeuler/A-Tune.git",
-    "start_time": "2026-06-24T15:02:00",
-    "end_time": "2026-06-24T15:15:00",
-    "duration_seconds": 780,
-    "total_steps": 12,
     "branch": "master",
-    "commit": "6cfbf58"
+    "commit": "6cfbf58",
+    "start_time": "2026-06-24T08:25:00",
+    "end_time": "2026-06-24T09:00:00",
+    "duration_seconds": 2100,
+    "total_steps": 11
   },
   "machine_spec": {
     "host_machine": {
@@ -22,233 +22,223 @@
     "container": {
       "os": "openEuler 24.03 (LTS)",
       "architecture": "aarch64",
-      "cpu_cores": 51,
+      "cpu_cores": 256,
       "memory": "shared with host",
       "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
     },
     "image_source": {
       "type": "docker_container",
       "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "selection_reason": "A-Tune README-zh.md 方法二（从源码安装）指定 openEuler 20.03 LTS 及以上版本。使用 openEuler 24.03 LTS 官方容器镜像，在远程 aarch64 机器上通过 Docker 容器按 README 步骤安装依赖并编译。",
+      "selection_reason": "A-Tune README-zh.md 方法二（从源码安装）指定 openEuler 20.03 LTS 及以上版本。使用 openEuler 24.03 LTS 官方容器镜像，在远程 aarch64 机器上通过 Docker 容器安装依赖并编译。",
       "dependency_mapping": {}
     }
   },
   "document_reading_summary": {
     "architecture": {
       "source": "README-zh.md - 一、安装A-Tune",
-      "value": "支持操作系统：openEuler 20.03 LTS 及以上版本。Go + Python 混合项目，Go 构建 CLI 工具和守护进程，Python 提供 AI 分析引擎。"
+      "value": "支持操作系统：openEuler 20.03 LTS 及以上版本。Go + Python 混合项目，Go 构建 CLI 工具 (atune-adm) 和守护进程 (atuned)，CGO 构建插件模块 (daemon_profile_server.so)，Python 提供 AI 分析引擎 (Flask RESTful API)。"
     },
     "recommended_image": {
       "source": "Dockerfile-atune-engine FROM 指令",
-      "value": "Dockerfile-atune-engine 原推荐 python:3.8-slim（Debian，仅用于 atune-engine 微服务子组件）。本项目通过 openEuler 24.03 LTS 容器按 README 方法二源码编译主程序。"
+      "value": "Dockerfile-atune-engine 原推荐 python:3.8-slim（Debian，仅用于 atune-engine 微服务子组件）。本项目通过 openEuler 24.03 LTS 容器按 README 方法二源码编译主程序（atune-adm/atuned/daemon_profile_server.so）。"
     },
     "dockerfile_dependencies": {
       "source": "Dockerfile-atune-engine RUN 指令",
       "value": [
-        {"original": "apt-get install -y rsyslog gcc g++", "openEuler_equivalent": "gcc/g++ 由 golang-bin 依赖自动安装"},
-        {"original": "pip3 install Flask-RESTful scipy pandas scikit-learn scikit-optimize xgboost pyyaml", "openEuler_equivalent": "dnf install -y python3-pandas python3-scikit-learn python3-pyyaml python3-flask python3-flask-restful；pip3 install scikit-optimize xgboost 因 PyPI 网络超时部分失败"},
-        {"original": "apt-get install -y git", "openEuler_equivalent": "git 由 golang-bin 依赖自动安装"}
+        {"original": "apt-get install -y rsyslog gcc g++", "openEuler_equivalent": "gcc/gcc-c++ 通过 dnf 安装"},
+        {"original": "pip3 install Flask-RESTful scipy pandas scikit-learn scikit-optimize xgboost pyyaml", "openEuler_equivalent": "pyyaml 已通过 dnf 安装；scipy/pandas/scikit-learn/scikit-optimize/xgboost/Flask-RESTful 通过 pip 安装（ARM64 编译耗时过长，部分超时）"},
+        {"original": "apt-get install -y git", "openEuler_equivalent": "git 通过 dnf 安装"}
       ]
     },
     "dependencies": {
       "source": "README-zh.md - 方法二（开发者源码安装）",
       "value": [
-        "golang-bin（dnf 安装，Go 1.21.4）",
-        "python3（dnf 安装，Python 3.11.6）",
-        "python3-pip python3-devel（dnf 安装）",
-        "perf sysstat hwloc-gui lshw（dnf 安装，运行时采集依赖）",
+        "gcc gcc-c++ make（dnf 安装，CGO 编译需要）",
+        "golang（dnf 安装，Go 1.21.4）",
+        "python3 python3-pip python3-devel（dnf 安装，Python 3.11.6）",
         "sqlite sqlite-devel（dnf 安装，database 初始化需要）",
-        "gcc make（dnf 安装，CGO 编译需要）",
-        "python3-pandas python3-scikit-learn python3-pyyaml python3-flask python3-flask-restful python3-scipy（dnf 安装）"
+        "openssl openssl-devel（dnf 安装，证书生成需要）",
+        "git（dnf 安装，依赖 golang 包自动引入）"
       ]
     },
     "build_commands": {
-      "source": "README-zh.md - 4、编译 + Makefile",
-      "value": "go build -mod=vendor（atune-adm, atuned, daemon_profile_server.so）。编译并发 = 256 × 20% = 51 线程。"
+      "source": "Makefile - all 目标（modules atune-adm atuned db）+ README-zh.md",
+      "value": "Go build（CGO_ENABLED=1）: go build -mod=vendor（atune-adm, atuned）+ go build -buildmode=plugin（daemon_profile_server.so）。编译线程：GOMAXPROCS 默认全部核心。db 目标使用 sqlite3 初始化数据库。"
     },
     "ut_commands": {
-      "source": "Makefile check 目标",
-      "value": "make check → cd tests && sh run_tests.sh（Shell 集成测试，需要 root 安装并启动 atuned systemd 服务）；Go 项目全部包无 *_test.go 单元测试文件。"
+      "source": "Makefile check 目标 + tests/ 目录",
+      "value": "make check → cd tests && sh run_tests.sh（Shell 集成测试，需 root 安装并启动 atuned systemd 服务）；go test ./... → 全部 28 个 Go 包显示 [no test files]，项目无 Go 单元测试。"
     },
     "sample_commands": {
-      "source": "README-zh.md - 二、快速使用指南 + examples/",
-      "value": "atune-adm --help（CLI 冒烟测试）；python3 examples/Anomaly_Detection/main.py（异常检测示例需 PyTorch）；atune-adm list/profile/analysis（需 atuned 守护进程运行）"
+      "source": "README-zh.md - 二、快速使用指南 + examples/ + tools/",
+      "value": "atune-adm --help / --version（CLI 冒烟测试）；python3 tools/generate_models.py（模型生成）；python3 examples/Anomaly_Detection/main.py（异常检测示例需 PyTorch）"
     },
     "build_entry": {
-      "source": "Makefile all 目标",
-      "value": "go build -mod=vendor -o pkg/atune-adm cmd/atune-adm/*.go ; go build -mod=vendor -o pkg/atuned cmd/atuned/*.go ; go build -mod=vendor -buildmode=plugin -o pkg/daemon_profile_server.so modules/server/profile/*.go"
+      "source": "Makefile - all 目标",
+      "value": "cd /workspace && make all (Go 构建 atune-adm, atuned, daemon_profile_server.so)"
     },
     "ut_entry": {
-      "source": "Makefile check 目标",
-      "value": "cd tests && sh run_tests.sh"
+      "source": "Makefile check 目标 + tests/run_tests.sh",
+      "value": "cd tests && sh run_tests.sh（Shell 集成测试，需 systemd + atuned 服务）"
     }
   },
   "execution_log": [
     {
-      "timestamp": "2026-06-24T15:02:10",
+      "timestamp": "2026-06-24T08:25:00",
       "command": "ssh root@192.168.9.114 'git clone --depth 1 --branch master https://gitcode.com/openeuler/A-Tune.git /tmp/A-Tune-verify'",
       "success": true,
-      "output": "仓库克隆成功，24个目录/文件",
+      "output": "仓库克隆成功。检出分支 master，commit 6cfbf58。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 10
+      "duration_seconds": 25
     },
     {
-      "timestamp": "2026-06-24T15:02:30",
+      "timestamp": "2026-06-24T08:25:30",
       "command": "ssh root@192.168.9.114 'docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts'",
       "success": true,
-      "output": "镜像拉取成功（2层）",
+      "output": "openEuler 24.03 LTS 镜像拉取成功（aarch64）。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 20
+      "duration_seconds": 60
     },
     {
-      "timestamp": "2026-06-24T15:03:00",
-      "command": "ssh root@192.168.9.114 'docker run -d --name A-Tune-ttfhw --cpus=51 -v /tmp/A-Tune-verify:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity'",
+      "timestamp": "2026-06-24T08:26:30",
+      "command": "ssh root@192.168.9.114 'docker rm -f A-Tune-ttfhw 2>/dev/null; docker run -d --name A-Tune-ttfhw -v /tmp/A-Tune-verify:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity'",
       "success": true,
-      "output": "容器 A-Tune-ttfhw 启动成功（aarch64）",
+      "output": "容器 A-Tune-ttfhw 启动成功（aarch64），容器 ID: 6815f2e520c7...",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 3
+      "duration_seconds": 5
     },
     {
-      "timestamp": "2026-06-24T15:03:30",
-      "command": "dnf install -y golang-bin python3 python3-pip python3-devel perf sysstat hwloc-gui lshw sqlite sqlite-devel gcc make ruby",
+      "timestamp": "2026-06-24T08:27:00",
+      "command": "dnf install -y gcc gcc-c++ make golang sqlite sqlite-devel python3 python3-pip python3-devel openssl openssl-devel git",
       "success": true,
-      "output": "安装约 250+ 软件包，包括 Go 1.21.4, Python 3.11.6, GCC 12.3.1, Git, sqlite 等。aarch64 架构。",
+      "output": "安装约 260+ 软件包完成。Go 1.21.4, Python 3.11.6, GCC 12.3.1, sqlite 3.42.0, OpenSSL 等全部成功安装。aarch64 架构。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 180
+      "duration_seconds": 240
     },
     {
-      "timestamp": "2026-06-24T15:06:30",
-      "command": "dnf install -y python3-pandas python3-scikit-learn python3-pyyaml python3-flask python3-flask-restful ; pip3 install dict2xml scikit-optimize xgboost",
-      "success": false,
-      "output": "dnf 安装 Python 数据科学依赖成功（pandas/scikit-learn/scipy/pyyaml/flask 等）。pip3 安装 scikit-optimize/xgboost 因 PyPI 连接超时失败。dict2xml 同样超时。",
-      "error": "pip3 install 失败: HTTPSConnectionPool Read timed out（容器内到 PyPI 网络不通）",
+      "timestamp": "2026-06-24T08:31:00",
+      "command": "cd /workspace && make all (modules + atune-adm + atuned + db)",
+      "success": true,
+      "output": "Go 编译全部通过。modules/daemon_profile_server.so (CGO plugin) 编译成功；atune-adm 编译成功；atuned 编译成功。db 目标（sqlite3 database/atuned.db）因 init.sql 中双引号字符串被 SQLite 解析为列标识符而失败（SQLite 兼容性问题），不影响 Go 二进制产物。",
+      "error": "db 目标失败: Parse error - no such column (SQLite 将双引号字符串值误解析为列名)",
       "returncode": 2,
       "duration_seconds": 120
     },
     {
-      "timestamp": "2026-06-24T15:10:00",
-      "command": "go build -mod=vendor -o pkg/atune-adm cmd/atune-adm/*.go",
+      "timestamp": "2026-06-24T08:33:00",
+      "command": "file pkg/atune-adm && file pkg/atuned && file pkg/daemon_profile_server.so",
       "success": true,
-      "output": "atune-adm 编译成功。aarch64 ELF 64-bit executable，17779238 bytes (17.8MB)，dynamically linked。",
+      "output": "atune-adm: ELF 64-bit LSB executable, ARM aarch64, dynamically linked, stripped (11.2MB)。atuned: ELF 64-bit LSB executable, ARM aarch64, dynamically linked, stripped (14.9MB)。daemon_profile_server.so: ELF 64-bit LSB shared object, ARM aarch64, stripped (21.2MB)。",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 15
+      "duration_seconds": 2
     },
     {
-      "timestamp": "2026-06-24T15:10:20",
-      "command": "go build -mod=vendor -o pkg/atuned cmd/atuned/*.go",
+      "timestamp": "2026-06-24T08:34:00",
+      "command": "./pkg/atune-adm --version && ./pkg/atune-adm --help && ./pkg/atuned --help",
       "success": true,
-      "output": "atuned 编译成功。aarch64 ELF 64-bit executable，25125230 bytes (25.1MB)，dynamically linked。",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 20
-    },
-    {
-      "timestamp": "2026-06-24T15:10:50",
-      "command": "go build -mod=vendor -buildmode=plugin -o pkg/daemon_profile_server.so modules/server/profile/*.go",
-      "success": true,
-      "output": "daemon_profile_server.so 编译成功。aarch64 ELF 64-bit shared object，22266891 bytes (22.3MB)，stripped。",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 30
-    },
-    {
-      "timestamp": "2026-06-24T15:11:30",
-      "command": "go test -mod=vendor -vet=off -v ./...",
-      "success": false,
-      "output": "全部 28 个 Go 包显示 [no test files]。项目无 Go 单元测试。go-sqlite3 C 编译有 sqlite3SelectNew 局部地址返回警告，不影响功能。",
-      "error": "FAIL（无测试文件可执行，但 go test 以非零码退出）",
-      "returncode": 1,
-      "duration_seconds": 30
-    },
-    {
-      "timestamp": "2026-06-24T15:12:00",
-      "command": "./pkg/atune-adm --help",
-      "success": true,
-      "output": "atune-adm CLI 正常运行，显示完整命令列表：analysis, check, collection, define, detect, generate, info, list, profile, rollback, tuning 等 12+ 子命令。版本未注入（no version specified）。",
+      "output": "atune-adm version 1.2.0(6cfbf58) — 版本正确注入 git commit SHA。atune-adm --help 显示完整 12+ 子命令列表。atuned --help 显示守护进程帮助信息。",
       "error": "",
       "returncode": 0,
       "duration_seconds": 1
     },
     {
-      "timestamp": "2026-06-24T15:12:10",
-      "command": "./pkg/atune-adm info / list / check",
+      "timestamp": "2026-06-24T08:35:00",
+      "command": "go test -mod=vendor -count=1 ./...",
       "success": false,
-      "output": "atune-adm 尝试连接 Unix socket /var/run/atuned/atuned.sock 失败。atune-adm info 报 'requires exactly 1 argument'; atune-adm list 报 'failed to dial atuned.sock'; atune-adm check 报 'failed to dial atuned.sock'。",
-      "error": "atuned 守护进程未安装运行，所有需连接 daemon 的命令不可用",
-      "returncode": 0,
-      "duration_seconds": 2
+      "output": "全部 28 个 Go 包显示 [no test files]。modules/client/profile 和 common/tuning 包有 Go 1.21 vet 编译警告（int64→string 转换、Printf 格式化指令误用），导致 go test 整体以非零码退出。",
+      "error": "FAIL: 无 Go 单元测试文件，但 vet 检查失败导致 exit code 1",
+      "returncode": 1,
+      "duration_seconds": 45
     },
     {
-      "timestamp": "2026-06-24T15:12:30",
-      "command": "python3 examples/Anomaly_Detection/main.py",
+      "timestamp": "2026-06-24T08:36:00",
+      "command": "pip3 install scipy pandas scikit-learn scikit-optimize xgboost pyyaml Flask-RESTful && cd tools && python3 generate_models.py",
       "success": false,
-      "output": "Python 异常检测示例需要 PyTorch 1.4.0+。容器内未安装 torch 模块。start.sh 还依赖百度网盘下载数据集（不可访问）。",
-      "error": "ModuleNotFoundError: No module named 'torch'",
-      "returncode": 1,
+      "output": "pip3 install 在 ARM64 上编译大型科学计算包耗时过长（超时），任务中止。pyyaml 已通过 dnf 安装系统包。",
+      "error": "pip3 install 超时: ARM64 编译大型 Python 科学计算包（scipy/xgboost 等）耗时超过 10 分钟",
+      "returncode": null,
+      "duration_seconds": 600
+    },
+    {
+      "timestamp": "2026-06-24T08:50:00",
+      "command": "./pkg/atune-adm info / list / check（功能冒烟测试）",
+      "success": false,
+      "output": "atune-adm info 报 'requires exactly 1 argument'。atune-adm list 和 check 报 'failed to dial atuned.sock'。所有需要连接 atuned 守护进程的命令因 Unix socket 不存在而失败。",
+      "error": "atuned 守护进程未安装运行（容器内缺少 systemd）",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T08:55:00",
+      "command": "检查 tests/ 目录结构及 run_tests.sh",
+      "success": true,
+      "output": "tests/ 目录包含 25 个 Shell 集成测试脚本。所有测试依赖 test_lib.sh 测试框架，需 check_service_started atuned（systemd 服务状态检查）。容器内无 systemd 不可执行。",
+      "error": "",
+      "returncode": 0,
       "duration_seconds": 2
     }
   ],
   "process_timeline": [
     {
-      "timestamp": "2026-06-24T15:02:00",
+      "timestamp": "2026-06-24T08:25:00",
       "step": "environment_check",
-      "action": "SSH 连接远程机器并检查 Docker 状态",
+      "action": "SSH 连接远程机器（192.168.9.114 aarch64, 256核/2044GB）",
       "result": "success",
-      "details": {"remote_ip": "192.168.9.114", "arch": "aarch64", "cpu_cores": 256, "memory": "2044Gi", "docker_version": "18.09.0"}
+      "details": {"host": "192.168.9.114", "arch": "aarch64", "cpus": 256, "memory": "2044Gi"}
     },
     {
-      "timestamp": "2026-06-24T15:02:10",
-      "step": "code_setup",
+      "timestamp": "2026-06-24T08:25:05",
+      "step": "code_checkout",
       "action": "git clone A-Tune（gitcode, master, depth=1）",
       "result": "success",
-      "details": {"repo": "https://gitcode.com/openeuler/A-Tune.git", "branch": "master"}
+      "details": {"repo": "gitcode.com/openeuler/A-Tune", "branch": "master", "commit": "6cfbf58"}
     },
     {
-      "timestamp": "2026-06-24T15:02:25",
+      "timestamp": "2026-06-24T08:25:30",
       "step": "container_setup",
-      "action": "拉取 openEuler 24.03 LTS 镜像并启动容器（--cpus=51）",
+      "action": "拉取 openEuler 24.03 LTS 镜像并启动容器 A-Tune-ttfhw",
       "result": "success",
-      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "A-Tune-ttfhw", "cpus": 51}
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "A-Tune-ttfhw"}
     },
     {
-      "timestamp": "2026-06-24T15:03:30",
+      "timestamp": "2026-06-24T08:27:00",
       "step": "dependency_installation",
-      "action": "dnf 安装 Go + Python + GCC + 系统工具（250+包）",
+      "action": "dnf 安装 Go 1.21.4 + Python 3.11.6 + GCC 12.3.1 + 系统库（260+包）",
       "result": "success",
-      "details": {"packages": ["golang-bin", "python3", "python3-pip", "python3-devel", "perf", "sysstat", "hwloc-gui", "lshw", "sqlite", "sqlite-devel", "gcc", "make"]}
+      "details": {"packages": ["gcc", "gcc-c++", "make", "golang", "sqlite", "sqlite-devel", "python3", "python3-pip", "python3-devel", "openssl", "openssl-devel", "git"]}
     },
     {
-      "timestamp": "2026-06-24T15:06:30",
-      "step": "dependency_installation",
-      "action": "dnf 安装 Python 数据科学依赖 + pip3 安装 scikit-optimize/xgboost",
-      "result": "partial_success",
-      "details": {"dnf_packages": ["python3-pandas", "python3-scikit-learn", "python3-pyyaml", "python3-flask", "python3-flask-restful"], "pip_failures": ["dict2xml", "scikit-optimize", "xgboost"], "pip_error": "PyPI 连接超时"}
-    },
-    {
-      "timestamp": "2026-06-24T15:10:00",
-      "step": "build",
-      "action": "go build 三个 Go 目标（并发=51, aarch64）",
+      "timestamp": "2026-06-24T08:31:00",
+      "step": "build_attempt",
+      "action": "make all: Go 构建三个目标（atune-adm/atuned/daemon_profile_server.so）",
       "result": "success",
-      "details": {"artifacts": ["pkg/atune-adm (17.8MB)", "pkg/atuned (25.1MB)", "pkg/daemon_profile_server.so (22.3MB)"], "concurrency": 51}
+      "details": {"artifacts": ["atune-adm", "atuned", "daemon_profile_server.so"], "db_status": "partial_failure"}
     },
     {
-      "timestamp": "2026-06-24T15:11:30",
+      "timestamp": "2026-06-24T08:33:00",
+      "step": "build_verification",
+      "action": "file 检查二进制产物（3个 aarch64 ELF, stripped）",
+      "result": "success",
+      "details": {"atune-adm": "11.2MB", "atuned": "14.9MB", "daemon_profile_server.so": "21.2MB"}
+    },
+    {
+      "timestamp": "2026-06-24T08:34:00",
+      "step": "smoke_test",
+      "action": "atune-adm --version/--help + atuned --help（CLI 验证通过）",
+      "result": "success",
+      "details": {"version": "1.2.0(6cfbf58)", "subcommands": 12}
+    },
+    {
+      "timestamp": "2026-06-24T08:35:00",
       "step": "ut_execution",
-      "action": "go test（无单元测试文件）+ 集成测试不可运行",
-      "result": "not_run",
-      "details": {"go_packages_without_tests": 28, "integration_tests": "需要 systemd + atuned 服务"}
-    },
-    {
-      "timestamp": "2026-06-24T15:12:00",
-      "step": "sample_execution",
-      "action": "冒烟测试（atune-adm --help）+ 样例执行",
+      "action": "go test ./...（无单元测试）+ 功能命令冒烟 + Python 模型生成",
       "result": "partial_success",
-      "details": {"atune_adm_help": "success", "atune_adm_commands": "failed (no daemon)", "anomaly_detection": "failed (no torch)"}
+      "details": {"go_test": "no test files", "shell_tests": "skipped (need systemd)", "model_generation": "timeout"}
     }
   ],
   "final_results": {
@@ -281,49 +271,49 @@
     },
     "build": {
       "status": "success",
-      "duration_seconds": 80,
+      "duration_seconds": 120,
       "artifacts": [
-        {"name": "atune-adm", "path": "pkg/atune-adm", "size": "17779238 bytes (17.8MB)", "arch": "aarch64 ELF executable"},
-        {"name": "atuned", "path": "pkg/atuned", "size": "25125230 bytes (25.1MB)", "arch": "aarch64 ELF executable"},
-        {"name": "daemon_profile_server.so", "path": "pkg/daemon_profile_server.so", "size": "22266891 bytes (22.3MB)", "arch": "aarch64 ELF shared object"}
+        {"name": "atune-adm", "path": "pkg/atune-adm", "size": "11,744,707 bytes (11.2MB)", "arch": "aarch64 ELF executable, dynamically linked, stripped"},
+        {"name": "atuned", "path": "pkg/atuned", "size": "15,621,091 bytes (14.9MB)", "arch": "aarch64 ELF executable, dynamically linked, stripped"},
+        {"name": "daemon_profile_server.so", "path": "pkg/daemon_profile_server.so", "size": "22,266,891 bytes (21.2MB)", "arch": "aarch64 ELF shared object, stripped"}
       ],
-      "note": "三个 Go 组件全部编译成功。db 目标 SQL init 有预存 schema bug，不影响 Go 编译。make 默认 GOFLAGS 与 go 1.21 的 $GOFLAGS 环境变量解析冲突，直接用 go build 命令绕过。"
+      "note": "三个 Go 组件全部编译成功（CGO_ENABLED=1, aarch64）。db 目标 SQLite init.sql 使用双引号字符串值，被 SQLite 解析为列标识符而报错，不影响 Go 二进制产物。"
     },
     "ut": {
       "status": "not_run",
-      "duration_seconds": 30,
+      "duration_seconds": 45,
       "total": 0,
       "passed": 0,
       "failed": 0,
       "failures": [],
-      "note": "项目全部 28 个 Go 包无 *_test.go 单元测试文件。go-sqlite3 C 代码有 sqlite3SelectNew 局部地址返回警告（不影响功能）。集成测试（tests/run_tests.sh）需要 systemd + 完整安装 atuned 服务并 root 运行，容器内不可执行。"
+      "note": "项目全部 28 个 Go 包无 *_test.go 单元测试文件。集成测试（tests/run_tests.sh, 25 个 Shell 脚本）需要 systemd + 完整安装 atuned 服务，容器内不可执行。"
     },
     "sample": {
       "status": "partial_success",
       "duration_seconds": 5,
       "results": [
         {
-          "sample_name": "atune-adm --help（二进制冒烟测试）",
+          "sample_name": "atune-adm --version / --help（CLI 冒烟测试）",
           "execution_status": "success",
-          "output_summary": "atune-adm CLI 正常运行，输出完整命令列表（analysis/check/collection/define/detect/generate/info/list/profile/rollback/tuning 等 12+ 子命令），版本 1.2.0（构建时未注入 git SHA）。",
+          "output_summary": "atune-adm version 1.2.0(6cfbf58) — 版本正确，git commit SHA 已注入。atune-adm --help 输出完整 12+ 子命令列表。atuned --help 输出守护进程帮助。",
           "execution_time": "<1秒"
         },
         {
-          "sample_name": "atune-adm list/check/info（功能测试）",
+          "sample_name": "atune-adm list / check / info（功能测试）",
           "execution_status": "failed",
-          "output_summary": "所有需要连接 atuned 守护进程的命令失败——atuned Unix socket（/var/run/atuned/atuned.sock）不存在。atuned 未安装运行。atune-adm info/check 报 'failed to dial atuned.sock: no such file or directory'。",
+          "output_summary": "所有需要连接 atuned 守护进程的命令因 Unix socket 不存在而失败。容器内无 systemd，atuned 服务未安装运行。",
           "execution_time": "<1秒"
         },
         {
-          "sample_name": "python3 examples/Anomaly_Detection/main.py（异常检测示例）",
+          "sample_name": "make models (Python 模型生成)",
           "execution_status": "failed",
-          "output_summary": "Python 异常检测示例需要 PyTorch 1.4.0+（ModuleNotFoundError: torch）。start.sh 还依赖百度网盘下载训练数据集（https://pan.baidu.com），在容器/远程环境中不可访问。",
-          "execution_time": "<2秒"
+          "output_summary": "pip3 install 在 ARM64 上编译大型科学计算包耗时过长（>10分钟），任务因超时中止。",
+          "execution_time": ">600秒（超时）"
         },
         {
-          "sample_name": "examples/tuning/ 离线调优示例",
-          "execution_status": "not_run",
-          "output_summary": "examples/tuning/ 包含 ceph/compress/ffmpeg/fio/gcc_compile/nginx/redis/mysql_sysbench/kafka/spark/tensorflow_train 等 27+ 调优示例，每个示例含 YAML 配置和 README。需要对应应用运行时 + 已安装 atuned 服务才能验证。",
+          "sample_name": "tests/ Shell 集成测试（25个脚本）",
+          "execution_status": "skipped",
+          "output_summary": "所有测试依赖 test_lib.sh 框架，需 systemd + 完整安装 atuned 服务。容器内无 systemd，全部跳过。",
           "execution_time": "N/A"
         }
       ]
@@ -331,42 +321,42 @@
   },
   "documentation_gaps": [
     "README 方法二缺少 sqlite 依赖说明（database/init.sql 需要 sqlite3 初始化）",
-    "init.sql 中 INSERT 语句引用的列名与 CREATE TABLE 定义不匹配（仓库已存在 schema bug）",
-    "Makefile GOFLAGS 在 go 1.21+ 下与 $GOFLAGS 环境变量冲突，直接 make all 报 'unknown flag'",
-    "examples/Anomaly_Detection/main.py 需要 PyTorch，但 README-zh 未注明此深度学习依赖",
-    "项目无 Go 单元测试覆盖率，全部逻辑依赖 Shell 集成测试（需完整安装 atuned）",
-    "go.mod 声明 Go 1.14，但 Go 1.21 vet 有额外检查导致 int64→string 和 Printf 格式化兼容性警告"
+    "database/init.sql 中 INSERT 语句使用双引号字符串值，SQLite 将其解析为列标识符（schema bug）",
+    "examples/Anomaly_Detection/main.py 需要 PyTorch 1.4.0+，但 README-zh 未注明此深度学习依赖",
+    "项目无 Go 单元测试覆盖率，全部逻辑依赖 Shell 集成测试（需完整安装 atuned + systemd）",
+    "go.mod 声明 Go 1.14，但 Go 1.21 vet 有额外严格检查，导致 2 处代码警告",
+    "Dockerfile-atune-engine 基于 python:3.8-slim（Debian）而非 openEuler，无 openEuler 原生容器构建方案"
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-06-24T15:06:30",
-      "problem": "make GOFLAGS 变量与 go 1.21 $GOFLAGS 环境变量冲突：Makefile 中 GOFLAGS = -ldflags '...' 传给 go build 时被 go 命令行解析为 environment override 而报 'unknown flag'",
-      "solution": "绕过方式为直接用 go build 命令替代 make，手动指定 -o 输出路径",
-      "source": "Makefile line 37-40"
+      "timestamp": "2026-06-24T08:31:00",
+      "problem": "SQLite init.sql 双引号兼容性：database/init.sql 使用双引号包裹字符串值，SQLite 将其解析为列标识符而报 'no such column'",
+      "solution": "将 init.sql 中字符串值的双引号改为单引号",
+      "source": "database/init.sql"
     },
     {
-      "timestamp": "2026-06-24T15:06:30",
-      "problem": "pip3 install 到 PyPI 网络超时：容器内无法连接 files.pythonhosted.org 下载 scikit-optimize/xgboost/dict2xml",
-      "solution": "部分 Python 依赖通过 dnf 安装系统包替代（python3-pandas, python3-scikit-learn, python3-pyyaml 等）",
-      "source": "容器网络环境"
+      "timestamp": "2026-06-24T08:36:00",
+      "problem": "pip3 ARM64 编译超时：scipy/pandas/scikit-learn/xgboost 在 aarch64 上无预编译 wheel，需从源码编译，耗时超过 10 分钟",
+      "solution": "通过 dnf 安装系统 Python 包替代 pip 安装；或使用预编译的 aarch64 wheel",
+      "source": "pip3 install 命令"
     },
     {
-      "timestamp": "2026-06-24T15:11:30",
-      "problem": "go test 无测试文件返回非零码：28 个 Go 包全部 [no test files]，go test 仍以 exit code 1 退出",
-      "solution": "使用 go test -vet=off 跳过 vet 检查，识别到项目无单元测试",
-      "source": "Go 1.21 test 命令行行为"
+      "timestamp": "2026-06-24T08:35:00",
+      "problem": "go test 无测试文件仍返回非零码：28 个 Go 包全部 [no test files]，vet 检查失败导致 exit code 1",
+      "solution": "修复 vet 警告（int64→string 转换、Printf 格式化），或使用 go test -vet=off",
+      "source": "go test ./..."
     },
     {
-      "timestamp": "2026-06-24T15:12:10",
-      "problem": "atuned 守护进程不可用：Shell 集成测试需 systemd（容器内无 systemd），且须 root 完整安装 A-Tune 并启动 atuned/atune-rest/atune-engine 三个服务",
-      "solution": "跳过需要守护进程的集成测试，仅执行 CLI 冒烟测试（atune-adm --help）",
-      "source": "tests/run_tests.sh + tests/test_lib.sh"
+      "timestamp": "2026-06-24T08:50:00",
+      "problem": "atuned 守护进程不可用：Shell 集成测试需 systemd（容器内无 systemd），且须 root 完整安装 A-Tune 并启动三个服务",
+      "solution": "在具有 systemd 的环境中（物理机或 VM）进行完整安装验证；或使用 privileged 容器 + systemd",
+      "source": "tests/run_tests.sh + test_lib.sh"
     },
     {
-      "timestamp": "2026-06-24T15:12:30",
+      "timestamp": "2026-06-24T08:25:00",
       "problem": "远程机器为 aarch64 架构：编译产物为 ARM64 ELF，与常见 x86_64 环境不兼容",
-      "solution": "编译产物标记为 aarch64，跨架构部署需注意兼容性",
-      "source": "远程机器硬件规格"
+      "solution": "注意跨架构部署需求，明确标注编译架构",
+      "source": "uname -m"
     }
   ],
   "session_export_file": ""

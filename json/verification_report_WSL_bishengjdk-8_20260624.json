@@ -1,238 +1,512 @@
 {
   "metadata": {
-    "repo_url": "https://gitcode.com/openeuler/bishengjdk-8.git",
-    "repo_name": "bishengjdk-8",
+    "repo_path": "https://gitcode.com/openeuler/bishengjdk-8.git",
     "branch": "master",
-    "commit": "unknown (shallow clone --depth 1)",
-    "start_time": "2026-06-24T07:02:00+08:00",
-    "end_time": "2026-06-24T07:17:00+08:00",
-    "duration_seconds": 900,
-    "total_steps": 7,
-    "repo_path": "/tmp/bishengjdk-8-verify"
+    "start_time": "2026-06-24T08:34:00",
+    "end_time": "2026-06-24T08:55:27",
+    "duration_seconds": 1287,
+    "total_steps": 18,
+    "repo_name": "bishengjdk-8",
+    "repo_url": "https://gitcode.com/openeuler/bishengjdk-8.git"
   },
   "machine_spec": {
     "host_machine": {
       "architecture": "aarch64",
-      "cpu_model": "ARM64 (Kunpeng)",
+      "cpu_model": "Kunpeng 920",
       "cpu_cores": 256,
       "memory": "2044Gi",
-      "disk": "Remote server disk",
-      "docker_version": "Docker 18.09.0 (EulerVersion 18.09.0.273)"
+      "disk": "充足",
+      "docker_version": "Docker version 18.09.0"
     },
     "container": {
-      "os": "openEuler 24.03 (LTS)",
+      "os": "openEuler 24.03 LTS",
       "architecture": "aarch64",
       "cpu_cores": 256,
-      "memory": "2.0Ti",
-      "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+      "memory": "无限制"
     },
     "image_source": {
-      "type": "docker_container",
+      "type": "base_image",
       "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "selection_reason": "bishengjdk-8 README.md 说明支持 Linux/AArch64 和 Linux/x86_64 平台。使用 openEuler 24.03 LTS 官方容器镜像，在容器内按源码构建指南编译。",
-      "dependency_mapping": {}
+      "selection_reason": "仓库未提供 Dockerfile，强制使用 openEuler 24.03 LTS 基础镜像从零构建环境",
+      "dependency_mapping": {
+        "from_dockerfile": "无 Dockerfile，所有依赖通过分析 configure 脚本和标准 OpenJDK 8 构建文档确定",
+        "mappings": []
+      }
     }
   },
   "document_reading_summary": {
     "architecture": {
-      "source": "README.md - 平台支持",
-      "value": "支持 Linux/AArch64、Linux/x86_64 平台"
+      "source": "README_EN.md 平台支持章节 + configure 脚本探测",
+      "value": "AArch64 Linux 和 x86_64 Linux，当前环境为 aarch64"
     },
     "recommended_image": {
-      "source": "README.md - 源码构建说明",
-      "value": "README.md 指引查看 Wiki 构建说明 (https://gitcode.com/openeuler/bishengjdk-8/wiki/毕昇JDK8_源码构建说明.md)。构建通过 bishengjdk-build 框架的 build.sh 脚本编排，需要 Boot JDK 8 和 GCC 工具链。"
+      "source": "仓库未提供 Dockerfile",
+      "value": "文档未指定镜像，使用 openEuler 24.03 LTS"
     },
     "dockerfile_dependencies": {
-      "source": "bishengjdk-build/sbin/prepare.sh dnf install 命令",
-      "value": [
-        {
-          "original": "yum install -y autoconf gcc-c++ libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel cups-devel freetype-devel alsa-lib-devel unzip fontconfig-devel",
-          "openEuler_equivalent": "dnf install -y autoconf gcc-c++ libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel cups-devel freetype-devel alsa-lib-devel unzip fontconfig-devel"
-        },
-        {
-          "original": "yum install -y java-1.8.0-openjdk-devel (boot JDK when not specified)",
-          "openEuler_equivalent": "dnf install -y java-1.8.0-openjdk-devel"
-        },
-        {
-          "original": "yum install -y openssl-devel (aarch64 额外依赖)",
-          "openEuler_equivalent": "dnf install -y openssl-devel"
-        }
-      ]
+      "source": "仓库未提供 Dockerfile",
+      "value": []
     },
     "dependencies": {
-      "source": "bishengjdk-build/sbin/prepare.sh 依赖列表",
+      "source": "OpenJDK 8 标准构建文档 + configure --help + Makefile",
       "value": [
-        "autoconf (构建系统)",
-        "gcc-c++ (GCC 12.3.1 C/C++ 编译器)",
-        "java-1.8.0-openjdk-devel (Boot JDK 1.8.0_462)",
-        "cups-devel (打印支持)",
-        "freetype-devel (字体渲染)",
-        "alsa-lib-devel (音频支持)",
-        "fontconfig-devel (字体配置)",
-        "libXtst-devel, libXt-devel, libXrender-devel, libXrandr-devel, libXi-devel (X11 图形库)",
-        "openssl-devel (aarch64 加密库)",
-        "unzip (解压工具)"
+        "java-1.8.0-openjdk-devel (Bootstrap JDK，dnf)",
+        "gcc >= 9.0 (dnf: gcc gcc-c++)",
+        "make >= 3.81 (dnf: make)",
+        "autoconf automake libtool (dnf)",
+        "alsa-lib-devel (dnf)",
+        "cups-devel (dnf)",
+        "freetype-devel (dnf)",
+        "fontconfig-devel (dnf)",
+        "libX11-devel libXext-devel libXrender-devel libXrandr-devel libXtst-devel libXt-devel libXi-devel libXinerama-devel (dnf)",
+        "libffi-devel (dnf)",
+        "giflib-devel (dnf)",
+        "zip unzip (dnf)"
       ]
     },
     "build_commands": {
-      "source": "bishengjdk-build/sbin/buildjdk.sh BuildJDK 函数 + Makefile help 目标",
-      "value": "bash configure --with-boot-jdk=<path> --with-update-version=492 --with-build-number=b13 --with-stdc++lib=dynamic --with-milestone=fcs --with-debug-level=release --with-native-debug-symbols=external --with-jvm-variants=server → make JOBS=51 images"
+      "source": "Makefile help 输出 + OpenJDK 8 标准构建文档",
+      "value": "bash configure --with-jobs=N --with-debug-level=release && make JOBS=N all"
     },
     "ut_commands": {
-      "source": "Makefile help 目标 - make test",
-      "value": "make test TEST=\"jdk_core langtools_jtreg\" (需要 jtreg 测试框架)"
+      "source": "Makefile help 输出",
+      "value": "make test TEST=\"jdk_core\"（需 jtreg，未预装）"
     },
     "sample_commands": {
-      "source": "README.md - 快速验证",
-      "value": "./build/linux-aarch64-normal-server-release/images/j2sdk-image/bin/java -version; javac HelloWorld.java && java HelloWorld"
+      "source": "README_EN.md + JDK demo 目录",
+      "value": "通过手动编译运行 Java 程序和使用 j2sdk-image/bin/java 执行示例验证 JDK 功能"
+    },
+    "special_dependencies": {
+      "source": "configure --help",
+      "value": [
+        "jtreg（测试回归框架，未在 openEuler 仓库中找到，需要从 GitHub 下载）"
+      ]
     },
     "build_entry": {
-      "source": "bishengjdk-build/sbin/buildjdk.sh BuildJDK function",
-      "value": "bash configure --with-boot-jdk=/usr/lib/jvm/java-1.8.0-openjdk --with-update-version=492 --with-build-number=b13 --with-stdc++lib=dynamic --with-milestone=fcs --with-debug-level=release --with-native-debug-symbols=external --with-jvm-variants=server ; make JOBS=51 images"
+      "source": "Makefile help 输出",
+      "value": "bash configure --with-jobs=N --with-debug-level=release && make JOBS=N all"
     },
     "ut_entry": {
-      "source": "Makefile help target - make test",
-      "value": "make test TEST=\"jdk_core langtools_jtreg\""
+      "source": "Makefile help 输出",
+      "value": "make test TEST=\"jdk_core\""
     }
   },
   "execution_log": [
     {
-      "timestamp": "2026-06-24T07:02:00+08:00",
-      "command": "ssh root@192.168.9.114 \"git clone --depth 1 --branch master https://gitcode.com/openeuler/bishengjdk-8.git /tmp/bishengjdk-8-verify\"",
+      "timestamp": "2026-06-24T08:34:00",
+      "command": "检查仓库文档: README.md README_EN.md Makefile",
       "success": true,
-      "output": "克隆 48470 个文件完成",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 180
-    },
-    {
-      "timestamp": "2026-06-24T07:05:00+08:00",
-      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "success": true,
-      "output": "镜像已存在，pull 成功 (ARM64)",
+      "output": "README_EN.md 指向 wiki 获取构建说明，wiki 页面无法直接访问；Makefile 为标准 OpenJDK 8 构建系统",
       "error": "",
       "returncode": 0,
       "duration_seconds": 10
     },
     {
-      "timestamp": "2026-06-24T07:05:20+08:00",
-      "command": "docker run -d --name bishengjdk-8-ttfhw -v /tmp/bishengjdk-8-verify:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "timestamp": "2026-06-24T08:34:30",
+      "command": "检查 pre-commit 配置: ls .pre-commit-config.yaml",
       "success": true,
-      "output": "容器 bishengjdk-8-ttfhw 启动成功 (fb53e130f351)",
+      "output": "未找到 .pre-commit-config.yaml",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T08:34:31",
+      "command": "检查 devcontainer 配置: ls -d .devcontainer",
+      "success": true,
+      "output": "未找到 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T08:34:32",
+      "command": "检查仓库 Dockerfile: find -name 'Dockerfile*'",
+      "success": true,
+      "output": "仓库未提供 Dockerfile",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T08:34:40",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts（远程机器 192.168.9.114）",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974, Status: Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T08:35:00",
+      "command": "docker run -d --name bishengjdk-8-ttfhw --cpus=51 -v /tmp/bishengjdk-8-verify:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts sleep infinity",
+      "success": true,
+      "output": "Container ID: cd6450e38402571159dd3c5013801cbe74c7acaf8849e843d7c1d3de5bd7cf0b",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T08:35:10",
+      "command": "第一层依赖：dnf install -y gcc gcc-c++ make autoconf automake libtool zip unzip git python3 python3-pip",
+      "success": true,
+      "output": "安装完成：gcc-12.3.1, gcc-c++-12.3.1, make-4.4.1, autoconf-2.71, automake-1.16.5, libtool-2.4.7, zip-3.0, unzip-6.0, git-2.43.0, python3-3.11.6, python3-pip-23.3.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 40
+    },
+    {
+      "timestamp": "2026-06-24T08:35:50",
+      "command": "第二层依赖：dnf install -y java-1.8.0-openjdk-devel alsa-lib-devel cups-devel freetype-devel fontconfig-devel libX11-devel libXext-devel libXrender-devel libXrandr-devel libXtst-devel libXt-devel libXi-devel libXinerama-devel libffi-devel giflib-devel",
+      "success": true,
+      "output": "安装完成：java-1.8.0-openjdk-devel (Bootstrap JDK 1.8.0_462), alsa-lib-devel, cups-devel, freetype-devel, fontconfig-devel, X11 开发库系列, libffi-devel, giflib-devel 及200+依赖包",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-24T08:37:15",
+      "command": "bash configure --with-jobs=51 --with-debug-level=release",
+      "success": true,
+      "output": "配置成功：linux-aarch64-normal-server-release\nBoot JDK: OpenJDK 1.8.0_462 (BiSheng)\nToolchain: GCC 12.3.1 (GNU Compiler Collection)\nCores: 51, Memory: 2093412 MB\nJVM variants: server, Debug level: release\nHeadful: 支持（检测到 X11 CUPS ALSA Freetype Fontconfig）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 4
+    },
+    {
+      "timestamp": "2026-06-24T08:38:10",
+      "command": "make JOBS=51 all",
+      "success": true,
+      "output": "构建成功：langtools(16s), hotspot(1m15s), jdk(1m13s), corba(9s), jaxp(9s), jaxws(11s), nashorn(6s), docs(52s), demos(3s), images(10s)\n总耗时 4m24s",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 264
+    },
+    {
+      "timestamp": "2026-06-24T08:42:40",
+      "command": "冒烟测试：构建 JDK 的 java -version 和 javac -version",
+      "success": true,
+      "output": "openjdk version \"1.8.0_492-internal\"\nOpenJDK Runtime Environment (build 1.8.0_492-internal-_2026_06_24_08_37-b00)\nOpenJDK 64-Bit Server VM (build 25.492-b00, mixed mode)\njavac 1.8.0_492-internal",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T08:43:00",
+      "command": "示例1 — 编译运行 Hello World",
+      "success": true,
+      "output": "Hello from BiSheng JDK 8!",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T08:43:30",
+      "command": "综合功能测试：Collections/Math/String/Reflection/Lambda/Stream/NIO 测试",
+      "success": true,
+      "output": "7项测试全部通过：Collections Test [BiSheng, JDK, 8], Math Test sqrt(144)=12.0, String Test, Reflection Test 77 methods, Lambda Test, Stream Test 3 elements >= c, NIO Test /tmp exists=true",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T08:44:00",
+      "command": "make test TEST=\"jdk_core\"（首次尝试运行正式测试套件）",
+      "success": false,
+      "output": "失败：jtreg 未安装，无法运行标准测试套件",
+      "error": "gmake: *** No rule to make target '/java/re/jtreg/4.1/promoted/latest/binaries/jtreg', needed by '.../jtreg/bin/jtreg'. Stop.",
+      "returncode": 2,
+      "duration_seconds": 4
+    },
+    {
+      "timestamp": "2026-06-24T08:45:00",
+      "command": "尝试安装 jtreg：dnf search jtreg → 未找到 → 尝试从网络下载",
+      "success": false,
+      "output": "jtreg 不在 openEuler 仓库中，从 Jenkins/GitHub 下载失败（网络限制）",
+      "error": "下载到的文件为 HTML 页面而非 tar.gz 包",
+      "returncode": 1,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T08:46:00",
+      "command": "扩展示例2 — Nashorn JavaScript 引擎 + Charsets + Security + JVM 属性测试",
+      "success": true,
+      "output": "Nashorn JS Engine Test通过, 171 charsets可用, Security providers加载成功, java.vm.name=OpenJDK 64-Bit Server VM, java.vm.version=25.492-b00, os.arch=aarch64",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T08:47:00",
+      "command": "扩展示例3 — 并发测试：AtomicLong + ConcurrentHashMap + ForkJoinPool",
+      "success": true,
+      "output": "Concurrent counter: 100 (expected 100), ConcurrentHashMap test passed, ForkJoinPool sum 1-10: 55 (expected 55)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T08:48:00",
+      "command": "JDK Demo 检查：jfc/jvmti/nio/management/scripting/jpda 示例",
+      "success": true,
+      "output": "检测到多个 JDK Demo JAR（Swing GUI 程序为主），NIO ZipFS demo 存在但 jpda examples.jar 无可直接运行的 main class",
       "error": "",
       "returncode": 0,
       "duration_seconds": 5
-    },
-    {
-      "timestamp": "2026-06-24T07:05:30+08:00",
-      "command": "dnf install -y gcc-c++ autoconf cups-devel freetype-devel alsa-lib-devel fontconfig-devel unzip libXtst-devel libXt-devel libXrender-devel libXrandr-devel libXi-devel java-1.8.0-openjdk-devel openssl-devel",
-      "success": true,
-      "output": "安装 200+ 个软件包，包括 GCC 12.3.1, OpenJDK 1.8.0_462, X11 开发库，CUPS, FreeType, ALSA 等",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 180
-    },
-    {
-      "timestamp": "2026-06-24T07:08:30+08:00",
-      "command": "bash configure --with-boot-jdk=/usr/lib/jvm/java-1.8.0-openjdk --with-update-version=492 --with-build-number=b13 --with-stdc++lib=dynamic --with-milestone=fcs --with-debug-level=release --with-native-debug-symbols=external --with-jvm-variants=server",
-      "success": true,
-      "output": "配置成功创建于 /workspace/build/linux-aarch64-normal-server-release。检测到 256 核 CPU, 2093412 MB 内存。Boot JDK: OpenJDK 1.8.0_462 (BiSheng)。工具链: GCC 12.3.1。",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 120
-    },
-    {
-      "timestamp": "2026-06-24T07:10:52+08:00",
-      "command": "make JOBS=51 images",
-      "success": true,
-      "output": "构建成功完成。各组件构建时间: corba 9s, demos 3s, hotspot 53s, images 10s, jaxp 9s, jaxws 11s, jdk 71s, langtools 18s, nashorn 8s。总计 193 秒。产物: j2sdk-image (620M), j2re-image (468M)。",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 193
-    },
-    {
-      "timestamp": "2026-06-24T07:14:10+08:00",
-      "command": "./build/linux-aarch64-normal-server-release/images/j2sdk-image/bin/java -version; javac HelloWorld.java && java HelloWorld",
-      "success": true,
-      "output": "java version \"1.8.0_492\"。HelloWorld 编译运行成功，输出: java.version=1.8.0_492, java.vendor=Oracle Corporation, os.arch=aarch64",
-      "error": "",
-      "returncode": 0,
-      "duration_seconds": 10
     }
   ],
   "process_timeline": [
     {
-      "phase": "环境准备",
-      "step": "克隆仓库",
-      "duration_seconds": 180,
-      "status": "success",
-      "action": "克隆仓库",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:00",
+      "step": "start",
+      "action": "开始验证流程（远程机器 openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {
+        "repo": "bishengjdk-8",
+        "branch": "master",
+        "environment": "remote:192.168.9.114"
+      }
     },
     {
-      "phase": "环境准备",
-      "step": "拉取镜像",
-      "duration_seconds": 10,
-      "status": "success",
-      "action": "拉取镜像",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:10",
+      "step": "document_reading",
+      "action": "读取 README_EN.md、Makefile、configure --help 了解构建说明",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "README_EN.md",
+          "Makefile",
+          "configure --help 输出"
+        ],
+        "note": "构建说明主要参考 wiki 页面（不可直接访问），依据标准 OpenJDK 8 构建流程和 configure --help 完成"
+      }
     },
     {
-      "phase": "环境准备",
-      "step": "启动容器",
-      "duration_seconds": 5,
-      "status": "success",
-      "action": "启动容器",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "未配置",
+      "details": {
+        "config_file": null
+      }
     },
     {
-      "phase": "依赖安装",
-      "step": "dnf install 构建依赖",
-      "duration_seconds": 180,
-      "status": "success",
-      "action": "dnf install 构建依赖",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:31",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
     },
     {
-      "phase": "构建配置",
-      "step": "bash configure",
-      "duration_seconds": 120,
-      "status": "success",
-      "action": "bash configure",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:32",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及 Dockerfile",
+      "result": "未配置",
+      "details": {
+        "config_dir": null,
+        "dockerfile": null
+      }
     },
     {
-      "phase": "编译构建",
-      "step": "make JOBS=51 images",
-      "duration_seconds": 193,
-      "status": "success",
-      "action": "make JOBS=51 images",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:34:40",
+      "step": "image_selection",
+      "action": "选择 openEuler 基础镜像（仓库无 Dockerfile）",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "仓库未提供 Dockerfile，强制使用 openEuler 24.03 LTS 从零构建"
+      }
     },
     {
-      "phase": "样例验证",
-      "step": "HelloWorld 编译运行冒烟测试",
-      "duration_seconds": 10,
-      "status": "success",
-      "action": "HelloWorld 编译运行冒烟测试",
-      "result": "success",
-      "timestamp": "2026-06-24T07:00:00+08:00"
+      "timestamp": "2026-06-24T08:35:00",
+      "step": "container_setup",
+      "action": "在远程机器 192.168.9.114 上拉取 openEuler 基础镜像并启动容器",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "bishengjdk-8-ttfhw",
+        "host": "192.168.9.114",
+        "cpus_limit": 51
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:35:10",
+      "step": "dependency_installation_layer1",
+      "action": "安装系统工具链（gcc gcc-c++ make autoconf automake libtool zip unzip git python3 python3-pip）",
+      "result": "成功",
+      "details": {
+        "source": "openEuler 官方仓库 (dnf)",
+        "packages": [
+          "gcc",
+          "gcc-c++",
+          "make",
+          "autoconf",
+          "automake",
+          "libtool",
+          "zip",
+          "unzip",
+          "git",
+          "python3",
+          "python3-pip"
+        ],
+        "duration_seconds": 40
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:35:50",
+      "step": "dependency_installation_layer2",
+      "action": "安装 JDK 8 构建依赖（Bootstrap JDK + ALSA + CUPS + Freetype + Fontconfig + X11 + libffi + giflib）",
+      "result": "成功",
+      "details": {
+        "source": "openEuler 官方仓库 (dnf)",
+        "packages": [
+          "java-1.8.0-openjdk-devel",
+          "alsa-lib-devel",
+          "cups-devel",
+          "freetype-devel",
+          "fontconfig-devel",
+          "libX11-devel",
+          "libXext-devel",
+          "libXrender-devel",
+          "libXrandr-devel",
+          "libXtst-devel",
+          "libXt-devel",
+          "libXi-devel",
+          "libXinerama-devel",
+          "libffi-devel",
+          "giflib-devel"
+        ],
+        "duration_seconds": 60
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:37:15",
+      "step": "configure",
+      "action": "执行 bash configure --with-jobs=51 --with-debug-level=release",
+      "result": "成功",
+      "details": {
+        "config": "linux-aarch64-normal-server-release",
+        "boot_jdk": "OpenJDK 1.8.0_462 (BiSheng)",
+        "compiler": "GCC 12.3.1",
+        "concurrency": 51,
+        "duration_seconds": 4
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:38:10",
+      "step": "build",
+      "action": "执行 make JOBS=51 all 构建 OpenJDK 8",
+      "result": "成功",
+      "details": {
+        "concurrency": 51,
+        "concurrency_ratio": "20%（256核 × 20% = 51）",
+        "duration_seconds": 264,
+        "components": {
+          "langtools": "16s",
+          "hotspot": "1m15s",
+          "jdk": "1m13s",
+          "corba": "9s",
+          "jaxp": "9s",
+          "jaxws": "11s",
+          "nashorn": "6s",
+          "docs": "52s",
+          "demos": "3s",
+          "images": "10s"
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:42:40",
+      "step": "smoke_test",
+      "action": "冒烟测试：java -version 和 javac -version",
+      "result": "成功",
+      "details": {
+        "java_version": "1.8.0_492-internal",
+        "javac_version": "1.8.0_492-internal",
+        "jdk_image_size": "443 MB"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:43:00",
+      "step": "sample_execution",
+      "action": "执行 Hello World 编译运行示例",
+      "result": "成功",
+      "details": {
+        "output": "Hello from BiSheng JDK 8!"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:43:30",
+      "step": "sample_execution",
+      "action": "执行 Java 综合功能示例（Collections/Math/String/Reflection/Lambda/Stream/NIO）",
+      "result": "成功",
+      "details": {
+        "tests_run": 7,
+        "tests_passed": 7,
+        "tests_failed": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:44:00",
+      "step": "ut_execution",
+      "action": "执行 make test TEST=\"jdk_core\" 单元测试",
+      "result": "失败",
+      "details": {
+        "error": "jtreg 未安装，无法运行标准 OpenJDK 测试套件",
+        "attempted_fix": "尝试通过 dnf 安装和网络下载 jtreg 均失败"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:46:00",
+      "step": "sample_execution",
+      "action": "执行扩展功能示例（Nashorn JS 引擎 + Charsets + Security）",
+      "result": "成功",
+      "details": {
+        "nashorn_engine": "正常",
+        "charsets_available": 171,
+        "security_providers": "正常",
+        "jvm_name": "OpenJDK 64-Bit Server VM",
+        "jvm_version": "25.492-b00"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:47:00",
+      "step": "sample_execution",
+      "action": "执行并发功能示例（AtomicLong + ConcurrentHashMap + ForkJoinPool）",
+      "result": "成功",
+      "details": {
+        "atomic_counter": "100/100",
+        "concurrent_hashmap": "正常",
+        "fork_join_pool_sum": "55/55"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T08:55:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_bishengjdk-8_20260624.json"
+      }
     }
   ],
   "final_results": {
     "static_analysis": {
       "enabled": false,
-      "summary": "仓库未配置静态代码检查工具（无 .pre-commit-config.yaml）",
+      "summary": "仓库未配置 pre-commit 和 lint-runner 静态检查工具",
       "pre_commit": {
         "configured": false,
-        "config_file": null,
-        "status": "未配置"
+        "config_file": null
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
       }
     },
     "devcontainer": {
@@ -240,120 +514,91 @@
       "config_dir": null,
       "config_files": [],
       "original_base_image": null,
-      "used_image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-      "summary": "仓库未配置 devcontainer 开发容器，本次使用 openEuler 24.03 LTS 容器进行验证构建"
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer"
     },
     "build": {
       "status": "success",
-      "duration_seconds": 193,
-      "compile_jobs": 51,
+      "duration_seconds": 264,
       "artifacts": [
         {
           "name": "j2sdk-image",
           "path": "build/linux-aarch64-normal-server-release/images/j2sdk-image",
-          "size": "620M",
-          "description": "Complete JDK image with compiler, tools, and JRE"
+          "size": "443 MB"
         },
         {
           "name": "j2re-image",
           "path": "build/linux-aarch64-normal-server-release/images/j2re-image",
-          "size": "468M",
-          "description": "JRE image (runtime only)"
+          "size": "已生成"
+        },
+        {
+          "name": "JDK binary",
+          "path": "j2sdk-image/bin/java",
+          "version": "1.8.0_492-internal"
         }
-      ],
-      "components_built": [
-        {
-          "component": "corba",
-          "duration_seconds": 9
-        },
-        {
-          "component": "demos",
-          "duration_seconds": 3
-        },
-        {
-          "component": "hotspot",
-          "duration_seconds": 53
-        },
-        {
-          "component": "images",
-          "duration_seconds": 10
-        },
-        {
-          "component": "jaxp",
-          "duration_seconds": 9
-        },
-        {
-          "component": "jaxws",
-          "duration_seconds": 11
-        },
-        {
-          "component": "jdk",
-          "duration_seconds": 71
-        },
-        {
-          "component": "langtools",
-          "duration_seconds": 18
-        },
-        {
-          "component": "nashorn",
-          "duration_seconds": 8
-        }
-      ],
-      "summary": "OpenJDK 8 构建成功（BiSheng JDK 8.492.8.0.13-b13），目标: linux-aarch64-normal-server-release。所有 9 个组件编译通过。"
+      ]
     },
     "ut": {
       "status": "not_run",
-      "duration_seconds": 0,
-      "total": 0,
-      "passed": 0,
-      "failed": 0,
+      "duration_seconds": null,
+      "total": null,
+      "passed": null,
+      "failed": null,
       "failures": [],
-      "note": "make test 需要 jtreg 测试框架，容器中未安装。本文通过 HelloWorld 冒烟测试验证 JDK 基本功能。"
+      "reason": "jtreg 测试框架未包含在 openEuler 仓库中，从外部下载失败（网络限制）。无法运行标准 OpenJDK 测试套件。"
     },
     "sample": {
       "status": "success",
-      "duration_seconds": 10,
+      "duration_seconds": 7,
       "results": [
         {
-          "sample_name": "java -version (版本验证)",
-          "execution_status": "success",
-          "output_summary": "openjdk version \"1.8.0_492\" OpenJDK Runtime Environment (build 1.8.0_492-b13) OpenJDK 64-Bit Server VM (build 25.492-b13, mixed mode)"
+          "sample_name": "HelloWorld 编译运行",
+          "execution_status": "成功",
+          "output_summary": "javac 编译并运行 HelloWorld.java，输出 'Hello from BiSheng JDK 8!'",
+          "execution_time": "0.5秒"
         },
         {
-          "sample_name": "javac -version (编译器验证)",
-          "execution_status": "success",
-          "output_summary": "javac 1.8.0_492"
+          "sample_name": "Java 综合功能测试",
+          "execution_status": "成功",
+          "output_summary": "7项测试全部通过：Collections/Math/String/Reflection/Lambda(JDK8)/Stream API/NIO",
+          "execution_time": "0.5秒"
         },
         {
-          "sample_name": "HelloWorld 编译运行 (功能冒烟测试)",
-          "execution_status": "success",
-          "output_summary": "HelloWorld.java 编译成功，运行输出: Hello from BiSheng JDK 8! java.version=1.8.0_492, java.vendor=Oracle Corporation, os.arch=aarch64"
+          "sample_name": "Nashorn JavaScript 引擎测试",
+          "execution_status": "成功",
+          "output_summary": "Nashorn 引擎正常执行 JavaScript，171个字符集可用，Security providers 加载成功",
+          "execution_time": "0.5秒"
+        },
+        {
+          "sample_name": "Java 并发功能测试",
+          "execution_status": "成功",
+          "output_summary": "AtomicLong(100/100)、ConcurrentHashMap、ForkJoinPool(sum=55) 均正常工作",
+          "execution_time": "0.5秒"
         }
       ]
     }
   },
   "documentation_gaps": [
-    "Wiki 构建说明页面 (https://gitcode.com/openeuler/bishengjdk-8/wiki/毕昇JDK8_源码构建说明.md) 无法直接访问",
-    "doc/building.md 为空文件，构建文档不完整",
-    "README.md 仅包含基本介绍，构建说明完全依赖外部 Wiki 链接",
-    "bishengjdk-build 构建框架的 build.sh 脚本依赖 4 个独立子脚本 (init_info.sh, prepare.sh, buildjdk.sh, testjdk.sh)，需要单独克隆 bishengjdk-build 仓库",
-    "缺少 devcontainer 配置，开发者需要手动搭建构建环境"
+    "README_EN.md 的构建说明链接指向 wiki 页面，但 wiki 内容无法通过 WebFetch 直接获取",
+    "仓库未提供 Dockerfile 或环境配置指南，依赖列表需通过 configure 脚本和标准 OpenJDK 文档推断",
+    "未在 README 中找到 jtreg 测试框架的安装说明",
+    "未明确列出 GCC/编译器的最低版本要求"
   ],
   "problems_encountered": [
     {
-      "severity": "info",
-      "problem": "构建系统依赖外部 bishengjdk-build 框架，但 README 未说明如何获取",
-      "solution": "直接解析 bishengjdk-build/sbin/prepare.sh 和 buildjdk.sh 获取依赖列表和构建参数",
-      "timestamp": "2026-06-24T07:10:00+08:00",
-      "source": "bishengjdk-build framework"
+      "timestamp": "2026-06-24T08:44:00",
+      "problem": "make test 失败：jtreg 测试框架未安装",
+      "solution": "jtreg 不在 openEuler 官方仓库中，从外网（Jenkins/GitHub）下载因网络限制失败。已通过手动编写综合性 Java 测试程序（覆盖 Collections/Reflection/Lambda/Stream/NIO/Concurrent/Nashorn/Security）代替标准测试套件来验证 JDK 功能完整性",
+      "source": "OpenJDK 测试需要使用 jtreg 回归测试框架"
     },
     {
-      "severity": "info",
-      "problem": "configure 自动检测 256 核并限制为 16 并行任务",
-      "solution": "显式传递 JOBS=51 (CPU 核数 × 20%) 覆盖默认值，实际编译使用 51 并行任务",
-      "timestamp": "2026-06-24T07:10:00+08:00",
-      "source": "bishengjdk-build framework"
+      "timestamp": "2026-06-24T08:45:00",
+      "problem": "JDK Demo 程序多为 GUI（Swing/AWT），在 headless 容器中无法运行",
+      "solution": "选择 headless 友好的 NIO、Scripting 和并发示例进行验证，并结合手动编写的综合 Java 功能测试覆盖核心运行时能力",
+      "source": "JDK 8 自带 Demo 以 GUI 程序为主"
     }
   ],
+  "environment": "remote:192.168.9.114",
+  "verification_summary": "BiSheng JDK 8 (bishengjdk-8) 在 openEuler 24.03 LTS (aarch64) 上从零构建环境并成功完成编译，构建耗时 4分24秒（51 并发）。生成 j2sdk-image (443MB) 和 j2re-image。冒烟测试和综合 Java 功能测试（Collections/Reflection/Lambda/Stream/NIO/Concurrent/Nashorn）全部通过。标准测试套件因 jtreg 不可用而未执行。",
   "session_export_file": ""
 }
