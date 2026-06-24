@@ -12,8 +12,8 @@ queue:
 - repo: A-Tune
   url: https://gitcode.com/openeuler/A-Tune.git
   branch: master
-  status: running
-  note: ''
+  status: done
+  note: 验证通过 2026-06-24
 - repo: stratovirt
   url: https://gitcode.com/openeuler/stratovirt.git
   branch: master
