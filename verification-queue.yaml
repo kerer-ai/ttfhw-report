@@ -2,7 +2,7 @@ queue:
 - repo: kernel
   url: https://gitcode.com/openeuler/kernel.git
   branch: OLK-6.6
-  status: pending
+  status: running
   note: ''
 - repo: iSulad
   url: https://gitcode.com/openeuler/iSulad.git
