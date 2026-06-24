@@ -283,47 +283,117 @@ PROMPT
 }
 
 # ═══════════════════════════════════════════
-# 单个仓库验证（后台任务）
+# Worker：独立循环领取 + 验证，不等待其他 worker
 # ═══════════════════════════════════════════
 
-run_single() {
-  local REPO="$1" URL="$2" BRANCH="$3" RIP="$4" RUSER="$5"
-  local LOG_FILE="$LOG_DIR/${REPO}_$(date +%Y%m%d_%H%M%S).log"
-  local STATUS_FILE="$STATUS_DIR/${REPO}.status"
+LOCK_FILE="$QUEUE_FILE.lock"
 
-  echo "[$(date +%H:%M:%S)] $REPO 开始..." | tee "$STATUS_FILE"
+# 带锁领取任务（多 worker 安全）
+claim_locked() {
+  flock -x "$LOCK_FILE" -c "
+    python3 -c \"
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['status'] == 'pending':
+        r['status'] = 'running'
+        with open('$QUEUE_FILE', 'w') as f:
+            yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+        remote = r.get('remote', {})
+        rip = remote.get('ip', '') if remote else ''
+        ruser = remote.get('user', '') if remote else ''
+        print(f\\\"{r['repo']}|{r['url']}|{r['branch']}|{rip}|{ruser}\\\")
+        exit(0)
+print('NONE')
+    \"
+  " 2>/dev/null
+}
 
-  local PROMPT
-  PROMPT=$(build_prompt "$REPO" "$URL" "$BRANCH" "$RIP" "$RUSER")
-  local START_TS
-  START_TS=$(date +%s)
+worker_loop() {
+  local WORKER_ID="$1"
+  local TASK_COUNT=0
 
-  timeout ${TIMEOUT_HOURS}h claude -p \
-    --dangerously-skip-permissions \
-    "$PROMPT" \
-    > "$LOG_FILE" 2>&1
+  while true; do
+    # 带锁领取
+    local CLAIMED
+    CLAIMED=$(claim_locked)
+    if [ -z "$CLAIMED" ] || [ "$CLAIMED" = "NONE" ]; then
+      echo "[worker-$WORKER_ID] 无待验证任务，退出（完成 $TASK_COUNT 个）"
+      break
+    fi
 
-  local EXIT_CODE=$?
-  local END_TS DURATION
-  END_TS=$(date +%s)
-  DURATION=$(( (END_TS - START_TS) / 60 ))
+    local REPO URL BRANCH RIP_T RUSR_T RIP_FINAL RUSR_FINAL
+    REPO=$(echo "$CLAIMED" | cut -d'|' -f1)
+    URL=$(echo "$CLAIMED" | cut -d'|' -f2)
+    BRANCH=$(echo "$CLAIMED" | cut -d'|' -f3)
+    RIP_T=$(echo "$CLAIMED" | cut -d'|' -f4)
+    RUSR_T=$(echo "$CLAIMED" | cut -d'|' -f5)
+    RIP_FINAL="${RIP_T:-$REMOTE_IP}"
+    RUSR_FINAL="${RUSR_T:-$REMOTE_USER}"
 
-  {
-    echo ""
-    echo "──────────────────────────────────────────"
-    echo "  完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "  耗时:     ${DURATION} 分钟"
-    echo "  退出码:   $EXIT_CODE"
-  } >> "$LOG_FILE"
+    TASK_COUNT=$((TASK_COUNT + 1))
+    local LOG_FILE="$LOG_DIR/${REPO}_$(date +%Y%m%d_%H%M%S).log"
 
-  cat > "$STATUS_FILE" <<EOF
-REPO=$REPO
-EXIT_CODE=$EXIT_CODE
-DURATION=${DURATION}min
-LOG=$LOG_FILE
-EOF
+    echo "[$(date +%H:%M:%S)] worker-$WORKER_ID: $REPO (#$TASK_COUNT) 开始..."
 
-  echo "[$(date +%H:%M:%S)] $REPO 结束 (exit=$EXIT_CODE, ${DURATION}min)" >> "$LOG_DIR/parallel.log"
+    local PROMPT
+    PROMPT=$(build_prompt "$REPO" "$URL" "$BRANCH" "$RIP_FINAL" "$RUSR_FINAL")
+    local START_TS
+    START_TS=$(date +%s)
+
+    timeout ${TIMEOUT_HOURS}h claude -p \
+      --dangerously-skip-permissions \
+      "$PROMPT" \
+      > "$LOG_FILE" 2>&1
+
+    local EXIT_CODE=$?
+    local END_TS DURATION
+    END_TS=$(date +%s)
+    DURATION=$(( (END_TS - START_TS) / 60 ))
+
+    {
+      echo ""
+      echo "──────────────────────────────────────────"
+      echo "  完成时间: $(date '+%Y-%m-%d %H:%M:%S')"
+      echo "  耗时:     ${DURATION} 分钟"
+      echo "  退出码:   $EXIT_CODE"
+    } >> "$LOG_FILE"
+
+    # 独立更新队列状态（带锁）
+    local NOTE
+    if [ "$EXIT_CODE" = "124" ]; then
+      NOTE="超时 ${TIMEOUT_HOURS}h"
+    elif [ "$EXIT_CODE" != "0" ]; then
+      NOTE="session 异常退出 (exit=$EXIT_CODE)"
+    elif verify_output "$REPO"; then
+      NOTE="验证通过 $(date +%Y-%m-%d)"
+    else
+      NOTE="session 正常退出但未产出有效 JSON"
+    fi
+
+    local NEW_STATUS
+    if [ "$EXIT_CODE" = "0" ] && verify_output "$REPO" 2>/dev/null; then
+      NEW_STATUS="done"
+    else
+      NEW_STATUS="failed"
+    fi
+
+    flock -x "$LOCK_FILE" -c "python3 -c \"
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['repo'] == '$REPO':
+        r['status'] = '$NEW_STATUS'
+        r['note'] = '$NOTE'
+        break
+with open('$QUEUE_FILE', 'w') as f:
+    yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+\"" 2>/dev/null
+
+    echo "[$(date +%H:%M:%S)] worker-$WORKER_ID: $REPO → $NEW_STATUS (${DURATION}min)"
+  done
 }
 
 # ═══════════════════════════════════════════
@@ -346,163 +416,67 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 echo "═══════════════════════════════════════════"
-echo "  TTFHW 批量验证调度器（并发版）"
+echo "  TTFHW 批量验证调度器（Worker Pool）"
 echo "  队列文件:  $QUEUE_FILE"
 echo "  验证环境:  $MODE$([[ "$MODE" == "remote" ]] && echo " (${REMOTE_USER}@${REMOTE_IP})")"
-echo "  最大并发:  $MAX_CONCURRENCY"
-echo "  编译比例:  ${BUILD_RATIO}%"
-echo "  日期:      $TODAY"
+echo "  并发 worker: $MAX_CONCURRENCY"
+echo "  编译比例:   ${BUILD_RATIO}%"
 echo "═══════════════════════════════════════════"
 
-TOTAL=0
-ROUND=0
+# 重置崩溃残留
+STALE=$(reset_stale_running)
+if [ -n "$STALE" ]; then
+  echo "🔄 $STALE"
+fi
 
-while true; do
-  ROUND=$((ROUND + 1))
-
-  echo ""
-  echo "──── 第 $ROUND 轮 ────"
-
-  # 重置崩溃残留
-  STALE=$(reset_stale_running)
-  if [ -n "$STALE" ]; then
-    echo "  🔄 $STALE"
-    :  # 本地重置完成
-  fi
-
-  # 检查是否还有待处理任务
-  if [ "$(has_pending)" = "0" ]; then
-    FAILED=$(python3 -c "
+PENDING=$(has_pending)
+if [ "$PENDING" = "0" ]; then
+  FAILED=$(python3 -c "
 import yaml
 with open('$QUEUE_FILE') as f:
     data = yaml.safe_load(f)
 print(len([r for r in data['queue'] if r['status'] == 'failed']))
 " 2>/dev/null || echo 0)
-
-    if [ "$FAILED" -gt 0 ]; then
-      echo ""
-      echo "═══════════════════════════════════════════"
-      echo "  ⚠️  队列已空，$FAILED 个失败需人工介入："
-      echo "═══════════════════════════════════════════"
-      list_failed
-    else
-      echo ""
-      echo "═══════════════════════════════════════════"
-      echo "  🎉 全部完成！共 $TOTAL 个仓库"
-      echo "═══════════════════════════════════════════"
-    fi
-    break
+  if [ "$FAILED" -gt 0 ]; then
+    echo "⚠️  无待验证任务，$FAILED 个失败需人工介入"
+    list_failed
+  else
+    echo "🎉 全部已完成"
   fi
+  exit 0
+fi
 
-  # ── 顺序领取任务（最多 MAX_CONCURRENCY 个）──
-  echo ""
-  echo "──── 领取任务（最多 $MAX_CONCURRENCY 个）────"
-  TASKS=()
-  for i in $(seq 1 "$MAX_CONCURRENCY"); do
-    CLAIMED=$(claim_one)
-    if [ $? -ne 0 ] || [ -z "$CLAIMED" ] || [ "$CLAIMED" = "NONE" ]; then
-      break
-    fi
-    TASKS+=("$CLAIMED")
-    CLAIMED_NAME=$(echo "$CLAIMED" | cut -d'|' -f1)
-    echo "  ✅ 领取: $CLAIMED_NAME"
-  done
+echo ""
+echo "启动 $MAX_CONCURRENCY 个 worker，各 worker 独立循环领取任务..."
+echo ""
 
-  if [ ${#TASKS[@]} -eq 0 ]; then
-    echo "  无任务可领取，等待下一轮..."
-    sleep 10
-    continue
-  fi
+# 启动 worker pool
+for i in $(seq 1 "$MAX_CONCURRENCY"); do
+  worker_loop "$i" &
+done
 
-  # ── 并发启动所有任务 ──
-  echo ""
-  echo "──── 并发启动 ${#TASKS[@]} 个任务 ────"
-  PIDS=()
-  for TASK in "${TASKS[@]}"; do
-    R=$(echo "$TASK" | cut -d'|' -f1)
-    U=$(echo "$TASK" | cut -d'|' -f2)
-    B=$(echo "$TASK" | cut -d'|' -f3)
-    RIP_T=$(echo "$TASK" | cut -d'|' -f4)
-    RUSR_T=$(echo "$TASK" | cut -d'|' -f5)
-    RIP_FINAL="${RIP_T:-$REMOTE_IP}"
-    RUSR_FINAL="${RUSR_T:-$REMOTE_USER}"
+# 等待所有 worker 完成
+wait
 
-    echo "  🚀 $R ($U @ $B)"
-
-    run_single "$R" "$U" "$B" "$RIP_FINAL" "$RUSR_FINAL" &
-    PIDS+=($!)
-  done
-
-  echo "  等待 ${#PIDS[@]} 个任务完成..."
-
-  # ── 等待所有任务完成 ──
-  for PID in "${PIDS[@]}"; do
-    wait "$PID" 2>/dev/null || true
-  done
-
-  echo ""
-  echo "──── 本轮完成，验证产出 ────"
-
-  # 只验证产出（状态已由各 session 独立更新到本地 YAML）
-  # 若 session 未更新则脚本兜底
-
-  for TASK in "${TASKS[@]}"; do
-    R=$(echo "$TASK" | cut -d'|' -f1)
-    STATUS_FILE="$STATUS_DIR/${R}.status"
-
-    if [ -f "$STATUS_FILE" ]; then
-      EXIT_CODE=$(grep 'EXIT_CODE=' "$STATUS_FILE" 2>/dev/null | cut -d'=' -f2)
-    else
-      EXIT_CODE=-1
-    fi
-
-    echo ""
-    echo "  ── $R ──"
-
-    # 检查 session 是否已自行更新队列
-    SESSION_UPDATED=$(python3 -c "
+# 汇总
+echo ""
+echo "═══════════════════════════════════════════"
+FAILED=$(python3 -c "
 import yaml
 with open('$QUEUE_FILE') as f:
     data = yaml.safe_load(f)
-for r in data['queue']:
-    if r['repo'] == '$R' and r['status'] in ('done', 'failed'):
-        print('yes')
-        exit(0)
-print('no')
+done_count = len([r for r in data['queue'] if r['status'] == 'done'])
+failed_count = len([r for r in data['queue'] if r['status'] == 'failed'])
+pending_count = len([r for r in data['queue'] if r['status'] in ('pending', 'running')])
+print(f'{done_count}|{failed_count}|{pending_count}')
 " 2>/dev/null)
-
-    if [ "$SESSION_UPDATED" = "yes" ]; then
-      if verify_output "$R" 2>/dev/null; then
-        echo "  ✅ 已完成（session 刷新）"
-      else
-        echo "  ⚠️ session 已标记完成但产出验证失败"
-        update_status "$R" "failed" "产出验证失败"
-        :  # 本地状态已由 update_status 写入
-      fi
-    else
-      # session 未自行更新 → 脚本兜底
-      if [ "$EXIT_CODE" = "124" ]; then
-        echo "  ❌ 超时（${TIMEOUT_HOURS}h）"
-        update_status "$R" "failed" "超时 ${TIMEOUT_HOURS}h"
-      elif [ "$EXIT_CODE" != "0" ]; then
-        echo "  ❌ session 异常 (exit=$EXIT_CODE)"
-        update_status "$R" "failed" "session 异常退出 (exit=$EXIT_CODE)"
-      elif verify_output "$R"; then
-        echo "  ✅ 验证通过（脚本兜底）"
-        update_status "$R" "done" "验证通过 $(date +%Y-%m-%d)"
-      else
-        echo "  ❌ 产出验证失败"
-        update_status "$R" "failed" "session 正常退出但未产出有效 JSON"
-      fi
-      :  # 本地状态已由 update_status 写入
-    fi
-
-    TOTAL=$((TOTAL + 1))
-  done
-
-  echo ""
-  echo "  本轮结束，共完成 $TOTAL 个"
-  sleep 10
-done
+DONE_C=$(echo "$FAILED" | cut -d'|' -f1)
+FAIL_C=$(echo "$FAILED" | cut -d'|' -f2)
+PEND_C=$(echo "$FAILED" | cut -d'|' -f3)
+echo "  完成: $DONE_C  |  失败: $FAIL_C  |  剩余: $PEND_C"
+echo "═══════════════════════════════════════════"
+if [ "$FAIL_C" -gt 0 ]; then
+  list_failed
+fi
 
 rm -rf "$STATUS_DIR"
