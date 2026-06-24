@@ -267,7 +267,30 @@ build_prompt() {
 
 退出前执行 ls 确认两个文件确实存在。文件不存在 = 你没完成。
 
-不要操作 git，不要更新 verification-queue.yaml。
+══════════════════════════════════════
+⚠️ 独立刷新队列状态
+══════════════════════════════════════
+
+验证和归一化都完成后，你必须自行更新 verification-queue.yaml 中 ${REPO} 的状态：
+
+  git pull origin main --rebase
+  python3 -c "
+  import yaml
+  with open('verification-queue.yaml') as f:
+      data = yaml.safe_load(f)
+  for r in data['queue']:
+      if r['repo'] == '${REPO}':
+          r['status'] = '<done 或 failed>'
+          r['note'] = '<状态说明>'
+          break
+  with open('verification-queue.yaml', 'w') as f:
+      yaml.dump(data, f, allow_unicode=True, default_flow_style=False, sort_keys=False)
+  "
+  git add verification-queue.yaml json-org-openeuler/ json/ docs/
+  git commit -m "verify: ${REPO} <done|failed>"
+  git push origin main
+
+如果 git push 冲突，git pull --rebase 后重试一次。
 
 退出前输出以下结构化结果（必须包含实际状态值）:
 [TTFHVV_RESULT]
@@ -446,8 +469,10 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
   done
 
   echo ""
-  echo "──── 本轮完成，验证产出并更新队列 ────"
+  echo "──── 本轮完成，验证产出 ────"
 
+  # 只验证产出（状态已由各 session 独立 git push）
+  # 若 session 未成功推送则脚本兜底
   git pull origin main --rebase 2>&1 || true
 
   for TASK in "${TASKS[@]}"; do
@@ -463,26 +488,50 @@ print(len([r for r in data['queue'] if r['status'] == 'failed']))
     echo ""
     echo "  ── $R ──"
 
-    if [ "$EXIT_CODE" = "124" ]; then
-      echo "  ❌ 超时（${TIMEOUT_HOURS}h）"
-      update_status "$R" "failed" "超时 ${TIMEOUT_HOURS}h"
-    elif [ "$EXIT_CODE" != "0" ]; then
-      echo "  ❌ session 异常 (exit=$EXIT_CODE)"
-      update_status "$R" "failed" "session 异常退出 (exit=$EXIT_CODE)"
-    elif verify_output "$R"; then
-      echo "  ✅ 验证通过"
-      update_status "$R" "done" "验证通过 $(date +%Y-%m-%d)"
+    # 检查 session 是否已自行更新队列
+    SESSION_UPDATED=$(python3 -c "
+import yaml
+with open('$QUEUE_FILE') as f:
+    data = yaml.safe_load(f)
+for r in data['queue']:
+    if r['repo'] == '$R' and r['status'] in ('done', 'failed'):
+        print('yes')
+        exit(0)
+print('no')
+" 2>/dev/null)
+
+    if [ "$SESSION_UPDATED" = "yes" ]; then
+      if verify_output "$R" 2>/dev/null; then
+        echo "  ✅ 已完成（session 刷新）"
+      else
+        echo "  ⚠️ session 已标记完成但产出验证失败"
+        update_status "$R" "failed" "产出验证失败"
+        git add "$QUEUE_FILE" >/dev/null 2>&1
+        git commit -m "queue: $R failed (output verification)" >/dev/null 2>&1 || true
+        git push origin main >/dev/null 2>&1 || true
+      fi
     else
-      echo "  ❌ 产出验证失败"
-      update_status "$R" "failed" "session 正常退出但未产出有效 JSON"
+      # session 未自行更新 → 脚本兜底
+      if [ "$EXIT_CODE" = "124" ]; then
+        echo "  ❌ 超时（${TIMEOUT_HOURS}h）"
+        update_status "$R" "failed" "超时 ${TIMEOUT_HOURS}h"
+      elif [ "$EXIT_CODE" != "0" ]; then
+        echo "  ❌ session 异常 (exit=$EXIT_CODE)"
+        update_status "$R" "failed" "session 异常退出 (exit=$EXIT_CODE)"
+      elif verify_output "$R"; then
+        echo "  ✅ 验证通过（脚本兜底）"
+        update_status "$R" "done" "验证通过 $(date +%Y-%m-%d)"
+      else
+        echo "  ❌ 产出验证失败"
+        update_status "$R" "failed" "session 正常退出但未产出有效 JSON"
+      fi
+      git add "$QUEUE_FILE" >/dev/null 2>&1
+      git commit -m "queue: $R status (fallback)" >/dev/null 2>&1 || true
+      git push origin main >/dev/null 2>&1 || true
     fi
 
     TOTAL=$((TOTAL + 1))
   done
-
-  git add "$QUEUE_FILE" json-org-openeuler/ json/ docs/ >/dev/null 2>&1 || true
-  git commit -m "verify: round $ROUND complete ($TOTAL total)" >/dev/null 2>&1 || true
-  git push origin main >/dev/null 2>&1 || true
 
   echo ""
   echo "  本轮结束，共完成 $TOTAL 个"
