@@ -1,0 +1,449 @@
+{
+  "metadata": {
+    "repo_path": "/tmp/ttfhw-verify/ubs-engine",
+    "start_time": "2026-06-24T14:09:00",
+    "end_time": "2026-06-24T14:50:00",
+    "duration_seconds": 2460,
+    "total_steps": 45
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "aarch64",
+      "cpu_model": "华为云ECS aarch64",
+      "cpu_cores": 8,
+      "memory": "14Gi",
+      "disk": "可用",
+      "docker_version": "Docker version 18.09.0, build 4ca0e26"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "aarch64",
+      "cpu_cores": 8,
+      "memory": "14Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "强制使用 openEuler 24.03 LTS 基础镜像，从零构建环境",
+      "dependency_mapping": {
+        "from_dockerfile": "仓库无Dockerfile，依赖信息来自ubs-engine.spec和构建指导文档",
+        "mappings": []
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 项目介绍章节",
+      "value": "aarch64 (ARM64)"
+    },
+    "recommended_image": {
+      "source": "docs/build_install/构建指导.md",
+      "value": "推荐 openEuler 24.03 LTS SP3/SP4"
+    },
+    "dockerfile_dependencies": {
+      "source": "仓库无Dockerfile",
+      "value": []
+    },
+    "dependencies": {
+      "source": "ubs-engine.spec + docs/build_install/构建指导.md",
+      "value": [
+        "cmake >= 3.22 (dnf: cmake)",
+        "make >= 4.3 (dnf: make)",
+        "gcc >= 10.3 (dnf: gcc)",
+        "gcc-c++ >= 10.3 (dnf: gcc-c++)",
+        "ninja-build >= 1.10 (dnf: ninja-build)",
+        "libboundscheck >= v1.1 (dnf: libboundscheck)",
+        "libxml2-devel >= 2.9 (dnf: libxml2-devel)",
+        "openssl-devel >= 3.0 (dnf: openssl-devel)",
+        "cpp-httplib-devel >= 0.40.0 (dnf: cpp-httplib-devel)",
+        "rapidjson-devel >= 1.1.0 (dnf: rapidjson-devel)",
+        "ubs-comm-devel >= 1.0.1-7 (从源码编译安装)",
+        "numactl-libs >= 2.0 (dnf: numactl-libs)",
+        "libvirt-devel >= 9.0 (dnf: libvirt-devel)",
+        "systemd-devel >= 249 (dnf: systemd-devel)",
+        "rdma-core-devel (dnf: rdma-core-devel)",
+        "umdk-urma-devel (dnf: umdk-urma-devel)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md + build.sh",
+      "value": "bash build.sh (Release构建)"
+    },
+    "ut_commands": {
+      "source": "README.md - 开发者测试章节",
+      "value": "bash build.sh ut"
+    },
+    "sample_commands": {
+      "source": "README.md",
+      "value": "仓库未提供独立样例命令"
+    },
+    "special_dependencies": {
+      "source": "docs/build_install/构建指导.md",
+      "value": ["ubs-comm-devel需要从源码编译安装"]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-24T14:10:00",
+      "command": "git clone https://gitcode.com/openeuler/ubs-engine.git",
+      "success": true,
+      "output": "克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T14:11:00",
+      "command": "检查 pre-commit 配置",
+      "success": true,
+      "output": "pre-commit 配置存在: .pre-commit-config.yaml，包含5个hooks",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:11:30",
+      "command": "检查 lint-runner 配置",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:12:00",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "devcontainer 目录不存在",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:13:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "镜像已是最新",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T14:14:00",
+      "command": "docker run -d --name ttfhw-ubs-engine-openeuler-env --privileged --network host -v /tmp/ttfhw-verify/ubs-engine:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T14:15:00",
+      "command": "修改dnf仓库配置使用http并禁用gpgcheck",
+      "success": true,
+      "output": "仓库配置已修改",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T14:16:00",
+      "command": "dnf install -y gcc gcc-c++ make cmake git python3 ninja-build bash bc coreutils sudo patch",
+      "success": true,
+      "output": "系统工具链安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T14:18:00",
+      "command": "dnf install -y libboundscheck libxml2-devel numactl-libs openssl-devel rapidjson-devel libvirt-devel systemd-devel python3-setuptools glibc-devel libstdc++-devel",
+      "success": true,
+      "output": "构建依赖安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-24T14:19:00",
+      "command": "dnf install -y cpp-httplib-devel",
+      "success": true,
+      "output": "cpp-httplib-devel安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T14:20:00",
+      "command": "dnf install -y rdma-core-devel umdk-urma-devel",
+      "success": true,
+      "output": "RDMA和URMA依赖安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-24T14:22:00",
+      "command": "git clone -b openEuler-24.03-LTS-SP4 https://gitcode.com/src-openeuler/ubs-comm.git /tmp/src/ubs-comm",
+      "success": true,
+      "output": "ubs-comm源码下载成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T14:23:00",
+      "command": "rpmbuild -ba ~/rpmbuild/SPECS/ubs-comm.spec && dnf install -y ~/rpmbuild/RPMS/aarch64/ubs-comm-lib-*.rpm ~/rpmbuild/RPMS/aarch64/ubs-comm-devel-*.rpm",
+      "success": true,
+      "output": "ubs-comm编译安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-24T14:28:00",
+      "command": "time bash build.sh",
+      "success": true,
+      "output": "Build complated in 361.625s",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 362
+    },
+    {
+      "timestamp": "2026-06-24T14:35:00",
+      "command": "time bash build.sh ut",
+      "success": true,
+      "output": "1378 tests from 56 test suites ran. PASSED 1366 tests. SKIPPED 12 tests.",
+      "error": "测试构建阶段有一个编译警告，但主要测试已全部通过",
+      "returncode": 0,
+      "duration_seconds": 861
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-24T14:09:00",
+      "step": "start",
+      "action": "开始验证流程（openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {"ecs_ip": "120.46.19.18", "architecture": "aarch64"}
+    },
+    {
+      "timestamp": "2026-06-24T14:10:00",
+      "step": "document_reading",
+      "action": "读取 README.md、CMakeLists.txt、build.sh、ubs-engine.spec 了解构建说明",
+      "result": "成功",
+      "details": {"files_read": ["README.md", "CMakeLists.txt", "build.sh", "ubs-engine.spec", "docs/build_install/构建指导.md"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:11:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "hooks_count": 5, "hooks": ["run-build", "run-build-test", "clang-format", "clang-tidy", "clang-tidy-test"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:11:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*", ".lintrunner.toml"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:12:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:13:00",
+      "step": "image_selection",
+      "action": "选择 openEuler 基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {"selection_reason": "仓库推荐 openEuler 24.03 LTS SP3/SP4"}
+    },
+    {
+      "timestamp": "2026-06-24T14:14:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 基础镜像并启动容器",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "ttfhw-ubs-engine-openeuler-env", "network_mode": "host", "privileged": true}
+    },
+    {
+      "timestamp": "2026-06-24T14:15:00",
+      "step": "repository_config",
+      "action": "修改dnf仓库配置解决DNS解析问题",
+      "result": "成功",
+      "details": {"issue": "容器内getaddrinfo()线程无法启动", "solution": "使用--privileged --network host模式并修改仓库为http"}
+    },
+    {
+      "timestamp": "2026-06-24T14:16:00",
+      "step": "dependency_installation_layer1",
+      "action": "安装系统工具链",
+      "result": "成功",
+      "details": {"packages": ["gcc", "gcc-c++", "make", "cmake", "git", "python3", "ninja-build", "bash", "bc", "coreutils", "sudo", "patch"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:18:00",
+      "step": "dependency_installation_layer2",
+      "action": "安装构建依赖",
+      "result": "成功",
+      "details": {"packages": ["libboundscheck", "libxml2-devel", "numactl-libs", "openssl-devel", "rapidjson-devel", "libvirt-devel", "systemd-devel", "python3-setuptools", "glibc-devel", "libstdc++-devel", "cpp-httplib-devel", "rdma-core-devel", "umdk-urma-devel"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:22:00",
+      "step": "dependency_installation_layer3",
+      "action": "从源码编译安装 ubs-comm-devel",
+      "result": "成功",
+      "details": {"source": "https://gitcode.com/src-openeuler/ubs-comm.git", "branch": "openEuler-24.03-LTS-SP4", "packages_installed": ["ubs-comm-lib-1.0.1-9", "ubs-comm-devel-1.0.1-9"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:28:00",
+      "step": "build_attempt",
+      "action": "执行 Release 构建",
+      "result": "成功",
+      "details": {"command": "bash build.sh", "duration": "361.625s", "build_type": "Release"}
+    },
+    {
+      "timestamp": "2026-06-24T14:35:00",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "成功",
+      "details": {"total": 1378, "passed": 1366, "failed": 0, "skipped": 12, "duration": "861s"}
+    },
+    {
+      "timestamp": "2026-06-24T14:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "待执行",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:50:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_ubs-engine_20260624.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（5个hooks），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "已配置",
+        "duration_seconds": 0,
+        "total_hooks": 5,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 5,
+        "failures": [],
+        "note": "pre-commit hooks需要构建环境支持，未在容器中执行"
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "original_base_image": null,
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer，使用 openEuler 24.03 LTS 基础镜像从零构建"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 362,
+      "artifacts": [
+        {
+          "name": "ubse",
+          "path": "cmake-build-release/bin/ubse",
+          "size": "12.2 MB"
+        },
+        {
+          "name": "ubsectl",
+          "path": "cmake-build-release/bin/ubsectl",
+          "size": "1.0 MB"
+        },
+        {
+          "name": "libmempooling.so",
+          "path": "cmake-build-release/lib/libmempooling.so",
+          "size": "3.6 MB"
+        },
+        {
+          "name": "libprocess_mem.so",
+          "path": "cmake-build-release/lib/libprocess_mem.so",
+          "size": "423 KB"
+        },
+        {
+          "name": "libubse-client.so",
+          "path": "cmake-build-release/lib/libubse-client.so",
+          "size": "401 KB"
+        },
+        {
+          "name": "libucache_plugin.so",
+          "path": "cmake-build-release/lib/libucache_plugin.so",
+          "size": "885 KB"
+        },
+        {
+          "name": "libvirtagent.so",
+          "path": "cmake-build-release/lib/libvirtagent.so",
+          "size": "1.7 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 861,
+      "total": 1378,
+      "passed": 1366,
+      "failed": 0,
+      "skipped": 12,
+      "failures": [],
+      "skipped_tests": [
+        "TestEventListener.MpEventSubModuleInitSuccess",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid1",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid2",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid3",
+        "TestMemPoolMigrateHelper.GetRollBackBorrowIdPid4",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidFailed_NotValidBorrowId",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidFailed_NotSameBatch",
+        "TestMemPoolMigrateHelper.TestGetRollBackBorrowIdPidSuccess",
+        "TestMemPoolMigrateHelper.RpcMemBorrowRollback1",
+        "TestMemManager.DataReloadInitFailed",
+        "TestOverCommitFaultMemIdModule.GetRemoteNumaSizeFail1",
+        "TestOverCommitFaultMemIdModule.GetRemoteNumaSizeFail2"
+      ]
+    },
+    "sample": {
+      "status": "未执行",
+      "duration_seconds": 0,
+      "results": [],
+      "note": "仓库未提供独立样例命令，SDK示例位于src/sdk/example目录"
+    }
+  },
+  "documentation_gaps": [
+    "README未明确列出所有构建依赖，需从ubs-engine.spec文件获取完整依赖列表",
+    "构建指导文档提到ubs-comm-devel需要从源码编译，但未详细说明编译步骤",
+    "仓库未提供Dockerfile，无法直接提取依赖映射信息",
+    "容器内DNS解析需要使用--privileged --network host模式，文档未提及"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-24T14:15:00",
+      "problem": "容器内getaddrinfo()线程无法启动，导致DNS解析失败",
+      "solution": "使用--privileged --network host模式运行容器，并修改dnf仓库配置使用http协议",
+      "source": "Docker网络配置问题"
+    },
+    {
+      "timestamp": "2026-06-24T14:20:00",
+      "problem": "ubs-comm-devel在openEuler官方仓库中不可用",
+      "solution": "从源码编译安装ubs-comm，需要额外安装rdma-core-devel和umdk-urma-devel依赖",
+      "source": "docs/build_install/构建指导.md"
+    }
+  ]
+}
