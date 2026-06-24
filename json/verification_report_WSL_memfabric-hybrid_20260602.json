@@ -1,12 +1,14 @@
 {
   "metadata": {
-    "repo_name": "memfabric_hybrid",
     "repo_path": "./tmp_src/",
-    "repo_url": "",
+    "repo_name": "memfabric_hybrid",
     "start_time": "2026-06-02T02:18:00",
     "end_time": "2026-06-02T02:30:00",
     "duration_seconds": 720,
-    "total_steps": 4
+    "total_steps": 4,
+    "image_used": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+    "xpu_type": "NPU",
+    "repo_url": ""
   },
   "machine_spec": {
     "host_machine": {
@@ -21,8 +23,7 @@
       "os": "openEuler 24.03 (LTS)",
       "architecture": "x86_64",
       "cpu_cores": 20,
-      "memory": "15Gi",
-      "container_image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+      "memory": "15Gi"
     },
     "image_source": {
       "type": "base_image",
@@ -126,43 +127,37 @@
       "timestamp": "2026-06-02T02:18:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-02T02:19:00",
       "step": "dependency_install",
       "action": "安装完整构建依赖",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-02T02:21:00",
       "step": "submodule_init",
       "action": "初始化 googletest submodule",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-02T02:22:00",
       "step": "build",
       "action": "执行完整构建 (whl + run)",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T02:27:00",
       "step": "ut_build_and_run",
       "action": "构建并执行 UT 测试",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T02:30:00",
       "step": "cleanup",
       "action": "停止并删除容器",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     }
   ],
   "final_results": {
@@ -180,28 +175,28 @@
           "name": "libmf_hybm_core.so",
           "path": "output/hybm/lib64/",
           "size": "~2M"
-        },
-        {
-          "name": "memfabric_hybrid-1.2.0-cp311-cp311-manylinux_2_38_x86_64.whl",
-          "path": "output/memfabric_hybrid/wheel/",
-          "size": "4.2M",
-          "type": "whl_package",
-          "note": "manylinux_2_38 标签，需要 GLIBC >= 2.38"
-        },
-        {
-          "name": "memfabric_hybrid-1.2.0_linux_x86_64.run",
-          "path": "output/",
-          "size": "9.1M",
-          "type": "run_package",
-          "contents": [
-            "libmf_smem.so",
-            "libmf_hybm_core.so",
-            "Python wheel包",
-            "头文件 (smem/hybm)",
-            "hybm_copy_kernel.cpp",
-            "install.sh / uninstall.sh"
-          ]
         }
+      ]
+    },
+    "whl_package": {
+      "status": "success",
+      "file_name": "memfabric_hybrid-1.2.0-cp311-cp311-manylinux_2_38_x86_64.whl",
+      "path": "output/memfabric_hybrid/wheel/",
+      "size": "4.2M",
+      "note": "manylinux_2_38 标签，需要 GLIBC >= 2.38"
+    },
+    "run_package": {
+      "status": "success",
+      "file_name": "memfabric_hybrid-1.2.0_linux_x86_64.run",
+      "path": "output/",
+      "size": "9.1M",
+      "contents": [
+        "libmf_smem.so",
+        "libmf_hybm_core.so",
+        "Python wheel包",
+        "头文件 (smem/hybm)",
+        "hybm_copy_kernel.cpp",
+        "install.sh / uninstall.sh"
       ]
     },
     "ut": {
@@ -210,17 +205,18 @@
       "total": 1175,
       "passed": 1175,
       "failed": 0,
-      "coverage": "lcov未安装，覆盖率报告未生成"
+      "coverage": "lcov未安装，覆盖率报告未生成",
+      "failures": []
     },
     "sample": {
-      "status": "not_run",
+      "status": "unknown",
       "duration_seconds": 0,
       "results": []
     }
   },
   "documentation_gaps": [
-    "libubsan 依赖: 文档中未说明 UT ASAN 模式需要 libubsan 库 (severity: 低)",
-    "lcov/gcovr 工具: openEuler 仓库中不存在 lcov/gcovr，覆盖率报告生成失败 (severity: 低)"
+    "libubsan 依赖: 文档中未说明 UT ASAN 模式需要 libubsan 库",
+    "lcov/gcovr 工具: openEuler 仓库中不存在 lcov/gcovr，覆盖率报告生成失败"
   ],
   "problems_encountered": [
     {

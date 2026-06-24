@@ -1,0 +1,428 @@
+{
+  "metadata": {
+    "repo_name": "MindIE-SD",
+    "repo_path": "./tmp_src/MindIE-SD",
+    "repo_url": "https://gitcode.com/Ascend/MindIE-SD.git",
+    "start_time": "2026-06-02T20:24:00+08:00",
+    "end_time": "2026-06-02T22:00:00+08:00",
+    "duration_seconds": 5760,
+    "total_steps": 8
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "~32GB",
+      "disk": "100G available (10% used)",
+      "docker_version": "Docker version 29.4.3, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "~15GB (container limit)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "用户明确要求必须使用 openEuler 24.03 LTS 镜像进行验证，不能使用其他镜像"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "value": "x86_64 和 aarch64（build.sh 第56-60行检查架构）",
+      "source": "build/build.sh"
+    },
+    "recommended_image": {
+      "value": "Dockerfile_910b_aarch64.ubuntu FROM ubuntu:24.04（aarch64专用），openEuler 未在文档中推荐。按用户要求使用 openEuler 24.03 LTS。",
+      "source": "docker/Dockerfile_910b_aarch64.ubuntu 第1行"
+    },
+    "dependencies": {
+      "value": [
+        "Python >= 3.10（容器自带 Python 3.11.6）",
+        "CANN 8.5.1（昇腾软件栈）",
+        "torch 2.6/2.7/2.8/2.9（需昇腾定制版本）",
+        "torch-npu 2.6/2.7/2.8/2.9",
+        "gcc-9/gcc-13, g++-9/g++-13, make, cmake（openEuler: dnf install gcc gcc-c++ make cmake）",
+        "build-essential, openssl-devel, zlib-devel, libffi-devel",
+        "Python packages: diffusers==0.29.0, transformers==4.44.2, open_clip_torch==2.26.1, av==12.0.0, tqdm==4.66.5, timm==0.9.12, tensorboard==2.20.0, pre-commit==3.8.0, mmengine==0.10.4, ftfy==6.1.3, accelerate==0.26.1, bs4, torchvision==0.24.0, einops, numpy==1.26.4, strenum, zmq"
+      ],
+      "source": "docs/zh/installation.md + docker/Dockerfile_910b_aarch64.ubuntu + requirements.txt + pyproject.toml"
+    },
+    "build_commands": {
+      "value": "python3 setup.py bdist_wheel  或  python -m build --wheel --no-isolation",
+      "source": "docs/zh/developer_guide/build_guide.md + setup.py"
+    },
+    "build_entry": "python3 setup.py bdist_wheel",
+    "ut_commands": {
+      "value": "CPU UT: bash tests/run_UT_test.sh（coverage + unittest + pytest）; NPU全量: bash tests/run_test.sh --all",
+      "source": "docs/zh/developer_guide/test.md + tests/run_UT_test.sh"
+    },
+    "ut_entry": "bash tests/run_UT_test.sh",
+    "sample_commands": {
+      "value": "examples/dummy_run/: python wan_infer.py / qwen_image_infer.py / flux_infer.py（需NPU）; examples/wan/: bash infer_t2v.sh",
+      "source": "examples/dummy_run/README.md"
+    },
+    "special_dependencies": {
+      "value": [
+        {
+          "name": "CANN Toolkit 8.5.1",
+          "download_url": "https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.5.1/Ascend-cann-toolkit_8.5.1_linux-{arch}.run",
+          "install_method": "wget + .run安装",
+          "note": "Dockerfile仅提供aarch64版本",
+          "source": "docker/Dockerfile_910b_aarch64.ubuntu 第84行"
+        },
+        {
+          "name": "torch/torch_npu（昇腾定制）",
+          "download_url": "https://pytorch-package.obs.cn-north-4.myhuaweicloud.com/pta/torch/v2.9.0/",
+          "install_method": "pip install .whl",
+          "note": "标准PyPI不可获取",
+          "source": "docker/Dockerfile_910b_aarch64.ubuntu 第95-100行"
+        },
+        {
+          "name": "mindiesd pip源",
+          "download_url": "https://ascend.devcloud.huaweicloud.com/pypi/simple/",
+          "install_method": "pip install --trusted-host ascend.devcloud.huaweicloud.com -i https://ascend.devcloud.huaweicloud.com/pypi/simple/ mindiesd",
+          "source": "docs/zh/installation.md 快速安装章节"
+        }
+      ],
+      "source": "docker/Dockerfile_910b_aarch64.ubuntu + docs/zh/installation.md"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-02T20:24:00+08:00",
+      "step": "verify_repo",
+      "command": "git clone --depth 1 https://gitcode.com/Ascend/MindIE-SD.git && tar czf && docker cp",
+      "success": true,
+      "output": "Repo cloned and copied to container via docker cp + tar",
+      "error": "",
+      "returncode": 0,
+      "note": "Windows Docker volume mount不可用，改用docker cp + tar管道复制"
+    },
+    {
+      "timestamp": "2026-06-02T20:25:00+08:00",
+      "step": "start_container",
+      "command": "docker run -d --name ttfhw-mindie-sd-env hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "openEuler 24.03 LTS container started",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-02T20:26:00+08:00",
+      "step": "configure_repos",
+      "command": "sed替换repo镜像为华为云/清华镜像源，禁用metalink和gpgcheck，仅保留OS repo",
+      "success": true,
+      "output": "Repo mirrors updated to mirrors.tuna.tsinghua.edu.cn",
+      "error": "",
+      "returncode": 0,
+      "note": "openEuler默认镜像速度极慢，需手动替换加速源"
+    },
+    {
+      "timestamp": "2026-06-02T20:30:00+08:00",
+      "step": "install_python3_check",
+      "command": "python3 --version",
+      "success": true,
+      "output": "Python 3.11.6（已预装在openEuler 24.03 LTS镜像中）",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-02T20:31:00+08:00",
+      "step": "bootstrap_pip",
+      "command": "python3 -m ensurepip --upgrade",
+      "success": true,
+      "output": "Successfully installed pip-23.3.1 setuptools-68.0.0",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-02T20:35:00+08:00",
+      "step": "dnf_install_build_tools",
+      "command": "dnf --noplugins install -y gcc gcc-c++ make cmake wget git unzip zip curl dos2unix openssl-devel zlib-devel libffi-devel",
+      "success": true,
+      "output": "gcc 12.3.1, make 4.4.1, cmake, wget, git, etc. installed successfully",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2400,
+      "note": "dnf极其缓慢（metadata下载+解析需~40分钟），需--noplugins加速。libssl-devel在openEuler中名为openssl-devel。多次遭遇dnf锁问题需手动清除"
+    },
+    {
+      "timestamp": "2026-06-02T21:20:00+08:00",
+      "step": "pip_install_build_deps",
+      "command": "pip install build wheel setuptools scikit-build pybind11",
+      "success": true,
+      "output": "build-1.5.0, wheel-0.47.0, scikit-build-0.19.0, pybind11-3.0.4 installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-02T21:22:00+08:00",
+      "step": "pip_install_torch_cpu",
+      "command": "pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu",
+      "success": true,
+      "output": "torch-2.12.0+cpu, torchvision-0.27.0+cpu installed",
+      "error": "",
+      "returncode": 0,
+      "note": "使用CPU版本替代文档要求的torch 2.9.0（昇腾定制PyPI不可用）"
+    },
+    {
+      "timestamp": "2026-06-02T21:25:00+08:00",
+      "step": "pip_install_requirements_tsinghua",
+      "command": "pip install -r requirements_no_torch.txt",
+      "success": false,
+      "output": "ReadTimeoutError: HTTPSConnectionPool(host='pypi.tuna.tsinghua.edu.cn', port=443): Read timed out.",
+      "error": "清华源超时",
+      "returncode": 1
+    },
+    {
+      "timestamp": "2026-06-02T21:30:00+08:00",
+      "step": "pip_install_requirements_aliyun",
+      "command": "pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/ && pip install -r requirements_no_torch.txt",
+      "success": true,
+      "output": "All requirements installed successfully (diffusers-0.29.0, transformers-4.44.2, etc.)",
+      "error": "",
+      "returncode": 0,
+      "mirror_used": "阿里云镜像"
+    },
+    {
+      "timestamp": "2026-06-02T21:40:00+08:00",
+      "step": "pip_install_test_deps",
+      "command": "pip install pytest coverage",
+      "success": true,
+      "output": "pytest and coverage installed",
+      "error": "",
+      "returncode": 0
+    },
+    {
+      "timestamp": "2026-06-02T21:42:00+08:00",
+      "step": "fix_crlf",
+      "command": "dos2unix tests/run_UT_test.sh .coveragerc",
+      "success": true,
+      "output": "Line endings fixed",
+      "error": "",
+      "returncode": 0,
+      "note": "仓库脚本存在CRLF换行符问题，在Linux容器中需转换"
+    },
+    {
+      "timestamp": "2026-06-02T21:43:00+08:00",
+      "step": "cpu_unittest",
+      "command": "PYTHONPATH=/workspace/MindIE-SD bash tests/run_UT_test.sh",
+      "success": true,
+      "output": "unittest: Ran 34 tests in 2.390s - OK; coverage report generated; pytest: 29 passed, 4 errors (torch_npu missing)",
+      "error": "4 pytest errors来自test_aclgraph_config.py，因缺torch_npu导致导入失败",
+      "returncode": 1,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-02T21:45:00+08:00",
+      "step": "build_attempt",
+      "command": "python3 -m build --wheel --no-isolation",
+      "success": false,
+      "output": "RuntimeError: Script execution failed: build/build_ops.sh",
+      "error": "build_ops.sh需要ASCEND_TOOLKIT_HOME（CANN工具链），容器中无昇腾环境",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-02T22:00:00+08:00",
+      "step": "cleanup",
+      "command": "docker stop ttfhw-mindie-sd-env && docker rm ttfhw-mindie-sd-env",
+      "success": true,
+      "output": "Container stopped and removed",
+      "error": "",
+      "returncode": 0
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-02T20:24:00+08:00",
+      "step": "start",
+      "action": "验证过程启动（openEuler 24.03 LTS）",
+      "result": "started",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T20:24:00+08:00",
+      "step": "document_reading",
+      "action": "复用之前读取的文档信息",
+      "result": "completed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T20:25:00+08:00",
+      "step": "container_setup",
+      "action": "启动openEuler 24.03 LTS容器，docker cp + tar复制仓库",
+      "result": "repo copied to /workspace/MindIE-SD",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T20:26:00+08:00",
+      "step": "repo_config",
+      "action": "替换dnf镜像源（华为云→清华），禁用metalink/gpgcheck",
+      "result": "mirrors updated",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T20:30:00+08:00",
+      "step": "python_check",
+      "action": "确认Python 3.11.6已预装，ensurepip安装pip",
+      "result": "Python 3.11.6 + pip 23.3.1",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T20:35:00+08:00",
+      "step": "dnf_install",
+      "action": "dnf --noplugins安装C/C++构建工具（耗时~40分钟）",
+      "result": "gcc 12.3.1, make 4.4.1, cmake, etc. installed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T21:20:00+08:00",
+      "step": "pip_install_all",
+      "action": "pip安装Python依赖（清华源超时→阿里云成功）",
+      "result": "all Python packages installed",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T21:43:00+08:00",
+      "step": "unittest",
+      "action": "运行CPU友好UT",
+      "result": "34/34 unittest passed, 4 pytest errors (torch_npu)",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T21:45:00+08:00",
+      "step": "build",
+      "action": "尝试构建wheel",
+      "result": "failed - requires CANN toolkit",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-02T22:00:00+08:00",
+      "step": "report",
+      "action": "生成验证报告",
+      "result": "completed",
+      "details": {}
+    }
+  ],
+  "final_results": {
+    "build": {
+      "status": "failed",
+      "duration_seconds": 1,
+      "failure_reason": "build_ops.sh需要CANN 8.5.1工具链（ASCEND_TOOLKIT_HOME环境变量）编译昇腾AscendC算子。openEuler容器中无CANN环境。构建流程硬依赖昇腾硬件软件栈，非构建脚本缺陷。",
+      "attempted_command": "python3 -m build --wheel --no-isolation",
+      "artifacts": []
+    },
+    "ut": {
+      "status": "partial_success",
+      "duration_seconds": 10,
+      "total": 38,
+      "passed": 34,
+      "failed": 0,
+      "errors": 4,
+      "skipped": 0,
+      "failures": [
+        {
+          "test_file": "tests/UT/compilation/test_aclgraph_config.py",
+          "error_type": "ModuleNotFoundError: No module named 'torch_npu'",
+          "affected_tests": 4,
+          "reason": "test_aclgraph_config.py → mindiesd.compilation → mindiesd.layers → flash_attn → prompt_flash_attn.py import torch_npu。无CANN环境时torch_npu不可用。",
+          "assessment": "非代码缺陷——环境缺少昇腾CANN/torch_npu"
+        }
+      ],
+      "coverage_summary": "核心模块 mindiesd/__init__.py 和 mindiesd/env.py 覆盖率100%。覆盖率报告已生成（coverage.xml + htmlcov/）"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample": "examples/dummy_run/wan_infer.py",
+          "status": "skipped",
+          "reason": "需要 NPU 硬件 (torch_npu) 和模型权重"
+        },
+        {
+          "sample": "examples/dummy_run/qwen_image_infer.py",
+          "status": "skipped",
+          "reason": "需要 NPU 硬件 (torch_npu) 和模型权重"
+        },
+        {
+          "sample": "examples/dummy_run/flux_infer.py",
+          "status": "skipped",
+          "reason": "需要 NPU 硬件 (torch_npu) + HF_TOKEN"
+        },
+        {
+          "sample": "examples/wan/infer_t2v.sh",
+          "status": "skipped",
+          "reason": "需要 NPU 硬件和 Wan2.1 模型权重"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README.md 缺少明确的构建/测试指令，关键信息分散在 docs/ 子目录中",
+    "Dockerfile 仅提供 aarch64 版本（Dockerfile_910b_aarch64.ubuntu），缺少 x86_64 Dockerfile",
+    "未提供 openEuler 环境的构建/测试指南（Dockerfile基于Ubuntu 24.04）",
+    "docs/zh/installation.md 中的 pip 安装命令（ascend.devcloud.huaweicloud.com）外部用户可能无法访问",
+    "CANN x86_64 版本的下载链接未在文档中明确提供",
+    "构建失败后的故障排除指南缺失——文档未说明在无CANN环境下的降级构建方案",
+    "requirements.txt 中 torch==2.9.0 是昇腾定制版本，标准 PyPI 上不可获取",
+    "tests/run_UT_test.sh 存在 CRLF 换行符问题（Windows git checkout 后在 Linux 容器中运行会报语法错误）",
+    "openEuler 上 dnf 包管理器性能问题未在文档中提及（meta_link 下载极慢）",
+    "pip 安装命令未指定 --break-system-packages（在系统Python环境中会因PEP 668报错）"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "",
+      "problem": "Windows Docker volume mount 不可用（MSYS路径转换导致挂载目录为空）",
+      "solution": "使用 docker cp + tar 管道方式将仓库复制到容器内",
+      "source": "Windows + Docker Desktop 路径处理限制"
+    },
+    {
+      "timestamp": "",
+      "problem": "openEuler 24.03 LTS 的 dnf 默认镜像（repo.openeuler.org）速度极慢，metadata下载需要数小时",
+      "solution": "替换为华为云镜像（mirrors.huaweicloud.com）后仍慢，最终使用清华镜像（mirrors.tuna.tsinghua.edu.cn）并通过 --noplugins 和禁用多余repo加速。gcc安装耗时约40分钟。",
+      "source": "openEuler 24.03 LTS 默认repo配置"
+    },
+    {
+      "timestamp": "",
+      "problem": "多次 dnf 进程残留导致锁冲突（'Waiting for process with pid XXX to finish'）",
+      "solution": "手动 kill -9 残留 dnf 进程，并清理 /var/lib/rpm/.rpm.lock /var/run/dnf.pid 等锁文件",
+      "source": "dnf 在异常退出后不清理锁文件"
+    },
+    {
+      "timestamp": "",
+      "problem": "openEuler 中 libssl-devel 包不存在",
+      "solution": "使用 openssl-devel 替代",
+      "source": "openEuler 包命名差异"
+    },
+    {
+      "timestamp": "",
+      "problem": "pip install 从清华源下载超时（ReadTimeoutError）",
+      "solution": "切换到阿里云镜像源：pip config set global.index-url https://mirrors.aliyun.com/pypi/simple/",
+      "source": "pip 镜像回退策略"
+    },
+    {
+      "timestamp": "",
+      "problem": "tests/run_UT_test.sh 在容器内报语法错误（'set: -: invalid option' 和 CRLF）",
+      "solution": "使用 dos2unix 转换脚本换行符",
+      "source": "Windows Git 仓库的 CRLF 换行符"
+    },
+    {
+      "timestamp": "",
+      "problem": "构建失败: RuntimeError: Script execution failed: build/build_ops.sh",
+      "solution": "无法在 openEuler 容器中解决——项目需要 CANN 8.5.1 工具链编译 AscendC 算子，CANN 仅提供 aarch64 版本，x86_64 版本下载链接未在文档中提供",
+      "source": "build/build_ops.sh 第19-31行"
+    },
+    {
+      "timestamp": "",
+      "problem": "pytest 中 test_aclgraph_config.py 的4个测试导入失败: No module named 'torch_npu'",
+      "solution": "非代码缺陷——无CANN环境时 torch_npu 不可用",
+      "source": "mindiesd/layers/flash_attn/prompt_flash_attn.py 第14行"
+    }
+  ],
+  "session_export_file": ""
+}

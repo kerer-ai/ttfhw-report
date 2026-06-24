@@ -1,15 +1,15 @@
 {
   "metadata": {
-    "repo_path": "/home/<USER>/pytorch/tmp_src",
-    "branch": "v2.7.1",
-    "commit": "a81f4a55b244ab8e1e36b1726cf7201a83f7a709",
+    "repo_name": "pytorch",
+    "repo_path": "/home/user/pytorch/tmp_src",
+    "repo_url": "https://gitcode.com/Ascend/pytorch.git",
     "start_time": "2026-06-10T11:13:47+08:00",
     "end_time": "2026-06-10T13:59:49+08:00",
     "duration_seconds": 9962,
     "total_steps": 18,
-    "verification_status": "构建成功_UT和样例因缺少完整CANN运行库失败",
-    "repo_url": "https://gitcode.com/Ascend/pytorch.git",
-    "repo_name": "pytorch"
+    "branch": "v2.7.1",
+    "commit": "a81f4a55b244ab8e1e36b1726cf7201a83f7a709",
+    "verification_status": "构建成功_UT和样例因缺少完整CANN运行库失败"
   },
   "machine_spec": {
     "host_machine": {
@@ -77,6 +77,14 @@
       "value": "python3 -c \"import torch;import torch_npu; a = torch.randn(3, 4).npu(); print(a + a);\" 以及快速验证矩阵乘法样例",
       "source": "docs/zh/installation_guide/compilation_installation_using_source_code.md 第155-184行; README.md 第105-129行"
     },
+    "build_entry": {
+      "source": "build_commands",
+      "value": "MAX_JOBS=12 bash ci/build.sh --python=3.11"
+    },
+    "ut_entry": {
+      "source": "ut_commands",
+      "value": "python ci/access_control_test.py --all"
+    },
     "special_dependencies": {
       "value": [
         {
@@ -96,14 +104,6 @@
         }
       ],
       "source": "README.md 第13-29行; README.md 第150-162行; docs/zh/installation_guide/preparing_installation.md 第11-18行; requirements.txt 第1-10行"
-    },
-    "build_entry": {
-      "source": "README.md 第82-89行; docs/zh/installation_guide/compilation_installation_using_source_code.md 第44-51行; 并发数限制为20核的60%",
-      "value": "MAX_JOBS=12 bash ci/build.sh --python=3.11"
-    },
-    "ut_entry": {
-      "source": "test/README.md 第44-54行",
-      "value": "python ci/access_control_test.py --all"
     }
   },
   "execution_log": [
@@ -136,7 +136,7 @@
       "command": "git submodule update --init --recursive --depth=1",
       "success": false,
       "output": "失败：fatal: Unable to find current revision in submodule path 'third_party/acl_src/runtime'。",
-      "error": "",
+      "error": "fatal: Unable to find current revision in submodule path 'third_party/acl_src/runtime'",
       "returncode": 1
     },
     {
@@ -152,7 +152,7 @@
       "command": "dnf makecache && dnf install ...",
       "success": false,
       "output": "失败原因：openEuler source 仓库元数据下载超时。",
-      "error": "",
+      "error": "openEuler source 仓库元数据下载超时",
       "returncode": 1
     },
     {
@@ -168,7 +168,7 @@
       "command": "python3 -m pip install pyyaml setuptools auditwheel wheel numpy==1.23.2 torch==2.7.1+cpu triton-ascend==3.2.1",
       "success": false,
       "output": "首次尝试下载 triton-ascend 超时；重试后发现 numpy 冲突：triton-ascend 3.2.1 需要 numpy==1.26.4。",
-      "error": "",
+      "error": "triton-ascend 下载超时；numpy 版本冲突",
       "returncode": 1
     },
     {
@@ -192,7 +192,7 @@
       "command": "MAX_JOBS=12 bash ci/build.sh --python=3.11",
       "success": false,
       "output": "首次构建因缺少 wheel 失败；安装 wheel 后因 op-plugin 子模块不在期望提交失败；之后又因 fmt 子模块不在期望提交失败。",
-      "error": "",
+      "error": "缺少 wheel；op-plugin 子模块不在期望提交；fmt 子模块不在期望提交",
       "returncode": 1
     },
     {
@@ -224,7 +224,7 @@
       "command": "cd /tmp && python3 -c 'import torch; import torch_npu; ...'",
       "success": false,
       "output": "导入失败：缺少 libhccl.so。使用构建生成的 stub 库后，导入仍因 libtensorpipe.so 缺少 aclGetRecentErrMsg 符号而失败。",
-      "error": "",
+      "error": "ImportError: 缺少 libhccl.so；libtensorpipe.so 缺少 aclGetRecentErrMsg 符号",
       "returncode": 1
     },
     {
@@ -232,74 +232,20 @@
       "command": "python3 ci/access_control_test.py --all",
       "success": false,
       "output": "UT 命令在导入 torch_npu 时立即失败，因 libtensorpipe.so 缺少 aclGetRecentErrMsg 符号。",
-      "error": "",
+      "error": "ImportError: libtensorpipe.so undefined symbol: aclGetRecentErrMsg",
       "returncode": 1
     }
   ],
   "process_timeline": [
-    {
-      "timestamp": "2026-06-10T11:13:47+08:00",
-      "step": "start",
-      "action": "启动 Ascend/pytorch v2.7.1 仓库验证",
-      "result": "started",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T11:14:00+08:00",
-      "step": "branch_checkout",
-      "action": "切换到 v2.7.1 分支",
-      "result": "success",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T11:18:00+08:00",
-      "step": "container_setup",
-      "action": "拉取并启动 openEuler 24.03 LTS 容器",
-      "result": "success",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T12:01:00+08:00",
-      "step": "system_dependencies",
-      "action": "调整 DNF 超时参数后安装系统依赖",
-      "result": "success",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T12:30:00+08:00",
-      "step": "python_dependencies",
-      "action": "从 requirements.txt 安装 Python 依赖",
-      "result": "success",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T13:20:00+08:00",
-      "step": "submodules",
-      "action": "手动恢复/修复子模块到主仓库期望提交",
-      "result": "success_with_manual_recovery",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T13:57:00+08:00",
-      "step": "build",
-      "action": "构建 torch_npu wheel",
-      "result": "success",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T13:58:00+08:00",
-      "step": "sample",
-      "action": "执行文档中的导入/NPU 样例命令",
-      "result": "failed_missing_complete_cann_runtime",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-10T13:59:00+08:00",
-      "step": "ut",
-      "action": "执行文档中的非分布式全量 UT 命令",
-      "result": "failed_missing_complete_cann_runtime",
-      "details": {}
-    }
+    {"timestamp": "2026-06-10T11:13:47+08:00", "step": "start", "action": "启动 Ascend/pytorch v2.7.1 仓库验证", "result": "started", "details": {}},
+    {"timestamp": "2026-06-10T11:14:00+08:00", "step": "branch_checkout", "action": "切换到 v2.7.1 分支", "result": "success", "details": {}},
+    {"timestamp": "2026-06-10T11:18:00+08:00", "step": "container_setup", "action": "拉取并启动 openEuler 24.03 LTS 容器", "result": "success", "details": {}},
+    {"timestamp": "2026-06-10T12:01:00+08:00", "step": "system_dependencies", "action": "调整 DNF 超时参数后安装系统依赖", "result": "success", "details": {}},
+    {"timestamp": "2026-06-10T12:30:00+08:00", "step": "python_dependencies", "action": "从 requirements.txt 安装 Python 依赖", "result": "success", "details": {}},
+    {"timestamp": "2026-06-10T13:20:00+08:00", "step": "submodules", "action": "手动恢复/修复子模块到主仓库期望提交", "result": "success_with_manual_recovery", "details": {}},
+    {"timestamp": "2026-06-10T13:57:00+08:00", "step": "build", "action": "构建 torch_npu wheel", "result": "success", "details": {}},
+    {"timestamp": "2026-06-10T13:58:00+08:00", "step": "sample", "action": "执行文档中的导入/NPU 样例命令", "result": "failed_missing_complete_cann_runtime", "details": {}},
+    {"timestamp": "2026-06-10T13:59:00+08:00", "step": "ut", "action": "执行文档中的非分布式全量 UT 命令", "result": "failed_missing_complete_cann_runtime", "details": {}}
   ],
   "final_results": {
     "build": {
@@ -313,21 +259,9 @@
           "path": "dist/torch_npu-2.7.1.post5+gita81f4a5-cp311-cp311-linux_x86_64.whl",
           "size": "40M / 41713572 bytes"
         },
-        {
-          "name": "_C.cpython-311-x86_64-linux-gnu.so",
-          "path": "build/packages/torch_npu/_C.cpython-311-x86_64-linux-gnu.so",
-          "size": "169632 bytes"
-        },
-        {
-          "name": "libgtest.so.1.10.0",
-          "path": "build/lib/libgtest.so.1.10.0",
-          "size": "564248 bytes"
-        },
-        {
-          "name": "libgmock.so.1.10.0",
-          "path": "build/lib/libgmock.so.1.10.0",
-          "size": "162624 bytes"
-        }
+        {"name": "_C.cpython-311-x86_64-linux-gnu.so", "path": "build/packages/torch_npu/_C.cpython-311-x86_64-linux-gnu.so", "size": "169632 bytes"},
+        {"name": "libgtest.so.1.10.0", "path": "build/lib/libgtest.so.1.10.0", "size": "564248 bytes"},
+        {"name": "libgmock.so.1.10.0", "path": "build/lib/libgmock.so.1.10.0", "size": "162624 bytes"}
       ]
     },
     "ut": {
@@ -370,54 +304,64 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "",
       "problem": "验证前需要重置 Docker 资源。",
-      "source": "用户指令和 Docker 命令",
-      "solution": "用户确认范围后，删除了所有 Docker 容器和镜像；重新拉取了 openEuler 24.03 LTS 镜像。"
+      "solution": "用户确认范围后，删除了所有 Docker 容器和镜像；重新拉取了 openEuler 24.03 LTS 镜像。",
+      "source": "用户指令和 Docker 命令"
     },
     {
+      "timestamp": "",
       "problem": "初次克隆/子模块工作被中断，tmp_src 仅包含部分仓库状态。",
-      "source": "git ls-remote 和 git fetch 输出",
-      "solution": "使用 depth=1 拉取 v2.7.1 并显式 checkout 分支。"
+      "solution": "使用 depth=1 拉取 v2.7.1 并显式 checkout 分支。",
+      "source": "git ls-remote 和 git fetch 输出"
     },
     {
+      "timestamp": "",
       "problem": "DNF source 和 EPOL 仓库下载反复超时。",
-      "source": "DNF 输出: Curl error (28) timeout",
-      "solution": "在可行时禁用 source/debuginfo，并使用更长的 DNF 超时/重试/最小速率参数。安装最终成功。"
+      "solution": "在可行时禁用 source/debuginfo，并使用更长的 DNF 超时/重试/最小速率参数。安装最终成功。",
+      "source": "DNF 输出: Curl error (28) timeout"
     },
     {
+      "timestamp": "",
       "problem": "triton-ascend wheel 首次下载超时。",
-      "source": "pip 输出",
-      "solution": "使用更长的 pip 超时和文档中的索引重试；下载成功。"
+      "solution": "使用更长的 pip 超时和文档中的索引重试；下载成功。",
+      "source": "pip 输出"
     },
     {
+      "timestamp": "",
       "problem": "手动指定 numpy==1.23.2 与 triton-ascend==3.2.1 要求的 numpy==1.26.4 冲突。",
-      "source": "requirements.txt 和 pip resolver 输出",
-      "solution": "严格按 requirements.txt 安装，不手动固定 numpy；pip 自行解析为 numpy==1.26.4。"
+      "solution": "严格按 requirements.txt 安装，不手动固定 numpy；pip 自行解析为 numpy==1.26.4。",
+      "source": "requirements.txt 和 pip resolver 输出"
     },
     {
+      "timestamp": "",
       "problem": "third_party/acl_src/runtime 子模块在浅克隆中断后无法找到当前修订版本。",
-      "source": "git ls-remote 和 git fetch 输出",
-      "solution": "在远端找到 refs/keep-around/6cce8b... 引用后，在确认无 git 进程运行后清除残留的 shallow.lock，手动 checkout 该提交。"
+      "solution": "在远端找到 refs/keep-around/6cce8b... 引用后，在确认无 git 进程运行后清除残留的 shallow.lock，手动 checkout 该提交。",
+      "source": "git ls-remote 和 git fetch 输出"
     },
     {
+      "timestamp": "",
       "problem": "多个子模块 checkout 到了远端默认分支头而非主仓库期望的提交。",
-      "source": "git submodule status 和构建错误输出",
-      "solution": "对 dvm、fmt、googletest、nlohmann、op-plugin 和 torchair 执行强制子模块更新；构建在修复后推进。"
+      "solution": "对 dvm、fmt、googletest、nlohmann、op-plugin 和 torchair 执行强制子模块更新；构建在修复后推进。",
+      "source": "git submodule status 和构建错误输出"
     },
     {
+      "timestamp": "",
       "problem": "构建首次失败：ModuleNotFoundError: No module named 'wheel'。",
-      "source": "setup.py 第27行和构建输出",
-      "solution": "因 setup.py 导入 wheel.bdist_wheel 而安装 wheel；构建继续推进。"
+      "solution": "因 setup.py 导入 wheel.bdist_wheel 而安装 wheel；构建继续推进。",
+      "source": "setup.py 第27行和构建输出"
     },
     {
+      "timestamp": "",
       "problem": "wheel 安装时 pip 只能解析到清华源，无法识别已安装的 torch==2.7.1+cpu。",
-      "source": "README.md 第25-29行和 pip 输出",
-      "solution": "重试时添加 README/requirements 中指定的 PyTorch CPU extra 索引 https://download.pytorch.org/whl/cpu；安装成功。"
+      "solution": "重试时添加 README/requirements 中指定的 PyTorch CPU extra 索引 https://download.pytorch.org/whl/cpu；安装成功。",
+      "source": "README.md 第25-29行和 pip 输出"
     },
     {
+      "timestamp": "",
       "problem": "wheel 安装后 UT 和样例因缺少完整 CANN 运行时库/符号而失败。",
-      "source": "python 导入输出和 docs/zh/installation_guide/preparing_installation.md 第11-18行",
-      "solution": "尝试通过 LD_LIBRARY_PATH 使用构建生成的 ACL stub 库，但导入仍因 aclGetRecentErrMsg 符号缺失而失败。记录为运行时依赖缺口；未修改源码。"
+      "solution": "尝试通过 LD_LIBRARY_PATH 使用构建生成的 ACL stub 库，但导入仍因 aclGetRecentErrMsg 符号缺失而失败。记录为运行时依赖缺口；未修改源码。",
+      "source": "python 导入输出和 docs/zh/installation_guide/preparing_installation.md 第11-18行"
     }
   ],
   "session_export_file": ""

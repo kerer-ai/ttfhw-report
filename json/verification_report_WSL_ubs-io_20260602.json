@@ -6,7 +6,7 @@
     "start_time": "2026-06-02T20:47:00+08:00",
     "end_time": "2026-06-02T21:15:00+08:00",
     "duration_seconds": 1680,
-    "total_steps": 9
+    "total_steps": 5
   },
   "machine_spec": {
     "host_machine": {
@@ -56,10 +56,20 @@
       ],
       "source": "ubsio-boostio/build/ubs-io.spec + CMakeLists.txt"
     },
+    "build_commands": {
+      "value": "cd ubsio-boostio && bash build.sh -t release",
+      "source": "ubsio-boostio/README.md - 源码编译章节"
+    },
+    "ut_commands": {
+      "value": "cd ubsio-boostio/test/llt/ && bash run_dt.sh",
+      "source": "ubsio-boostio/README.md - UT章节"
+    },
     "sample_commands": {
       "value": "N/A (无样例程序)",
       "source": "未找到样例执行说明"
     },
+    "build_entry": "cd ubsio-boostio && bash build.sh -t release",
+    "ut_entry": "cd ubsio-boostio/test/llt/ && bash run_dt.sh",
     "special_dependencies": {
       "value": [
         {
@@ -89,9 +99,7 @@
         }
       ],
       "source": "ubsio-boostio/3rdparty/ + build/install_test_tools.sh"
-    },
-    "build_entry": "cd ubsio-boostio && bash build.sh -t release",
-    "ut_entry": "cd ubsio-boostio/test/llt/ && bash run_dt.sh"
+    }
   },
   "execution_log": [
     {
@@ -100,8 +108,7 @@
       "success": true,
       "output": "Image pulled successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:49:00",
@@ -109,8 +116,7 @@
       "success": true,
       "output": "Container started",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:50:00",
@@ -118,8 +124,7 @@
       "success": true,
       "output": "Files copied",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:51:00",
@@ -127,8 +132,7 @@
       "success": true,
       "output": "Build tools installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:53:00",
@@ -136,8 +140,7 @@
       "success": true,
       "output": "Development libraries installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:55:00",
@@ -145,8 +148,7 @@
       "success": true,
       "output": "Additional tools installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:56:00",
@@ -154,8 +156,7 @@
       "success": true,
       "output": "Scripts converted to Unix format",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T20:57:00",
@@ -163,8 +164,7 @@
       "success": true,
       "output": "Build completed successfully. Generated: libbio_sdk.so, libbio_server.so, libbio_interceptor_server.so, libock_interceptor.so, libock_iofwd_proxy.so, bio_daemon",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-02T21:05:00",
@@ -172,8 +172,7 @@
       "success": true,
       "output": "326 tests passed, 0 failed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     }
   ],
   "process_timeline": [
@@ -181,57 +180,49 @@
       "timestamp": "2026-06-02T20:47:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "unknown",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-02T20:48:00",
       "step": "container_setup",
       "action": "拉取 openEuler 24.03 LTS 镜像并启动容器",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T20:50:00",
       "step": "file_copy",
       "action": "复制仓库文件到容器",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T20:51:00",
       "step": "dependency_install",
       "action": "安装构建依赖",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T20:56:00",
       "step": "script_fix",
       "action": "修复 Windows 换行符问题",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T20:57:00",
       "step": "build",
       "action": "执行 release 构建",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T21:05:00",
       "step": "test",
       "action": "执行单元测试",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-02T21:15:00",
       "step": "complete",
       "action": "验证过程完成",
-      "result": "success",
-      "details": {}
+      "result": "success"
     }
   ],
   "final_results": {
@@ -300,38 +291,38 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "",
       "problem": "Windows 换行符导致 shell 脚本执行失败",
-      "error": "build.sh: line 7: $'\\r': command not found",
       "solution": "使用 dos2unix 命令转换脚本格式",
       "source": "通用 Windows/Linux 兼容性问题"
     },
     {
+      "timestamp": "",
       "problem": "缺少 git 命令导致 CMake FetchContent 失败",
-      "error": "error: could not find git for clone of libboundscheck_src-populate",
       "solution": "安装 git 包: dnf install -y git",
       "source": "CMake FetchContent 依赖 git"
     },
     {
+      "timestamp": "",
       "problem": "缺少 infiniband/verbs.h 头文件",
-      "error": "fatal error: infiniband/verbs.h: No such file or directory",
       "solution": "安装 libibverbs-devel (rdma-core-devel) 包",
       "source": "ubs-comm 依赖 RDMA 库"
     },
     {
+      "timestamp": "",
       "problem": "缺少 patch 命令导致 mockcpp 补丁应用失败",
-      "error": "Failed to apply mockcpp patch! Exit code: No such file or directory",
       "solution": "安装 patch 包: dnf install -y patch",
       "source": "mockcpp 构建需要打补丁"
     },
     {
+      "timestamp": "",
       "problem": "openEuler 默认仓库 SSL 连接失败",
-      "error": "Curl error (35): SSL connect error",
       "solution": "配置清华镜像源: mirrors.tuna.tsinghua.edu.cn",
       "source": "网络环境问题"
     },
     {
+      "timestamp": "",
       "problem": "lcov 未在 openEuler 仓库中找到",
-      "error": "No match for argument: lcov",
       "solution": "跳过覆盖率报告，直接运行测试二进制文件",
       "source": "lcov 不在 openEuler 24.03 标准仓库中"
     }

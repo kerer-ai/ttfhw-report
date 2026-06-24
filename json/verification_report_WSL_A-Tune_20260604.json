@@ -6,7 +6,7 @@
     "start_time": "2026-06-04T07:13:00Z",
     "end_time": "2026-06-04T07:22:08Z",
     "duration_seconds": 548,
-    "total_steps": 11,
+    "total_steps": 6,
     "verification_environment": "WSL2 Docker (openEuler 24.03 LTS container)"
   },
   "machine_spec": {
@@ -49,15 +49,35 @@
     },
     "dependencies": {
       "system": {
-        "value": ["golang-bin", "python3", "perf", "sysstat", "hwloc-gui", "lshw", "sqlite", "git"],
+        "value": [
+          "golang-bin",
+          "python3",
+          "perf",
+          "sysstat",
+          "hwloc-gui",
+          "lshw",
+          "sqlite",
+          "git"
+        ],
         "source": "README-zh.md - 方法二：从本仓库源码安装 - 第1步 + Makefile db target需要sqlite3"
       },
       "python": {
-        "value": ["python3-dict2xml", "python3-flask-restful", "python3-pandas", "python3-scikit-optimize", "python3-xgboost", "python3-pyyaml", "python3-scikit-learn"],
+        "value": [
+          "python3-dict2xml",
+          "python3-flask-restful",
+          "python3-pandas",
+          "python3-scikit-optimize",
+          "python3-xgboost",
+          "python3-pyyaml",
+          "python3-scikit-learn"
+        ],
         "source": "README-zh.md - 方法二：2.1 安装A-Tune服务的依赖包"
       },
       "python_optional_db": {
-        "value": ["python3-sqlalchemy", "python3-cryptography"],
+        "value": [
+          "python3-sqlalchemy",
+          "python3-cryptography"
+        ],
         "source": "README-zh.md - 方法二：2.2 安装数据库依赖包（可选）"
       },
       "go_vendor": {
@@ -77,18 +97,12 @@
       "value": "examples/tuning/ 目录下各子目录的示例，如 nginx/README 指导的调优示例",
       "source": "README-zh.md - 二、快速使用指南 - 4、tuning命令 + examples/tuning/ 目录"
     },
-    "build_entry": {
-      "value": "make",
-      "source": "README-zh.md - 方法二：第4步编译 + Makefile all target: abs-python modules atune-adm atuned db"
-    },
-    "ut_entry": {
-      "value": "cd tests && sh run_tests.sh",
-      "source": "Makefile - check target: cd ${CURDIR}/tests && sh run_tests.sh"
-    },
     "special_dependencies": {
       "value": [],
       "source": "未找到特殊依赖（无CAN或其他第三方包下载链接需求）"
-    }
+    },
+    "build_entry": "make",
+    "ut_entry": "cd tests && sh run_tests.sh"
   },
   "execution_log": [
     {
@@ -196,71 +210,61 @@
       "timestamp": "2026-06-04T07:13:00Z",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-04T07:14:00Z",
       "step": "clone_repo",
       "action": "从GitCode克隆A-Tune仓库",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-04T07:15:00Z",
       "step": "pull_image",
       "action": "拉取openEuler 24.03 LTS Docker镜像",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-04T07:16:00Z",
       "step": "start_container",
       "action": "启动openEuler 24.03容器",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-04T07:16:20Z",
       "step": "install_system_deps",
       "action": "安装系统构建依赖",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-04T07:16:30Z",
       "step": "install_python_deps",
       "action": "安装Python依赖包",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-04T07:17:00Z",
       "step": "build_make",
       "action": "执行make编译",
-      "result": "partial_success (Go组件成功，db target失败)",
-      "details": {}
+      "result": "partial_success (Go组件成功，db target失败)"
     },
     {
       "timestamp": "2026-06-04T07:21:00Z",
       "step": "verify_binaries",
       "action": "验证编译产物的CLI功能",
-      "result": "success (atune-adm, atuned CLI正常工作)",
-      "details": {}
+      "result": "success (atune-adm, atuned CLI正常工作)"
     },
     {
       "timestamp": "2026-06-04T07:21:30Z",
       "step": "test_tools",
       "action": "测试模型生成和基本命令",
-      "result": "failed (容器环境限制)",
-      "details": {}
+      "result": "failed (容器环境限制)"
     },
     {
       "timestamp": "2026-06-04T07:22:00Z",
       "step": "cleanup",
       "action": "停止并删除容器",
-      "result": "pending",
-      "details": {}
+      "result": "pending"
     }
   ],
   "final_results": {
@@ -308,7 +312,8 @@
       "passed": 0,
       "failed": 0,
       "skipped": 22,
-      "reason": "测试脚本(tests/run_tests.sh)要求: 1) systemd运行atuned服务 2) /etc/atuned/atuned.cnf配置文件 3) 真实网络/磁盘设备。容器环境不具备这些条件。"
+      "reason": "测试脚本(tests/run_tests.sh)要求: 1) systemd运行atuned服务 2) /etc/atuned/atuned.cnf配置文件 3) 真实网络/磁盘设备。容器环境不具备这些条件。",
+      "failures": []
     },
     "sample": {
       "status": "not_run",
@@ -346,39 +351,39 @@
   ],
   "problems_encountered": [
     {
-      "timestamp": "2026-06-04T07:17:00Z",
+      "timestamp": "",
       "problem": "make失败：db target SQLite初始化大量Parse error",
-      "cause": "openEuler 24.03的SQLite 3.42.0编译时设置DQS=0，禁用双引号字符串字面量。A-Tune的init.sql使用双引号包裹字符串值（如\"CONFIG_ACPI\"），DQS=0会将它们当作列标识符。",
       "solution": "未解决。需要修改init.sql将双引号改为单引号，或使用支持DQS=1的SQLite版本。",
-      "source": "问题定位：SQLite compile_options输出显示DQS=0"
+      "source": "问题定位：SQLite compile_options输出显示DQS=0",
+      "cause": "openEuler 24.03的SQLite 3.42.0编译时设置DQS=0，禁用双引号字符串字面量。A-Tune的init.sql使用双引号包裹字符串值（如\"CONFIG_ACPI\"），DQS=0会将它们当作列标识符。"
     },
     {
-      "timestamp": "2026-06-04T07:21:00Z",
+      "timestamp": "",
       "problem": "集成测试无法在容器中运行",
-      "cause": "测试脚本需要systemd服务管理、已安装并运行的atuned服务、真实网络/磁盘设备。容器环境（非特权、无systemd）无法满足这些前置条件。",
       "solution": "跳过。完整的集成测试需要在安装了A-Tune的openEuler物理机/虚拟机上运行。",
-      "source": "tests/test_lib.sh - check_service_started函数使用systemctl"
+      "source": "tests/test_lib.sh - check_service_started函数使用systemctl",
+      "cause": "测试脚本需要systemd服务管理、已安装并运行的atuned服务、真实网络/磁盘设备。容器环境（非特权、无systemd）无法满足这些前置条件。"
     },
     {
-      "timestamp": "2026-06-04T07:21:30Z",
-      "problem": "模型生成工具(generate_models.py)执行perf失败",
-      "cause": "perf stat需要访问内核性能计数器（perf_event_open系统调用），容器默认权限不足。",
+      "timestamp": "",
+      "problem": "模型生成工具(genreate_models.py)执行perf失败",
       "solution": "未解决。需要在特权容器（--privileged）或宿主机上运行。",
-      "source": "问题定位：perf stat -a -e cycles返回exit status 255"
+      "source": "问题定位：perf stat -a -e cycles返回exit status 255",
+      "cause": "perf stat需要访问内核性能计数器（perf_event_open系统调用），容器默认权限不足。"
     },
     {
-      "timestamp": "2026-06-04T07:21:20Z",
+      "timestamp": "",
       "problem": "atuned daemon无法启动（缺少配置）",
-      "cause": "make install未执行，因此/etc/atuned/atuned.cnf配置文件不存在。这是预期行为，非构建问题。",
       "solution": "执行make install即可解决。make install会安装配置文件、证书等。",
-      "source": "atuned.go:111 - could not find default config file"
+      "source": "atuned.go:111 - could not find default config file",
+      "cause": "make install未执行，因此/etc/atuned/atuned.cnf配置文件不存在。这是预期行为，非构建问题。"
     },
     {
-      "timestamp": "2026-06-04T07:16:20Z",
+      "timestamp": "",
       "problem": "golang-bin包名在openEuler 24.03中不存在",
-      "cause": "README文档中的golang-bin是旧版本openEuler的包名。openEuler 24.03中Go编译器包名为golang。",
       "solution": "已解决。自动安装了golang包（go 1.21.4）。",
-      "source": "dnf包搜索结果"
+      "source": "dnf包搜索结果",
+      "cause": "README文档中的golang-bin是旧版本openEuler的包名。openEuler 24.03中Go编译器包名为golang。"
     }
   ],
   "session_export_file": ""

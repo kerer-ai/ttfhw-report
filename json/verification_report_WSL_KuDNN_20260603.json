@@ -1,7 +1,7 @@
 {
   "metadata": {
     "repo_url": "https://gitcode.com/kunpengcompute/kudnn.git",
-    "repo_path": "/home/zhaogev5/tmp_src/kudnn",
+    "repo_path": "/home/user/tmp_src/kudnn",
     "repo_name": "KuDNN",
     "repo_description": "鲲鹏深度神经网络算子库 - Kunpeng Deep Neural Network operator library, using KML BLAS and JIT dynamic code generation",
     "start_time": "2026-06-10T11:40:00",
@@ -25,12 +25,12 @@
       "os": "openEuler 24.03 (LTS)",
       "architecture": "aarch64 (QEMU emulated)",
       "cpu_cores": 24,
-      "memory": "15Gi",
-      "image_source": {
-        "type": "base_image",
-        "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts (arm64 manifest)",
-        "selection_reason": "README 文档推荐 openEuler AArch64 → 选择 openEuler 24.03 LTS AArch64（通过 --platform linux/arm64 + QEMU 仿真）"
-      }
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts (arm64 manifest)",
+      "selection_reason": "README 文档推荐 openEuler AArch64 → 选择 openEuler 24.03 LTS AArch64（通过 --platform linux/arm64 + QEMU 仿真）"
     }
   },
   "document_reading_summary": {
@@ -97,8 +97,8 @@
       "value": "无独立样例程序，算子库本身作为 oneDNN 插件或 PyTorch/TensorFlow 后端加速器使用。开发指南见: https://www.hikunpeng.com/document/detail/zh/kunpenghpcs/hpckit/devg/KunpengHPCKit_developer_158.html",
       "source": "README.md - 学习教程章节"
     },
-    "build_entry": "bisheng: sh build/build_kudnn.sh --only_kudnn=on --build_type=Release --compiler=clang --install_path=[install_dir] ; gcc: sh build/build_kudnn.sh --only_kudnn=on --build_type=Release --compiler=gcc --install_path=[install_dir]",
-    "ut_entry": "compile_tests: sh build/build_kudnn.sh --only_tests=on --compiler=clang --install_path=[install_dir] ; run_tests: ./kudnn_gtest --gtest_filter=TestName (located in out/test/dnn/llt/gtest/) ; list_tests: ./kudnn_gtest --gtest_list_tests ; prerequisite: sh build/pre_env_kudnn.sh (downloads googletest v1.15.2)"
+    "build_entry": "sh build/build_kudnn.sh --only_kudnn=on --build_type=Release --compiler=clang --install_path=[install_dir] ; sh build/build_kudnn.sh --only_kudnn=on --build_type=Release --compiler=gcc --install_path=[install_dir]",
+    "ut_entry": "sh build/build_kudnn.sh --only_tests=on --compiler=clang --install_path=[install_dir] ; ./kudnn_gtest --gtest_filter=TestName (located in out/test/dnn/llt/gtest/) ; ./kudnn_gtest --gtest_list_tests ; sh build/pre_env_kudnn.sh (downloads googletest v1.15.2)"
   },
   "execution_log": [
     {
@@ -219,103 +219,96 @@
       "timestamp": "2026-06-10T11:40:00",
       "step": "start",
       "action": "验证流程启动",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-10T11:40:00",
       "step": "clone_repo",
       "action": "克隆仓库到 ./tmp_src/kudnn",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T11:42:00",
       "step": "read_docs",
       "action": "阅读 README.md, README_en.md, build/ scripts",
-      "result": "success - 提取了完整的架构/依赖/构建/测试信息",
-      "details": {}
+      "result": "success - 提取了完整的架构/依赖/构建/测试信息"
     },
     {
       "timestamp": "2026-06-10T11:42:00",
       "step": "setup_qemu",
       "action": "配置 QEMU binfmt_misc 支持 AArch64",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T11:43:00",
       "step": "pull_image",
       "action": "拉取 openEuler 24.03 LTS AArch64 镜像",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T11:45:00",
       "step": "download_hpckit",
       "action": "从华为云镜像下载 HPCKit 26.0.RC1 (2.6GB)",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T11:50:00",
       "step": "start_container",
       "action": "启动 AArch64 openEuler Docker 容器",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T11:52:00",
       "step": "install_hpckit",
       "action": "解压并安装 HPCKit (含 OS 检测绕过)",
-      "result": "success (Bisheng/GCC/KML/KUPL installed)",
-      "details": {}
+      "result": "success (Bisheng/GCC/KML/KUPL installed)"
     },
     {
       "timestamp": "2026-06-10T12:00:00",
       "step": "install_build_tools",
       "action": "在容器中安装 cmake/make/environment-modules",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-10T12:04:00",
       "step": "verify_compiler",
       "action": "验证 Bisheng 编译器可用性",
-      "result": "success (clang 19.1.7, aarch64 target)",
-      "details": {}
+      "result": "success (clang 19.1.7, aarch64 target)"
     },
     {
       "timestamp": "2026-06-10T12:05:00",
       "step": "build_kudnn",
       "action": "执行 KuDNN 构建 (cmake + make, Bisheng compiler)",
-      "result": "cmake配置成功, 编译进行中(无错误, 因QEMU仿真速度慢中止)",
-      "details": {}
+      "result": "cmake配置成功, 编译进行中(无错误, 因QEMU仿真速度慢中止)"
     },
     {
       "timestamp": "2026-06-10T13:05:00",
       "step": "generate_report",
       "action": "生成验证报告",
-      "result": "success",
-      "details": {}
+      "result": "success"
     }
   ],
   "final_results": {
     "build": {
       "status": "partial_success",
-      "duration_seconds": 3780,
+      "duration_seconds": 0,
       "note": "在 QEMU AArch64 仿真环境下，包含 SVE/SVE2/SME 指令的代码编译极为缓慢。cmake 配置阶段完全成功，编译无错误。在实际 Kunpeng 920 硬件上预期可正常完成编译。",
       "artifacts": [
         {
-          "name": "cmake build system configured at out/build/"
+          "name": "cmake build system configured at out/build/",
+          "path": "unknown",
+          "size": "unknown"
         },
         {
-          "name": "Compilation files generated (reorder kernels, matmul JIT, convolution kernels)"
+          "name": "Compilation files generated (reorder kernels, matmul JIT, convolution kernels)",
+          "path": "unknown",
+          "size": "unknown"
         }
       ],
       "compiler_used": "BiSheng Enterprise 5.1.0.2 clang version 19.1.7",
       "target_arch": "aarch64-unknown-linux-gnu",
-      "compile_flags": "-march=armv9.2-a+fp+simd+bf16+sve+sve2+sme -O3 -DKUDNNL_920Pro"
+      "compile_flags": "-march=armv9.2-a+fp+simd+bf16+sve+sve2+sme -O3 -DKUDNNL_920Pro",
+      "status_detail": "partial_success - cmake successful, compilation in progress (QEMU bottleneck)"
     },
     "ut": {
       "status": "not_run",
@@ -323,12 +316,16 @@
       "total": 0,
       "passed": 0,
       "failed": 0,
-      "note": "测试程序需要 googletest v1.15.2 (通过 build/pre_env_kudnn.sh 下载)，且需要先完成 Bisheng 编译的 KuDNN 库"
+      "note": "测试程序需要 googletest v1.15.2 (通过 build/pre_env_kudnn.sh 下载)，且需要先完成 Bisheng 编译的 KuDNN 库",
+      "status_detail": "skipped - requires successful build and GoogleTest installation",
+      "failures": []
     },
     "sample": {
-      "status": "unknown",
-      "duration_seconds": null,
-      "note": "KuDNN 无独立样例程序。作为算子库通过 oneDNN 插件或 PyTorch/TensorFlow 后端集成使用。开发指南有代码样例。"
+      "status": "not_run",
+      "duration_seconds": 0,
+      "note": "KuDNN 无独立样例程序。作为算子库通过 oneDNN 插件或 PyTorch/TensorFlow 后端集成使用。开发指南有代码样例。",
+      "status_detail": "no_standalone_samples",
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -342,31 +339,37 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "",
       "problem": "openEuler 24.03 (LTS) 不在 HPCKit 支持的 OS 列表中",
       "solution": "修改 bootstrapper.conf 中 SUPPORT_OS_NAME 添加 openEuler24.03(LTS)",
       "source": "install.sh line 777 的 check_os() 函数"
     },
     {
+      "timestamp": "",
       "problem": "基础 openEuler 镜像缺少 find/xargs/getopt 等命令",
       "solution": "dnf install -y findutils util-linux diffutils",
       "source": "容器执行时发现"
     },
     {
+      "timestamp": "",
       "problem": "docker pull openEuler arm64 镜像被 amd64 缓存覆盖",
       "solution": "通过 digest (sha256:7c60c59...) 拉取 arm64 manifest 并重新 tag",
       "source": "Docker multi-arch 行为"
     },
     {
+      "timestamp": "",
       "problem": "QEMU AArch64 仿真下编译极慢（SVE/SVE2/SME 指令模拟）",
       "solution": "降低并行任务数到 4-14 之间，但在 QEMU 下仍需数小时。建议在实际 Kunpeng 硬件上编译。",
       "source": "性能分析"
     },
     {
+      "timestamp": "",
       "problem": "Hyper-MPI 安装失败：不支持的 OS",
       "solution": "Hyper-MPI 不影响 KuDNN 编译，可忽略",
       "source": "HPCKit install 输出"
     },
     {
+      "timestamp": "",
       "problem": "HIO 安装失败：缺少 libhdf5/libnetcdf/libpnetcdf",
       "solution": "HIO 不影响 KuDNN 编译，可忽略",
       "source": "HPCKit install 输出"

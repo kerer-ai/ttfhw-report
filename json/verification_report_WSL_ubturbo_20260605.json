@@ -1,6 +1,7 @@
 {
   "metadata": {
     "repo_name": "ubturbo",
+    "repo_path": "tmp_src",
     "repo_url": "https://gitcode.com/openeuler/ubturbo.git",
     "start_time": "2026-06-05T10:58:00+08:00",
     "end_time": "2026-06-05T11:20:00+08:00",
@@ -99,8 +100,7 @@
       "success": true,
       "output": "克隆成功",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T10:59:00",
@@ -109,8 +109,7 @@
       "success": true,
       "output": "Image is up to date",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T10:59:30",
@@ -119,8 +118,7 @@
       "success": true,
       "output": "容器启动成功",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:00:00",
@@ -129,8 +127,7 @@
       "success": true,
       "output": "Upgraded: libpng, vim-minimal. Complete!",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:01:00",
@@ -139,8 +136,7 @@
       "success": true,
       "output": "Complete!",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:02:00",
@@ -149,8 +145,7 @@
       "success": true,
       "output": "所有11个子模块克隆成功",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:03:00",
@@ -159,8 +154,7 @@
       "success": false,
       "output": "首次构建失败",
       "error": "fatal error: libvirt/libvirt.h: No such file or directory\nNo rule to make target '/usr/lib64/libboundscheck.so'",
-      "returncode": 2,
-      "details": {}
+      "returncode": 2
     },
     {
       "timestamp": "2026-06-05T11:04:00",
@@ -169,8 +163,7 @@
       "success": true,
       "output": "libboundscheck.so 编译并安装到 /usr/lib64/",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:05:00",
@@ -179,8 +172,7 @@
       "success": true,
       "output": "构建成功，耗时约7秒。产物: ub_turbo_exec, libubturbo_client.so, librmrs_ubturbo_plugin.so",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:06:00",
@@ -189,8 +181,7 @@
       "success": true,
       "output": "rmrs_ut 和 ub_turbo_exec 构建成功",
       "error": "ubturbo_ut 链接失败: undefined reference to InitLog",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:07:00",
@@ -199,8 +190,7 @@
       "success": true,
       "output": "444 tests from 17 test suites ran. 444 PASSED.",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T11:08:00",
@@ -209,8 +199,7 @@
       "success": true,
       "output": "进程启动后因 Smap 模块启动失败退出（预期行为，未安装 SMAP）",
       "error": "",
-      "returncode": 1,
-      "details": {}
+      "returncode": 1
     },
     {
       "timestamp": "2026-06-05T11:09:00",
@@ -219,8 +208,7 @@
       "success": true,
       "output": "容器已清理",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     }
   ],
   "process_timeline": [
@@ -228,101 +216,87 @@
       "timestamp": "2026-06-05T10:58:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-05T10:58:30",
       "step": "clone",
       "action": "克隆 ubturbo 仓库",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-05T10:59:00",
       "step": "docs",
       "action": "文档阅读 - 收集构建/测试信息",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-05T10:59:30",
       "step": "container",
       "action": "启动 openEuler 24.03 LTS 容器",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-05T11:00:00",
       "step": "deps_install",
       "action": "安装构建依赖（cmake, gcc, gcc-c++, make, git, dos2unix, bc, libvirt-devel）",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-05T11:02:00",
       "step": "submodules",
       "action": "初始化 git 子模块",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-05T11:03:00",
       "step": "build_attempt_1",
       "action": "首次构建 - 失败（缺少 libvirt-devel 和 libboundscheck）",
-      "result": "failed",
-      "details": {}
+      "result": "failed"
     },
     {
       "timestamp": "2026-06-05T11:04:00",
       "step": "fix_deps",
       "action": "安装缺失依赖并编译 libboundscheck",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-05T11:05:00",
       "step": "build",
       "action": "重新构建 - 成功",
       "result": "success",
-      "duration_seconds": 7,
-      "details": {}
+      "duration_seconds": 7
     },
     {
       "timestamp": "2026-06-05T11:06:00",
       "step": "test_build",
       "action": "构建测试 - rmrs_ut 成功，ubturbo_ut 链接失败",
-      "result": "partial",
-      "details": {}
+      "result": "partial"
     },
     {
       "timestamp": "2026-06-05T11:07:00",
       "step": "unit_tests",
       "action": "运行 rmrs_ut - 444/444 通过",
       "result": "success",
-      "duration_seconds": 10,
-      "details": {}
+      "duration_seconds": 10
     },
     {
       "timestamp": "2026-06-05T11:08:00",
       "step": "sample_run",
       "action": "运行 ub_turbo_exec - 因 SMAP 未安装而退出（预期行为）",
-      "result": "expected_failure",
-      "details": {}
+      "result": "expected_failure"
     },
     {
       "timestamp": "2026-06-05T11:09:00",
       "step": "cleanup",
       "action": "清理容器",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-05T11:20:00",
       "step": "report",
       "action": "生成验证报告",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     }
   ],
   "final_results": {
@@ -331,16 +305,19 @@
       "duration_seconds": 7,
       "artifacts": [
         {
-          "type": "ub_turbo_exec",
-          "count": 1
+          "name": "ub_turbo_exec",
+          "path": "dist/release/bin/ub_turbo_exec",
+          "size": "470648 bytes (460KB)"
         },
         {
-          "type": "libubturbo_client.so",
-          "count": 1
+          "name": "libubturbo_client.so",
+          "path": "dist/release/lib/libubturbo_client.so",
+          "size": "92464 bytes (90KB)"
         },
         {
-          "type": "librmrs_ubturbo_plugin.so",
-          "count": 1
+          "name": "librmrs_ubturbo_plugin.so",
+          "path": "dist/release/lib/librmrs_ubturbo_plugin.so",
+          "size": "990624 bytes (967KB)"
         }
       ]
     },
@@ -350,13 +327,11 @@
       "total": 444,
       "passed": 444,
       "failed": 0,
-      "sub_components": {
-        "skipped_targets": [
-          "ubturbo_ut"
-        ],
-        "skip_reason": "ubturbo_ut 目标链接失败：undefined reference to InitLog(void (*)(int, char const*, char const*))",
-        "failures": []
-      }
+      "skipped_targets": [
+        "ubturbo_ut"
+      ],
+      "skip_reason": "ubturbo_ut 目标链接失败：undefined reference to InitLog(void (*)(int, char const*, char const*))",
+      "failures": []
     },
     "sample": {
       "status": "partial_success",
@@ -372,28 +347,49 @@
     }
   },
   "documentation_gaps": [
-    "README 中未明确列出 libvirt-devel 为编译依赖（源码中使用 #include <libvirt/libvirt.h> 但文档未提及）",
-    "README 中未说明 libboundscheck 子模块需要手动编译安装",
-    "文档中未提供 SMAP 的具体安装方法或下载链接（仅在'前置条件'中说明需提前安装）",
-    "test/run_dt.sh 文件不存在，但 build.sh 中 -t test 目标引用了该脚本",
-    "ubturbo_ut 测试目标存在链接错误（InitLog 符号缺失），测试 CMakeLists.txt 未包含必要的源文件",
-    "CMakeLists.txt 中硬编码了 /etc/openEuler-release 读取，在非 openEuler 系统上构建可能失败",
-    "README 中的 OS_VERSION 在 openEuler 24.03 LTS 上解析为 'oesp'（正则匹配不完整，缺少 SP 版本号）"
+    {
+      "description": "README 中未明确列出 libvirt-devel 为编译依赖（源码中使用 #include <libvirt/libvirt.h> 但文档未提及）",
+      "severity": "unknown"
+    },
+    {
+      "description": "README 中未说明 libboundscheck 子模块需要手动编译安装",
+      "severity": "unknown"
+    },
+    {
+      "description": "文档中未提供 SMAP 的具体安装方法或下载链接（仅在'前置条件'中说明需提前安装）",
+      "severity": "unknown"
+    },
+    {
+      "description": "test/run_dt.sh 文件不存在，但 build.sh 中 -t test 目标引用了该脚本",
+      "severity": "unknown"
+    },
+    {
+      "description": "ubturbo_ut 测试目标存在链接错误（InitLog 符号缺失），测试 CMakeLists.txt 未包含必要的源文件",
+      "severity": "unknown"
+    },
+    {
+      "description": "CMakeLists.txt 中硬编码了 /etc/openEuler-release 读取，在非 openEuler 系统上构建可能失败",
+      "severity": "unknown"
+    },
+    {
+      "description": "README 中的 OS_VERSION 在 openEuler 24.03 LTS 上解析为 'oesp'（正则匹配不完整，缺少 SP 版本号）",
+      "severity": "unknown"
+    }
   ],
   "problems_encountered": [
     {
       "problem": "首次构建失败: fatal error: libvirt/libvirt.h: No such file or directory",
       "solution": "在 CMakeLists.txt 源码中发现 #include <libvirt/libvirt.h>，安装 libvirt-devel",
       "source": "plugins/rmrs/src/ubturbo_plugin/export/libvirt/rmrs_libvirt_module.h:15",
-      "root_cause": "RMRS 插件依赖 libvirt，但 README 中未提及此依赖",
-      "command": "dnf install -y libvirt-devel"
+      "command": "dnf install -y libvirt-devel",
+      "root_cause": "RMRS 插件依赖 libvirt，但 README 中未提及此依赖"
     },
     {
       "problem": "首次构建失败: No rule to make target '/usr/lib64/libboundscheck.so'",
       "solution": "进入 3rdparty/libboundscheck 目录执行 make 编译，然后 cp 到 /usr/lib64/",
       "source": "test/CMakeLists.txt 第118行 find_library(BOUNDSCHECK_LIB boundscheck)",
-      "root_cause": "libboundscheck 子模块需要手动编译，CMakeLists.txt 通过 find_library(boundscheck) 查找系统路径",
-      "command": "cd 3rdparty/libboundscheck && make && cp lib/libboundscheck.so /usr/lib64/"
+      "command": "cd 3rdparty/libboundscheck && make && cp lib/libboundscheck.so /usr/lib64/",
+      "root_cause": "libboundscheck 子模块需要手动编译，CMakeLists.txt 通过 find_library(boundscheck) 查找系统路径"
     },
     {
       "problem": "ubturbo_ut 测试目标链接失败: undefined reference to InitLog",

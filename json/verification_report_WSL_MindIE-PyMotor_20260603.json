@@ -1,6 +1,7 @@
 {
   "metadata": {
     "repo_name": "MindIE-PyMotor",
+    "repo_path": "./tmp_src",
     "repo_url": "https://gitcode.com/Ascend/MindIE-PyMotor.git",
     "start_time": "2026-06-03T09:07:00",
     "end_time": "2026-06-03T04:20:00",
@@ -73,10 +74,12 @@
       "value": "bash build.sh（生成 protobuf + pip wheel 构建）",
       "source": "build.sh"
     },
+    "build_entry": "bash build.sh",
     "ut_commands": {
       "value": "bash tests/run_tests.sh（运行 pytest tests/，默认并行6进程）",
       "source": "tests/run_tests.sh + README.md（贡献指南提及）"
     },
+    "ut_entry": "bash tests/run_tests.sh",
     "sample_commands": {
       "value": "样例程序需要 K8s 集群 + NPU 硬件（Atlas 800I A2 推理服务器），无法在纯容器中运行",
       "source": "docs/zh/user_guide/quick_start.md"
@@ -84,9 +87,7 @@
     "special_dependencies": {
       "value": [],
       "source": "未找到 CANN 等特殊依赖的本地构建需求。CANN 仅在 K8s 集群部署场景的文档中提及，非构建/测试依赖"
-    },
-    "build_entry": "bash build.sh（生成 protobuf + pip wheel 构建）",
-    "ut_entry": "bash tests/run_tests.sh（运行 pytest tests/，默认并行6进程）"
+    }
   },
   "execution_log": [
     {
@@ -96,8 +97,7 @@
       "success": true,
       "output": "Cloning into 'tmp_src'...",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T09:10:00",
@@ -106,8 +106,7 @@
       "success": true,
       "output": "Image is up to date for hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T09:11:00",
@@ -117,8 +116,7 @@
       "output": "Container started successfully",
       "error": "",
       "returncode": 0,
-      "note": "Volume mount 失败（Docker Desktop Windows 路径问题），改用 docker cp 复制文件",
-      "details": {}
+      "note": "Volume mount 失败（Docker Desktop Windows 路径问题），改用 docker cp 复制文件"
     },
     {
       "timestamp": "2026-06-03T09:12:00",
@@ -127,8 +125,7 @@
       "success": true,
       "output": "Files copied successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T09:13:00",
@@ -137,8 +134,7 @@
       "success": true,
       "output": "Successfully installed pip-23.3.1 setuptools-68.0.0",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T09:14:00",
@@ -147,8 +143,7 @@
       "success": true,
       "output": "Configured TUNA mirror for pip",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T03:00:00",
@@ -158,8 +153,7 @@
       "output": "Metadata cache created (OS, update repos)",
       "error": "",
       "returncode": 0,
-      "note": "TUNA mirror 用于 dnf 源，更新仓库 91MB 元数据下载耗时约30分钟",
-      "details": {}
+      "note": "TUNA mirror 用于 dnf 源，update 仓库 91MB 元数据下载耗时约30分钟"
     },
     {
       "timestamp": "2026-06-03T03:40:00",
@@ -168,8 +162,7 @@
       "success": true,
       "output": "findutils-2:4.9.0-1.oe2403.x86_64 installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T03:50:00",
@@ -178,8 +171,7 @@
       "success": true,
       "output": "All 48+ packages installed successfully via TUNA mirror",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T04:15:00",
@@ -189,8 +181,7 @@
       "output": "CRLF converted to LF",
       "error": "",
       "returncode": 0,
-      "note": "Windows git checkout 导致 CRLF 行尾",
-      "details": {}
+      "note": "Windows git checkout 导致 CRLF 行尾"
     },
     {
       "timestamp": "2026-06-03T04:15:00",
@@ -200,8 +191,7 @@
       "output": "python symlink created",
       "error": "",
       "returncode": 0,
-      "note": "build.sh 和 generate_proto.sh 使用 python 命令而非 python3",
-      "details": {}
+      "note": "build.sh 和 generate_proto.sh 使用 python 命令而非 python3"
     },
     {
       "timestamp": "2026-06-03T04:19:00",
@@ -211,8 +201,7 @@
       "output": "Protobuf files generated. wheel built: dist/motor-0.1.0-py3-none-any.whl (559K)",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 5.5,
-      "details": {}
+      "duration_seconds": 5.5
     },
     {
       "timestamp": "2026-06-03T04:19:00",
@@ -222,8 +211,7 @@
       "output": "1315 passed in 27.69s. All tests passed successfully with no warnings",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 30.4,
-      "details": {}
+      "duration_seconds": 30.4
     }
   ],
   "process_timeline": [
@@ -325,7 +313,7 @@
       "results": [
         {
           "name": "examples/",
-          "status": "not_run",
+          "status": "skipped",
           "reason": "样例程序需要 K8s 集群 + NPU 硬件（Atlas 800I A2 推理服务器），无法在纯 Docker 容器中运行。部署方式涉及 PD 分离部署、MindCluster、Volcano 等 K8s 组件"
         }
       ]
@@ -339,45 +327,45 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "",
       "problem": "Docker volume mount 在 Windows Docker Desktop 中失败",
       "solution": "改用 docker cp 复制文件到容器内",
-      "severity": "low",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "dnf install gcc/gcc-c++ 因 openEuler 镜像源下载速度极慢（~10KB/s）多次超时",
       "solution": "项目实际不需要 gcc（纯 Python 项目，依赖均有预编译 wheel），跳过 gcc 安装",
-      "severity": "medium",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "容器中无 pip，仅有 python3",
       "solution": "使用 python3 -m ensurepip --upgrade 安装 pip",
-      "severity": "low",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "build.sh 和 generate_proto.sh 使用 'python' 命令，但 openEuler 仅有 'python3'",
       "solution": "创建符号链接 ln -s /usr/bin/python3 /usr/bin/python",
-      "severity": "low",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "脚本文件有 CRLF 行尾（Windows git checkout 导致）",
       "solution": "使用 sed -i 's/\\r$//' 转换 LF",
-      "severity": "low",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "容器中无 find 命令（findutils 未安装）",
       "solution": "从 OS 仓库 dnf install findutils（小包，下载较快）",
-      "severity": "low",
       "source": ""
     },
     {
+      "timestamp": "",
       "problem": "tests/run_tests.sh 中 pip install pytest-xdist 失败（pip 命令不存在，仅有 pip3）",
       "solution": "pytest-xdist 已通过 requirements 预装，脚本中缺失不影响测试运行",
-      "severity": "low",
       "source": ""
     }
   ],

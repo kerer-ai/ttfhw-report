@@ -1,12 +1,12 @@
 {
   "metadata": {
+    "repo_path": "https://gitcode.com/Ascend/MindIE-LLM.git (cloned to ./tmp_src/)",
     "repo_name": "MindIE-LLM",
-    "repo_path": "./tmp_src/",
-    "repo_url": "https://gitcode.com/Ascend/MindIE-LLM.git",
     "start_time": "2026-06-04T03:19:00+08:00",
-    "end_time": "2026-06-04T04:37:00+08:00",
-    "duration_seconds": 4680,
-    "total_steps": 15
+    "end_time": "2026-06-04T12:42:00+08:00",
+    "duration_seconds": 33780,
+    "total_steps": 15,
+    "repo_url": "https://gitcode.com/Ascend/MindIE-LLM.git"
   },
   "machine_spec": {
     "host_machine": {
@@ -98,8 +98,7 @@
       "success": true,
       "output": "仓库克隆成功，包含mindie_llm/, src/, examples/, tests/, docs/等目录",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:20:00",
@@ -107,8 +106,7 @@
       "success": true,
       "output": "openEuler 24.03 LTS镜像拉取成功（已存在缓存）",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:21:00",
@@ -116,8 +114,7 @@
       "success": true,
       "output": "容器启动成功，x86_64架构，20核，15Gi内存",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:22:00",
@@ -125,8 +122,7 @@
       "success": true,
       "output": "gcc 12.3.1, cmake 3.27.9, Python 3.11.6 安装成功",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:25:00",
@@ -134,8 +130,7 @@
       "success": true,
       "output": "requirements.txt安装成功(posix_ipc, pybind11, networkx, pytz); PyTorch 2.12.0+cpu安装成功",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:28:00",
@@ -144,8 +139,7 @@
       "output": "第三方依赖构建失败 - 构建系统使用CMake FetchContent下载zip文件但提取时格式不匹配（zlib为zip但cmake查找*.tar.*）",
       "error": "CMake Error: No source directory specified for -S; gmake: *** [CMakeFiles/zlib_pkg.dir/build.make:71: CMakeFiles/zlib_pkg] Error 1",
       "returncode": 2,
-      "solution": "改用系统包管理器(dnf)安装第三方依赖，并为缺失的包(prometheus-cpp, grpc等)从OBS下载源码单独编译",
-      "details": {}
+      "solution": "改用系统包管理器(dnf)安装第三方依赖，并为缺失的包(prometheus-cpp, grpc等)从OBS下载源码单独编译"
     },
     {
       "timestamp": "2026-06-04T03:35:00",
@@ -153,8 +147,7 @@
       "success": true,
       "output": "系统包安装成功，但protobuf缺少libprotobuf-lite.so、grpc缺少cmake配置文件",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:40:00",
@@ -162,8 +155,7 @@
       "success": true,
       "output": "prometheus-cpp编译安装成功到 /workspace/third_party/output/prometheus-cpp",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T03:50:00",
@@ -172,8 +164,7 @@
       "output": "所有第三方依赖编译安装成功",
       "error": "",
       "returncode": 0,
-      "note": "遇到多个ABI兼容性问题：系统protobuf与自定义abseil链接冲突，需要多次重建",
-      "details": {}
+      "note": "遇到多个ABI兼容性问题：系统protobuf与自定义abseil链接冲突，需要多次重建"
     },
     {
       "timestamp": "2026-06-04T04:10:00",
@@ -181,8 +172,7 @@
       "success": true,
       "output": "boost编译安装成功到 /workspace/third_party/output/boost",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T04:20:00",
@@ -191,8 +181,7 @@
       "output": "为grpc, protobuf, re2, c-ares, boost创建了自定义cmake配置文件",
       "error": "",
       "returncode": 0,
-      "note": "解决了多个ABI兼容性和路径引用问题",
-      "details": {}
+      "note": "解决了多个ABI兼容性和路径引用问题"
     },
     {
       "timestamp": "2026-06-04T04:25:00",
@@ -200,8 +189,7 @@
       "success": true,
       "output": "CMake配置成功，找到所有依赖（ZLIB, Boost 1.87.0, OpenSSL, re2, protobuf, gRPC, Torch, Python 3.11, pybind11）",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T04:26:00",
@@ -209,8 +197,7 @@
       "success": true,
       "output": "构建成功，产物包括: libfoundation.so(780K), libsystem_log.so(7.7M), libmindie_grpc.a(12M), libmindie_protobuf.a(8.4M)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T04:35:00",
@@ -218,8 +205,7 @@
       "success": true,
       "output": "测试依赖安装成功，mindie_llm Python模块可导入",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T04:36:00",
@@ -228,8 +214,7 @@
       "output": "测试收集阶段失败 - 测试代码需要MINDIE_LLM_HOME_PATH等环境变量",
       "error": "TypeError: expected str, bytes or os.PathLike object, not NoneType",
       "returncode": 2,
-      "note": "测试需要完整的环境配置和NPU硬件，在无NPU的容器中无法运行",
-      "details": {}
+      "note": "测试需要完整的环境配置和NPU硬件，在无NPU的容器中无法运行"
     }
   ],
   "process_timeline": [
@@ -394,81 +379,83 @@
     }
   },
   "documentation_gaps": [
-    {
-      "gap": "build.sh 3rd构建系统在openEuler 24.03 LTS上存在格式兼容性问题：dependency.json中部分包为zip格式（如zlib-openEuler.zip），但cmake提取时查找*.tar.*文件",
-      "description": "build.sh 3rd构建系统在openEuler 24.03 LTS上存在格式兼容性问题：dependency.json中部分包为zip格式（如zlib-openEuler.zip），但cmake提取时查找*.tar.*文件"
-    },
-    {
-      "gap": "README.md中未详细说明无NPU硬件时的最小构建流程（仅构建C++核心部分）",
-      "description": "README.md中未详细说明无NPU硬件时的最小构建流程（仅构建C++核心部分）"
-    },
-    {
-      "gap": "文档推荐的编译安装方式需要完整的CANN + torch_npu环境，未提供降级构建方案",
-      "description": "文档推荐的编译安装方式需要完整的CANN + torch_npu环境，未提供降级构建方案"
-    },
-    {
-      "gap": "third_party_entry/dependency.json中的下载链接依赖华为云OBS服务，网络不可达时无法构建",
-      "description": "third_party_entry/dependency.json中的下载链接依赖华为云OBS服务，网络不可达时无法构建"
-    },
-    {
-      "gap": "环境准备文档(preparing_software_and_dependencies.md)中的软件下载链接指向社区页面而非直接下载URL",
-      "description": "环境准备文档(preparing_software_and_dependencies.md)中的软件下载链接指向社区页面而非直接下载URL"
-    },
-    {
-      "gap": "未明确说明gcc版本要求与实际cmake最低版本(3.19)的配套关系",
-      "description": "未明确说明gcc版本要求与实际cmake最低版本(3.19)的配套关系"
-    }
+    "build.sh 3rd构建系统在openEuler 24.03 LTS上存在格式兼容性问题：dependency.json中部分包为zip格式（如zlib-openEuler.zip），但cmake提取时查找*.tar.*文件",
+    "README.md中未详细说明无NPU硬件时的最小构建流程（仅构建C++核心部分）",
+    "文档推荐的编译安装方式需要完整的CANN + torch_npu环境，未提供降级构建方案",
+    "third_party_entry/dependency.json中的下载链接依赖华为云OBS服务，网络不可达时无法构建",
+    "环境准备文档(preparing_software_and_dependencies.md)中的软件下载链接指向社区页面而非直接下载URL",
+    "未明确说明gcc版本要求与实际cmake最低版本(3.19)的配套关系"
   ],
   "problems_encountered": [
     {
-      "problem": "build.sh 3rd构建失败 - 第三方依赖zip/tar格式不匹配 | dependency.json中zlib等包为zip格式，但cmake/open_source_build/zlib.cmake查找*.tar.*文件进行解压",
+      "problem": "build.sh 3rd构建失败 - 第三方依赖zip/tar格式不匹配",
+      "error_detail": "dependency.json中zlib等包为zip格式，但cmake/open_source_build/zlib.cmake查找*.tar.*文件进行解压",
       "solution": "放弃build.sh 3rd方式，改用dnf系统包管理器安装大部分依赖，对缺失的包(prometheus-cpp, grpc等)从OBS下载源码单独编译",
-      "source": "cmake/open_source_build/zlib.cmake 第17行"
+      "source": "cmake/open_source_build/zlib.cmake 第17行",
+      "timestamp": ""
     },
     {
-      "problem": "protobuf系统包缺少libprotobuf-lite.so共享库 | openEuler 24.03的protobuf 25.1 RPM包不提供protobuf-lite的动态库文件",
+      "problem": "protobuf系统包缺少libprotobuf-lite.so共享库",
+      "error_detail": "openEuler 24.03的protobuf 25.1 RPM包不提供protobuf-lite的动态库文件",
       "solution": "从OBS下载protobuf源码，使用-Dprotobuf_BUILD_SHARED_LIBS=ON -Dprotobuf_BUILD_LITE=ON重新编译",
-      "source": "自行编译"
+      "source": "自行编译",
+      "timestamp": ""
     },
     {
-      "problem": "grpc_cpp_plugin符号查找错误 - ABI不兼容 | grpc_cpp_plugin链接到系统abseil库(/lib64/libabsl_*.so)但版本符号不匹配，导致undefined symbol: _ZN4absl12lts_2023080219str_format_internal...",
+      "problem": "grpc_cpp_plugin符号查找错误 - ABI不兼容",
+      "error_detail": "grpc_cpp_plugin链接到系统abseil库(/lib64/libabsl_*.so)但版本符号不匹配，导致undefined symbol: _ZN4absl12lts_2023080219str_format_internal...",
       "solution": "多次重建protobuf和grpc确保ABI一致性，最终使用系统grpc+自定义cmake包装器方案",
-      "source": "系统abseil-cpp 20230802.1版本"
+      "source": "系统abseil-cpp 20230802.1版本",
+      "timestamp": ""
     },
     {
-      "problem": "Boost cmake组件查找失败 | 自定义BoostConfig.cmake未正确定义thread和chrono组件的found状态",
+      "problem": "Boost cmake组件查找失败",
+      "error_detail": "自定义BoostConfig.cmake未正确定义thread和chrono组件的found状态",
       "solution": "重写BoostConfig.cmake，在find_package调用时动态创建Boost::thread和Boost::chrono目标并设置Boost_FOUND",
-      "source": "CMakeLists.txt 第32行"
+      "source": "CMakeLists.txt 第32行",
+      "timestamp": ""
     },
     {
-      "problem": "gRPC缺少gRPC::grpc++_reflection目标 | src/server/endpoint/CMakeLists.txt链接到gRPC::grpc++_reflection但该目标未在自定义grpc cmake配置中定义",
+      "problem": "gRPC缺少gRPC::grpc++_reflection目标",
+      "error_detail": "src/server/endpoint/CMakeLists.txt链接到gRPC::grpc++_reflection但该目标未在自定义grpc cmake配置中定义",
       "solution": "在gRPCConfig.cmake中添加grpc++_reflection和grpc++_unsecure等额外目标",
-      "source": "src/server/endpoint/CMakeLists.txt 第86行"
+      "source": "src/server/endpoint/CMakeLists.txt 第86行",
+      "timestamp": ""
     },
     {
-      "problem": "c-ares cmake配置文件在系统中不存在 | openEuler的c-ares-devel不提供cmake配置文件，只有pkg-config",
+      "problem": "c-ares cmake配置文件在系统中不存在",
+      "error_detail": "openEuler的c-ares-devel不提供cmake配置文件，只有pkg-config",
       "solution": "手动创建c-ares-config.cmake包装器，定义c-ares::cares IMPORTED目标指向系统库",
-      "source": "CMakeLists.txt 第25行 (find_package(c-ares REQUIRED CONFIG))"
+      "source": "CMakeLists.txt 第25行 (find_package(c-ares REQUIRED CONFIG))",
+      "timestamp": ""
     },
     {
-      "problem": "re2 cmake配置文件在系统中不存在 | openEuler的re2-devel不提供cmake配置文件",
+      "problem": "re2 cmake配置文件在系统中不存在",
+      "error_detail": "openEuler的re2-devel不提供cmake配置文件",
       "solution": "手动创建re2Config.cmake包装器，定义re2::re2 IMPORTED目标指向系统库",
-      "source": "CMakeLists.txt 第34行 (find_package(re2 REQUIRED CONFIG))"
+      "source": "CMakeLists.txt 第34行 (find_package(re2 REQUIRED CONFIG))",
+      "timestamp": ""
     },
     {
-      "problem": "prometheus-cpp在系统包管理器中不可用 | openEuler 24.03仓库中没有prometheus-cpp包",
+      "problem": "prometheus-cpp在系统包管理器中不可用",
+      "error_detail": "openEuler 24.03仓库中没有prometheus-cpp包",
       "solution": "从华为云OBS下载prometheus-cpp-with-submodules.tar.gz，手动cmake编译安装",
-      "source": "dependency.json - https://mindie.obs.cn-north-4.myhuaweicloud.com/open_source/prometheus-cpp/v1.3.0/prometheus-cpp-with-submodules.tar.gz"
+      "source": "dependency.json - https://mindie.obs.cn-north-4.myhuaweicloud.com/open_source/prometheus-cpp/v1.3.0/prometheus-cpp-with-submodules.tar.gz",
+      "timestamp": ""
     },
     {
-      "problem": "Python测试需要环境变量和NPU硬件 | 测试代码依赖MINDIE_LLM_HOME_PATH环境变量和Ascend NPU设备",
+      "problem": "Python测试需要环境变量和NPU硬件",
+      "error_detail": "测试代码依赖MINDIE_LLM_HOME_PATH环境变量和Ascend NPU设备",
       "solution": "无法在无NPU环境中解决，标记为跳过",
-      "source": "tests/pythontest/测试代码"
+      "source": "tests/pythontest/测试代码",
+      "timestamp": ""
     },
     {
-      "problem": "pip安装国内镜像源回退策略生效 | 部分pip包从PyPI官方源下载较慢",
+      "problem": "pip安装国内镜像源回退策略生效",
+      "error_detail": "部分pip包从PyPI官方源下载较慢",
       "solution": "配置清华镜像源作为pip全局默认源，加速下载",
-      "source": "https://pypi.tuna.tsinghua.edu.cn/simple/"
+      "source": "https://pypi.tuna.tsinghua.edu.cn/simple/",
+      "timestamp": ""
     }
   ],
   "session_export_file": ""

@@ -1,12 +1,12 @@
 {
   "metadata": {
-    "repo_name": "kutacc",
     "repo_path": "/root/workspace/tmp_src_kutacc",
     "repo_url": "https://gitcode.com/kunpengcompute/kutacc.git",
     "start_time": "2026-06-03T14:49:00",
     "end_time": "2026-06-03T16:44:00",
     "duration_seconds": 6900,
-    "total_steps": 5
+    "total_steps": 5,
+    "repo_name": "kutacc"
   },
   "machine_spec": {
     "host_machine": {
@@ -94,8 +94,7 @@
       "success": true,
       "output": "Container started (ARM64 via QEMU emulation)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T15:02:00",
@@ -103,8 +102,7 @@
       "success": true,
       "output": "All packages installed successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T15:48:00",
@@ -112,8 +110,7 @@
       "success": true,
       "output": "Downloaded 2.5GB in ~11min (average 3.83MB/s)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T16:05:00",
@@ -121,8 +118,7 @@
       "success": true,
       "output": "HPCKit installed. HMPI skipped: 'Unsupported os openEuler24.03(LTS)'",
       "error": "HMPI not installed due to OS compatibility check. System OpenMPI used as substitute.",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T16:15:00",
@@ -130,8 +126,7 @@
       "success": false,
       "output": "fatal error: 'mpi.h' file not found",
       "error": "MPI headers from system openmpi not in default include path",
-      "returncode": 2,
-      "details": {}
+      "returncode": 2
     },
     {
       "timestamp": "2026-06-03T16:20:00",
@@ -139,8 +134,7 @@
       "success": false,
       "output": "Compilation OK, linking failed: cannot find -lmpi",
       "error": "MPI library path /usr/lib64/openmpi/lib not in linker path",
-      "returncode": 2,
-      "details": {}
+      "returncode": 2
     },
     {
       "timestamp": "2026-06-03T16:23:00",
@@ -148,8 +142,7 @@
       "success": true,
       "output": "libkutacc.so.1.26.1.RC1 (195KB) built and installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T16:30:00",
@@ -157,8 +150,7 @@
       "success": true,
       "output": "kutacc_cal_test (409KB), kutacc_comm_test (196KB) built successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T16:42:00",
@@ -166,8 +158,7 @@
       "success": true,
       "output": "54/54 tests passed (54ms total)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T16:43:00",
@@ -175,8 +166,7 @@
       "success": true,
       "output": "2/2 tests passed (58ms total across 2 MPI ranks)",
       "error": "CMA kernel warning (non-fatal, due to container/QEMU)",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     }
   ],
   "process_timeline": [
@@ -336,91 +326,73 @@
             }
           ]
         }
-      }
+      },
+      "failures": []
     },
     "sample": {
       "status": "not_run",
       "duration_seconds": 0,
-      "results": "文档中未提供示例/样例程序，源码中也没有 examples 目录"
+      "results": [
+        {
+          "note": "文档中未提供示例/样例程序，源码中也没有 examples 目录"
+        }
+      ]
     }
   },
   "documentation_gaps": [
-    {
-      "gap": "README中HPCKit下载链接指向hikunpeng.com文档页而非直接下载地址，需手动导航查找",
-      "description": "README中HPCKit下载链接指向hikunpeng.com文档页而非直接下载地址，需手动导航查找"
-    },
-    {
-      "gap": "HPCKit支持的OS列表未在README中说明 (openEuler 24.03 LTS 基版不在支持列表中，仅支持SP3)",
-      "description": "HPCKit支持的OS列表未在README中说明 (openEuler 24.03 LTS 基版不在支持列表中，仅支持SP3)"
-    },
-    {
-      "gap": "README未说明HMPI是编译所必需的，但测试需要mpirun",
-      "description": "README未说明HMPI是编译所必需的，但测试需要mpirun"
-    },
-    {
-      "gap": "README未提及GTest是测试编译的依赖，测试CMakeLists.txt要求GTEST_ROOT环境变量",
-      "description": "README未提及GTest是测试编译的依赖，测试CMakeLists.txt要求GTEST_ROOT环境变量"
-    },
-    {
-      "gap": "README未提供MPI头文件和库路径的配置说明 (HMPI通过module自动设置，但系统OpenMPI需手动配置)",
-      "description": "README未提供MPI头文件和库路径的配置说明 (HMPI通过module自动设置，但系统OpenMPI需手动配置)"
-    },
-    {
-      "gap": "README未提及OpenMPI与毕昇编译器的配合使用方式 (需设置OMPI_CC/OMPI_CXX)",
-      "description": "README未提及OpenMPI与毕昇编译器的配合使用方式 (需设置OMPI_CC/OMPI_CXX)"
-    },
-    {
-      "gap": "README未提供在不支持HMPI的系统上使用系统OpenMPI的替代方案",
-      "description": "README未提供在不支持HMPI的系统上使用系统OpenMPI的替代方案"
-    },
-    {
-      "gap": "README中单元测试运行指令不完整 (test_all.sh需要特定目录结构且未在README中说明)",
-      "description": "README中单元测试运行指令不完整 (test_all.sh需要特定目录结构且未在README中说明)"
-    },
-    {
-      "gap": "README中缺少样例/示例程序的使用说明",
-      "description": "README中缺少样例/示例程序的使用说明"
-    },
-    {
-      "gap": "README中系统规格写为 openEuler 22.03 LTS SP4，但HPCKit实际支持到 openEuler 24.03 LTS SP3",
-      "description": "README中系统规格写为 openEuler 22.03 LTS SP4，但HPCKit实际支持到 openEuler 24.03 LTS SP3"
-    }
+    "README中HPCKit下载链接指向hikunpeng.com文档页而非直接下载地址，需手动导航查找",
+    "HPCKit支持的OS列表未在README中说明 (openEuler 24.03 LTS 基版不在支持列表中，仅支持SP3)",
+    "README未说明HMPI是编译所必需的，但测试需要mpirun",
+    "README未提及GTest是测试编译的依赖，测试CMakeLists.txt要求GTEST_ROOT环境变量",
+    "README未提供MPI头文件和库路径的配置说明 (HMPI通过module自动设置，但系统OpenMPI需手动配置)",
+    "README未提及OpenMPI与毕昇编译器的配合使用方式 (需设置OMPI_CC/OMPI_CXX)",
+    "README未提供在不支持HMPI的系统上使用系统OpenMPI的替代方案",
+    "README中单元测试运行指令不完整 (test_all.sh需要特定目录结构且未在README中说明)",
+    "README中缺少样例/示例程序的使用说明",
+    "README中系统规格写为 openEuler 22.03 LTS SP4，但HPCKit实际支持到 openEuler 24.03 LTS SP3"
   ],
   "problems_encountered": [
     {
       "problem": "HPCKit不支持 openEuler 24.03 LTS",
       "solution": "修改 bootstrapper.conf 添加 'openEuler24.03(LTS)' 到 SUPPORT_OS_NAME 列表",
-      "source": "主动适配 (patch HPCKit install script)"
+      "source": "主动适配 (patch HPCKit install script)",
+      "timestamp": ""
     },
     {
       "problem": "HMPI安装失败 - 'Unsupported os openEuler24.03(LTS)'",
       "solution": "使用系统OpenMPI替代 (dnf install openmpi-devel)",
-      "source": "HMPI模块另有独立的OS检查"
+      "source": "HMPI模块另有独立的OS检查",
+      "timestamp": ""
     },
     {
       "problem": "编译时找不到 mpi.h 头文件",
       "solution": "添加 CPLUS_INCLUDE_PATH=/usr/include/openmpi-aarch64",
-      "source": "系统OpenMPI安装路径与HMPI不同"
+      "source": "系统OpenMPI安装路径与HMPI不同",
+      "timestamp": ""
     },
     {
       "problem": "链接时找不到 -lmpi 库",
       "solution": "添加 LIBRARY_PATH=/usr/lib64/openmpi/lib",
-      "source": "系统OpenMPI库路径不在默认搜索路径中"
+      "source": "系统OpenMPI库路径不在默认搜索路径中",
+      "timestamp": ""
     },
     {
       "problem": "测试编译时 GCC mpicc 不支持 -stdlib=libstdc++ 标志",
       "solution": "设置 OMPI_CC/OMPI_CXX 环境变量指向毕昇clang/clang++编译器",
-      "source": "test/functest/CMakeLists.txt 使用Clang特有编译选项"
+      "source": "test/functest/CMakeLists.txt 使用Clang特有编译选项",
+      "timestamp": ""
     },
     {
       "problem": "CMake FindThreads 在QEMU环境下-pthread检测失败",
       "solution": "设置 -DCMAKE_THREAD_LIBS_INIT='-lpthread' -DTHREADS_PREFER_PTHREAD_FLAG=ON",
-      "source": "QEMU仿真限制"
+      "source": "QEMU仿真限制",
+      "timestamp": ""
     },
     {
       "problem": "QEMU ARM64仿真下载速度极慢 (~30KB/s)",
       "solution": "在宿主机(x86_64)下载HPCKit后通过docker cp传入容器",
-      "source": "QEMU user mode网络IO性能差"
+      "source": "QEMU user mode网络IO性能差",
+      "timestamp": ""
     }
   ],
   "session_export_file": ""

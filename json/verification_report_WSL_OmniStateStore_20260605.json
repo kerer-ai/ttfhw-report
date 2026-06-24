@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "repo_name": "OmniStateStore",
     "repo_path": "/home/lrp/tmp_src",
     "repo_url": "https://gitcode.com/openeuler/OmniStateStore.git",
+    "repo_name": "OmniStateStore",
     "start_time": "2026-06-05T09:28:00+08:00",
     "end_time": "2026-06-05T10:05:00+08:00",
     "duration_seconds": 2220,
@@ -66,8 +66,14 @@
       "value": [],
       "source": "未找到CANN等特殊依赖。项目3rdparty通过git submodule管理: googletest v1.16.0, lz4 v1.10.0, libboundscheck v1.1.16, spdlog v1.15.3"
     },
-    "build_entry": "bash scripts/build.sh -t release (完整构建) 或 bash scripts/build.sh -t debug --ut (仅C++和UT)",
-    "ut_entry": "bash scripts/build.sh -t debug --ut (编译UT) 然后 cd build/test/llt && ./bss_ut (执行UT)"
+    "build_entry": {
+      "source": "docs/zh/quick_start.md - 源码编译章节",
+      "value": "bash scripts/build.sh -t release"
+    },
+    "ut_entry": {
+      "source": "docs/zh/quick_start.md - 开发者测试章节 + execution_log step: unit_test",
+      "value": "cd build/test/llt && ./bss_ut --gtest_output=xml:report.xml"
+    }
   },
   "execution_log": [
     {
@@ -77,8 +83,7 @@
       "success": true,
       "output": "Image already available locally",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T09:29:00+08:00",
@@ -87,8 +92,7 @@
       "success": true,
       "output": "Container started: 9e4ee7517055",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T09:30:00+08:00",
@@ -97,8 +101,7 @@
       "success": true,
       "output": "Metadata cache created.",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T09:31:00+08:00",
@@ -107,8 +110,7 @@
       "success": true,
       "output": "Installed: cmake 3.27.9, gcc 12.3.1, gcc-c++ 12.3.1, make 4.4.1, java-1.8.0-openjdk 1.8.0.462, libaio 0.3.113",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T09:35:00+08:00",
@@ -117,8 +119,7 @@
       "success": true,
       "output": "Initialized 4 submodules: googletest v1.16.0, lz4 v1.10.0, libboundscheck v1.1.16, spdlog v1.15.3",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-05T09:50:00+08:00",
@@ -128,8 +129,7 @@
       "output": "C++编译和JNI编译成功, 但在构建Java plugin时失败 (mvn: command not found)",
       "error": "/bin/sh: line 1: mvn: command not found\nmake[7]: *** [src/plugin/CMakeFiles/build_bss_java_version_1.16.3.dir/build.make:70: src/plugin/CMakeFiles/build_bss_java_version_1.16.3] Error 127",
       "returncode": 1,
-      "note": "C++代码编译成功 (100%), JNI库编译成功。失败原因为缺少Maven用于Java插件构建。这是可选步骤, 不影响C++核心库和UT测试。",
-      "details": {}
+      "note": "C++代码编译成功 (100%), JNI库编译成功。失败原因为缺少Maven用于Java插件构建。这是可选步骤, 不影响C++核心库和UT测试。"
     },
     {
       "timestamp": "2026-06-05T09:55:00+08:00",
@@ -139,8 +139,7 @@
       "output": "C++编译成功, bss_ut测试二进制文件生成成功 (354MB)",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 240,
-      "details": {}
+      "duration_seconds": 240
     },
     {
       "timestamp": "2026-06-05T09:59:00+08:00",
@@ -150,8 +149,7 @@
       "output": "296 tests from 29 test suites ran. 295 PASSED, 1 FAILED",
       "error": "TestFileManager.test_write_read_secondary_key_iterator_return_ok - FAILED",
       "returncode": 1,
-      "duration_seconds": 191,
-      "details": {}
+      "duration_seconds": 191
     }
   ],
   "process_timeline": [
@@ -159,76 +157,67 @@
       "timestamp": "2026-06-05T09:28:00+08:00",
       "step": "start",
       "action": "验证过程启动",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-05T09:28:30+08:00",
       "step": "doc_read",
       "action": "文档阅读 - 收集构建/测试信息",
-      "result": "完成: 读取 README.md, README.en.md, CMakeLists.txt, installation_guide.md, quick_start.md, build.sh, 3rdparty CMakeLists, test CMakeLists",
-      "details": {}
+      "result": "完成: 读取 README.md, README.en.md, CMakeLists.txt, installation_guide.md, quick_start.md, build.sh, 3rdparty CMakeLists, test CMakeLists"
     },
     {
       "timestamp": "2026-06-05T09:29:00+08:00",
       "step": "container_start",
       "action": "启动openEuler 24.03 LTS容器",
-      "result": "容器启动成功",
-      "details": {}
+      "result": "容器启动成功"
     },
     {
       "timestamp": "2026-06-05T09:30:00+08:00",
       "step": "deps_install",
       "action": "安装构建依赖 (cmake, gcc, g++, make, JDK, libaio)",
-      "result": "全部安装成功",
-      "details": {}
+      "result": "全部安装成功"
     },
     {
       "timestamp": "2026-06-05T09:35:00+08:00",
       "step": "submodule",
       "action": "初始化git子模块",
-      "result": "4个子模块初始化成功",
-      "details": {}
+      "result": "4个子模块初始化成功"
     },
     {
       "timestamp": "2026-06-05T09:50:00+08:00",
       "step": "build_release_attempt",
       "action": "尝试release构建",
-      "result": "C++编译成功, 但Maven缺失导致Java插件构建失败",
-      "details": {}
+      "result": "C++编译成功, 但Maven缺失导致Java插件构建失败"
     },
     {
       "timestamp": "2026-06-05T09:55:00+08:00",
       "step": "build_debug_ut",
       "action": "使用--ut参数进行debug构建 (仅C++)",
-      "result": "编译成功, bss_ut二进制文件生成",
-      "details": {}
+      "result": "编译成功, bss_ut二进制文件生成"
     },
     {
       "timestamp": "2026-06-05T09:59:00+08:00",
       "step": "unit_test",
       "action": "执行单元测试",
-      "result": "296测试, 295通过, 1失败",
-      "details": {}
+      "result": "296测试, 295通过, 1失败"
     },
     {
       "timestamp": "2026-06-05T10:02:00+08:00",
       "step": "artifact_check",
       "action": "检查构建产物",
-      "result": "libockdbjni-linux64.so (360MB), bss_ut (354MB), 3rdparty库文件",
-      "details": {}
+      "result": "libockdbjni-linux64.so (360MB), bss_ut (354MB), 3rdparty库文件"
     },
     {
       "timestamp": "2026-06-05T10:05:00+08:00",
       "step": "cleanup_report",
       "action": "清理容器并生成报告",
-      "result": "验证完成",
-      "details": {}
+      "result": "验证完成"
     }
   ],
   "final_results": {
     "build": {
       "status": "partial_success",
+      "status_detail": "C++核心库和JNI编译成功。完整构建需Maven构建Java插件 (未在文档build命令中说明Maven依赖)",
       "duration_seconds": 240,
       "artifacts": [
         {
@@ -271,8 +260,7 @@
           "path": "/workspace/dist/3rdparty/spdlog/lib64/libspdlog.a",
           "size": "1.4MB"
         }
-      ],
-      "notes": " | C++核心库和JNI编译成功。完整构建需Maven构建Java插件 (未在文档build命令中说明Maven依赖)"
+      ]
     },
     "ut": {
       "status": "partial_success",
@@ -291,39 +279,29 @@
     },
     "sample": {
       "status": "not_run",
+      "status_detail": "该项目为Flink JNI库, 无独立可执行样例。样例运行需要完整的Flink集群环境 ($FLINK_HOME/bin/flink run WordCount.jar), 超出本次验证范围。",
       "duration_seconds": 0,
-      "results": [],
-      "notes": " | 该项目为Flink JNI库, 无独立可执行样例。样例运行需要完整的Flink集群环境 ($FLINK_HOME/bin/flink run WordCount.jar), 超出本次验证范围。"
+      "results": []
     }
   },
   "documentation_gaps": [
-    {
-      "description": "构建依赖未明确列出 Maven: release构建需要Maven来编译Java插件, 但quick_start.md中未提及"
-    },
-    {
-      "description": "文档指定硬件要求为鲲鹏920处理器 (aarch64), 但未说明x86_64架构的兼容性和可能的问题"
-    },
-    {
-      "description": "测试工具 hdt (Huawei Developer Tool) 未在文档中说明安装方式, 本次验证通过直接运行bss_ut绕过"
-    },
-    {
-      "description": "文档中推荐的OS为 openEuler 22.03 LTS SP3, 但本次使用 openEuler 24.03 LTS 仍能成功编译"
-    },
-    {
-      "description": "GCC版本要求文档标注10.3.1, 但使用GCC 12.3.1也能成功编译"
-    },
-    {
-      "description": "spdlog库的CMake安装目标将库安装到lib64目录, 但CMakeLists.txt中link_directories指向lib目录 (潜在路径不匹配问题)"
-    }
+    "构建依赖未明确列出 Maven: release构建需要Maven来编译Java插件, 但quick_start.md中未提及",
+    "文档指定硬件要求为鲲鹏920处理器 (aarch64), 但未说明x86_64架构的兼容性和可能的问题",
+    "测试工具 hdt (Huawei Developer Tool) 未在文档中说明安装方式, 本次验证通过直接运行bss_ut绕过",
+    "文档中推荐的OS为 openEuler 22.03 LTS SP3, 但本次使用 openEuler 24.03 LTS 仍能成功编译",
+    "GCC版本要求文档标注10.3.1, 但使用GCC 12.3.1也能成功编译",
+    "spdlog库的CMake安装目标将库安装到lib64目录, 但CMakeLists.txt中link_directories指向lib目录 (潜在路径不匹配问题)"
   ],
   "problems_encountered": [
     {
       "problem": "git命令在容器中不可用",
+      "command": "git submodule update --init --recursive (build.sh line 202)",
       "solution": "设置 CI_BUILD=1 环境变量跳过submodule更新, 在宿主机手动初始化子模块后挂载到容器",
       "source": "build.sh 第200-203行"
     },
     {
       "problem": "release构建失败: mvn (Maven) command not found",
+      "command": "bash scripts/build.sh -t release",
       "solution": "使用 --ut 参数构建 (bash scripts/build.sh -t debug --ut), 该路径调用 make build_cpp 跳过Java插件构建。Java插件构建不在UT测试范围内。",
       "source": "CMakeLists.txt build_all target + build.sh BUILD_UT判断逻辑"
     },

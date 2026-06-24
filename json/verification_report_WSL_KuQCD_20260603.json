@@ -25,12 +25,12 @@
       "os": "openEuler 24.03 (LTS)",
       "architecture": "aarch64 (QEMU emulated)",
       "cpu_cores": 24,
-      "memory": "15Gi",
-      "image_source": {
-        "type": "base_image",
-        "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts (arm64 by digest sha256:7c60c59...)",
-        "selection_reason": "README 文档推荐 openEuler 22.03 LTS-SP4 AArch64 → 选择最接近的 openEuler 24.03 LTS arm64"
-      }
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts (arm64 by digest sha256:7c60c59...)",
+      "selection_reason": "README 文档推荐 openEuler 22.03 LTS-SP4 AArch64 → 选择最接近的 openEuler 24.03 LTS arm64"
     }
   },
   "document_reading_summary": {
@@ -92,8 +92,8 @@
       "value": "无独立样例程序。开发指南有接口说明: https://www.hikunpeng.com/document/detail/zh/kunpenghpcs/hpckit/devg/KunpengHPCKit_developer_211.html",
       "source": "README.md - 学习教程章节"
     },
-    "build_entry": "bisheng: module load bisheng/compiler5.1.0.2/bishengmodule && module load bisheng/hmpi26.0.RC1/release && module load bisheng/kupl26.0.RC1/release && sh build.sh ; gcc: module load gcc/compiler12.3.1/gccmodule && module load gcc/hmpi26.0.RC1/release && module load gcc/kupl26.0.RC1/release && sh build.sh ; build_script_content: mkdir build && cd build && cmake .. && make -j",
-    "ut_entry": "bisheng: cd test && module load bisheng/hmpi26.0.RC1/release && sh build.sh && sh run.sh ; gcc: cd test && module load gcc/hmpi26.0.RC1/release && sh build.sh && sh run.sh ; expected_output: end test kuqcd_solve_multishift PASSED"
+    "build_entry": "module load bisheng/compiler5.1.0.2/bishengmodule && module load bisheng/hmpi26.0.RC1/release && module load bisheng/kupl26.0.RC1/release && sh build.sh",
+    "ut_entry": "cd test && module load bisheng/hmpi26.0.RC1/release && sh build.sh && sh run.sh"
   },
   "execution_log": [
     {
@@ -251,11 +251,14 @@
       "failed": 0,
       "test_name": "kuqcd_solve_multishift",
       "test_output": "CGM: # iterations 1, total time = 7.396332e-03 [s], PASSED",
-      "note": "测试通过 QEMU CPU检测绕过 (cpu part 0xd22 not available under QEMU). 通过 MPI fork launcher (--mca plm isolated) 绕过容器 SSH/R SH 限制运行。"
+      "note": "测试通过 QEMU CPU检测绕过 (cpu part 0xd22 not available under QEMU). 通过 MPI fork launcher (--mca plm isolated) 绕过容器 SSH/R SH 限制运行。",
+      "failures": []
     },
     "sample": {
-      "status": "unknown",
-      "note": "KuQCD 无独立样例程序。通过开发指南提供接口文档和代码示例。"
+      "status": "not_run",
+      "note": "KuQCD 无独立样例程序。通过开发指南提供接口文档和代码示例。",
+      "duration_seconds": 0,
+      "results": []
     }
   },
   "documentation_gaps": [
@@ -272,27 +275,32 @@
     {
       "problem": "HMPI 安装失败：Unsupported os openEuler24.03(LTS)",
       "solution": "手动提取 Hyper-MPI_26.0.RC1_aarch64_openEuler24.03SP3_Bisheng_hns-release.tar.gz 到 /opt/hpckit/HPCKit/26.0.RC1/hmpi/bisheng/",
-      "source": "HPCKit install.sh untar_HMPI() 函数 OS 检测"
+      "source": "HPCKit install.sh untar_HMPI() 函数 OS 检测",
+      "timestamp": ""
     },
     {
       "problem": "mpicxx wrapper 包含编译机器硬编码路径，无法使用",
       "solution": "直接使用 clang++ 手动编译测试程序，手动指定 MPI include/lib 路径",
-      "source": "HMPI 二进制包预编译路径问题"
+      "source": "HMPI 二进制包预编译路径问题",
+      "timestamp": ""
     },
     {
       "problem": "链接时缺少 libnuma（KUPL 间接依赖）",
       "solution": "dnf install -y numactl-devel",
-      "source": "ld 链接错误"
+      "source": "ld 链接错误",
+      "timestamp": ""
     },
     {
       "problem": "MPI 运行时在 Docker 容器中初始化失败 (plm_rsh_agent: ssh not found)",
       "solution": "使用 mpirun --allow-run-as-root --mca plm isolated -np 1 强制本地 fork 模式",
-      "source": "OpenMPI 容器运行时限制"
+      "source": "OpenMPI 容器运行时限制",
+      "timestamp": ""
     },
     {
       "problem": "test/build.sh CPU 检测不通过 (非 Kunpeng 920 硬件)",
       "solution": "手动编译测试程序，绕过 CPU part 0xd22 检测",
-      "source": "test/build.sh CPU 检测逻辑"
+      "source": "test/build.sh CPU 检测逻辑",
+      "timestamp": ""
     }
   ],
   "verification_summary": {
@@ -312,7 +320,7 @@
     "recommendations": [
       "README 支持系统列表增加 openEuler 24.03 LTS 系列",
       "HMPI 安装脚本增加 openEuler 24.03 LTS 支持",
-      "test/build.sh 的 CPU 检测添加 fallback 或 “--force” 选项",
+      "test/build.sh 的 CPU 检测添加 fallback 或 \"--force\" 选项",
       "build.sh 增加 -j 参数控制并发数（当前无限制使用全部核）",
       "README 增加容器/Docker 环境下的 MPI 运行时配置说明",
       "README 显式列出 libnuma 等间接依赖",

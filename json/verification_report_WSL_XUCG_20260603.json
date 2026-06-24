@@ -1,12 +1,12 @@
 {
   "metadata": {
+    "repo_name": "xucg",
     "repo_path": "/root/workspace/tmp_src_xucg",
     "repo_url": "https://gitcode.com/kunpengcompute/xucg.git",
     "start_time": "2026-06-03T16:57:00",
     "end_time": "2026-06-03T17:55:00",
     "duration_seconds": 3480,
-    "total_steps": 6,
-    "repo_name": "xucg"
+    "total_steps": 6
   },
   "machine_spec": {
     "host_machine": {
@@ -27,7 +27,7 @@
       "type": "base_image",
       "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
       "platform": "linux/arm64",
-      "selection_reason": "README推荐鲲鹏920 AArch64 + openEuler 22.03/24.03 → 选择 openEuler 24.03 LTS ARM64"
+      "selection_reason": "README推荐鲲鹏920 AArch64 + openEuler 22.03/24.03 -> 选择 openEuler 24.03 LTS ARM64"
     }
   },
   "document_reading_summary": {
@@ -35,13 +35,12 @@
       "value": "鲲鹏920系列 AArch64 (armv8.2-a, -mcpu=tsv110)",
       "source": "README - 版本配套章节 + src/CMakeLists.txt 编译标志"
     },
+    "recommended_image": {
+      "value": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "source": "machine_spec.image_source"
+    },
     "recommended_os_list": {
-      "value": [
-        "openEuler 20.03 LTS SP3",
-        "openEuler 22.03 LTS SP2/SP3/SP4",
-        "openEuler 24.03 LTS SP3",
-        "Kylin Linux Advanced Server V10/V11"
-      ],
+      "value": ["openEuler 20.03 LTS SP3", "openEuler 22.03 LTS SP2/SP3/SP4", "openEuler 24.03 LTS SP3", "Kylin Linux Advanced Server V10/V11"],
       "source": "README - 版本配套章节"
     },
     "dependencies": {
@@ -84,8 +83,14 @@
       "value": "未找到独立示例程序，测试中使用 OSU Micro Benchmarks 作为通信效率测评工具",
       "source": "README - 测试方法章节 6"
     },
-    "build_entry": "cmake .. -DCMAKE_INSTALL_PREFIX=path -DCMAKE_BUILD_TYPE=Release -DUCG_BUILD_WITH_UCX=${HUCX_DIR} ... && make -j",
-    "ut_entry": "编译时启用 -DUCG_BUILD_TESTS=ON，运行 build/tests/gtest/ucg_gtest"
+    "build_entry": {
+      "value": "cmake ..",
+      "source": "README - 编译安装章节 5.4"
+    },
+    "ut_entry": {
+      "value": "build/tests/gtest/ucg_gtest",
+      "source": "README.origin"
+    }
   },
   "execution_log": [
     {
@@ -93,64 +98,56 @@
       "command": "docker run openEuler 24.03 LTS ARM64 + dnf install cmake flex gcc-c++ gcc-gfortran wget autoconf automake libtool git",
       "success": true,
       "output": "All system packages installed",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:02:00",
       "command": "Clone hucx from gitcode.com/kunpengcompute/hucx",
       "success": true,
       "output": "HUCX source cloned",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:05:00",
       "command": "hucx autogen.sh + configure-opt + make -j8",
       "success": true,
       "output": "libucm.so, libucp.so, libucs.so built (9min)",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:15:00",
       "command": "cmake .. -DUCG_BUILD_TESTS=OFF -DUCG_BUILD_WITH_UCX=/install/hucx",
       "success": true,
       "output": "Configured without tests",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:16:00",
       "command": "make -j8 (xucg library build)",
       "success": true,
       "output": "libucg.so.1.26.0.0 + libucg_planc_ucx.so (libucg.so 520KB) built in 31s",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:25:00",
       "command": "GTest wrapper setup + cmake -DUCG_BUILD_TESTS=ON -DUCG_BUILD_WITH_GTEST=/gtest-wrapper",
       "success": true,
       "output": "GTest found via wrapper path",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:28:00",
       "command": "make CXX_FLAGS override (remove -Werror for stub.cpp unused-variable)",
       "success": true,
       "output": "ucg_gtest built successfully [100%]",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T17:30:00",
       "command": "./ucg_gtest (198 tests)",
       "success": true,
       "output": "197 passed, 1 failed (config default), 1 segfault in allgatherv_bruck (QEMU emulation limitation)",
-      "returncode": 139,
-      "details": {}
+      "returncode": 139
     }
   ],
   "process_timeline": [
@@ -158,57 +155,49 @@
       "timestamp": "2026-06-03T16:57:00",
       "step": "clone",
       "action": "克隆仓库",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-03T16:58:00",
       "step": "document_reading",
       "action": "阅读README, README.origin, CMakeLists.txt",
-      "result": "完成信息收集",
-      "details": {}
+      "result": "完成信息收集"
     },
     {
       "timestamp": "2026-06-03T17:00:00",
       "step": "container_setup",
       "action": "启动 openEuler 24.03 LTS ARM64 容器 (QEMU)",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-03T17:01:00",
       "step": "install_deps",
       "action": "安装 cmake, flex, gcc-c++, gfortran, autotools, git, gtest-devel",
-      "result": "success",
-      "details": {}
+      "result": "success"
     },
     {
       "timestamp": "2026-06-03T17:02:00",
       "step": "clone_hucx",
       "action": "克隆并编译 hucx (UCX) 前置依赖",
-      "result": "success (9min build)",
-      "details": {}
+      "result": "success (9min build)"
     },
     {
       "timestamp": "2026-06-03T17:15:00",
       "step": "build_xucg",
       "action": "编译 XUCG 核心库",
-      "result": "success (18s build)",
-      "details": {}
+      "result": "success (18s build)"
     },
     {
       "timestamp": "2026-06-03T17:25:00",
       "step": "build_tests",
       "action": "编译测试 (需绕过 stub.cpp -Werror)",
-      "result": "success (with make flag override)",
-      "details": {}
+      "result": "success (with make flag override)"
     },
     {
       "timestamp": "2026-06-03T17:30:00",
       "step": "run_tests",
       "action": "运行 198 个单元测试",
-      "result": "197 passed, 1 config mismatch, 1 QEMU crash",
-      "details": {}
+      "result": "197 passed, 1 config mismatch, 1 QEMU crash"
     }
   ],
   "final_results": {
@@ -268,8 +257,10 @@
       ]
     },
     "sample": {
-      "status": "unknown",
-      "results": "文档推荐使用 OSU Micro Benchmarks 作为通信测评工具，非项目自带样例"
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [],
+      "note": "文档推荐使用 OSU Micro Benchmarks 作为通信测评工具，非项目自带样例"
     }
   },
   "documentation_gaps": [

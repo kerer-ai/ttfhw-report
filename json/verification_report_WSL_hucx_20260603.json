@@ -1,13 +1,13 @@
 {
   "metadata": {
-    "repo_name": "hucx",
     "repo_path": "/root/workspace/tmp_src/hucx",
     "repo_url": "https://gitcode.com/kunpengcompute/hucx.git",
+    "repo_name": "hucx",
+    "repo_description": "Hyper MPI - HUCX (Huawei Unified Communication X), based on Open UCX 1.15 with Kunpeng hardware optimizations",
     "start_time": "2026-06-03T18:44:00+08:00",
     "end_time": "2026-06-03T19:12:00+08:00",
     "duration_seconds": 1680,
     "total_steps": 6,
-    "repo_description": "Hyper MPI - HUCX (Huawei Unified Communication X), based on Open UCX 1.15 with Kunpeng hardware optimizations",
     "verification_image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts (ARM64/aarch64)",
     "verification_architecture": "aarch64 (ARM64 via QEMU emulation on x86_64 host)"
   },
@@ -28,13 +28,7 @@
       "cpu_cores": 24,
       "memory": "15Gi",
       "kernel": "Linux 6.6.114.1-microsoft-standard-WSL2",
-      "emulation": "QEMU user mode (aarch64 on x86_64)",
-      "image_source": {
-        "type": "base_image",
-        "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
-        "platform": "linux/arm64",
-        "selection_reason": "README 版本配套章节列出 openEuler 24.03 (LTS) AArch64 为支持平台; 技能要求使用 openEuler 24.03 LTS 镜像; 仓库仅支持 AArch64 架构"
-      }
+      "emulation": "QEMU user mode (aarch64 on x86_64)"
     },
     "image_source": {
       "type": "base_image",
@@ -53,7 +47,18 @@
       "source": "README.md - 版本配套章节 + 技能要求使用 openEuler 24.03 LTS"
     },
     "dependencies": {
-      "value": "HPCKit_26.0.RC1 (提供 GCC 12.3.1 / Bisheng 编译器) ; cmake ; flex ; autoconf ; automake ; libtool ; gcc (from HPCKit 12.3.1) ; gcc-c++ (from HPCKit 12.3.1) ; gcc-gfortran (from HPCKit 12.3.1) ; numactl-libs (for NUMA support)",
+      "value": [
+        "HPCKit_26.0.RC1 (提供 GCC 12.3.1 / Bisheng 编译器)",
+        "cmake",
+        "flex",
+        "autoconf",
+        "automake",
+        "libtool",
+        "gcc (from HPCKit 12.3.1)",
+        "gcc-c++ (from HPCKit 12.3.1)",
+        "gcc-gfortran (from HPCKit 12.3.1)",
+        "numactl-libs (for NUMA support)"
+      ],
       "source": "README.md - 编译安装章节 (cmake, flex, HPCKit); configure.ac + autogen.sh (autotools)"
     },
     "build_commands": {
@@ -69,17 +74,20 @@
       "source": "README.md - 6. 测试方法章节; examples/Makefile.am"
     },
     "special_dependencies": {
-      "value": "{'name': 'HPCKit_26.0.RC1_Linux-aarch64', 'download_url': 'https://mirrors.huaweicloud.com/kunpeng/archive/HPC/HPCKit/HPCKit_26.0.RC1_Linux-aarch64.tar.gz', 'install_method': '解压后直接使用包内 GCC 12.3.1 编译器 (gcc-12.3.1-2025.06-aarch64-linux.tar.gz)', 'size': '2.5GB', 'purpose': '提供鲲鹏优化的 GCC 12.3.1 / Bisheng 编译器工具链', 'note': 'READEME 原始链接指向 hikunpeng.com (需注册下载)，用户提供华为云镜像地址作为替代'}",
+      "value": [
+        {
+          "name": "HPCKit_26.0.RC1_Linux-aarch64",
+          "download_url": "https://mirrors.huaweicloud.com/kunpeng/archive/HPC/HPCKit/HPCKit_26.0.RC1_Linux-aarch64.tar.gz",
+          "install_method": "解压后直接使用包内 GCC 12.3.1 编译器 (gcc-12.3.1-2025.06-aarch64-linux.tar.gz)",
+          "size": "2.5GB",
+          "purpose": "提供鲲鹏优化的 GCC 12.3.1 / Bisheng 编译器工具链",
+          "note": "READEME 原始链接指向 hikunpeng.com (需注册下载)，用户提供华为云镜像地址作为替代"
+        }
+      ],
       "source": "README.md - 1. 获取HCPKit软件包 章节; 用户提供的华为云镜像链接"
     },
-    "build_entry": {
-      "value": "./autogen.sh && ./contrib/configure-opt --prefix=<install_path> --enable-mt --disable-numa --with-pic --enable-inc --without-java CC=gcc CXX=g++ FC=gfortran && make -j32 && make -j32 install",
-      "source": "build_commands"
-    },
-    "ut_entry": {
-      "value": "未在文档中找到明确的单元测试执行命令。Makefile.am 中定义了 test/gtest (需 Google Test) 和 test/mpi (需 mpicc)，但 README 未描述如何运行测试。test/apps 目录下有手工测试程序。",
-      "source": "ut_commands"
-    }
+    "build_entry": "./autogen.sh && ./contrib/configure-opt --prefix=<install_path> --enable-mt --disable-numa --with-pic --enable-inc --without-java CC=gcc CXX=g++ FC=gfortran && make -j32 && make -j32 install",
+    "ut_entry": "未在文档中找到明确的单元测试执行命令。Makefile.am 中定义了 test/gtest (需 Google Test) 和 test/mpi (需 mpicc)，但 README 未描述如何运行测试。test/apps 目录下有手工测试程序。"
   },
   "execution_log": [
     {
@@ -88,8 +96,7 @@
       "success": true,
       "output": "Cloning into 'hucx'... completed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T18:46:00+08:00",
@@ -97,8 +104,7 @@
       "success": true,
       "output": "Image pulled successfully (already up to date)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T18:47:00+08:00",
@@ -106,8 +112,7 @@
       "success": true,
       "output": "Container started: a1668b4d17ff",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T18:48:00+08:00",
@@ -115,8 +120,7 @@
       "success": true,
       "output": "All packages installed successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T18:51:00+08:00",
@@ -124,8 +128,7 @@
       "success": true,
       "output": "Downloaded 2.5GB in 6m57s (6.21 MB/s)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T10:58:00+08:00",
@@ -133,8 +136,7 @@
       "success": true,
       "output": "HPCKit extracted; GCC 12.3.1 compiler package extracted to /opt/gcc-12.3.1-2025.06-aarch64-linux",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:03:00+08:00",
@@ -142,8 +144,7 @@
       "success": true,
       "output": "autoreconf completed successfully (git version warnings are non-fatal)",
       "error": "git: command not found (non-fatal - SCM_BRANCH/SCM_VERSION set to <unknown>/0000000)",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:03:00+08:00",
@@ -151,8 +152,7 @@
       "success": true,
       "output": "Configure completed. UCX build configuration: Multi-thread enabled, UCT modules: cma, Devel headers: no",
       "error": "configure: WARNING: unrecognized options: --disable-numa, --enable-inc; Some optional features not found: CUDA, ROCm, IB, Java, Go, GTEST, MPI, FUSE3, KNEM, XPMEM, GDR_COPY",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:06:00+08:00",
@@ -160,8 +160,7 @@
       "success": true,
       "output": "Build completed successfully. All modules compiled: libucm, libucs, libuct, libucp, libuct_cma, tools (ucx_info, ucx_perftest, ucx_read_profile, io_demo), test apps",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:13:00+08:00",
@@ -169,8 +168,7 @@
       "success": true,
       "output": "Install completed. All libraries, headers, tools, and cmake config installed to /workspace/install/hucx",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
@@ -178,8 +176,7 @@
       "success": true,
       "output": "SUCCESS",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
@@ -187,8 +184,7 @@
       "success": true,
       "output": "Finished 12 threads",
       "error": "Memory pool allocation errors for mm_recv_desc (expected in container without hugepages configuration)",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
@@ -196,8 +192,7 @@
       "success": true,
       "output": "SUCCESS",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
@@ -205,8 +200,7 @@
       "success": true,
       "output": "SUCCESS - Listed full UCP configuration with 5 transport components: self, tcp, sysv, posix, cma",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
@@ -214,8 +208,7 @@
       "success": true,
       "output": "SUCCESS - Successfully loaded libucs.so and libuct.so",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:15:00+08:00",
@@ -223,8 +216,7 @@
       "success": true,
       "output": "SUCCESS - Found 5 transport components: self, tcp, sysv, posix, cma",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:15:00+08:00",
@@ -232,8 +224,7 @@
       "success": true,
       "output": "SUCCESS - Successfully loaded libucs.so",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:15:00+08:00",
@@ -241,8 +232,7 @@
       "success": true,
       "output": "Library version: 1.15.0, Built for aarch64-unknown-linux-gnu",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:12:00+08:00",
@@ -250,8 +240,7 @@
       "success": true,
       "output": "Compiled successfully (75KB binary)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:12:00+08:00",
@@ -259,8 +248,7 @@
       "success": true,
       "output": "Compiled successfully (75KB binary)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:12:00+08:00",
@@ -268,8 +256,7 @@
       "success": true,
       "output": "Compiled successfully (76KB binary)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-03T11:15:00+08:00",
@@ -277,8 +264,7 @@
       "success": false,
       "output": "",
       "error": "Expected - ucx_perftest requires a server peer to run benchmarks. Self-transport test not supported.",
-      "returncode": 1,
-      "details": {}
+      "returncode": 1
     }
   ],
   "process_timeline": [
@@ -286,106 +272,91 @@
       "timestamp": "2026-06-03T18:44:00+08:00",
       "step": "start",
       "action": "验证过程启动 - 克隆 hucx 仓库",
-      "result": "started",
-      "details": {}
+      "result": "started"
     },
     {
       "timestamp": "2026-06-03T18:45:00+08:00",
       "step": "clone_complete",
       "action": "仓库克隆完成",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T18:45:00+08:00",
       "step": "document_reading",
       "action": "阅读 README.md, Makefile.am, configure.ac, config/m4/*.m4 提取构建信息",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T18:46:00+08:00",
       "step": "image_pull",
       "action": "拉取 openEuler 24.03 LTS ARM64 Docker 镜像",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T18:47:00+08:00",
       "step": "container_start",
       "action": "启动容器 ttfhw-hucx-env (ARM64 via QEMU)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T18:48:00+08:00",
       "step": "dependency_install",
       "action": "安装基础构建依赖 (autotools, cmake, flex, numactl-libs, wget)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T18:51:00+08:00",
       "step": "hpckit_download",
       "action": "从华为云镜像下载 HPCKit_26.0.RC1 (2.5GB)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T10:58:00+08:00",
       "step": "hpckit_extract",
       "action": "解压 HPCKit 并部署 GCC 12.3.1 编译器到 /opt",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:03:00+08:00",
       "step": "autogen",
       "action": "运行 ./autogen.sh 生成 configure 脚本",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:03:00+08:00",
       "step": "configure",
       "action": "运行 configure-opt 配置构建 (耗时 2m54s)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:06:00+08:00",
       "step": "build",
       "action": "运行 make -j14 编译 (耗时 7m12s)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:13:00+08:00",
       "step": "install",
       "action": "运行 make install 安装 (耗时 22s)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:14:00+08:00",
       "step": "unit_tests",
       "action": "运行 test/apps 测试程序 (7个测试)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T11:12:00+08:00",
       "step": "samples",
       "action": "编译并验证示例程序 (3个示例) 和工具 (ucx_info, ucx_perftest, io_demo)",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     },
     {
       "timestamp": "2026-06-03T19:12:00+08:00",
       "step": "report",
       "action": "生成验证报告",
-      "result": "completed",
-      "details": {}
+      "result": "completed"
     }
   ],
   "final_results": {
@@ -405,70 +376,138 @@
       ],
       "artifacts": [
         {
+          "name": "libucm.so",
+          "path": "/workspace/install/hucx/lib/",
           "type": "shared_library",
-          "count": 5
+          "size": "unknown"
         },
         {
+          "name": "libucm.a",
+          "path": "/workspace/install/hucx/lib/",
           "type": "static_library",
-          "count": 4
+          "size": "unknown"
         },
         {
-          "type": "tool",
-          "count": 4
+          "name": "libucs.so",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "shared_library",
+          "size": "unknown"
         },
         {
+          "name": "libucs.a",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "static_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libucs_signal.so",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "shared_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libuct.so",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "shared_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libuct.a",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "static_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libucp.so",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "shared_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libucp.a",
+          "path": "/workspace/install/hucx/lib/",
+          "type": "static_library",
+          "size": "unknown"
+        },
+        {
+          "name": "libuct_cma.so",
+          "path": "/workspace/install/hucx/lib/ucx/",
           "type": "transport_module",
-          "count": 1
+          "size": "unknown"
+        },
+        {
+          "name": "ucx_info",
+          "path": "/workspace/install/hucx/bin/",
+          "type": "tool",
+          "size": "unknown"
+        },
+        {
+          "name": "ucx_perftest",
+          "path": "/workspace/install/hucx/bin/",
+          "type": "tool",
+          "size": "unknown"
+        },
+        {
+          "name": "ucx_read_profile",
+          "path": "/workspace/install/hucx/bin/",
+          "type": "tool",
+          "size": "unknown"
+        },
+        {
+          "name": "io_demo",
+          "path": "/workspace/install/hucx/bin/",
+          "type": "tool",
+          "size": "unknown"
         }
       ],
       "install_size": "40M"
     },
     "ut": {
       "status": "success",
+      "duration_seconds": 3,
       "total": 7,
       "passed": 7,
       "failed": 0,
-      "duration_seconds": 3,
+      "test_framework": "Manual test apps (test/apps/); GTEST was not configured (HAVE_GTEST=no)",
       "results": [
         {
           "name": "test_link_map",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.47
         },
         {
           "name": "test_init_mt",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 1.54,
           "note": "Memory pool allocation warnings expected in container environment without hugepages"
         },
         {
           "name": "test_memtrack_limit",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.43
         },
         {
           "name": "test_ucp_config",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.5
         },
         {
           "name": "test_dlopen_cfg_print",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.04
         },
         {
           "name": "test_ucp_dlopen",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.07
         },
         {
           "name": "test_ucs_dlopen",
-          "status": "passed",
+          "status": "success",
           "duration_seconds": 0.03
         }
       ],
-      "failures": [],
-      "test_framework": "Manual test apps (test/apps/); GTEST was not configured (HAVE_GTEST=no)"
+      "failures": []
     },
     "sample": {
       "status": "success",
@@ -476,17 +515,17 @@
       "results": [
         {
           "name": "uct_hello_world (compile)",
-          "status": "unknown",
+          "status": "success",
           "note": "75KB binary, compilation successful"
         },
         {
           "name": "ucp_hello_world (compile)",
-          "status": "unknown",
+          "status": "success",
           "note": "75KB binary, compilation successful"
         },
         {
           "name": "ucp_client_server (compile)",
-          "status": "unknown",
+          "status": "success",
           "note": "76KB binary, compilation successful"
         },
         {
@@ -519,38 +558,38 @@
   },
   "documentation_gaps": [
     {
-      "description": "--disable-numa 和 --enable-inc 选项未被 configure 识别",
       "category": "构建选项不准确",
+      "description": "--disable-numa 和 --enable-inc 选项未被 configure 识别",
       "severity": "medium",
       "source": "README.md - 5.3 编译hucx 章节"
     },
     {
-      "description": "README 未说明如何运行单元测试。Makefile.am 中定义了 test/gtest (需 Google Test) 和 test/mpi (需 mpicc) 测试目标，但未在文档中提及",
       "category": "缺少单元测试说明",
+      "description": "README 未说明如何运行单元测试。Makefile.am 中定义了 test/gtest (需 Google Test) 和 test/mpi (需 mpicc) 测试目标，但未在文档中提及",
       "severity": "high",
       "source": "README.md 全文"
     },
     {
-      "description": "README 编译流程需要完整 HMPI 栈 (hucx + xucg + hmpi)。没有描述如何仅构建 hucx 仓库",
       "category": "缺少独立构建说明",
+      "description": "README 编译流程需要完整 HMPI 栈 (hucx + xucg + hmpi)。没有描述如何仅构建 hucx 仓库",
       "severity": "medium",
       "source": "README.md - 5. 编译流程 章节"
     },
     {
-      "description": "--enable-examples 选项未被包含在 README 构建命令中，导致示例程序默认不编译",
       "category": "示例默认不编译",
+      "description": "--enable-examples 选项未被包含在 README 构建命令中，导致示例程序默认不编译",
       "severity": "low",
       "source": "README.md - 5.3 编译hucx 章节"
     },
     {
-      "description": "HPCKit 原始下载链接 (https://www.hikunpeng.com/developer/hpc/hpckit-download) 需要注册鲲鹏社区账号才能下载",
       "category": "依赖来源链接需注册",
+      "description": "HPCKit 原始下载链接 (https://www.hikunpeng.com/developer/hpc/hpckit-download) 需要注册鲲鹏社区账号才能下载",
       "severity": "medium",
       "source": "README.md - 1. 获取HCPKit软件包 章节"
     },
     {
-      "description": "make -j32 假设机器有32+核心，对于小规格机器可能导致资源耗尽。建议文档注明根据实际核数调整",
       "category": "缺少编译并发数建议",
+      "description": "make -j32 假设机器有32+核心，对于小规格机器可能导致资源耗尽。建议文档注明根据实际核数调整",
       "severity": "low",
       "source": "README.md - 5.3 编译hucx 章节"
     }

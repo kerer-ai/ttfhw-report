@@ -1,7 +1,8 @@
 {
   "metadata": {
     "repo_name": "MindIE-SD",
-    "repo_url": "https://gitcode.com/Ascend/MindIE-SD.git",
+    "repo_path": "./tmp_src/MindIE-SD (cloned from https://gitcode.com/Ascend/MindIE-SD.git)",
+    "repo_url": "",
     "start_time": "2026-06-04T08:00:00",
     "end_time": "2026-06-04T09:50:00",
     "duration_seconds": 6600,
@@ -57,7 +58,7 @@
       "source": "README.md + docs/zh/installation.md + requirements.txt + pyproject.toml + Dockerfile_910b_aarch64.ubuntu"
     },
     "build_commands": {
-      "value": "python setup.py bdist_wheel (或 python -m build --wheel --no-isolation)",
+      "value": "python setup.py bdist_wheel  (或 python -m build --wheel --no-isolation)",
       "source": "docs/zh/developer_guide/build_guide.md + docs/zh/installation.md#源码安装"
     },
     "ut_commands": {
@@ -68,6 +69,8 @@
       "value": "examples/dummy_run/wan_infer.py, examples/dummy_run/qwen_image_infer.py, examples/dummy_run/flux_infer.py (均需NPU硬件)",
       "source": "examples/dummy_run/README.md"
     },
+    "build_entry": "python3 setup.py bdist_wheel",
+    "ut_entry": "bash tests/run_UT_test.sh",
     "special_dependencies": {
       "value": [
         {
@@ -97,9 +100,7 @@
         }
       ],
       "source": "docs/zh/installation.md + docker/Dockerfile_910b_aarch64.ubuntu + 昇腾OBS仓库"
-    },
-    "build_entry": "python setup.py bdist_wheel (或 python -m build --wheel --no-isolation)",
-    "ut_entry": "bash tests/run_UT_test.sh (CPU友好); bash tests/run_test.sh --all (NPU全量)"
+    }
   },
   "execution_log": [
     {
@@ -109,8 +110,7 @@
       "success": true,
       "output": "Image already up to date",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:00:30",
@@ -119,8 +119,7 @@
       "success": true,
       "output": "Container started successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:01:00",
@@ -129,8 +128,7 @@
       "success": true,
       "output": "Repository files copied to /workspace",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:02:00",
@@ -139,8 +137,7 @@
       "success": true,
       "output": "All system dependencies installed successfully",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:05:00",
@@ -149,8 +146,7 @@
       "success": true,
       "output": "Downloaded 1.1GB CANN toolkit (6.20 MB/s, ~2m52s)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:10:00",
@@ -159,8 +155,7 @@
       "success": true,
       "output": "CANN Toolkit 8.5.1 installed at /usr/local/Ascend (WARNING: driver not installed - expected without NPU hardware)",
       "error": "Initial install failed due to missing 'flock' command, resolved by installing util-linux package",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:15:00",
@@ -169,8 +164,7 @@
       "success": true,
       "output": "910b ops (2.0GB) and nnal (538MB) downloaded successfully",
       "error": "NNAL installation reported error but toolkit libs already available",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T08:40:00",
@@ -179,8 +173,7 @@
       "success": true,
       "output": "torch 2.9.0 + CUDA 12.8 dependencies installed (899.8 MB wheel)",
       "error": "Official PyPI timed out; Tsinghua mirror worked after configuring global pip config",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T09:16:00",
@@ -189,8 +182,7 @@
       "success": true,
       "output": "torch_npu installed from Huawei OBS wheel (27MB)",
       "error": "Could not install with dependencies (requires torch==2.9.0+cpu); installed with --no-deps",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T09:20:00",
@@ -199,8 +191,7 @@
       "success": true,
       "output": "All Python dependencies installed (diffusers, transformers, pytest, coverage, etc.)",
       "error": "Some CANN Python tool warnings about missing optional deps (getopt, inspect, scipy) - not critical",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T09:25:00",
@@ -210,8 +201,7 @@
       "output": "Fixed Windows CRLF line endings in 6 build scripts",
       "error": "",
       "returncode": 0,
-      "note": "Shell scripts in the repository have Windows line endings (\\r\\n) which caused bash parse errors on Linux",
-      "details": {}
+      "note": "Shell scripts in the repository have Windows line endings (\\r\\n) which caused bash parse errors on Linux"
     },
     {
       "timestamp": "2026-06-04T09:26:00",
@@ -220,8 +210,7 @@
       "success": false,
       "output": "",
       "error": "build_ops.sh failed: linker error 'ld: cannot find -lopapi' - libopapi.so missing from CANN toolkit. Fixed by installing Ascend-cann-910b-ops package which provides libopapi.so",
-      "returncode": 1,
-      "details": {}
+      "returncode": 1
     },
     {
       "timestamp": "2026-06-04T09:30:00",
@@ -230,8 +219,7 @@
       "success": false,
       "output": "Compilation progressed to 69% then failed",
       "error": "AscendC operator compilation failed: multiple NPU target builds (ascend910b, ascend910_93, ascend910) failed to generate .json binaries. This requires NPU compilation infrastructure not available in CPU-only container.",
-      "returncode": 2,
-      "details": {}
+      "returncode": 2
     },
     {
       "timestamp": "2026-06-04T09:35:00",
@@ -240,8 +228,7 @@
       "success": true,
       "output": "PyTorch C++ plugin built successfully: libPTAExtensionOPS.so (2.0MB)",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T09:40:00",
@@ -251,8 +238,7 @@
       "output": "mindiesd-3.0.0-cp311-cp311-linux_x86_64.whl (582KB) generated in 23 seconds",
       "error": "",
       "returncode": 0,
-      "duration_seconds": 23,
-      "details": {}
+      "duration_seconds": 23
     },
     {
       "timestamp": "2026-06-04T09:42:00",
@@ -261,8 +247,7 @@
       "success": true,
       "output": "mindiesd 3.0.0 installed",
       "error": "",
-      "returncode": 0,
-      "details": {}
+      "returncode": 0
     },
     {
       "timestamp": "2026-06-04T09:45:00",
@@ -284,8 +269,7 @@
           "tests/UT/utils/test_env.py: 8 passed",
           "tests/UT/utils/test_exception.py: 5 passed"
         ]
-      },
-      "details": {}
+      }
     },
     {
       "timestamp": "2026-06-04T09:46:00",
@@ -295,102 +279,23 @@
       "output": "",
       "error": "ImportError: cannot import name 'AutoencoderKLWan' from 'diffusers'. Additionally, NPU hardware is required for sample execution (libhccl.so missing without NPU driver). This is expected behavior per documentation.",
       "returncode": 1,
-      "note": "Samples explicitly require NPU hardware as stated in examples/dummy_run/README.md: '确保 NPU 可用'",
-      "details": {}
+      "note": "Samples explicitly require NPU hardware as stated in examples/dummy_run/README.md: '确保 NPU 可用'"
     }
   ],
   "process_timeline": [
-    {
-      "timestamp": "2026-06-04T08:00:00",
-      "step": "start",
-      "action": "验证过程启动",
-      "result": "started",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T08:00:00",
-      "step": "doc_reading",
-      "action": "读取仓库文档提取构建/测试信息",
-      "result": "completed - 提取了依赖、构建命令、测试命令、CANN依赖信息",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T08:00:30",
-      "step": "container_setup",
-      "action": "拉取并启动 openEuler 24.03 LTS 容器",
-      "result": "completed",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T08:02:00",
-      "step": "deps_install",
-      "action": "安装系统构建依赖 (gcc, cmake, openssl-devel等)",
-      "result": "completed",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T08:05:00",
-      "step": "cann_install",
-      "action": "下载安装 CANN 8.5.1 工具链",
-      "result": "completed (driver not installed - no NPU hardware)",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T08:40:00",
-      "step": "python_deps",
-      "action": "安装 torch, torch_npu 及 requirements.txt",
-      "result": "completed",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:25:00",
-      "step": "crlf_fix",
-      "action": "修复 shell 脚本的 Windows 行尾符",
-      "result": "completed - 6个脚本已转换",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:26:00",
-      "step": "build_ops",
-      "action": "尝试构建 AscendC 算子",
-      "result": "failed - NPU 编译基础设施不可用 (预期，需NPU硬件)",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:35:00",
-      "step": "build_plugin",
-      "action": "构建 PyTorch C++ 插件",
-      "result": "completed - libPTAExtensionOPS.so (2.0MB)",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:40:00",
-      "step": "wheel_build",
-      "action": "构建 Python wheel (跳过AscendC算子)",
-      "result": "completed - mindiesd-3.0.0-cp311-cp311-linux_x86_64.whl (582KB, 23s)",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:45:00",
-      "step": "unit_tests",
-      "action": "运行 CPU 友好单元测试",
-      "result": "completed - 34/34 passed (10s)",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:46:00",
-      "step": "sample_attempt",
-      "action": "尝试运行样例程序",
-      "result": "skipped - 需 NPU 硬件",
-      "details": {}
-    },
-    {
-      "timestamp": "2026-06-04T09:50:00",
-      "step": "cleanup",
-      "action": "清理容器并生成报告",
-      "result": "completed",
-      "details": {}
-    }
+    {"timestamp": "2026-06-04T08:00:00", "step": "start", "action": "验证过程启动", "result": "started", "details": {}},
+    {"timestamp": "2026-06-04T08:00:00", "step": "doc_reading", "action": "读取仓库文档提取构建/测试信息", "result": "completed - 提取了依赖、构建命令、测试命令、CANN依赖信息", "details": {}},
+    {"timestamp": "2026-06-04T08:00:30", "step": "container_setup", "action": "拉取并启动 openEuler 24.03 LTS 容器", "result": "completed", "details": {}},
+    {"timestamp": "2026-06-04T08:02:00", "step": "deps_install", "action": "安装系统构建依赖 (gcc, cmake, openssl-devel等)", "result": "completed", "details": {}},
+    {"timestamp": "2026-06-04T08:05:00", "step": "cann_install", "action": "下载安装 CANN 8.5.1 工具链", "result": "completed (driver not installed - no NPU hardware)", "details": {}},
+    {"timestamp": "2026-06-04T08:40:00", "step": "python_deps", "action": "安装 torch, torch_npu 及 requirements.txt", "result": "completed", "details": {}},
+    {"timestamp": "2026-06-04T09:25:00", "step": "crlf_fix", "action": "修复 shell 脚本的 Windows 行尾符", "result": "completed - 6个脚本已转换", "details": {}},
+    {"timestamp": "2026-06-04T09:26:00", "step": "build_ops", "action": "尝试构建 AscendC 算子", "result": "failed - NPU 编译基础设施不可用 (预期，需NPU硬件)", "details": {}},
+    {"timestamp": "2026-06-04T09:35:00", "step": "build_plugin", "action": "构建 PyTorch C++ 插件", "result": "completed - libPTAExtensionOPS.so (2.0MB)", "details": {}},
+    {"timestamp": "2026-06-04T09:40:00", "step": "wheel_build", "action": "构建 Python wheel (跳过AscendC算子)", "result": "completed - mindiesd-3.0.0-cp311-cp311-linux_x86_64.whl (582KB, 23s)", "details": {}},
+    {"timestamp": "2026-06-04T09:45:00", "step": "unit_tests", "action": "运行 CPU 友好单元测试", "result": "completed - 34/34 passed (10s)", "details": {}},
+    {"timestamp": "2026-06-04T09:46:00", "step": "sample_attempt", "action": "尝试运行样例程序", "result": "not_run - 需 NPU 硬件", "details": {}},
+    {"timestamp": "2026-06-04T09:50:00", "step": "cleanup", "action": "清理容器并生成报告", "result": "completed", "details": {}}
   ],
   "final_results": {
     "build": {
@@ -421,29 +326,7 @@
       "passed": 34,
       "failed": 0,
       "coverage_percent": 22,
-      "failures": [],
-      "sub_components": [
-        {
-          "name": "tests/UT/compilation/test_aclgraph_config.py",
-          "total": 17,
-          "passed": 17
-        },
-        {
-          "name": "tests/UT/utils/logs/test_log.py",
-          "total": 4,
-          "passed": 4
-        },
-        {
-          "name": "tests/UT/utils/test_env.py",
-          "total": 8,
-          "passed": 8
-        },
-        {
-          "name": "tests/UT/utils/test_exception.py",
-          "total": 5,
-          "passed": 5
-        }
-      ]
+      "failures": []
     },
     "sample": {
       "status": "not_run",
@@ -483,46 +366,55 @@
   ],
   "problems_encountered": [
     {
+      "timestamp": "2026-06-04T08:00:00",
       "problem": "Container startup with 'tail -f /dev/null' failed - 'cannot open nul for reading'",
       "solution": "Changed to 'sleep infinity' as container entrypoint",
       "source": "Docker on Windows maps /dev/null differently"
     },
     {
+      "timestamp": "2026-06-04T08:10:00",
       "problem": "CANN toolkit install failed - 'flock: command not found'",
       "solution": "Installed util-linux package which provides flock command",
       "source": "openEuler 24.03 minimal image does not include flock by default"
     },
     {
+      "timestamp": "2026-06-04T08:40:00",
       "problem": "pip install torch from official PyPI timed out",
       "solution": "Configured Tsinghua mirror (pypi.tuna.tsinghua.edu.cn) as global pip index",
       "source": "Network conditions in China"
     },
     {
+      "timestamp": "2026-06-04T09:16:00",
       "problem": "torch_npu could not be installed normally - requires torch==2.9.0+cpu but we have torch==2.9.0+cu128",
       "solution": "Downloaded torch_npu wheel from Huawei OBS (pytorch_v2.9.0-7.3.0_py311.tar.gz) and installed with --no-deps",
       "source": "Huawei OBS: https://pytorch-package.obs.cn-north-4.myhuaweicloud.com/pta/Daily/v2.9.0-7.3.0/20260214.4/"
     },
     {
+      "timestamp": "2026-06-04T09:26:00",
       "problem": "Build failed: 'ld: cannot find -lopapi' - libopapi.so missing",
       "solution": "Downloaded and installed Ascend-cann-910b-ops_8.5.1_linux-x86_64.run from 昇腾OBS repository, which provides libopapi.so",
       "source": "https://ascend-repo.obs.cn-east-2.myhuaweicloud.com/CANN/CANN%208.5.1/"
     },
     {
+      "timestamp": "2026-06-04T09:25:00",
       "problem": "Shell scripts have Windows CRLF line endings causing bash parse errors",
       "solution": "Used dos2unix to convert all .sh files in build/, tests/, csrc/, mindiesd/ directories",
       "source": "Files in repository edited on Windows"
     },
     {
+      "timestamp": "2026-06-04T09:30:00",
       "problem": "AscendC operator compilation (build_ops.sh) failed - NPU target compilation requires Ascend NPU compilation infrastructure",
       "solution": "Skipped AscendC build by temporarily renaming csrc/ops directory. Plugin build (build_plugin.sh) succeeded independently.",
       "source": "build/build_ops.sh calls msopgen which requires NPU compiler toolchain"
     },
     {
+      "timestamp": "2026-06-04T09:42:00",
       "problem": "mindiesd package import fails without NPU driver - torch_npu requires libhccl.so",
       "solution": "Set TORCH_DEVICE_BACKEND_AUTOLOAD=0 to prevent automatic torch_npu loading. Unit tests work with this setting.",
       "source": "torch_npu design - requires NPU runtime libraries"
     },
     {
+      "timestamp": "2026-06-04T09:46:00",
       "problem": "Sample program (wan_infer.py) fails with ImportError: AutoencoderKLWan not in diffusers 0.29.0",
       "solution": "Not resolved - requires newer diffusers version or NPU hardware for proper testing",
       "source": "examples/dummy_run/wan_infer.py requires diffusers >= 0.34.0 per README, but requirements.txt specifies 0.29.0"
