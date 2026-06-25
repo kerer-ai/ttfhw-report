@@ -669,13 +669,26 @@ function formatDurationDisplay(seconds?: number): string | undefined {
 
 function normalizeStatusString(status?: string): string {
   if (!status) return 'unknown'
-  const lower = status.toLowerCase()
+
+  // Handle boolean values
+  if (typeof status === 'boolean') return status ? 'success' : 'failed'
+  const raw = String(status)
+
+  // -- Chinese status values --
+  if (raw === '成功') return 'success'
+  if (raw === '不成功' || raw === '超时失败') return 'failed'
+
+  const lower = raw.toLowerCase()
   if (lower === 'skipped') return 'skipped'
   if (lower === 'no_tests') return 'no_tests'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'
   if (lower.includes('partial')) return 'partial_success'
   if (lower.includes('fail') || lower.includes('block') || lower.includes('unsuccessful')) return 'failed'
   if (lower.includes('skip') || lower.includes('not')) return 'not_run'
+
+  // -- Other non-standard values --
+  if (lower === 'incomplete') return 'partial_success'
+
   return 'unknown'
 }
 
