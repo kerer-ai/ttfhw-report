@@ -694,13 +694,19 @@ function normalizeStatusString(status?: string): string {
 
 function normalizeDisplayStatus(status?: string): string {
   if (!status) return 'unknown'
-  const lower = status.toLowerCase()
+  if (typeof status === 'boolean') return status ? 'success' : 'failed'
+  const raw = String(status)
+  // Chinese status values
+  if (raw === '成功') return 'success'
+  if (raw === '不成功' || raw === '超时失败') return 'failed'
+  const lower = raw.toLowerCase()
   if (lower === 'no_tests') return 'no_tests'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'
   if (lower.includes('partial')) return 'partial_success'
   if (lower.includes('fail') || lower.includes('block')) return 'failed'
   if (lower.includes('skip')) return 'skipped'
   if (lower.includes('not') || lower.includes('n/a')) return 'not_run'
+  if (lower === 'incomplete') return 'partial_success'
   return status
 }
 
