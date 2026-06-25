@@ -4,6 +4,9 @@ on:
   schedule:
     # Daily at 03:07 UTC (off-peak minute to avoid :00/:30 contention)
     - cron: '7 3 * * *'
+  repository_dispatch:
+    # Triggered by computing-TTFHW/ttfhw-json when new reports are pushed
+    types: [new-reports]
   workflow_dispatch:
     inputs:
       force_rebuild:
