@@ -470,29 +470,43 @@ function normalizeImageSelection(imgSrc: any): ImageSelection | undefined {
 // ======================== Status Helpers ========================
 
 function normalizeStatus(status: any): ResultStatus {
-  if (!status) return 'unknown'
-
-  // Handle boolean values from execution_log entries
+  // Handle boolean values first (before falsy check — !false is true)
   if (typeof status === 'boolean') return status ? 'success' : 'failed'
+
+  if (!status) return 'unknown'
 
   const raw = String(status).trim()
   const s = raw.toLowerCase()
 
-  // -- Chinese status values (from raw verification reports) --
-  if (raw === '成功') return 'success'
-  if (raw === '不成功' || raw === '超时失败') return 'failed'
-  if (raw === '部分成功') return 'partial_success'
-
-  // -- English standard values --
+  // -- Exact-match English standard values --
   if (s === 'success' || s === 'passed') return 'success'
   if (s === 'failed' || s === 'failure' || s === 'error' || s === 'blocked') return 'failed'
-  if (s === 'partial_success' || s === 'partial_failure' || s === 'mainly_success' || s === 'mostly_success' || s.includes('partial') || (s.includes('success') && s.includes('fail'))) return 'partial_success'
+  if (s === 'partial_success' || s === 'partial_failure' || s === 'mainly_success' || s === 'mostly_success') return 'partial_success'
   if (s === 'skipped') return 'skipped'
   if (s === 'no_tests' || s === 'not_applicable' || s === 'not_available') return 'no_tests'
   if (s === 'not_run' || s === 'not_executed' || s === 'not_configured' || s === 'not_attempted') return 'not_run'
-
-  // -- Other non-standard values --
   if (s === 'incomplete') return 'partial_success'
+
+  // -- Keyword-based fallback (handles Chinese, mixed-language, and descriptive values) --
+  const hasCnPartial = raw.includes('部分')
+  const hasCnSuccess = raw.includes('成功') || raw.includes('通过')
+  const hasCnFail = raw.includes('失败') || raw.includes('无法') || raw.includes('缺少') || raw.includes('不成功')
+  const hasCnSkip = raw.includes('跳过') || raw.includes('未执行') || raw.includes('未配置')
+  const hasEnPartial = s.includes('partial')
+  const hasEnSuccess = s.includes('success')
+  const hasEnFail = s.includes('fail') || s.includes('error') || s.includes('blocked')
+  const hasEnSkip = s.includes('skip') || s.includes('not_run') || s.includes('not configured')
+
+  if ((hasCnPartial || hasEnPartial) && (hasCnSuccess || hasEnSuccess || hasCnFail || hasEnFail))
+    return 'partial_success'
+  if (hasCnPartial || hasEnPartial)
+    return 'partial_success'
+  if (hasCnSuccess && !hasCnFail) return 'success'
+  if (hasEnSuccess && !hasEnFail) return 'success'
+  if (hasCnFail) return 'failed'
+  if (hasEnFail) return 'failed'
+  if (hasCnSkip) return 'not_run'
+  if (hasEnSkip) return 'not_run'
 
   return 'unknown'
 }

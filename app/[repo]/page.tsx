@@ -668,48 +668,49 @@ function formatDurationDisplay(seconds?: number): string | undefined {
 }
 
 function normalizeStatusString(status?: string): string {
+  // Handle boolean values first (before falsy check — !false is true)
+  if (typeof status === 'boolean') return status ? 'success' : 'failed'
+
   if (!status) return 'unknown'
 
-  // Handle boolean values
-  if (typeof status === 'boolean') return status ? 'success' : 'failed'
-  const raw = String(status)
-
-  // -- Chinese status values --
-  if (raw === '成功') return 'success'
-  if (raw === '不成功' || raw === '超时失败') return 'failed'
-  if (raw === '部分成功') return 'partial_success'
-
+  const raw = String(status).trim()
   const lower = raw.toLowerCase()
-  if (lower === 'skipped') return 'skipped'
-  if (lower === 'no_tests') return 'no_tests'
-  if (lower.includes('success') && !lower.includes('partial')) return 'success'
-  if (lower.includes('partial')) return 'partial_success'
-  if (lower.includes('fail') || lower.includes('block') || lower.includes('unsuccessful')) return 'failed'
-  if (lower.includes('skip') || lower.includes('not')) return 'not_run'
 
-  // -- Other non-standard values --
+  // Exact-match English standard values
+  if (lower === 'success' || lower === 'passed') return 'success'
+  if (lower === 'failed' || lower === 'failure' || lower === 'error' || lower === 'blocked') return 'failed'
+  if (lower === 'partial_success' || lower === 'partial_failure' || lower === 'mainly_success' || lower === 'mostly_success') return 'partial_success'
+  if (lower === 'skipped') return 'skipped'
+  if (lower === 'no_tests' || lower === 'not_applicable' || lower === 'not_available') return 'no_tests'
+  if (lower === 'not_run' || lower === 'not_executed' || lower === 'not_configured' || lower === 'not_attempted') return 'not_run'
   if (lower === 'incomplete') return 'partial_success'
+
+  // Keyword-based fallback (handles Chinese, mixed-language, and compound values like "成功 (经修复)")
+  const cnPartial = raw.includes('部分')
+  const cnSuccess = raw.includes('成功') || raw.includes('通过')
+  const cnFail = raw.includes('失败') || raw.includes('无法') || raw.includes('缺少') || raw.includes('不成功')
+  const cnSkip = raw.includes('跳过') || raw.includes('未执行') || raw.includes('未配置')
+  const enPartial = lower.includes('partial')
+  const enSuccess = lower.includes('success')
+  const enFail = lower.includes('fail') || lower.includes('error') || lower.includes('blocked')
+  const enSkip = lower.includes('skip') || lower.includes('not_run') || lower.includes('not configured')
+
+  if (cnPartial || enPartial) {
+    if (cnSuccess || enSuccess || cnFail || enFail) return 'partial_success'
+    return 'partial_success'
+  }
+  if (cnSuccess && !cnFail) return 'success'
+  if (enSuccess && !enFail) return 'success'
+  if (cnFail) return 'failed'
+  if (enFail) return 'failed'
+  if (cnSkip) return 'not_run'
+  if (enSkip) return 'not_run'
 
   return 'unknown'
 }
 
 function normalizeDisplayStatus(status?: string): string {
-  if (!status) return 'unknown'
-  if (typeof status === 'boolean') return status ? 'success' : 'failed'
-  const raw = String(status)
-  // Chinese status values
-  if (raw === '成功') return 'success'
-  if (raw === '不成功' || raw === '超时失败') return 'failed'
-  if (raw === '部分成功') return 'partial_success'
-  const lower = raw.toLowerCase()
-  if (lower === 'no_tests') return 'no_tests'
-  if (lower.includes('success') && !lower.includes('partial')) return 'success'
-  if (lower.includes('partial')) return 'partial_success'
-  if (lower.includes('fail') || lower.includes('block')) return 'failed'
-  if (lower.includes('skip')) return 'skipped'
-  if (lower.includes('not') || lower.includes('n/a')) return 'not_run'
-  if (lower === 'incomplete') return 'partial_success'
-  return status
+  return normalizeStatusString(status)
 }
 
 function statusText(status?: string): string {
@@ -1110,25 +1111,28 @@ function formatSeconds(seconds: number): string {
 }
 
 function timelineTone(result: string) {
-  if (result.includes('success') || result.includes('resolved')) {
-    return {
-      dot: 'bg-green-500',
-      panel: 'border-green-200 bg-green-50',
-      badge: 'bg-green-100 text-green-700',
-    }
+  const r = result.toLowerCase()
+  // Success indicators (EN + CN)
+  if (r.includes('success') || r.includes('resolved') || r.includes('passed') ||
+      (result.includes('成功') && !result.includes('不') && !result.includes('失败') && !result.includes('部分')) ||
+      result.includes('全部通过') || result.includes('已解决') || result.includes('完成')) {
+    return { dot: 'bg-green-500', panel: 'border-green-200 bg-green-50', badge: 'bg-green-100 text-green-700' }
   }
-  if (result.includes('fail') || result.includes('error') || result.includes('blocked')) {
-    return {
-      dot: 'bg-red-500',
-      panel: 'border-red-200 bg-red-50',
-      badge: 'bg-red-100 text-red-700',
-    }
+  // Partial indicators
+  if (r.includes('partial') || result.includes('部分') || result.includes('incomplete')) {
+    return { dot: 'bg-amber-500', panel: 'border-amber-200 bg-amber-50', badge: 'bg-amber-100 text-amber-700' }
   }
-  return {
-    dot: 'bg-slate-400',
-    panel: 'border-slate-200 bg-slate-50',
-    badge: 'bg-slate-100 text-slate-700',
+  // Failure indicators (EN + CN)
+  if (r.includes('fail') || r.includes('error') || r.includes('blocked') ||
+      result.includes('失败') || result.includes('无法') || result.includes('不成功') ||
+      result.includes('超时') || result.includes('缺少')) {
+    return { dot: 'bg-red-500', panel: 'border-red-200 bg-red-50', badge: 'bg-red-100 text-red-700' }
   }
+  // Skip/not-run indicators
+  if (r.includes('skip') || result.includes('跳过') || result.includes('未执行') || result.includes('未配置')) {
+    return { dot: 'bg-gray-400', panel: 'border-gray-200 bg-gray-50', badge: 'bg-gray-100 text-gray-600' }
+  }
+  return { dot: 'bg-slate-400', panel: 'border-slate-200 bg-slate-50', badge: 'bg-slate-100 text-slate-700' }
 }
 
 function JsonObjectGrid({ data, compact = false }: { data?: any; compact?: boolean }) {
