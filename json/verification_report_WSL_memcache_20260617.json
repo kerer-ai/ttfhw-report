@@ -1,0 +1,774 @@
+{
+  "metadata": {
+    "repo_name": "memcache",
+    "repo_path": "/workspace/TTFHW-third/UBSCore/memcache/repo",
+    "repo_url": "https://gitcode.com/Ascend/memcache.git",
+    "start_time": "2026-06-17T09:06:00",
+    "end_time": "2026-06-17T09:50:00",
+    "duration_seconds": 2640,
+    "total_steps": 7
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "WSL2 Virtual",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "919G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "Ubuntu 22.04 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "docker.m.daocloud.io/library/ubuntu:22.04",
+      "selection_reason": "install_run.md 第12行明确指定 OS: Ubuntu 22.04 LTS+，选择 Ubuntu 22.04"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "doc/install_run.md - 第70行 run包命名含x86或aarch64",
+      "value": "x86_64 / aarch64 双架构支持"
+    },
+    "recommended_image": {
+      "source": "doc/install_run.md - 环境准备章节第12行",
+      "value": "OS: Ubuntu 22.04 LTS+"
+    },
+    "dependencies": {
+      "source": "doc/install_run.md 环境准备章节 + CMakeLists.txt",
+      "value": [
+        "cmake 3.20.x (doc/install_run.md)",
+        "gcc 11.4+ (doc/install_run.md)",
+        "python 3.11.10 (doc/install_run.md)",
+        "pybind11 2.10.3 (doc/install_run.md)",
+        "make 4.3 or ninja 1.10.1 (doc/install_run.md)",
+        "git (doc/install_run.md 拉取代码步骤)",
+        "patch (CMakeLists.txt UT mockcpp patch 步骤隐式依赖)",
+        "lcov (script/run_ut.sh 覆盖率分析隐式依赖)",
+        "dos2unix (script/build.sh 隐式依赖)"
+      ]
+    },
+    "build_commands": {
+      "source": "doc/install_run.md - 编译章节第50行",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF"
+    },
+    "ut_commands": {
+      "source": "README.md 目录结构 script/run_ut.sh + script/run_ut.sh",
+      "value": "bash script/run_ut.sh"
+    },
+    "sample_commands": {
+      "source": "example/examples.md + example/cpp/README.md + example/python/README.md",
+      "value": "C++样例需NPU+CANN环境编译运行；Python样例需memfabric_hybrid+torch依赖"
+    },
+    "build_entry": {
+      "source": "doc/install_run.md - 编译章节第50行",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF"
+    },
+    "ut_entry": {
+      "source": "README.md + script/run_ut.sh",
+      "value": "bash script/run_ut.sh"
+    },
+    "special_dependencies": {
+      "source": ".gitmodules + README.md 快速入门章节",
+      "value": [
+        "git submodule: 3rdparty/memfabric_hybrid (gitcode.com/Ascend/memfabric_hybrid)",
+        "git submodule: 3rdparty/log/spdlog (github.com/gabime/spdlog → gitcode镜像)",
+        "git submodule: 3rdparty/cpp-httplib (github.com/yhirose/cpp-httplib → gitcode镜像)",
+        "git submodule: 3rdparty/nlohmann/json (github.com/nlohmann/json → gitcode镜像)",
+        "git submodule: 3rdparty/prometheus-cpp-lite (github.com/biaks/prometheus-cpp-lite → ghproxy下载)",
+        "git submodule: test/3rdparty/googletest (github.com/google/googletest → gitcode镜像)",
+        "git submodule: test/3rdparty/mockcpp (github.com/sinojelly/mockcpp → gitclone镜像)"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T09:06:00",
+      "command": "git clone https://gitcode.com/Ascend/memcache.git repo",
+      "success": true,
+      "output": "Cloning into 'repo'...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T09:06:30",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "7个hooks通过, 5个hooks失败, 1个hook跳过",
+      "error": "ruff-check, codespell, pylint, bandit, typos 检测到问题",
+      "returncode": 1,
+      "duration_seconds": 42
+    },
+    {
+      "timestamp": "2026-06-17T09:07:30",
+      "command": "检查 lint-runner 配置: find . -name \".lint-runner*\" -o -name \"lint-runner*\"",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:08:00",
+      "command": "检查 .devcontainer/ 目录和 Dockerfile",
+      "success": true,
+      "output": "未找到 .devcontainer 目录，未找到 Dockerfile",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:08:30",
+      "command": "docker pull ubuntu:22.04 → 失败后切换 docker.m.daocloud.io/library/ubuntu:22.04",
+      "success": true,
+      "output": "Digest: sha256:4f838adc... Status: Image is up to date",
+      "error": "Docker Hub 超时，通过 daocloud 镜像拉取成功",
+      "returncode": 0,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-17T09:09:30",
+      "command": "docker run -d --name ttfhw-memcache-env --network host -v repo:/workspace ubuntu:22.04",
+      "success": true,
+      "output": "Container ID: 73031f52e19d...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T09:10:00",
+      "command": "apt-get install -y cmake gcc-11 g++-11 ninja-build make git python3.11 python3.11-dev pybind11",
+      "success": true,
+      "output": "cmake 3.22.1, gcc 11.4.0, python 3.11.15, ninja 1.10.1, make 4.3, pybind11 2.10.3",
+      "error": "deadsnakes PPA GPG key导入失败(不影响安装)",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-17T09:34:00",
+      "command": "git submodule update --init 3rdparty/ (with git config url.insteadOf redirects)",
+      "success": true,
+      "output": "spdlog, cpp-httplib, memfabric_hybrid, nlohmann/json 检出成功",
+      "error": "prometheus-cpp-lite gitclone 版本不匹配(shallow clone 缺少指定commit)",
+      "returncode": 128,
+      "duration_seconds": 80,
+      "note": "使用 git config url.insteadOf 将 github.com 重定向到 gitcode.com/gh_mirrors 和 gitclone.com"
+    },
+    {
+      "timestamp": "2026-06-17T09:35:00",
+      "command": "修复 prometheus-cpp-lite: git clone from gitclone → git checkout origin/master",
+      "success": true,
+      "output": "prometheus-cpp-lite 检出 master HEAD: 175b1b9",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T09:36:00",
+      "command": "修复 mockcpp: git clone from gitclone → git checkout origin/master",
+      "success": true,
+      "output": "mockcpp 检出 master HEAD: 7b7eb8b",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T09:36:26",
+      "command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF (第1次)",
+      "success": false,
+      "output": "ninja: build stopped: subcommand failed",
+      "error": "fatal error: prometheus/simpleapi.h: No such file or directory (prometheus-cpp-lite v2 目录结构与旧版不兼容)",
+      "returncode": 1,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T09:37:00",
+      "command": "创建 prometheus-cpp-lite symlinks: simpleapi/include→include, core/include→include",
+      "success": true,
+      "output": "symlinks created",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T09:37:32",
+      "command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF (第2次)",
+      "success": false,
+      "output": "ninja: build stopped: subcommand failed",
+      "error": "fatal error: tcp_socket.h: No such file or directory (prometheus-cpp-lite v2 新增 ip-sockets-cpp-lite 依赖)",
+      "returncode": 1,
+      "duration_seconds": 25
+    },
+    {
+      "timestamp": "2026-06-17T09:38:14",
+      "command": "bash script/build_and_pack_run.sh (第3次, CPLUS_INCLUDE_PATH 添加 ip-sockets-cpp-lite)",
+      "success": false,
+      "output": "ninja: build stopped",
+      "error": "error: 'to_chars' is not a member of 'std' (prometheus-cpp-lite v2 使用 C++17 ABI, BUILD_OPEN_ABI=OFF 不兼容)",
+      "returncode": 1,
+      "duration_seconds": 23
+    },
+    {
+      "timestamp": "2026-06-17T09:39:00",
+      "command": "从 ghproxy.net 下载 prometheus-cpp-lite 正确版本 tarball (commit 48d09c4)",
+      "success": true,
+      "output": "下载 29KB tarball, 解压到 3rdparty/prometheus-cpp-lite",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T09:39:26",
+      "command": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF (第4次, 正确 prometheus-cpp-lite)",
+      "success": false,
+      "output": "ninja: build stopped: subcommand failed",
+      "error": "error: 'int32_t' was not declared in spdlogger4c.h:55 (spdlog v1.15.3 不传递包含 <cstdint>)",
+      "returncode": 1,
+      "duration_seconds": 89
+    },
+    {
+      "timestamp": "2026-06-17T09:41:16",
+      "command": "bash script/build_and_pack_run.sh (第5次, CXXFLAGS=\"-include cstdint\")",
+      "success": true,
+      "output": "构建成功, 生成 run 包和 whl 包",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 95
+    },
+    {
+      "timestamp": "2026-06-17T09:45:11",
+      "command": "bash script/run_ut.sh (CXXFLAGS=\"-include cstdint\" MMC_BUILD_JOBS=12)",
+      "success": true,
+      "output": "158 tests, 0 failures, 0 errors. 覆盖率: lines 78.6%, branches 44.3%",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 237
+    },
+    {
+      "timestamp": "2026-06-17T09:49:30",
+      "command": "pip3 install --no-deps memcache_hybrid-1.2.0-*.whl && python3 example/python/test_mmc_demo.py",
+      "success": false,
+      "output": "ModuleNotFoundError: No module named 'memfabric_hybrid'",
+      "error": "样例需要完整 MemFabric 运行时和 Ascend NPU 硬件，当前 x86_64 Docker 容器无法执行",
+      "returncode": 1,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T09:50:00",
+      "command": "docker stop ttfhw-memcache-env && docker rm ttfhw-memcache-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T09:06:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T09:06:00",
+      "step": "document_reading",
+      "action": "读取 README.md 了解项目概览",
+      "result": "成功",
+      "details": {
+        "file": "README.md",
+        "sections_read": [
+          "概述",
+          "核心组件",
+          "目录结构",
+          "快速入门",
+          "学习教程"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:07:00",
+      "step": "document_reading",
+      "action": "读取 doc/install_run.md 了解编译和UT入口",
+      "result": "成功",
+      "details": {
+        "file": "doc/install_run.md",
+        "sections_read": [
+          "环境准备",
+          "编译",
+          "run包安装",
+          "软件使用"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:07:30",
+      "step": "document_reading",
+      "action": "读取 CMakeLists.txt 和构建脚本确认编译参数",
+      "result": "成功",
+      "details": {
+        "files": [
+          "CMakeLists.txt",
+          "script/build.sh",
+          "script/build_and_pack_run.sh",
+          "script/run_ut.sh"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:08:00",
+      "step": "document_reading",
+      "action": "读取 .gitmodules 确认第三方依赖",
+      "result": "成功",
+      "details": {
+        "submodules": [
+          "memfabric_hybrid",
+          "spdlog",
+          "cpp-httplib",
+          "nlohmann/json",
+          "prometheus-cpp-lite",
+          "googletest",
+          "mockcpp"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:07:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 13
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:07:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "passed": 7,
+        "failed": 5,
+        "skipped": 1
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:07:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:08:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及 Dockerfile",
+      "result": "未配置",
+      "details": {
+        "config_dir": null,
+        "files": []
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:08:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "Ubuntu 22.04 LTS",
+      "details": {
+        "selection_reason": "doc/install_run.md 第12行明确指定 OS: Ubuntu 22.04 LTS+"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:09:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {
+        "image": "docker.m.daocloud.io/library/ubuntu:22.04",
+        "note": "Docker Hub 超时，通过 daocloud 镜像"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:10:00",
+      "step": "dependency_installation",
+      "action": "安装文档列出的构建依赖",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "cmake 3.22.1",
+          "gcc-11 11.4.0",
+          "python3.11 3.11.15",
+          "pybind11 2.10.3",
+          "ninja 1.10.1",
+          "make 4.3",
+          "git 2.34.1"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:34:00",
+      "step": "submodule_initialization",
+      "action": "初始化 git 子模块（使用 gitcode/gitclone 镜像替换 GitHub）",
+      "result": "部分需要手动修复",
+      "details": {
+        "resolved": [
+          "spdlog",
+          "cpp-httplib",
+          "nlohmann/json",
+          "memfabric_hybrid",
+          "googletest"
+        ],
+        "need_fix": [
+          "prometheus-cpp-lite",
+          "mockcpp"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:36:00",
+      "step": "build_attempt",
+      "action": "首次构建尝试",
+      "result": "失败",
+      "details": {
+        "error": "prometheus-cpp-lite gitclone版本(v2)目录结构与仓库期望不兼容"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:37:00",
+      "step": "problem_resolution",
+      "action": "创建 prometheus-cpp-lite 目录兼容 symlinks",
+      "result": "部分解决",
+      "details": {
+        "solution": "symlink simpleapi/include→include, core/include→include"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:38:00",
+      "step": "build_attempt",
+      "action": "第2-3次构建尝试",
+      "result": "失败",
+      "details": {
+        "errors": [
+          "tcp_socket.h 缺失(新版依赖)",
+          "std::to_chars ABI 不兼容"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:39:00",
+      "step": "problem_resolution",
+      "action": "从 ghproxy.net 下载 prometheus-cpp-lite 正确版本(commit 48d09c4)替换",
+      "result": "已解决",
+      "details": {
+        "solution": "ghproxy.net 下载 GitHub tarball"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:39:26",
+      "step": "build_attempt",
+      "action": "第4次构建尝试（正确 prometheus-cpp-lite）",
+      "result": "失败",
+      "details": {
+        "error": "spdlogger4c.h:55 int32_t 未声明 (spdlog v1.15.3 不传递 <cstdint>)"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:41:00",
+      "step": "problem_resolution",
+      "action": "设置 CXXFLAGS=\"-include cstdint\" 环境变量规避 int32_t 问题",
+      "result": "已解决",
+      "details": {
+        "solution": "export CXXFLAGS=\"-include cstdint\""
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:41:16",
+      "step": "build_retry",
+      "action": "第5次构建（RELEASE模式）",
+      "result": "成功",
+      "details": {
+        "concurrency": 12,
+        "concurrency_ratio": "60%",
+        "duration_seconds": 95
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:45:11",
+      "step": "ut_execution",
+      "action": "执行单元测试（DEBUG模式 + 覆盖率）",
+      "result": "成功",
+      "details": {
+        "total": 158,
+        "passed": 158,
+        "failed": 0,
+        "errors": 0,
+        "lines_coverage": "78.6%",
+        "branches_coverage": "44.3%",
+        "duration_seconds": 237
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:49:30",
+      "step": "sample_execution",
+      "action": "尝试执行 C++ 和 Python 样例",
+      "result": "无法执行",
+      "details": {
+        "reason": "样例需要 Ascend NPU 硬件、CANN 软件栈和完整 MemFabric 运行时，当前 x86_64 Docker 容器不具备这些条件"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:50:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T09:50:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_memcache_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（13个hooks，7通过5失败1跳过），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "partial_success",
+        "duration_seconds": 42,
+        "total_hooks": 13,
+        "passed": 7,
+        "failed": 5,
+        "skipped": 1,
+        "failures": [
+          {
+            "hook_name": "ruff-check",
+            "file": "多个 Python 文件",
+            "error": "Python 代码风格检查未通过"
+          },
+          {
+            "hook_name": "codespell",
+            "file": "多个文件",
+            "error": "拼写检查发现拼写错误"
+          },
+          {
+            "hook_name": "pylint",
+            "file": "多个 Python 文件",
+            "error": "Python 代码质量检查未通过"
+          },
+          {
+            "hook_name": "bandit",
+            "file": "多个 Python 文件",
+            "error": "安全漏洞检查发现 Low severity 问题 2 个"
+          },
+          {
+            "hook_name": "typos",
+            "file": "test/python/memcache/mock_server/server.py:264,266",
+            "error": "typos 发现 'datas' 应为 'data'"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer，未提供 Dockerfile"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 95,
+      "concurrency": 12,
+      "artifacts": [
+        {
+          "name": "memcache_hybrid run包",
+          "path": "output/memcache_hybrid-1.2.0_linux_x86_64.run",
+          "size": "6.9 MB"
+        },
+        {
+          "name": "libmf_memcache.so (C++共享库)",
+          "path": "output/memcache/lib64/libmf_memcache.so",
+          "size": "3.9 MB"
+        },
+        {
+          "name": "_pymmc Python扩展模块",
+          "path": "output/memcache/lib64/_pymmc.cpython-311-x86_64-linux-gnu.so",
+          "size": "728 KB"
+        },
+        {
+          "name": "mmc_meta_service (MetaService二进制)",
+          "path": "output/memcache/bin/mmc_meta_service",
+          "size": "1.2 MB"
+        },
+        {
+          "name": "memcache_hybrid wheel包",
+          "path": "output/memcache/wheel/memcache_hybrid-1.2.0-cp311-cp311-linux_x86_64.whl",
+          "size": "1.8 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 237,
+      "total": 158,
+      "passed": 158,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 10,
+      "results": [
+        {
+          "sample_name": "C++ 样例 (example/cpp/memcache_cpp_test.cpp)",
+          "execution_status": "无法执行",
+          "output_summary": "需要 Ascend NPU + CANN 软件栈 + MemFabric run 包环境",
+          "execution_time": "N/A"
+        },
+        {
+          "sample_name": "Python 样例 (test_mmc_demo.py, test_mmc_batch.py 等)",
+          "execution_status": "无法执行",
+          "output_summary": "需要 memfabric_hybrid Python 包 + torch + NPU 硬件",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 和 install_run.md 未列出 prometheus-cpp-lite 等 GitHub 第三方子模块依赖（仅在 .gitmodules 中）",
+    "install_run.md 未列出 cpp-httplib、nlohmann/json 等 header-only 第三方依赖",
+    "install_run.md 未列出 patch 命令依赖（UT 编译 mockcpp patch 步骤需要）",
+    "install_run.md 未列出 lcov 依赖（UT 覆盖率分析需要）",
+    "install_run.md 未列出 dos2unix 依赖（build.sh 隐式调用）",
+    "spdlogger4c.h 缺少 #include <cstdint>，导致使用 spdlog v1.15.3 时编译失败",
+    "prometheus-cpp-lite .gitmodules 指定 branch=master 无固定版本，最新版本(v2)目录结构与旧版不兼容",
+    "install_run.md 未说明在无 NPU 环境下构建的限制和预期行为",
+    "install_run.md 中 pip install 步骤未说明可能需要 --break-system-packages 或 venv",
+    "README 中 GitHub 子模块 URL 在国内网络环境下不可达，建议提供 gitcode 镜像地址"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T09:09:00",
+      "problem": "Docker Hub 不可访问，无法拉取 ubuntu:22.04 镜像",
+      "solution": "改用 docker.m.daocloud.io/library/ubuntu:22.04 镜像",
+      "source": "网络限制"
+    },
+    {
+      "timestamp": "2026-06-17T09:10:00",
+      "problem": "deadsnakes PPA GPG 密钥导入失败",
+      "solution": "手动添加 GPG key 和 PPA 源，python3.11 安装成功",
+      "source": "Ubuntu 22.04 默认不含 python3.11"
+    },
+    {
+      "timestamp": "2026-06-17T09:34:00",
+      "problem": "GitHub 不可访问，git submodule update 失败",
+      "solution": "使用 git config url.insteadOf 将 github.com 重定向到 gitcode.com/gh_mirrors 和 gitclone.com",
+      "source": ".gitmodules 中 spdlog, cpp-httplib, nlohmann/json, googletest, mockcpp, prometheus-cpp-lite 使用 GitHub URL"
+    },
+    {
+      "timestamp": "2026-06-17T09:36:00",
+      "problem": "prometheus-cpp-lite gitclone 镜像为 shallow clone，缺少 .gitmodules 指定的 commit 48d09c4",
+      "solution": "手动 checkout gitclone master HEAD，后续从 ghproxy.net 下载正确版本 tarball",
+      "source": "gitclone.com shallow clone 限制"
+    },
+    {
+      "timestamp": "2026-06-17T09:36:26",
+      "problem": "prometheus-cpp-lite v2 目录结构变化: simpleapi/ 和 core/ 独立目录改为统一 include/ 目录",
+      "solution": "从 ghproxy.net 下载正确版本 tarball (commit 48d09c4) 替换",
+      "source": ".gitmodules 指定 branch=master 无版本锁定"
+    },
+    {
+      "timestamp": "2026-06-17T09:39:26",
+      "problem": "spdlogger4c.h:55 int32_t 未声明，spdlog v1.15.3 不再传递包含 <cstdint>",
+      "solution": "设置环境变量 export CXXFLAGS=\"-include cstdint\" 强制包含",
+      "source": "spdlog v1.15.3 API 变化 + memcache 代码缺少 #include <cstdint>"
+    },
+    {
+      "timestamp": "2026-06-17T09:44:00",
+      "problem": "UT 编译失败: /bin/sh: patch: not found",
+      "solution": "apt-get install -y patch",
+      "source": "run_ut.sh 中 mockcpp arm64 patch 步骤需要 patch 命令"
+    },
+    {
+      "timestamp": "2026-06-17T09:49:30",
+      "problem": "样例无法执行: ModuleNotFoundError: No module named 'memfabric_hybrid'",
+      "solution": "无法在无 NPU 的 x86_64 Docker 容器中解决，需要 Ascend 硬件环境",
+      "source": "样例依赖完整的 MemFabric + Ascend NPU 运行时"
+    }
+  ],
+  "session_export_file": "verification_report_WSL_memcache_20260617.json",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（13个hooks，7通过5失败1跳过），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 42,
+      "total_hooks": 13,
+      "passed": 7,
+      "failed": 5,
+      "skipped": 1,
+      "failures": [
+        {
+          "hook_name": "ruff-check",
+          "file": "多个 Python 文件",
+          "error": "Python 代码风格检查未通过"
+        },
+        {
+          "hook_name": "codespell",
+          "file": "多个文件",
+          "error": "拼写检查发现拼写错误"
+        },
+        {
+          "hook_name": "pylint",
+          "file": "多个 Python 文件",
+          "error": "Python 代码质量检查未通过"
+        },
+        {
+          "hook_name": "bandit",
+          "file": "多个 Python 文件",
+          "error": "安全漏洞检查发现 Low severity 问题 2 个"
+        },
+        {
+          "hook_name": "typos",
+          "file": "test/python/memcache/mock_server/server.py:264,266",
+          "error": "typos 发现 'datas' 应为 'data'"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer，未提供 Dockerfile"
+  }
+}

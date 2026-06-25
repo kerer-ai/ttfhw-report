@@ -1,0 +1,690 @@
+{
+  "metadata": {
+    "repo_name": "libipmi",
+    "repo_path": "/workspace/TTFHW-third/openUBMC/libipmi-tmp-src",
+    "repo_url": "https://gitcode.com/openUBMC/libipmi.git",
+    "start_time": "2026-06-17T11:58:00",
+    "end_time": "2026-06-17T12:18:00",
+    "duration_seconds": 1200,
+    "total_steps": 28
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G total, 913G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "文档未指定镜像，默认使用 openEuler 24.03 LTS。README 中使用 apt 命令（Debian/Ubuntu 风格），但仓库未提供 Dockerfile 或推荐镜像说明"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 系统要求章节",
+      "value": "C++17 兼容编译器（GCC 7+, Clang 5+, MSVC 2019+），无明确架构限定，conanfile.py 同时支持 armv8 和 x86_64"
+    },
+    "recommended_image": {
+      "source": "未在文档中找到镜像推荐",
+      "value": "文档未指定镜像，默认使用 openEuler 24.03 LTS。README 中使用 apt 命令暗示 Ubuntu/Debian 环境，但无 Dockerfile"
+    },
+    "dependencies": {
+      "source": "README.md + meson.build + CMakeLists.txt(find_package)分析",
+      "value": [
+        "C++17 编译器 (GCC 7+)",
+        "Meson 构建系统 (0.56+)",
+        "ninja-build",
+        "libboost-all-dev (boost-devel)",
+        "libgtest-dev (gtest-devel)",
+        "openUBMC libmcpp (1.2.0+)",
+        "dbus-1 (dbus-devel)",
+        "glib-2.0 (glib2-devel)",
+        "git（meson subprojects 需要）",
+        "sqlite3（libmcpp 子项目隐式依赖）",
+        "luajit（libmcpp 子项目隐式依赖）"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson setup builddir && meson compile -C builddir"
+    },
+    "ut_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson test -C builddir"
+    },
+    "sample_commands": {
+      "source": "README.md - 快速开始章节（Lua API 示例，无编译后的二进制样例）",
+      "value": "文档未提供编译后的样例二进制程序，快速开始章节仅展示 Lua 脚本 API 调用方式"
+    },
+    "build_entry": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson setup builddir && meson compile -C builddir"
+    },
+    "ut_entry": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson test -C builddir"
+    },
+    "special_dependencies": {
+      "source": "README.md - 安装本地依赖库章节",
+      "value": [
+        "libmcpp: 通过 meson subprojects 从 gitcode.com/openUBMC/libmcpp.git 获取（wrap 文件使用 SSH URL，需改为 HTTPS 以支持匿名访问）",
+        "libmcpp 子项目进一步依赖 mcbase, mcengine, mcdbus, mcdatabase, mcexpr, mcapp, secfile, log_appenders 等"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T11:58:00",
+      "command": "git clone https://gitcode.com/openUBMC/libipmi.git libipmi-tmp-src",
+      "success": true,
+      "output": "仓库克隆成功，包含 README.md, meson.build, src/, tests/, subprojects/ 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-17T11:59:00",
+      "command": "检查 pre-commit 配置: ls .pre-commit-config.yaml",
+      "success": true,
+      "output": "文件不存在",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T11:59:30",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T11:59:30",
+      "command": "检查 devcontainer 配置: ls .devcontainer/",
+      "success": true,
+      "output": "目录不存在",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T12:00:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974\nStatus: Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T12:00:10",
+      "command": "docker run -d --name ttfhw-libipmi-env -v /workspace/TTFHW-third/openUBMC/libipmi-tmp-src:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 1f6cafeefb7066000aba785d9065ac878838b5ced0bd2c84449c8f5bd0a1a7cc",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T12:01:00",
+      "command": "dnf install -y meson gcc gcc-c++ boost-devel gtest-devel ninja-build dbus-devel glib2-devel (首次尝试)",
+      "success": false,
+      "output": "安装失败",
+      "error": "python3-ninja 与 ninja-build 冲突，meson 依赖 ninja-build 导致安装失败",
+      "returncode": 1,
+      "duration_seconds": 147
+    },
+    {
+      "timestamp": "2026-06-17T12:03:00",
+      "command": "分步安装: dnf install -y gcc gcc-c++ boost-devel gtest-devel dbus-devel glib2-devel && dnf install -y meson --allowerasing",
+      "success": true,
+      "output": "所有依赖安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 100
+    },
+    {
+      "timestamp": "2026-06-17T12:05:00",
+      "command": "meson setup builddir（首次尝试）",
+      "success": false,
+      "output": "配置失败",
+      "error": "Git program not found, cannot download libmcpp.wrap via git",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T12:05:30",
+      "command": "dnf install -y git",
+      "success": true,
+      "output": "git 2.43.0 安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T12:06:00",
+      "command": "meson setup builddir（第二次尝试，SSH URL）",
+      "success": false,
+      "output": "配置失败",
+      "error": "Git command failed: Host key verification failed. git@gitcode.com:openUBMC/libmcpp.git SSH 认证失败",
+      "returncode": 1,
+      "duration_seconds": 1,
+      "note": "subprojects/libmcpp.wrap 使用 SSH URL (git@gitcode.com:openUBMC/libmcpp.git)，容器内无 SSH 密钥"
+    },
+    {
+      "timestamp": "2026-06-17T12:06:30",
+      "command": "修改 subprojects/libmcpp.wrap: 将 SSH URL 改为 HTTPS URL (https://gitcode.com/openUBMC/libmcpp.git)",
+      "success": true,
+      "output": "wrap 文件已修改",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1,
+      "note": "将 git@gitcode.com:openUBMC/libmcpp.git 改为 https://gitcode.com/openUBMC/libmcpp.git 以支持匿名 HTTPS 克隆"
+    },
+    {
+      "timestamp": "2026-06-17T12:06:30",
+      "command": "meson setup builddir（第三次尝试，HTTPS URL）",
+      "success": false,
+      "output": "配置失败 - libmcpp 子项目的 mcdatabase 组件缺少 sqlite3",
+      "error": "Dependency 'sqlite3' not found, tried pkgconfig",
+      "returncode": 1,
+      "duration_seconds": 4,
+      "note": "sqlite3 是 libmcpp 子项目的隐式传递依赖，README 未列出"
+    },
+    {
+      "timestamp": "2026-06-17T12:07:00",
+      "command": "dnf install -y sqlite-devel",
+      "success": true,
+      "output": "sqlite-devel 3.42.0 安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 36
+    },
+    {
+      "timestamp": "2026-06-17T12:09:00",
+      "command": "meson setup builddir（第四次尝试）",
+      "success": true,
+      "output": "meson 配置成功，项目 libipmi 1.0.40，构建目标 27 个（含子项目）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T12:09:00",
+      "command": "meson compile -C builddir -j12（首次编译）",
+      "success": false,
+      "output": "编译失败",
+      "error": "1) lauxlib.h: No such file or directory (缺 LuaJIT 头文件)\n2) undefined reference to sqlite3_preupdate_hook/old/new/count/depth (系统 SQLite 不含 session extension)",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-17T12:12:00",
+      "command": "dnf install -y luajit-devel",
+      "success": true,
+      "output": "luajit 2.1.0 和 luajit-devel 安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T12:12:30",
+      "command": "从源码编译 SQLite 3.42.0（启用 SESSION + PREUPDATE_HOOK 扩展）并安装到 /usr/local",
+      "success": true,
+      "output": "SQLite 编译安装成功，libsqlite3.so 含 sqlite3_preupdate_hook 等符号",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 339
+    },
+    {
+      "timestamp": "2026-06-17T12:16:00",
+      "command": "echo '/usr/local/lib' > /etc/ld.so.conf.d/local.conf && ldconfig && PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:/usr/lib64/pkgconfig meson setup builddir && meson compile -C builddir -j12",
+      "success": true,
+      "output": "编译成功，368 个编译目标全部完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 158
+    },
+    {
+      "timestamp": "2026-06-17T12:16:55",
+      "command": "LD_LIBRARY_PATH=/usr/local/lib meson test -C builddir --print-errorlogs",
+      "success": true,
+      "output": "1/1 libipmi_test OK (149 tests from 17 test suites, 149 passed, 0 failed)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T12:17:30",
+      "command": "docker stop ttfhw-libipmi-env && docker rm ttfhw-libipmi-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T11:58:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T11:58:00",
+      "step": "document_reading",
+      "action": "克隆仓库并读取 README.md, meson.build, meson_options.txt, conanfile.py, docs/overview.md",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "meson.build",
+          "meson_options.txt",
+          "conanfile.py",
+          "docs/overview.md"
+        ],
+        "key_findings": "C++17 项目，使用 Meson 构建系统，依赖 libmcpp/dbus/glib，测试使用 gtest"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T11:59:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "未配置",
+      "details": {
+        "searched_file": ".pre-commit-config.yaml",
+        "found": false
+      }
+    },
+    {
+      "timestamp": "2026-06-17T11:59:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ],
+        "found": false
+      }
+    },
+    {
+      "timestamp": "2026-06-17T11:59:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {
+        "config_dir": ".devcontainer",
+        "exists": false
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:00:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "文档未指定镜像，默认使用 openEuler 24.03 LTS。README 中使用 apt 命令暗示 Ubuntu/Debian 环境，但未提供 Dockerfile"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:00:10",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器，挂载仓库目录",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-libipmi-env",
+        "mount": "/workspace"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:01:00",
+      "step": "dependency_installation",
+      "action": "安装 README 列出的构建依赖（首次尝试）",
+      "result": "失败",
+      "details": {
+        "error": "python3-ninja 与 ninja-build 包冲突",
+        "packages_attempted": [
+          "meson",
+          "gcc",
+          "gcc-c++",
+          "boost-devel",
+          "gtest-devel",
+          "ninja-build",
+          "dbus-devel",
+          "glib2-devel"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:03:00",
+      "step": "problem_resolution",
+      "action": "分步安装依赖，使用 --allowerasing 解决包冲突",
+      "result": "已解决",
+      "details": {
+        "solution": "先安装 gcc/gcc-c++/boost-devel/gtest-devel/dbus-devel/glib2-devel，再使用 dnf install -y meson --allowerasing 安装 meson"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:05:00",
+      "step": "build_attempt",
+      "action": "首次 meson setup 尝试",
+      "result": "失败",
+      "details": {
+        "error": "缺少 git 程序，无法通过 meson wrap 下载 libmcpp 子项目"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:05:30",
+      "step": "problem_resolution",
+      "action": "安装 git 程序",
+      "result": "已解决",
+      "details": {
+        "package": "git 2.43.0"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:06:00",
+      "step": "build_attempt",
+      "action": "第二次 meson setup 尝试",
+      "result": "失败",
+      "details": {
+        "error": "SSH 认证失败，无法克隆 git@gitcode.com:openUBMC/libmcpp.git"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:06:30",
+      "step": "problem_resolution",
+      "action": "修改 libmcpp.wrap 文件，将 SSH URL 改为 HTTPS URL",
+      "result": "已解决",
+      "details": {
+        "file": "subprojects/libmcpp.wrap",
+        "change": "git@gitcode.com:openUBMC/libmcpp.git → https://gitcode.com/openUBMC/libmcpp.git"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:06:30",
+      "step": "build_attempt",
+      "action": "第三次 meson setup 尝试",
+      "result": "失败",
+      "details": {
+        "error": "libmcpp 子项目 mcdatabase 组件找不到 sqlite3 依赖"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:07:00",
+      "step": "problem_resolution",
+      "action": "安装 sqlite-devel 解决 libmcpp 子项目 sqlite3 隐式依赖",
+      "result": "已解决",
+      "details": {
+        "package": "sqlite-devel 3.42.0",
+        "source": "libmcpp 子项目 mcdatabase/meson.build 第78行"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:09:00",
+      "step": "build_attempt",
+      "action": "第四次 meson setup + meson compile 尝试",
+      "result": "失败",
+      "details": {
+        "error": "libmcpp 子项目编译错误：1) 缺少 lauxlib.h (LuaJIT)；2) sqlite3_preupdate_* 符号未定义（系统 SQLite 无 session 扩展）"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:12:00",
+      "step": "problem_resolution",
+      "action": "安装 luajit-devel 解决 lua 头文件缺失问题",
+      "result": "已解决",
+      "details": {
+        "packages": [
+          "luajit 2.1.0",
+          "luajit-devel 2.1.0"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:12:30",
+      "step": "problem_resolution",
+      "action": "从源码编译 SQLite 3.42.0（启用 SESSION + PREUPDATE_HOOK 扩展）解决 sqlite3_preupdate_* 符号缺失",
+      "result": "已解决",
+      "details": {
+        "solution": "./configure CFLAGS='-DSQLITE_ENABLE_SESSION -DSQLITE_ENABLE_PREUPDATE_HOOK' --prefix=/usr/local",
+        "install_path": "/usr/local/lib/libsqlite3.so"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:16:00",
+      "step": "build_retry",
+      "action": "重新配置并编译（第五次尝试），使用自定义 SQLite",
+      "result": "成功",
+      "details": {
+        "concurrency": 12,
+        "concurrency_ratio": "60%（20核 × 60% = 12）",
+        "build_targets": 368,
+        "artifacts": [
+          "libipmi.so (4.7M)",
+          "libipmi_bt.so (3.0M)",
+          "libipmi_ipmb.so (2.7M)",
+          "libipmi_ipmb_eth.so (3.2M)",
+          "libipmi_edma.so (3.1M)",
+          "libipmi_wrapper.so (3.1M)",
+          "libipmi_test (测试二进制)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:16:55",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "成功",
+      "details": {
+        "total_test_suites": 17,
+        "total_tests": 149,
+        "passed": 149,
+        "failed": 0,
+        "duration_ms": 2799
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:17:00",
+      "step": "sample_execution",
+      "action": "检查编译后的样例二进制程序",
+      "result": "无可用样例",
+      "details": {
+        "reason": "README 快速开始章节仅展示 Lua 脚本 API 调用方式，构建系统未生成编译后的独立样例二进制程序"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:17:30",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {
+        "container_name": "ttfhw-libipmi-env"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T12:18:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_libipmi_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": false,
+      "summary": "仓库未配置静态检查工具：未检测到 pre-commit 配置，未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null,
+        "status": "未配置",
+        "duration_seconds": null,
+        "total_hooks": null,
+        "passed": null,
+        "failed": null,
+        "skipped": null,
+        "failures": []
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer 开发容器"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 158,
+      "concurrency": 12,
+      "artifacts": [
+        {
+          "name": "libipmi.so",
+          "path": "builddir/src/libipmi.so",
+          "size": "4.7 MB"
+        },
+        {
+          "name": "libipmi_bt.so",
+          "path": "builddir/src/bt/libipmi_bt.so",
+          "size": "3.0 MB"
+        },
+        {
+          "name": "libipmi_ipmb.so",
+          "path": "builddir/src/ipmb/libipmi_ipmb.so",
+          "size": "2.7 MB"
+        },
+        {
+          "name": "libipmi_ipmb_eth.so",
+          "path": "builddir/src/ipmb-eth/libipmi_ipmb_eth.so",
+          "size": "3.2 MB"
+        },
+        {
+          "name": "libipmi_edma.so",
+          "path": "builddir/src/edma/libipmi_edma.so",
+          "size": "3.1 MB"
+        },
+        {
+          "name": "libipmi_wrapper.so",
+          "path": "builddir/src/wrapper/libipmi_wrapper.so",
+          "size": "3.1 MB"
+        },
+        {
+          "name": "libipmi_test",
+          "path": "builddir/tests/libipmi_test",
+          "size": "约 50 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 3,
+      "total": 149,
+      "passed": 149,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "no_tests",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "N/A",
+          "execution_status": "无可用样例",
+          "output_summary": "README 的快速开始章节仅展示 Lua 脚本 API 调用方式，构建系统未生成编译后的独立样例二进制程序",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 未列出 sqlite3 依赖，该依赖来自 libmcpp 子项目的 mcdatabase 组件",
+    "README 未列出 luajit 依赖，该依赖来自 libmcpp 子项目的 mcapp 组件（lua_expression_evaluator.cpp）",
+    "README 未列出 git 依赖，meson subprojects 需要 git 来克隆依赖仓库",
+    "subprojects/libmcpp.wrap 使用 SSH URL (git@gitcode.com:openUBMC/libmcpp.git)，未提供 HTTPS fallback，匿名环境无法克隆",
+    "系统 SQLite 库需启用 SESSION + PREUPDATE_HOOK 扩展，README 未说明此要求",
+    "未明确指定 GCC 最低版本要求的具体检查方式",
+    "无 Dockerfile 或容器化构建指南",
+    "无 pre-commit / lint-runner 等静态检查工具配置"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T12:01:00",
+      "problem": "openEuler 上 python3-ninja 与 ninja-build 包冲突，meson 安装失败",
+      "solution": "分步安装依赖，使用 dnf install -y meson --allowerasing 解决冲突",
+      "source": "openEuler 24.03 包管理系统"
+    },
+    {
+      "timestamp": "2026-06-17T12:05:00",
+      "problem": "meson setup 失败：缺少 git 程序，无法克隆 libmcpp 子项目",
+      "solution": "安装 git (dnf install -y git)",
+      "source": "meson.build 第101行 subproject fallback 机制需要 git"
+    },
+    {
+      "timestamp": "2026-06-17T12:06:00",
+      "problem": "SSH 认证失败：libmcpp.wrap 使用 git@gitcode.com SSH URL，容器内无 SSH 密钥",
+      "solution": "修改 subprojects/libmcpp.wrap 将 SSH URL 改为 HTTPS URL",
+      "source": "subprojects/libmcpp.wrap"
+    },
+    {
+      "timestamp": "2026-06-17T12:06:30",
+      "problem": "meson setup 失败：libmcpp 子项目 mcdatabase 组件找不到 sqlite3 依赖",
+      "solution": "安装 sqlite-devel (dnf install -y sqlite-devel)",
+      "source": "libmcpp 子项目 mcdatabase/meson.build 第78行"
+    },
+    {
+      "timestamp": "2026-06-17T12:09:00",
+      "problem": "编译失败：1) 缺少 lauxlib.h (LuaJIT 头文件)；2) sqlite3_preupdate_* 符号未定义（系统 SQLite 不含 session extension）",
+      "solution": "1) 安装 luajit-devel；2) 从源码编译 SQLite 3.42.0 并启用 -DSQLITE_ENABLE_SESSION -DSQLITE_ENABLE_PREUPDATE_HOOK，安装到 /usr/local",
+      "source": "libmcpp 子项目 mcapp/src/expression/lua_expression_evaluator.cpp 第34行 和 mcdatabase/src/sqlite_wrapper.cpp 第423行"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_libipmi_20260617.md",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置静态检查工具：未检测到 pre-commit 配置，未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null,
+      "total_hooks": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer 开发容器"
+  }
+}

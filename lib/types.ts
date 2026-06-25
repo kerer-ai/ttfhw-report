@@ -1,5 +1,6 @@
 // 汇总数据接口
-export type ResultStatus = 'success' | 'failed' | 'partial_success' | 'unknown' | 'skipped' | 'not_run';
+export type ResultStatus = 'success' | 'failed' | 'partial_success' | 'unknown' | 'skipped' | 'not_run' | 'no_tests';
+export type ConfigStatus = 'configured' | 'not_configured' | 'unknown';
 
 export interface RepoSummary {
   name: string;
@@ -21,6 +22,10 @@ export interface RepoSummary {
   environment: 'local' | 'remote' | 'unknown';
   url?: string;
   category?: string;
+  // v630: 代码质量配置状态
+  preCommitStatus: ConfigStatus;
+  lintRunnerStatus: ConfigStatus;
+  devcontainerStatus: ConfigStatus;
 }
 
 // 详情数据接口 - 扩展覆盖所有JSON字段
@@ -53,6 +58,10 @@ export interface RepoDetail extends RepoSummary {
   problemsEncountered?: ProblemEncountered[];
   conclusion?: Conclusion;
   sessionExportFile?: string;
+
+  // v630 新增字段
+  staticAnalysis?: StaticAnalysisResult;
+  devcontainer?: DevcontainerResult;
 }
 
 // report-511 特有类型定义
@@ -64,11 +73,27 @@ export interface ReportMetadata {
   end_time?: string;
   duration_seconds?: number;
   total_steps?: number;
+  // v630 新增
+  branch?: string;
+  commit?: string;
+  commit_subject?: string;
+  commit_date?: string;
+  git_describe?: string;
 }
 
 export interface MachineSpec {
-  host_machine?: HostMachine;
-  container?: ContainerSpec;
+  host_machine?: Record<string, any>;
+  container?: Record<string, any>;
+  image_source?: {
+    type?: string;
+    image_name?: string;
+    selection_reason?: string;
+    source?: string;
+    [key: string]: any;
+  };
+  npu_hardware_present?: boolean;
+  cann_environment?: Record<string, any>;
+  [key: string]: any;
 }
 
 export interface HostMachine {
@@ -273,6 +298,12 @@ export interface BuildResult {
   warnings?: string[];
   targetsCount?: number;
   progress?: string;
+  /** 构建命令 (v630) */
+  command?: string;
+  /** 构建并发数 (v630) */
+  concurrency?: number;
+  /** 多次构建尝试的耗时分解 (v630) */
+  durationBreakdown?: Record<string, number>;
 }
 
 export interface BuildError {
@@ -304,6 +335,65 @@ export interface UtStats {
   errorSummary?: string;
   errorDetail?: string;
   coveragePercent?: number;
+  /** UT跳过原因 (v630) */
+  skipReason?: string;
+}
+
+// ======================== v630 新增类型 ========================
+
+export interface StaticAnalysisResult {
+  enabled: boolean;
+  summary?: string;
+  pre_commit: PreCommitDetail;
+  lint_runner: LintRunnerDetail;
+}
+
+export interface PreCommitDetail {
+  configured: boolean;
+  config_file?: string | null;
+  status?: string;
+  duration_seconds?: number;
+  total_hooks?: number;
+  passed?: number;
+  failed?: number;
+  skipped?: number;
+  failures?: PreCommitFailure[];
+}
+
+export interface PreCommitFailure {
+  hook_id?: string;
+  hook_name?: string;
+  reason?: string;
+  test_name?: string;
+}
+
+export interface LintRunnerDetail {
+  configured: boolean;
+  config_file?: string | null;
+  status?: string;
+  duration_seconds?: number;
+  active_linters?: string[];
+  result?: string;
+}
+
+export interface DevcontainerResult {
+  enabled: boolean;
+  config_dir?: string | null;
+  config_files?: string[];
+  summary?: string;
+}
+
+export interface SmokeTestResult {
+  command?: string;
+  status?: string;
+  interpretation?: string;
+}
+
+export interface SampleResultItem {
+  sample_name: string;
+  execution_status: string;
+  output_summary: string;
+  execution_time: string;
 }
 
 export interface DocumentationChecklist {
@@ -366,4 +456,15 @@ export interface SummaryStats {
   testableCount: number;
   ttfhwPassRate: number;
   buildPassRate: number;
+}
+
+// 分享汇报页面 — 社区维度统计 (硬编码数据使用)
+export interface CommunityStats {
+  community: string;
+  total: number;
+  success: number;
+  failed: number;
+  partial: number;
+  passRate: number;
+  avgDuration: number;
 }

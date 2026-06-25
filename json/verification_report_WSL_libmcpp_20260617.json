@@ -1,0 +1,909 @@
+{
+  "metadata": {
+    "repo_name": "libmcpp",
+    "repo_path": "/workspace/TTFHW-third/openUBMC/libmcpp/tmp_src",
+    "repo_url": "https://gitcode.com/openUBMC/libmcpp.git",
+    "start_time": "2026-06-17T09:25:00",
+    "end_time": "2026-06-17T09:49:25",
+    "duration_seconds": 912,
+    "total_steps": 30
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Unknown (WSL2)",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G total, 918G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "README 使用 apt-get 命令暗示 Ubuntu/Debian 环境，但未明确指定 Docker 镜像，默认使用 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - mcli target add linux-x86_64 / meson.build 构建目标",
+      "value": "x86_64"
+    },
+    "recommended_image": {
+      "source": "未在文档中找到 Dockerfile 或显式镜像推荐。README 构建环境章节使用 apt-get 命令",
+      "value": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+    },
+    "dependencies": {
+      "source": "README.md 系统要求章节 + meson.build find_package/dependency",
+      "value": [
+        "C++17 兼容编译器 (GCC 7+, Clang 5+, MSVC 2019+)",
+        "meson >= 0.56",
+        "ninja-build",
+        "Boost >= 1.66",
+        "SQLite3 >= 3.20",
+        "GTest (测试用)",
+        "dbus-1 (meson.build 显式 required: true)",
+        "glib-2.0 (meson.build 显式 required: true)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson setup builddir -Dexamples=true && meson compile -C builddir -j 12"
+    },
+    "ut_commands": {
+      "source": "README.md - 从源码构建章节 / 测试覆盖章节",
+      "value": "meson test -C builddir"
+    },
+    "sample_commands": {
+      "source": "README.md - 示例代码章节 / AGENTS.md 目录速查",
+      "value": "./builddir/examples/metric_example/metric_example, ./builddir/examples/task_service/task_service, ./builddir/examples/module_test/module_test_example"
+    },
+    "build_entry": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson setup builddir -Dexamples=true && meson compile -C builddir -j 12"
+    },
+    "ut_entry": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson test -C builddir"
+    },
+    "special_dependencies": {
+      "source": "README.md mcli 安装 + meson.build 编译宏 + 构建错误排查",
+      "value": [
+        "mcli (pip install mcli, 可选构建工具)",
+        "SQLite 需启用 SQLITE_ENABLE_PREUPDATE_HOOK (meson.build 硬编码编译宏)",
+        "LuaJIT 开发头文件 (mcapp 子项目编译依赖)",
+        "findutils (mcbase 子项目 meson.build 使用 find 命令)"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T09:23:00",
+      "command": "git clone https://gitcode.com/openUBMC/libmcpp.git tmp_src",
+      "success": true,
+      "output": "Cloning into 'tmp_src'...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T09:24:00",
+      "command": "检查 pre-commit 配置: ls .pre-commit-config.yaml",
+      "success": true,
+      "output": "文件不存在",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 1,
+      "note": "pre-commit 未配置"
+    },
+    {
+      "timestamp": "2026-06-17T09:24:01",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner*' -o -name 'lint-runner.config*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1,
+      "note": "lint-runner 未配置"
+    },
+    {
+      "timestamp": "2026-06-17T09:24:05",
+      "command": "检查 .devcontainer 目录: ls .devcontainer/",
+      "success": true,
+      "output": "目录不存在",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 1,
+      "note": "devcontainer 未配置"
+    },
+    {
+      "timestamp": "2026-06-17T09:25:01",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974\nStatus: Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:25:05",
+      "command": "docker run -d --name ttfhw-libmcpp-env -v /workspace/TTFHW-third/openUBMC/libmcpp/tmp_src:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 1c77ceeb43746f0e4844b1e87e3c5292bf0e546045563fe99d7b2b0269de74d6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T09:25:19",
+      "command": "dnf install -y gcc gcc-c++ meson ninja-build (首次尝试，失败 - ninja-build 冲突)",
+      "success": false,
+      "output": "Error: package python3-ninja obsoletes ninja-build",
+      "error": "python3-ninja 与 ninja-build 包冲突",
+      "returncode": 1,
+      "duration_seconds": 63
+    },
+    {
+      "timestamp": "2026-06-17T09:26:27",
+      "command": "dnf install -y ninja-build && dnf install -y meson (分步安装)",
+      "success": true,
+      "output": "Installed: python3-ninja, meson, ninja-build, 及依赖",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 22
+    },
+    {
+      "timestamp": "2026-06-17T09:26:57",
+      "command": "dnf install -y boost-devel sqlite-devel gtest-devel dbus-devel glib2-devel make pkg-config",
+      "success": true,
+      "output": "Installed: boost-devel 1.83.0, sqlite-devel 3.42.0, gtest-devel 1.14.0, dbus-devel 1.14.8, glib2-devel 2.78.3 及61个依赖",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 26
+    },
+    {
+      "timestamp": "2026-06-17T09:27:32",
+      "command": "meson setup builddir -Dexamples=true (首次尝试 - 失败，缺编译器)",
+      "success": false,
+      "output": "ERROR: Unknown compiler(s): [['c++'], ['g++'], ...]",
+      "error": "未安装 C++ 编译器，g++ 不可用",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:27:42",
+      "command": "dnf install -y gcc gcc-c++ (补充安装编译器)",
+      "success": true,
+      "output": "Installed: gcc 12.3.1, gcc-c++ 12.3.1, binutils, glibc-devel 及6个依赖",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 28
+    },
+    {
+      "timestamp": "2026-06-17T09:28:13",
+      "command": "meson setup builddir -Dexamples=true (第二次尝试 - 失败，缺 find)",
+      "success": false,
+      "output": "Program or command 'find' not found or not executable",
+      "error": "基础工具 find 未安装（mcbase 子项目 meson.build 使用 find 命令）",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:28:18",
+      "command": "dnf install -y findutils (安装 find 命令)",
+      "success": true,
+      "output": "Installed: findutils-4.9.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T09:28:23",
+      "command": "meson setup builddir -Dexamples=true (第三次尝试 - 成功)",
+      "success": true,
+      "output": "Build targets in project: 48\nSubprojects: mcbase, mcengine, log_appenders, mcexpr, mcdbus, mcdatabase, secfile, mcapp\nUser defined options: examples: true\nFound ninja-1.11.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:28:29",
+      "command": "meson compile -C builddir -j 12 (首次尝试 - 失败，SQLite 链接错误)",
+      "success": false,
+      "output": "undefined reference to sqlite3_preupdate_hook/preupdate_old/preupdate_new/preupdate_count/preupdate_depth",
+      "error": "系统 SQLite 3.42.0 未启用 SQLITE_ENABLE_PREUPDATE_HOOK，但 meson.build 硬编码了该编译宏",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-17T09:31:31",
+      "command": "从源码编译 SQLite 3.45.0 启用 PREUPDATE_HOOK: ./configure --prefix=/usr/local CFLAGS='-DSQLITE_ENABLE_PREUPDATE_HOOK' && make -j12 && make install",
+      "success": true,
+      "output": "Installed: libsqlite3.so.0.8.6 → /usr/local/lib\nVerified: sqlite3_preupdate_hook/old/new/count/depth symbols present",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 197,
+      "note": "问题定位：meson.build 第44-47行 add_project_arguments('-DSQLITE_ENABLE_PREUPDATE_HOOK')"
+    },
+    {
+      "timestamp": "2026-06-17T09:34:56",
+      "command": "meson setup builddir -Dexamples=true (使用自定义 SQLite 重新配置)",
+      "success": true,
+      "output": "mcdatabase: Run-time dependency sqlite3 found: YES 3.45.0\nBuild targets in project: 48",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T09:35:02",
+      "command": "meson compile -C builddir -j 12 (第二次尝试 - 失败，缺少 LuaJIT 头文件)",
+      "success": false,
+      "output": "fatal error: lauxlib.h: No such file or directory",
+      "error": "mcapp 子项目 expression/lua_expression_evaluator.cpp 需要 LuaJIT 头文件",
+      "returncode": 1,
+      "duration_seconds": 180
+    },
+    {
+      "timestamp": "2026-06-17T09:38:12",
+      "command": "dnf install -y lua-devel luajit-devel (安装 Lua 开发包)",
+      "success": true,
+      "output": "Installed: lua-devel 5.4.6, luajit 2.1.0, luajit-devel 2.1.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T09:38:27",
+      "command": "meson setup builddir -Dexamples=true (第三次配置 - 成功，检测到 luajit)",
+      "success": true,
+      "output": "mcapp: Run-time dependency luajit found: YES 2.1.ROLLING\nBuild targets in project: 48",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T09:38:35",
+      "command": "meson compile -C builddir -j 12 (第三次尝试 - 成功)",
+      "success": true,
+      "output": "[799/799] Linking target tests/libmcpp_test\n编译完成，无错误",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 278
+    },
+    {
+      "timestamp": "2026-06-17T09:43:17",
+      "command": "meson test -C builddir --print-errorlogs (首次完整测试)",
+      "success": false,
+      "output": "10个测试套件：6个通过，4个失败\n失败套件：mcbase unit tests(5/2157失败), mcengine unit tests(4失败), mcapp unit tests(4失败), libmcpp unit tests(113失败+2测试套件失败)",
+      "error": "D-Bus daemon 未运行导致连接/分发测试大量失败；mcbase EventDispatcherTest 容器环境时序问题；mcengine SHM/proxy 端点测试失败",
+      "returncode": 4,
+      "duration_seconds": 140
+    },
+    {
+      "timestamp": "2026-06-17T09:49:02",
+      "command": "examples/metric_example/metric_example (样例1)",
+      "success": true,
+      "output": "Prometheus 指标输出正常：histogram/counter/gauge 三类指标，父子进程通过共享内存共享指标数据，运行5秒后正常退出",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T09:49:07",
+      "command": "examples/task_service/task_service (样例2)",
+      "success": false,
+      "output": "服务启动成功，但因 D-Bus daemon 不可用而降级为无 DBus 通路模式，运行正常直至超时",
+      "error": "D-Bus 守护进程不可用：Failed to connect to socket /tmp/dbus_test_XjuFP4/dbus.socket: No such file or directory",
+      "returncode": 124,
+      "duration_seconds": 10,
+      "note": "超时退出(10s)，但服务自身逻辑正常执行，降级处理生效"
+    },
+    {
+      "timestamp": "2026-06-17T09:49:17",
+      "command": "examples/module_test/module_test_example (样例3)",
+      "success": true,
+      "output": "6个测试段全部通过：模块加载验证(devices/network/protocol/database)、两阶段卸载机制、重新加载验证",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T09:49:25",
+      "command": "docker stop ttfhw-libmcpp-env && docker rm ttfhw-libmcpp-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T09:23:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T09:23:00",
+      "step": "repo_clone",
+      "action": "克隆仓库 gitcode.com/openUBMC/libmcpp.git",
+      "result": "成功",
+      "details": {
+        "repo_url": "https://gitcode.com/openUBMC/libmcpp.git",
+        "target_dir": "tmp_src"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:24:00",
+      "step": "document_reading",
+      "action": "读取 README.md、AGENTS.md、meson.build、meson_options.txt、conanfile.py 了解项目结构",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "AGENTS.md",
+          "meson.build",
+          "meson_options.txt",
+          "conanfile.py",
+          "docs/index.md"
+        ],
+        "key_findings": "MC++ 现代C++基础库，7个子项目（mcbase/mcengine/mcapp/mcexpr/mcdbus/mcdatabase/log_appenders），Meson构建系统，C++17，Boost+SQLite3"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:24:01",
+      "step": "static_analysis_scan",
+      "action": "检查仓库静态代码检查配置（pre-commit + lint-runner）",
+      "result": "均未配置",
+      "details": {
+        "pre_commit": {
+          "configured": false,
+          "config_file": null
+        },
+        "lint_runner": {
+          "configured": false,
+          "config_file": null
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:24:05",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {
+        "config_dir": null,
+        "files": []
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:24:10",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "README 使用 apt-get 命令暗示 Ubuntu/Debian 环境，但未在文档中找到 Dockerfile 或显式镜像推荐，默认使用 openEuler 24.03 LTS"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:25:01",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器 ttfhw-libmcpp-env，挂载仓库到 /workspace",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-libmcpp-env"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:25:10",
+      "step": "dependency_installation",
+      "action": "安装构建工具：meson, ninja-build (解决包冲突后分步安装)",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "meson 1.3.1",
+          "ninja-build 1.11.1"
+        ],
+        "issue": "python3-ninja 与 ninja-build 冲突"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:26:57",
+      "step": "dependency_installation",
+      "action": "安装库依赖：boost-devel, sqlite-devel, gtest-devel, dbus-devel, glib2-devel, make, pkg-config",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "boost-devel 1.83.0",
+          "sqlite-devel 3.42.0",
+          "gtest-devel 1.14.0",
+          "dbus-devel 1.14.8",
+          "glib2-devel 2.78.3"
+        ],
+        "total_deps": 61
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:27:32",
+      "step": "build_attempt",
+      "action": "首次构建尝试 (meson setup) - 缺少 C++ 编译器",
+      "result": "失败",
+      "details": {
+        "error": "meson 未找到 g++/c++ 编译器"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:27:42",
+      "step": "dependency_installation",
+      "action": "补充安装 gcc gcc-c++",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "gcc 12.3.1",
+          "gcc-c++ 12.3.1"
+        ],
+        "reason": "首次安装命令因 ninja-build 冲突整体失败，编译器未安装"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:28:13",
+      "step": "build_attempt",
+      "action": "第二次构建尝试 (meson setup) - 缺少 find 命令",
+      "result": "失败",
+      "details": {
+        "error": "Program 'find' not found (mcbase 子项目 meson.build 使用 find 命令收集头文件)"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:28:18",
+      "step": "dependency_installation",
+      "action": "安装 findutils",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "findutils 4.9.0"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:28:23",
+      "step": "build_attempt",
+      "action": "第三次构建尝试 (meson setup) — 配置成功",
+      "result": "成功",
+      "details": {
+        "build_targets": 48,
+        "subprojects": [
+          "mcbase",
+          "mcengine",
+          "log_appenders",
+          "mcexpr",
+          "mcdbus",
+          "mcdatabase",
+          "secfile",
+          "mcapp"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:28:29",
+      "step": "build_attempt",
+      "action": "编译 (meson compile -j 12) — SQLite 链接失败",
+      "result": "失败",
+      "details": {
+        "error": "undefined reference to sqlite3_preupdate_hook/old/new/count/depth",
+        "root_cause": "系统 SQLite 未启用 SQLITE_ENABLE_PREUPDATE_HOOK"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:31:31",
+      "step": "problem_resolution",
+      "action": "从源码编译 SQLite 3.45.0 启用 PREUPDATE_HOOK，安装到 /usr/local",
+      "result": "已解决",
+      "details": {
+        "solution": "编译安装 SQLite 3.45.0 到 /usr/local，启用 SQLITE_ENABLE_PREUPDATE_HOOK + SQLITE_ENABLE_UPDATE_DELETE_LIMIT",
+        "source": "meson.build 第44-47行 add_project_arguments('-DSQLITE_ENABLE_PREUPDATE_HOOK')",
+        "duration_seconds": 197
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:34:56",
+      "step": "build_attempt",
+      "action": "重新配置 meson (PKG_CONFIG_PATH=/usr/local/lib/pkgconfig)",
+      "result": "成功",
+      "details": {
+        "sqlite3_version": "3.45.0 (自定义)"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:35:02",
+      "step": "build_attempt",
+      "action": "编译 (meson compile -j 12) — LuaJIT 头文件缺失",
+      "result": "失败",
+      "details": {
+        "error": "fatal error: lauxlib.h: No such file or directory",
+        "file": "libraries/mcapp/src/expression/lua_expression_evaluator.cpp:34"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:38:12",
+      "step": "dependency_installation",
+      "action": "安装 lua-devel luajit-devel",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "lua-devel 5.4.6",
+          "luajit 2.1.0",
+          "luajit-devel 2.1.0"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:38:27",
+      "step": "build_attempt",
+      "action": "重新配置并编译 (meson setup + compile -j 12)",
+      "result": "成功",
+      "details": {
+        "luajit": "detected 2.1.ROLLING",
+        "concurrency": 12,
+        "concurrency_ratio": "60% (20核 × 60% = 12)",
+        "total_steps": 799,
+        "duration_seconds": 278
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:43:17",
+      "step": "ut_execution",
+      "action": "执行单元测试 (meson test -C builddir)",
+      "result": "部分通过",
+      "details": {
+        "total_suites": 10,
+        "passed_suites": 6,
+        "failed_suites": 4,
+        "failed_details": {
+          "mcbase unit tests": "2157个测试，2151通过，5失败 (EventDispatcherTest 容器时序问题)，1跳过",
+          "mcengine unit tests": "4个失败 (proxy_test dynamic_async_api + endpoint_service_test publish_merges)",
+          "mcapp unit tests": "4个失败 (discovery_dispatcher_test x2 + expression_processor_test x2)",
+          "libmcpp unit tests": "113个失败 (connection/dispatch/signal D-Bus相关测试) + 2个测试套件失败 (mdb_service, mdb_access_property_chain)"
+        },
+        "root_cause": "容器内无 D-Bus daemon 导致 D-Bus 相关测试大量失败；EventDispatcherTest 为容器环境时序敏感问题"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:49:02",
+      "step": "sample_execution",
+      "action": "执行样例程序 (metric_example / task_service / module_test_example)",
+      "result": "2成功，1部分成功",
+      "details": {
+        "metric_example": "成功 — Prometheus 指标父子进程共享内存演示，histogram/counter/gauge 三类指标正常输出",
+        "task_service": "部分成功 — 服务启动正常，因 D-Bus 不可用降级运行后超时",
+        "module_test_example": "成功 — 6个测试段全部通过，模块加载/卸载/重新加载验证完成"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T09:49:25",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-libmcpp-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T11:07:00",
+      "step": "environment_fix",
+      "action": "环境修复：在新容器中安装 dbus-daemon + dbus，重新编译 SQLite，清理 /dev/shm 残留后重跑测试",
+      "result": "libmcpp D-Bus 测试套件 113个失败+2套件崩溃 → 全部通过（OK）；mcapp 从 4个测试失败 → SIGSEGV 崩溃（恶化，疑似 D-Bus 可用后触发代码 bug）；mcbase/mcengine 不变",
+      "details": {
+        "packages_added": [
+          "dbus-daemon",
+          "dbus",
+          "dbus-tools",
+          "diffutils"
+        ],
+        "fixed": [
+          "libmcpp / libmcpp unit tests (113+2 → OK)"
+        ],
+        "unchanged": [
+          "mcbase EventDispatcherTest (5 failures, timing)",
+          "mcengine SHM tests (4 failures, code/SHM)"
+        ],
+        "regressed": [
+          "mcapp unit tests (4 specific failures → SIGSEGV, D-Bus availability triggers code path bug)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T11:40:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_libmcpp_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": false,
+      "summary": "未检测到静态代码检查工具配置（pre-commit 和 lint-runner 均未配置）",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "未配置 devcontainer 开发容器"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 278,
+      "concurrency": 12,
+      "artifacts": [
+        {
+          "name": "libmcpp_base",
+          "path": "builddir/src/libmcpp_base.so",
+          "size": "8.4 MB"
+        },
+        {
+          "name": "libmcbase",
+          "path": "builddir/libraries/mcbase/src/libmcbase.so.1.0.0",
+          "size": "144 MB (含测试)"
+        },
+        {
+          "name": "libmcengine",
+          "path": "builddir/libraries/mcengine/src/libmcengine.so",
+          "size": "44 MB"
+        },
+        {
+          "name": "libmcapp",
+          "path": "builddir/libraries/mcapp/src/libmcapp.so",
+          "size": "42 MB"
+        },
+        {
+          "name": "libmcexpr",
+          "path": "builddir/libraries/mcexpr/src/libmcexpr.so",
+          "size": "19 MB"
+        },
+        {
+          "name": "libmcdbus",
+          "path": "builddir/libraries/mcdbus/src/libmcdbus.so",
+          "size": "9.9 MB"
+        },
+        {
+          "name": "libmcdatabase",
+          "path": "builddir/libraries/mcdatabase/src/libmcdatabase.so",
+          "size": "7.2 MB"
+        },
+        {
+          "name": "libsecfile",
+          "path": "builddir/libraries/secfile/src/libsecfile.so",
+          "size": "780 KB"
+        },
+        {
+          "name": "metric_example",
+          "path": "builddir/examples/metric_example/metric_example",
+          "size": "472 KB"
+        },
+        {
+          "name": "task_service",
+          "path": "builddir/examples/task_service/task_service",
+          "size": "6.2 MB"
+        },
+        {
+          "name": "module_test_example",
+          "path": "builddir/examples/module_test/module_test_example",
+          "size": "1.1 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "partial_success",
+      "duration_seconds": 140,
+      "total_suites": 10,
+      "passed_suites_initial": 6,
+      "failed_suites_initial": 4,
+      "passed_suites_after_env_fix": 7,
+      "failed_suites_after_fix": 3,
+      "environment_fix_summary": "安装 dbus-daemon 后，libmcpp D-Bus 测试套件从 113个失败+2套件崩溃 → 全部通过（OK）。mcapp 测试从 4个具体失败变为 SIGSEGV 崩溃（疑似 D-Bus 可用后触发了代码内部的 SHM/D-Bus 交互路径 bug）。mcbase 和 mcengine 失败与代码/时序问题相关，环境修复无效。",
+      "fixed_suite": {
+        "suite": "libmcpp / libmcpp unit tests",
+        "before": "113个测试失败 + 2个测试套件崩溃（mdb_service_test, mdb_access_property_chain_test）",
+        "after": "全部通过（OK）",
+        "fix": "dnf install -y dbus-daemon dbus; 清理 /dev/shm 残留"
+      },
+      "failures": [
+        {
+          "suite": "mcbase / mcbase unit tests",
+          "status": "5个测试失败，1个跳过",
+          "total": 2157,
+          "passed": 2151,
+          "failed": 5,
+          "skipped": 1,
+          "failures_detail": [
+            "EventDispatcherTest.PostEventUsesTargetEventLaneInsteadOfGlobalWorkQueue",
+            "EventDispatcherTest.RuntimeContextRemovePostedEventsCancelsPendingEvents",
+            "EventDispatcherTest.RuntimeContextSendPostedEventsFlushesMatchingPendingEvents",
+            "EventDispatcherTest.RuntimeContextSendPostedEventsPreservesReceiverLaneSerialization",
+            "EventDispatcherTest.ObjectDeleteLaterDefersDestructionUntilQueuedTurn"
+          ],
+          "likely_cause": "容器环境多线程事件调度时序问题。5个测试全部测试 mcbase 运行时 EventDispatcher 的内部线程/执行器行为：PostEvent 验证目标事件通道与全局工作队列隔离；RuntimeContext 验证已投递事件的取消和同步发送；ObjectDeleteLater 验证延迟销毁的异步语义。这些测试使用 std::async + thread_pool，依赖严格的线程同步屏障（200ms timeout）。在容器化环境中，线程调度延迟可能超过设定期望，导致同步断言失败。非 D-Bus 依赖。",
+          "test_details": {
+            "PostEventUsesTargetEventLaneInsteadOfGlobalWorkQueue": "创建专用线程池，将事件投递到绑定了该池的对象，断言事件处理线程属于专用线程池而非全局工作队列。失败原因：运行时 get_work_executor() 在容器中可能返回错误的执行器",
+            "RuntimeContextRemovePostedEventsCancelsPendingEvents": "在目标执行器被阻塞期间投递事件，调用 ctx.remove_posted_events() 过滤，解除阻塞后验证被过滤事件未送达。失败原因：200ms DELAY 时序在容器调度延迟下不可靠",
+            "RuntimeContextSendPostedEventsFlushesMatchingPendingEvents": "在被阻塞执行器上投递事件后，从另一线程调用 send_posted_events()，验证同步阻塞直至解除并完成交付。失败原因：std::async 创建的线程在容器中启动延迟可能超过 wait_for(200ms)",
+            "RuntimeContextSendPostedEventsPreservesReceiverLaneSerialization": "验证事件通道串行化保证——第二个投递的事件在第一个完成前不被执行。失败原因：同上，依赖严格的线程同步时序",
+            "ObjectDeleteLaterDefersDestructionUntilQueuedTurn": "用阻塞任务填满执行器后调用 delete_later()，验证对象在解除阻塞前仍存活。失败原因：delete_later 的异步语义在容器调度延迟下 weak_from_this().expired() 检查不可靠"
+          }
+        },
+        {
+          "suite": "mcengine / mcengine unit tests",
+          "status": "4个测试失败",
+          "failed": 4,
+          "failures_detail": [
+            "proxy_test.dynamic_async_api",
+            "proxy_test.default_source_read_status",
+            "endpoint_service_test.publish_merges_local_dispatch_across_services",
+            "endpoint_service_test.publish_merges_multi_match_same_service"
+          ],
+          "likely_cause": "SHM 共享内存基础设施问题。mcengine 测试固件 TestWithEngine 在 SetUp 中通过 mc::shm::shm_runtime 在 /dev/shm 创建共享内存区域（当 MCENGINE_USE_SHM=1 时，这是默认值）。若 SHM region 创建失败（ASSERT_TRUE(m_runtime->is_valid())），所有依赖引擎初始化的测试都会中止。非 D-Bus 直接依赖，但 proxy_test 和 endpoint_service_test 均需要 SHM region 正常工作才能初始化 mc::engine::service。",
+          "test_details": {
+            "proxy_test.dynamic_async_api": "使用 object_proxy 执行 get_property/set_property/invoke/get_all_properties，需要 SHM 消息队列。失败原因：若 TestWithEngine::SetUp() 中 SHM runtime 创建失败，此测试无法执行",
+            "proxy_test.default_source_read_status": "创建默认 SHM 属性源，检查已知/未知对象路径的 read_status(hit/miss)。此测试在 #if MCENGINE_USE_SHM 编译保护内，完全依赖 SHM slot 读取。失败原因：SHM region 不可用或属性写入 SHM 失败",
+            "endpoint_service_test.publish_merges_local_dispatch_across_services": "两个 service 订阅同一信号，engine::publish() 将两次发送合并为一次本地 dispatch。失败原因：engine::init 创建 endpoint service 需要 SHM region",
+            "endpoint_service_test.publish_merges_multi_match_same_service": "同一 service 注册两个 match 规则，单次 publish 触发两个回调。失败原因：同 publish_merges_local_dispatch_across_services"
+          }
+        },
+        {
+          "suite": "mcapp / mcapp unit tests",
+          "status": "4个测试失败",
+          "failed": 4,
+          "failures_detail": [
+            "discovery_dispatcher_test.default_evaluator_handles_discovery_property_pack_expression_before_init",
+            "discovery_dispatcher_test.default_evaluator_handles_discovery_property_variable_expression_before_init",
+            "expression_processor_test.lua_evaluator_handles_vpd_requirement_id_expression",
+            "expression_processor_test.lua_evaluator_handles_vpd_reference_property_pack_expression"
+          ],
+          "likely_cause": "Lua 表达式求值器初始化问题。discovery_dispatcher_test 使用 TestWithMcappRuntime（不初始化 D-Bus），但需要 disp_service（调用 mc::engine::service::init/start）作为基础设施。expression_processor_test 中的 Lua evaluator 测试需要 make_lua_discovery_expression_evaluator() 返回非空值。虽然编译时已链接 luajit，但运行时 Lua sandbox 初始化（加载 Lua 标准库如 string.format/string.cmp）可能因 Lua 搜索路径或 sandbox 安全策略而失败。非 D-Bus 依赖。",
+          "test_details": {
+            "discovery_dispatcher_test.default_evaluator_handles_discovery_property_pack_expression_before_init": "使用 make_default_discovery_expression_evaluator() 处理 $const 中的 property_pack 表达式并验证计算结果为 33554176。失败原因：default evaluator 创建需要 disp_service 运行，service init 可能因引擎状态问题失败",
+            "discovery_dispatcher_test.default_evaluator_handles_discovery_property_variable_expression_before_init": "处理 $const 中的变量表达式。失败原因：同上，evaluator 依赖的 service 基础设施未正确初始化",
+            "expression_processor_test.lua_evaluator_handles_vpd_requirement_id_expression": "Lua evaluator 处理 VPD 需求 ID 表达式。失败原因：make_lua_discovery_expression_evaluator() 可能返回 nullptr，Lua sandbox 初始化失败",
+            "expression_processor_test.lua_evaluator_handles_vpd_reference_property_pack_expression": "Lua evaluator 处理 VPD 引用属性包表达式。失败原因：同上，Lua sandbox 中 string.format/string.sub 等函数可能不可用"
+          }
+        },
+        {
+          "suite": "libmcpp / libmcpp unit tests",
+          "status": "113个测试失败 + 2个测试套件失败",
+          "failed": 113,
+          "failures_detail": [
+            "connection_test (67个测试全部失败)",
+            "signal_send_receive_test (5个测试全部失败)",
+            "dispatch_test (14个测试全部失败)",
+            "mdb_service_test (SetUpTestSuite 失败)",
+            "mdb_access_property_chain_test (SetUpTestSuite 失败)"
+          ],
+          "likely_cause": "容器内无 D-Bus daemon 可执行文件。connection_test/signal_send_receive_test/dispatch_test 均继承自 TestWithDbusDaemon，其 SetUpTestSuite() 调用 get_dbus_daemon().start()，该函数 fork+exec dbus-daemon 二进制文件创建 Unix 套接字。openEuler 基础镜像未预装 dbus-daemon，ASSERT_TRUE 在测试套件级别即失败，阻止该套件下所有测试执行。mdb_service_test 和 mdb_access_property_chain_test 继承自 TestWithEngine，SetUpTestSuite 中 SHM runtime 创建失败导致整个测试套件无法运行。",
+          "test_details": {
+            "connection_test": "67个测试全部因 SetUpTestSuite 失败被阻止。此套件测试 D-Bus 连接生命周期：打开会话总线、请求名称、列出名称、信号订阅、消息分派、路径处理、异步 send_with_reply 等",
+            "signal_send_receive_test": "5个测试全部因 SetUpTestSuite 失败被阻止。测试跨服务的双向信号收发、信号订阅/取消、接口增删通知",
+            "dispatch_test": "14个测试全部因 SetUpTestSuite 失败被阻止。测试 D-Bus 消息分派路由、watch/timeout 回调、异步调用、match 规则管理",
+            "mdb_service_test": "SetUpTestSuite 失败。TestWithEngine::SetUpTestSuite() 中 SHM runtime 创建失败（engine::reset_for_test() 需要 SHM），导致整个测试套件无法执行",
+            "mdb_access_property_chain_test": "SetUpTestSuite 失败。同上，TestWithEngine 的 SHM 依赖未满足"
+          }
+        }
+      ]
+    },
+    "sample": {
+      "status": "partial_success",
+      "duration_seconds": 16,
+      "results": [
+        {
+          "sample_name": "metric_example",
+          "execution_status": "success",
+          "output_summary": "Prometheus 指标父子进程共享内存演示，histogram/counter/gauge 三类指标正常输出，运行5秒后正常退出",
+          "execution_time": "5.054秒"
+        },
+        {
+          "sample_name": "task_service",
+          "execution_status": "partial_success",
+          "output_summary": "服务启动成功，因 D-Bus daemon 不可用而降级为无 DBus 通路模式，服务逻辑正常执行",
+          "execution_time": "10秒（超时退出）"
+        },
+        {
+          "sample_name": "module_test_example",
+          "execution_status": "success",
+          "output_summary": "6个测试段全部通过：模块加载(devices/network/protocol/database)、两阶段卸载机制、模块重新加载验证",
+          "execution_time": "0.113秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 未指定 Docker 镜像，使用 apt-get 命令但无配套 Dockerfile",
+    "README 未列出 SQLite 需要启用 SQLITE_ENABLE_PREUPDATE_HOOK 编译选项（仅在 meson.build 中硬编码）",
+    "README 未列出 dbus-1、glib-2.0 为必需依赖（仅在 meson.build 中显式 required: true）",
+    "README 未列出 luajit/lua 开发头文件为编译依赖（mcapp 子项目需要）",
+    "README 未提及编译过程需要 find 等基础工具（openEuler 镜像默认不安装）",
+    "README 未说明部分测试（D-Bus 相关）需要运行 D-Bus daemon（已通过 dnf install dbus-daemon 修复，libmcpp 测试套件恢复正常）",
+    "README 构建环境章节假设 Ubuntu/Debian (apt-get)，但无跨平台说明",
+    "meson_options.txt 中未提供禁用 SQLITE_ENABLE_PREUPDATE_HOOK 的选项",
+    "examples/discovery_example 需要 mcli+conan 工具链，无法通过标准 meson 流程构建",
+    "部分测试有运行时环境依赖（D-Bus daemon、Lua/LuaJIT 运行时），文档未说明"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T09:25:19",
+      "problem": "dnf 安装 meson 时 python3-ninja 与 ninja-build 包冲突",
+      "solution": "先单独安装 ninja-build，再安装 meson",
+      "source": "openEuler 24.03 包依赖冲突"
+    },
+    {
+      "timestamp": "2026-06-17T09:27:32",
+      "problem": "meson 未找到 C++ 编译器（g++/c++）",
+      "solution": "补充安装 gcc gcc-c++（第一次安装命令因 ninja-build 冲突整体失败）",
+      "source": "首次 dnf install gcc gcc-c++ meson ninja-build 命令因包冲突整体回滚"
+    },
+    {
+      "timestamp": "2026-06-17T09:28:13",
+      "problem": "meson 配置阶段报错 Program 'find' not found",
+      "solution": "安装 findutils 包",
+      "source": "openEuler 基础镜像未预装 findutils，mcbase 子项目 meson.build 使用 find 命令"
+    },
+    {
+      "timestamp": "2026-06-17T09:28:29",
+      "problem": "链接 mcdatabase 时 undefined reference to sqlite3_preupdate_hook 等 5 个符号",
+      "solution": "从源码编译安装 SQLite 3.45.0，启用 SQLITE_ENABLE_PREUPDATE_HOOK + SQLITE_ENABLE_UPDATE_DELETE_LIMIT",
+      "source": "meson.build 第44-47行 add_project_arguments('-DSQLITE_ENABLE_PREUPDATE_HOOK')，但系统 SQLite 未启用此功能"
+    },
+    {
+      "timestamp": "2026-06-17T09:35:02",
+      "problem": "编译 mcapp 时 fatal error: lauxlib.h: No such file or directory",
+      "solution": "安装 lua-devel 和 luajit-devel 包",
+      "source": "libraries/mcapp/src/expression/lua_expression_evaluator.cpp:34 包含 <lauxlib.h>"
+    },
+    {
+      "timestamp": "2026-06-17T09:43:17",
+      "problem": "libmcpp 测试套件 113 个 D-Bus 相关测试失败 + 2 个测试套件 SetUp 失败",
+      "solution": "无法解决（容器内无 D-Bus daemon，该测试依赖系统 D-Bus 总线）",
+      "source": "测试需要运行中的 D-Bus daemon，openEuler 基础镜像未预装 dbus-daemon。已通过 dnf install -y dbus-daemon dbus 修复，libmcpp 测试套件恢复正常"
+    },
+    {
+      "timestamp": "2026-06-17T11:15:00",
+      "problem": "安装 dbus-daemon 后 mcapp 测试套件从 4个具体测试失败 → SIGSEGV 崩溃（信号 11），测试结果恶化",
+      "solution": "无法解决（疑似代码 bug：D-Bus 可用后触发 mcapp 内部 SHM/D-Bus 交互路径的段错误，需修改源码）",
+      "source": "mcapp 测试固件 TestWithMcappRuntime 在 D-Bus 可用时可能走不同的初始化路径，导致内存访问错误"
+    }
+  ],
+  "session_export_file": "verification_report_WSL_libmcpp_20260617.json",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "未检测到静态代码检查工具配置（pre-commit 和 lint-runner 均未配置）",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer 开发容器"
+  }
+}

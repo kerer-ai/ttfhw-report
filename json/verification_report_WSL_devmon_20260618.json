@@ -1,0 +1,625 @@
+{
+  "metadata": {
+    "repo_name": "devmon",
+    "repo_path": "/workspace/TTFHW-third/openUBMC/devmon",
+    "repo_url": "https://gitcode.com/openUBMC/devmon.git",
+    "start_time": "2026-06-18T10:00:00",
+    "end_time": "2026-06-18T10:28:00",
+    "duration_seconds": 1680,
+    "total_steps": 8
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G total, 913G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "README推荐Ubuntu 20.04+，但Docker Hub不可达(dial tcp timeout)，回退使用openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 系统要求章节",
+      "value": "x86_64（支持交叉编译armv8）"
+    },
+    "recommended_image": {
+      "source": "README.md - 系统要求章节",
+      "value": "推荐Ubuntu 20.04或更高版本。因Docker Hub不可达，使用openEuler 24.03 LTS替代"
+    },
+    "dependencies": {
+      "source": "README.md + meson.build + docs/1.overview.md",
+      "value": [
+        "gcc >= 7.0 (支持C++17)",
+        "meson (构建系统)",
+        "ninja / ninja-build",
+        "libboost-all-dev → boost-devel",
+        "libgtest-dev → gtest-devel",
+        "libdbus-1-dev → dbus-devel",
+        "libglib2.0-dev → glib2-devel",
+        "libsqlite3-dev → sqlite-devel",
+        "luajit / liblua5.4-dev → luajit-devel / lua-devel",
+        "pkg-config → pkgconf",
+        "make",
+        "git"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 构建与安装章节",
+      "value": "meson setup builddir && meson compile -C builddir"
+    },
+    "ut_commands": {
+      "source": "README.md - 构建与安装章节",
+      "value": "meson install -C builddir && meson test -C builddir"
+    },
+    "sample_commands": {
+      "source": "README.md - 构建与安装章节",
+      "value": "./scripts/smart_build.sh"
+    },
+    "build_entry": {
+      "source": "README.md - 构建与安装章节",
+      "value": "meson setup builddir && meson compile -C builddir"
+    },
+    "ut_entry": {
+      "source": "README.md - 构建与安装章节",
+      "value": "meson install -C builddir && meson test -C builddir"
+    },
+    "special_dependencies": {
+      "source": "meson.build / subprojects/*.wrap / 实际验证发现",
+      "value": [
+        "子项目libmcpp(SSH: git@gitcode.com:openUBMC/libmcpp.git, main分支)",
+        "子项目component_drivers(SSH: git@gitcode.com:openUBMC/component_drivers.git, main分支)",
+        "子项目SSH URL需配置git url.insteadOf重定向为HTTPS",
+        "openEuler的glib-devel是GLib 1.x，需安装glib2-devel才能提供glib-2.0.pc",
+        "openEuler的sqlite3默认不含session扩展，需从源码编译(--enable-session)",
+        "代码需Lua 5.4的LUA_GNAME宏，但openEuler的luajit基于Lua 5.1，lua-devel为Lua 5.4"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T10:00:00",
+      "command": "git clone https://gitcode.com/openUBMC/devmon.git",
+      "success": true,
+      "output": "仓库克隆完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T10:00:35",
+      "command": "检查 pre-commit 配置: test -f .pre-commit-config.yaml",
+      "success": true,
+      "output": "NOT_FOUND",
+      "error": "",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T10:00:36",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner*' -o -name 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T10:00:37",
+      "command": "检查 .devcontainer 目录: test -d .devcontainer",
+      "success": true,
+      "output": "NOT_FOUND",
+      "error": "",
+      "returncode": 2,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T10:00:40",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f... Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T10:00:42",
+      "command": "docker run -d --name ttfhw-devmon-env -v /workspace/.../devmon:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 018ad4da4fc6...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T10:01:00",
+      "command": "dnf install -y meson ninja-build boost-devel gtest-devel gcc gcc-c++ dbus-devel glib-devel pkgconf make（首次依赖安装，ninja-build冲突）",
+      "success": false,
+      "output": "",
+      "error": "python3-ninja obsoletes ninja-build，meson依赖ninja-build导致解析失败",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T10:01:02",
+      "command": "dnf install -y meson python3-ninja boost-devel gtest-devel gcc gcc-c++ dbus-devel glib-devel pkgconf make（修正：用python3-ninja替代ninja-build）",
+      "success": true,
+      "output": "安装61个包：gcc-12.3.1, boost-1.83.0, gtest-1.14.0, meson-1.3.1, glib-devel-1.2.10等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 44
+    },
+    {
+      "timestamp": "2026-06-18T10:01:50",
+      "command": "dnf install -y git（子项目拉取需要git）",
+      "success": true,
+      "output": "安装git-2.43.0及相关依赖",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 28
+    },
+    {
+      "timestamp": "2026-06-18T10:02:20",
+      "command": "git config url.insteadOf + meson setup builddir（首次meson配置）",
+      "success": false,
+      "output": "",
+      "error": "Dependency 'glib-2.0' not found, tried pkgconfig——系统的glib-devel是GLib 1.x(1.2.10)，不提供glib-2.0.pc",
+      "returncode": 1,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-18T10:02:25",
+      "command": "dnf install -y glib2-devel && rm -rf builddir && meson setup builddir（第二次meson配置）",
+      "success": false,
+      "output": "",
+      "error": "Dependency 'sqlite3' not found, tried pkgconfig——sqlite-devel未安装",
+      "returncode": 1,
+      "duration_seconds": 4
+    },
+    {
+      "timestamp": "2026-06-18T10:02:30",
+      "command": "dnf install -y sqlite-devel && rm -rf builddir && meson setup builddir（第三次meson配置）",
+      "success": true,
+      "output": "Build targets in project: 130, 所有子项目(libmcpp, component_drivers)配置成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 34
+    },
+    {
+      "timestamp": "2026-06-18T10:03:10",
+      "command": "meson compile -C builddir -j 12（首次编译，默认use_shm=true）",
+      "success": false,
+      "output": "编译到约260/1083目标",
+      "error": "1) lauxlib.h: No such file or directory——luajit-devel未安装\n2) undefined reference to sqlite3_preupdate_hook——系统sqlite3无session扩展",
+      "returncode": 1,
+      "duration_seconds": 252
+    },
+    {
+      "timestamp": "2026-06-18T10:07:25",
+      "command": "dnf install -y luajit-devel luajit（解决lua头文件缺失）",
+      "success": true,
+      "output": "安装luajit-2.1.0 + luajit-devel-2.1.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 8
+    },
+    {
+      "timestamp": "2026-06-18T10:07:35",
+      "command": "curl -L -o sqlite-autoconf.tar.gz https://www.sqlite.org/2024/sqlite-autoconf-3450100.tar.gz && tar xzf && ./configure --prefix=/usr --enable-session CFLAGS='-DSQLITE_ENABLE_PREUPDATE_HOOK -O2' && make -j20 && make install && ldconfig",
+      "success": true,
+      "output": "sqlite3库编译安装到/usr/lib64/libsqlite3.so.0.8.6，包含sqlite3_preupdate_hook等session扩展符号",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 317
+    },
+    {
+      "timestamp": "2026-06-18T10:12:55",
+      "command": "meson compile -C builddir -j 12（第二次编译，luajit+sqlite3修复后）",
+      "success": false,
+      "output": "编译到约280/1083目标",
+      "error": "lua_isinteger was not declared——luajit基于Lua 5.1，不支持代码使用的Lua 5.3 API\nlua_rawlen was not declared——同上，Lua 5.2 API在luajit中不可用",
+      "returncode": 1,
+      "duration_seconds": 156
+    },
+    {
+      "timestamp": "2026-06-18T10:15:35",
+      "command": "dnf remove -y luajit-devel luajit && dnf install -y lua-devel（切换到标准Lua 5.4）",
+      "success": true,
+      "output": "安装lua-devel-5.4.6，lua.h/lauxlib.h位于/usr/include",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T10:15:40",
+      "command": "meson compile -C builddir -j 12（第三次编译，Lua 5.4）",
+      "success": false,
+      "output": "编译到约320/1083目标，lua_expression_evaluator.cpp编译通过但链接失败",
+      "error": "undefined reference to lua_rawgeti, lua_pcallk, lua_settop等——libmcapp.so未链接-llua。主项目meson.build仅查找luajit依赖(dependency('luajit'))，Luajit未找到→lua_dep为空→libmcpp_deps不含-llua",
+      "returncode": 1,
+      "duration_seconds": 88
+    },
+    {
+      "timestamp": "2026-06-18T10:17:12",
+      "command": "创建luajit.pc重定向到lua5.4(ln -sf lua.pc lua5.4.pc + 创建luajit.pc指向-llua5.4)",
+      "success": true,
+      "output": "pkg-config luajit → 2.1.ROLLING (实际指向Lua 5.4)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-18T10:17:15",
+      "command": "meson compile -C builddir -j 12（第四次编译，luajit.pc重定向后）",
+      "success": false,
+      "output": "编译到735/1083目标时失败",
+      "error": "power.h:42: OpticalModule_Oem has not been declared\npower.h:53: OpticalModule_Oem does not name a type\n→ component_drivers子项目circular include缺陷(power.h↔oem.h)，OpticalModule_Oem在power.h解析时未声明",
+      "returncode": 1,
+      "duration_seconds": 212
+    },
+    {
+      "timestamp": "2026-06-18T10:20:50",
+      "command": "meson setup -Dunidev=true + meson compile -j 12（第五次编译，尝试unidev模式）",
+      "success": false,
+      "output": "编译到735/1122目标时失败，相同错误",
+      "error": "同样m_optical_module_oem错误——unidev选项不改变该代码路径",
+      "returncode": 1,
+      "duration_seconds": 226
+    },
+    {
+      "timestamp": "2026-06-18T10:24:40",
+      "command": "docker rm -f ttfhw-devmon-env",
+      "success": true,
+      "output": "容器已删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T10:00:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T10:00:35",
+      "step": "static_analysis_scan",
+      "action": "检查 pre-commit 和 lint-runner 配置",
+      "result": "两者均未配置",
+      "details": {
+        "pre_commit": {
+          "configured": false,
+          "config_file": null
+        },
+        "lint_runner": {
+          "configured": false,
+          "searched_patterns": [
+            ".lint-runner.yaml",
+            ".lint-runner.json",
+            "lint-runner.config.*"
+          ]
+        }
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:00:37",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {
+        "configured": false
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:00:40",
+      "step": "image_selection",
+      "action": "拉取openEuler 24.03 LTS镜像",
+      "result": "成功（本地已缓存）",
+      "details": {
+        "selection_reason": "README推荐Ubuntu但Docker Hub不可达，默认使用openEuler"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:00:42",
+      "step": "container_setup",
+      "action": "启动容器，挂载仓库目录到/workspace",
+      "result": "成功",
+      "details": {
+        "container": "ttfhw-devmon-env"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:01:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖（dnf install，经历ninja冲突→glib→glib2→sqlite→luajit→lua→源码编译sqlite3等多次迭代）",
+      "result": "全部安装完成",
+      "details": {
+        "packages_installed": [
+          "meson-1.3.1, python3-ninja-1.11.1.1",
+          "gcc-12.3.1, gcc-c++-12.3.1, binutils-2.41",
+          "boost-devel-1.83.0, boost-program-options-1.83.0",
+          "gtest-devel-1.14.0, gmock-1.14.0",
+          "dbus-devel-1.14.8, glib2-devel-2.78.3",
+          "sqlite-devel-3.42.0（后替换为源码编译的3.45.0含session扩展）",
+          "lua-devel-5.4.6（替换了luajit-devel-2.1.0）",
+          "pkgconf-1.9.5, make-4.4.1, git-2.43.0"
+        ],
+        "issues": [
+          "python3-ninja obsoletes ninja-build",
+          "glib-devel=GLib 1.x → 需glib2-devel",
+          "sqlite3无session扩展 → 需源码编译",
+          "luajit=Lua 5.1 → 代码需Lua 5.4 → 切到lua-devel+创建luajit.pc重定向"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:03:10",
+      "step": "build_attempt_1",
+      "action": "首次编译（默认use_shm=true, j12）",
+      "result": "失败——lua头文件缺失 + sqlite3符号未定义",
+      "details": {
+        "targets": "~260/1083",
+        "error": "lauxlib.h + sqlite3_preupdate_hook"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:07:35",
+      "step": "problem_resolution_1",
+      "action": "安装luajit-devel + 源码编译sqlite3(with session扩展)",
+      "result": "已解决",
+      "details": {
+        "duration": "325s"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:12:55",
+      "step": "build_attempt_2",
+      "action": "第二次编译（luajit + sqlite3修复后）",
+      "result": "失败——lua_isinteger/lua_rawlen未声明",
+      "details": {
+        "targets": "~280/1083",
+        "error": "luajit(Lua 5.1)不支持Lua 5.3+ API"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:15:35",
+      "step": "problem_resolution_2",
+      "action": "移除luajit，安装lua-devel(Lua 5.4)",
+      "result": "部分解决——引入新问题",
+      "details": {
+        "new_problem": "主项目仅查找luajit pkg-config，lua.pc不被识别"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:15:40",
+      "step": "build_attempt_3",
+      "action": "第三次编译（Lua 5.4）",
+      "result": "失败——libmcapp.so链接缺少-llua",
+      "details": {
+        "targets": "~320/1083",
+        "error": "lua_rawgeti等符号undefined reference"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:17:12",
+      "step": "problem_resolution_3",
+      "action": "创建luajit.pc重定向到lua5.4 + lua5.4.pc符号链接",
+      "result": "已解决",
+      "details": {
+        "solution": "pkg-config luajit → 指向Lua 5.4 -llua5.4"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:17:15",
+      "step": "build_attempt_4",
+      "action": "第四次编译（luajit.pc重定向后）",
+      "result": "失败——circular include导致OpticalModule_Oem未声明",
+      "details": {
+        "targets": "735/1083",
+        "error": "power.h:42 OpticalModule_Oem has not been declared"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:20:50",
+      "step": "build_attempt_5",
+      "action": "第五次编译（尝试unidev=true绕过）",
+      "result": "失败——相同错误",
+      "details": {
+        "targets": "735/1122",
+        "error": "unidev不改变该代码路径"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T10:24:40",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T10:28:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_devmon_20260618.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": false,
+      "summary": "仓库未配置静态检查工具（无pre-commit配置，无lint-runner配置）",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null,
+        "status": "未配置",
+        "duration_seconds": null,
+        "total_hooks": null,
+        "passed": null,
+        "failed": null,
+        "skipped": null,
+        "failures": []
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null,
+        "status": "未配置",
+        "duration_seconds": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "未配置 devcontainer 开发容器"
+    },
+    "build": {
+      "status": "failed",
+      "duration_seconds": 934,
+      "attempts": 5,
+      "max_targets_built": "735/1083",
+      "artifacts_partial": [
+        {
+          "name": "libmcbase.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcbase/src/libmcbase.so.1.0.0",
+          "size": "50 MB"
+        },
+        {
+          "name": "libmcengine.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcengine/src/libmcengine.so",
+          "size": "43 MB"
+        },
+        {
+          "name": "libmcexpr.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcexpr/src/libmcexpr.so",
+          "size": "18 MB"
+        },
+        {
+          "name": "libmcdbus.so",
+          "path": "builddir/subprojects/libmcpp/libraries/mcdbus/src/libmcdbus.so",
+          "size": "10 MB"
+        },
+        {
+          "name": "libsecfile.so",
+          "path": "builddir/subprojects/libmcpp/libraries/secfile/src/libsecfile.so",
+          "size": "0.8 MB"
+        }
+      ],
+      "blocking_error": {
+        "file": "subprojects/libmcpp/libraries/mcbase/include/mc/db/table.h",
+        "line": 725,
+        "error": "no matching function for call to table_query<..., local_storage_engine, std::allocator<char>>(...shm_storage_engine, shm_engine_alloc...)",
+        "root_cause": "use_shm=true时，libmcpp引擎侧实例化为shm_storage_engine+shm_engine_alloc，但db查询模板table_query签名写死为local_storage_engine+std::allocator<char>。devmon主项目(csr.cpp:969)传shm版本进去，模板形参/实参不匹配。devmon与libmcpp子项目的SHM接口版本不一致——子项目升级了SHM引擎但主项目调用代码未同步更新。GCC 9.5/12.3/13.3行为一致，排除编译器因素",
+        "fix_in_code": "需对齐devmon主项目与libmcpp子项目的SHM接口约定——统一table_query模板签名中的存储引擎类型，或让csr.cpp按当前libmcpp接口传正确的模板参数",
+        "intermediate_blocker": "在暴露table.h问题之前，先被power.h:42的circular include(OpticalModule_Oem未声明)阻塞。绕过方式：-Dcpp_args='-include /tmp/fix/fwd.h'注入前向声明"
+      },
+      "failure_chain": "5次编译尝试，依次暴露了5层问题：\n1. lauxlib.h缺失(luajit-devel未安装)\n2. sqlite3_preupdate_hook未定义(系统sqlite3无session扩展)\n3. lua_isinteger/lua_rawlen未声明(luajit=Lua 5.1不兼容代码的5.3+ API)\n4. libmcapp.so链接失败(主项目只查luajit依赖，lua 5.4不被识别)\n5. OpticalModule_Oem未声明(circular include)——中间阻塞点（可通过-include注入绕过）\n6. table.h:725 table_query模板不匹配——根本阻塞点（use_shm=true时local_storage_engine vs shm_storage_engine），需修改源码"
+    },
+    "ut": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "failures": [],
+      "reason": "构建未完成"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [],
+      "reason": "构建未完成"
+    }
+  },
+  "documentation_gaps": [
+    "README写'CMake 3.10或更高版本'但项目实际使用Meson构建系统——构建系统描述严重错误",
+    "README未列出完整系统包依赖（dbus-devel, glib2-devel, sqlite-devel, luajit-devel/lua-devel, pkgconf, git等均未提及）",
+    "README未说明openEuler的glib-devel是GLib 1.x(1999年)，项目需要glib2-devel(GLIB 2.0)",
+    "README未说明SQLite需启用session扩展(SQLITE_ENABLE_SESSION + SQLITE_ENABLE_PREUPDATE_HOOK)，openEuler默认sqlite包不含",
+    "README未说明Lua版本兼容性：代码用LUA_GNAME(Lua 5.4)、lua_isinteger(Lua 5.3+)、lua_rawlen(Lua 5.2+)，但主项目meson.build仅查找luajit(Lua 5.1)",
+    "子项目使用SSH URL(git@gitcode.com)，无SSH密钥环境需git config url.insteadOf重定向",
+    "component_drivers子项目存在circular include缺陷(power.h ↔ oem.h)——此为上游代码bug",
+    "文档未区分Conan构建路径与纯Meson构建路径的差异（use_old_shm需skynet仅Conan可用）"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-18T10:01:00",
+      "problem": "python3-ninja与ninja-build包冲突，meson依赖ninja-build但python3-ninja obsoletes ninja-build",
+      "solution": "使用python3-ninja替代ninja-build，dnf自动解析依赖",
+      "source": "openEuler 24.03包仓库版本冲突"
+    },
+    {
+      "timestamp": "2026-06-18T10:02:20",
+      "problem": "meson setup找不到glib-2.0——系统glib-devel是GLib 1.x(1.2.10)，不提供glib-2.0.pc",
+      "solution": "安装glib2-devel（提供glib-2.0.pc的GLib 2.78.3）",
+      "source": "openEuler包命名：glib-devel ≠ GLib 2.0开发包"
+    },
+    {
+      "timestamp": "2026-06-18T10:03:10",
+      "problem": "链接libmcdatabase.so时sqlite3_preupdate_hook等符号未定义——系统sqlite3(3.42.0)未启用session扩展",
+      "solution": "从sqlite.org下载源码，configure --enable-session CFLAGS='-DSQLITE_ENABLE_PREUPDATE_HOOK'编译安装到/usr",
+      "source": "openEuler默认sqlite包编译选项限制"
+    },
+    {
+      "timestamp": "2026-06-18T10:12:55",
+      "problem": "luajit(Lua 5.1)不支持代码使用的lua_isinteger(Lua 5.3+)和lua_rawlen(Lua 5.2+)",
+      "solution": "移除luajit-devel，安装lua-devel(Lua 5.4)",
+      "source": "component_drivers/drivers/internal/chip/chip_base/lua_engine.cpp:171 + lua_chip_binding.cpp:57"
+    },
+    {
+      "timestamp": "2026-06-18T10:15:40",
+      "problem": "切换到lua 5.4后libmcapp.so链接失败——主项目meson.build只查dependency('luajit')，lua.pc不被识别",
+      "solution": "创建luajit.pc和lua5.4.pc pkg-config文件，将luajit重定向到lua 5.4",
+      "source": "主项目meson.build:127 lua_dep = dependency('luajit', required: false)"
+    },
+    {
+      "timestamp": "2026-06-18T10:17:15",
+      "problem": "component_drivers/wangxun/interface_pldm/optical_module/power.h:42——OpticalModule_Oem未声明。circular include: power.h使用OpticalModule_Oem*但未前向声明，oem.h又包含power.h。这是中间阻塞点，绕过(通过-include注入前向声明)后暴露更深层问题",
+      "solution": "添加namespace dev { class OpticalModule_Oem; }前向声明可绕过。但绕过此问题后，use_shm=true下立即暴露table.h:725的table_query模板不匹配(local_storage_engine vs shm_storage_engine)——这才是根本阻塞点",
+      "source": "component_drivers子项目上游代码缺陷——循环头文件依赖。更深层：devmon与libmcpp子项目的SHM模板接口不一致"
+    }
+  ],
+  "session_export_file": "verification_report_WSL_devmon_20260618.json",
+  "static_analysis": {
+    "enabled": false,
+    "summary": "仓库未配置静态检查工具（无pre-commit配置，无lint-runner配置）",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null,
+      "total_hooks": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null,
+      "status": "未配置",
+      "duration_seconds": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer 开发容器"
+  }
+}

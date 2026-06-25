@@ -1,0 +1,3350 @@
+[
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F2:V2",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h50m0s"
+          },
+          {
+            "value": "43m49s"
+          },
+          {
+            "value": "6m11s"
+          },
+          {
+            "value": "1h0m0s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 0通过 0失败 5跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "dnf builddep 命令不可用; 首次构建失败：hcom not found; ubs-engine_ucache_plugin_ut 测试套件长时间运行无响应"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F3:V3",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "1h1m0s"
+          },
+          {
+            "value": "43m7s"
+          },
+          {
+            "value": "5m24s"
+          },
+          {
+            "value": "6m1s"
+          },
+          {
+            "value": "6m28s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 0通过 0失败 5跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "构建时缺少 infiniband/verbs.h 头文件; 脚本文件存在 CRLF 行尾符问题，导致执行失败; 缺少 libboundscheck 库"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F4:V4",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "40m0s"
+          },
+          {
+            "value": "31m33s"
+          },
+          {
+            "value": "5m42s"
+          },
+          {
+            "value": "2m45s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "3个hooks, 0通过 0失败 3跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "shell 脚本使用 Windows 行尾 (CRLF)，在 Linux 容器中执行报错; ubs-virt-ovs rpmbuild 报错 ninja-build 包不存在; virt-optimizer RPM 打包失败，spec 文件包含 \\r 字符"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F5:V5",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "50m0s"
+          },
+          {
+            "value": "34m30s"
+          },
+          {
+            "value": "15m0s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 1通过 2失败 2跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "Docker容器内DNS解析失败"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F6:V6",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "34m0s"
+          },
+          {
+            "value": "31m21s"
+          },
+          {
+            "value": "1m8s"
+          },
+          {
+            "value": "1m31s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 0通过 5失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "容器内 DNS 解析失败（getaddrinfo() thread failed to start）; 构建失败：hcom.h: No such file or directory; 测试链接失败：/usr/bin/ld: cannot find -lasan"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F7:V7",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "11m40s"
+          },
+          {
+            "value": "6m57s"
+          },
+          {
+            "value": "18s"
+          },
+          {
+            "value": "4m25s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "14个hooks, 8通过 5失败 1跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "Python Wheel 打包失败: setup.py:32 SOURCE_DATE_EPOCH=0 与 Ubuntu 22.04 默认 wheel 0.37.1 不兼容，ZIP 不支持 1980 年之前的时间戳; pre-commit 内部 pip install 默认走 pypi.org 下载 hook 依赖，pypi.org 不可达导致初始化卡住; UT 子模块 googletest/moc"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F8:V8",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "44m0s"
+          },
+          {
+            "value": "38m18s"
+          },
+          {
+            "value": "1m35s"
+          },
+          {
+            "value": "3m57s"
+          },
+          {
+            "value": "10s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "13个hooks, 7通过 5失败 1跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "Docker Hub 不可访问，无法拉取 ubuntu:22.04 镜像; deadsnakes PPA GPG 密钥导入失败; GitHub 不可访问，git submodule update 失败"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F9:V9",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "56m9s"
+          },
+          {
+            "value": "46m9s"
+          },
+          {
+            "value": "10m0s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "0个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "构建失败，找不到jni.h头文件; 构建测试失败，磁盘空间不足; 构建Java部分失败，找不到mvn命令"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F10:V10",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "20m0s"
+          },
+          {
+            "value": "19m58s"
+          },
+          {
+            "value": "1s"
+          },
+          {
+            "value": "1s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 2通过 2失败 1跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "Docker 容器内 DNS 解析失败（getaddrinfo() thread failed to start）; 首次构建因 CMakeCache.txt 路径不匹配失败; 单元测试运行时 SIGILL (Illegal instruction)，6/8 测试崩溃"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F11:V11",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "23m0s"
+          },
+          {
+            "value": "20m28s"
+          },
+          {
+            "value": "33s"
+          },
+          {
+            "value": "1m59s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 2通过 3失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "构建失败：缺少 libvirt/libvirt.h 头文件; 构建失败：缺少 /usr/lib64/libboundscheck.so 库; 测试构建失败：googletest 和 mockcpp 子模块未初始化"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F12:V12",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "15m12s"
+          },
+          {
+            "value": "7m58s"
+          },
+          {
+            "value": "4m38s"
+          },
+          {
+            "value": "2m20s"
+          },
+          {
+            "value": "16s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "4个用例失败"
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "dnf 安装 meson 时 python3-ninja 与 ninja-build 包冲突; meson 未找到 C++ 编译器（g++/c++）; meson 配置阶段报错 Program 'find' not found"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F13:V13",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "28m0s"
+          },
+          {
+            "value": "12m26s"
+          },
+          {
+            "value": "15m34s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "python3-ninja与ninja-build包冲突，meson依赖ninja-build但python3-ninja obsoletes ninja-build; meson setup找不到glib-2.0——系统glib-devel是GLib 1.x(1.2.10)，不提供glib-2.0.pc; 链接libmcdatabase.so时sqlite3_preupdate_hook等符号未"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F14:V14",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "20m0s"
+          },
+          {
+            "value": "17m19s"
+          },
+          {
+            "value": "2m38s"
+          },
+          {
+            "value": "3s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "openEuler 上 python3-ninja 与 ninja-build 包冲突，meson 安装失败; meson setup 失败：缺少 git 程序，无法克隆 libmcpp 子项目; SSH 认证失败：libmcpp.wrap 使用 git@gitcode.com SSH URL，容器内无 SSH 密钥"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F15:V15",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "57m40s"
+          },
+          {
+            "value": "42m56s"
+          },
+          {
+            "value": "13m22s"
+          },
+          {
+            "value": "1m22s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1个用例失败"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "meson setup 失败：libmcpp.wrap 使用 SSH 地址 git@gitcode.com，外部开发者无密钥导致 Host key verification failed; meson setup 失败：libmcpp/mcdatabase 找不到 sqlite3 依赖; meson compile 失败：lauxlib.h 缺失"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F16:V16",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "11m0s"
+          },
+          {
+            "value": "8m50s"
+          },
+          {
+            "value": "1m36s"
+          },
+          {
+            "value": "34s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "npm run build 失败：Rollup 无法解析 import 'echarts-gl'，该依赖在源码中被引用但未在 package.json 中声明; 单元测试 date.spec.ts 失败：期望小时为 '20' 实际为 '12'，因测试用 UTC 时间戳并硬编码 UTC+8 期望值，而容器默认时区为 UTC"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F17:V17",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h0m0s"
+          },
+          {
+            "value": "59m31s"
+          },
+          {
+            "value": "5s"
+          },
+          {
+            "value": "24s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "2个用例失败"
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "GCC 10.3.1编译失败：cc1plus: error: unknown value 'armv9-a+sme-f64f64+sve' for '-march'; test_omp_main中HBW相关测试失败（4个用例）和mmap bind测试失败（6个用例）; test_pthread_main运行超时（>5分钟）被终止，导致test_shm_main和test_mma_main未执行"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F18:V18",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "25m0s"
+          },
+          {
+            "value": "24m54s"
+          },
+          {
+            "value": "4s"
+          },
+          {
+            "value": "2s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1个用例失败"
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "7个hooks, 0通过 0失败 7跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "测试构建失败：环境变量GTEST_ROOT未设置; 测试构建失败：kutacc头文件路径不存在（/workspace/test/functest/../../install/include）; kutacc_comm_test中TransposeTest.transpose_func测试失败：输出值3不等于期望值6"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F21:V21",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "1h30m0s"
+          },
+          {
+            "value": "1h18m54s"
+          },
+          {
+            "value": "10m0s"
+          },
+          {
+            "value": "1m0s"
+          },
+          {
+            "value": "6s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "hucx 编译失败: infiniband/verbs.h: No such file or directory; hucx 编译失败: uint32_t vs ucs_status_t 函数声明冲突; xucg 编译失败: ucs/datastruct/list.h: No such file or directory"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F22:V22",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "3h30m0s"
+          },
+          {
+            "value": "3h14m20s"
+          },
+          {
+            "value": "10m30s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "10s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "2个用例失败"
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "首次configure未启用gtest，导致构建后无法运行单元测试; 编译报错infiniband/verbs.h: No such file or directory，缺少RDMA开发库头文件; gtest单元测试在CMA传输层测试中段错误崩溃，未完成全部测试"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F23:V23",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h17m0s"
+          },
+          {
+            "value": "1h9m0s"
+          },
+          {
+            "value": "2m0s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "1m0s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "3个用例失败"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "CMake UCG_BUILD_WITH_UCX参数类型问题; gtest test_ucg_component.load崩溃; gtest test_ucx_allreduce.allreduce_sa_rabenseifner进程异常终止"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F24:V24",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "6h0m0s"
+          },
+          {
+            "value": "5h35m0s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "20m0s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "setup.py中KUPL_ROOT的library_dirs配置错误; GCC不支持-stdlib=libstdc++选项（这是Clang选项）; 缺少libomp.so运行时库"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F25:V25",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "28m0s"
+          },
+          {
+            "value": "11m35s"
+          },
+          {
+            "value": "16m25s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "12个hooks, 8通过 4失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "第三方依赖中的 abseil-cpp, re2, c-ares, zlib 目录结构不符合 grpc 编译预期，CMake 无法找到头文件; ms_coordinator 编译失败: 找不到 msServiceProfiler/Tracer.h 头文件; OpenSSL 版本冲突: 第三方编译的 libcrypto.so 与系统 libldap.so.2 不兼容，导致 cmake 启动失败"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F26:V26",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "41m0s"
+          },
+          {
+            "value": "40m18s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": "12s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "11个hooks, 0通过 0失败 11跳过"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "已配置"
+          },
+          {
+            "value": "构建脚本使用 Windows CRLF 行尾格式，Linux 下执行失败; CANN Toolkit 未安装，无法编译 Ascend 算子和 PyTorch 插件; torch-npu 和 triton-ascend 包不在公共 PyPI，无法直接安装"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F27:V27",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "39m22s"
+          },
+          {
+            "value": "34m17s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "5s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "15个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "build.sh 和 generate_proto.sh 脚本包含 Windows CRLF 换行符，导致 bash 执行时报错 '$'\\r': command not found' 和 'set: pipefail: invalid option name'; grpcio-tools 未安装，generate_proto.sh 检查失败; 部分 Python 依赖（pydantic、psuti"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F28:V28",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "2h22m0s"
+          },
+          {
+            "value": "2h20m52s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": "38s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "0个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "容器内pip安装出现 RuntimeError: can't start new thread; pip install -e . 构建时出现 RuntimeError: can't start new thread; Megatron-LM安装时升级了torch版本（2.7.1→2.12.1）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F29:V29",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "7m32s"
+          },
+          {
+            "value": "3m58s"
+          },
+          {
+            "value": "3m26s"
+          },
+          {
+            "value": "8s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "14个hooks, 4通过 10失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "容器内 pre-commit 报 getaddrinfo() thread failed to start，无法 git fetch hooks 仓库; import mindspeed_llm 报 No module named 'torch_npu'; pre-commit 中部分 hook 自动修改源码"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F30:V30",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "56m0s"
+          },
+          {
+            "value": "49m37s"
+          },
+          {
+            "value": "3m31s"
+          },
+          {
+            "value": "2m52s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "10个用例失败"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "0个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "AscendHub 上无 master tag 镜像; 宿主机 CentOS 7 无 python3 / pip3，无法在宿主机执行 pre-commit; pre-commit 默认 fixer 自动改写源码 30+ 文件，违反『不允许修改源码』约束"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F31:V31",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h8m4s"
+          },
+          {
+            "value": "38m31s"
+          },
+          {
+            "value": "29m33s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "test/README.md 与 README.md 中明确说明 UT（python ci/access_control_test.py --all）需要 Ascend NPU 硬件 + CANN 环境（source /usr/local/Ascend/ascend-toolkit/set_env.sh）；本机为 WSL2 x86_64 纯 CPU 环境，没有 Ascend 硬件，无法运行真实 U"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "build/CMakeCache.txt 中保存的源目录是 /workspace，与本次挂载点 /home/pytorch 不一致，导致 cmake 拒绝复用; third_party/Tensorpipe/third_party/libuv/CMakeLists.txt 第1行 cmake_minimum_required 与镜像中的 cmake 4.0.0 不兼容（cmake 4 已移除对 <"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F32:V32",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "39m0s"
+          },
+          {
+            "value": "17m1s"
+          },
+          {
+            "value": "21m59s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "test/run_test.py 强依赖 import torch_npu 与 NPU 硬件，且 wheel 未最终生成"
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "examples/cpp_extension_* 均需 NPU 硬件运行，且 wheel 未最终生成"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "0个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "宿主机 Python 3.6.8 不满足 pre-commit>=4.0 的 Python>=3.9 要求; auditwheel repair 报 'libccl_dpu.so could not be located' 导致 wheel 打包失败; 无 NPU 硬件，UT 与 examples 无法执行"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F33:V33",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "30m0s"
+          },
+          {
+            "value": "28m19s"
+          },
+          {
+            "value": "1m9s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": "2s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "10个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "首次构建时bdist_wheel失败，提示invalid command 'bdist_wheel'; 容器DNS解析失败（getaddrinfo() thread failed to start）; 安装CUDA版PyTorch导致UT链接失败（缺少CUDA运行时库）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F34:V34",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "23m0s"
+          },
+          {
+            "value": "4m1s"
+          },
+          {
+            "value": "18m43s"
+          },
+          {
+            "value": "0s"
+          },
+          {
+            "value": "15s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "Docker Desktop 守护进程未运行，无法使用容器执行验证"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F35:V35",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "16m0s"
+          },
+          {
+            "value": "15m9s"
+          },
+          {
+            "value": "50s"
+          },
+          {
+            "value": "0s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "dnf builddep 失败：libisula-devel > 2.1.5-0 不在 openEuler 24.03 仓库中; libisula 2.1.4 与 iSulad master (2.1.6) API 不兼容：缺少 isula_sub_string、isula_fopen 及 shim_client_process_state 新字段; cmake -DENABLE_UT=ON 失败"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F36:V36",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "27m0s"
+          },
+          {
+            "value": "26m22s"
+          },
+          {
+            "value": "33s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "5s"
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "所有测试依赖 systemd 管理的 atuned 服务（Unix socket 通信），容器环境无 systemd，无法启动服务。26 个 test_*.sh 测试脚本均无法执行。"
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "pip3 未预装，需先安装 python3-pip; pip install xgboost/scikit-learn 源码编译耗时过长; make db 目标失败：sqlite3 无法解析 init.sql 中含特殊字符的列名"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F37:V37",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "6m0s"
+          },
+          {
+            "value": "2m44s"
+          },
+          {
+            "value": "2m0s"
+          },
+          {
+            "value": "1m16s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": "unknown"
+          },
+          {
+            "value": "无用例"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "openEuler 24.03 自带 Rust 1.82.0 无法构建：cpufeatures-0.3.0 需要 edition2024 feature（Rust 1.85+）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F38:V38",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "15m0s"
+          },
+          {
+            "value": "11m17s"
+          },
+          {
+            "value": "3m37s"
+          },
+          {
+            "value": "6s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "configure 阶段未找到 fontconfig 库; jtreg 测试框架不可用，无法运行完整单元测试"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F39:V39",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "9m0s"
+          },
+          {
+            "value": "5m11s"
+          },
+          {
+            "value": "3m28s"
+          },
+          {
+            "value": "19s"
+          },
+          {
+            "value": "2s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "7个hooks, 5通过 2失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "样例运行时发生段错误 (Segmentation fault)"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F40:V40",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "15m0s"
+          },
+          {
+            "value": "10m12s"
+          },
+          {
+            "value": "4m15s"
+          },
+          {
+            "value": "26s"
+          },
+          {
+            "value": "7s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 2通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "安装自定义算子包失败，目录创建但内容为空; 样例运行时aclInit失败（错误码507008/500000）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F41:V41",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "16m0s"
+          },
+          {
+            "value": "11m48s"
+          },
+          {
+            "value": "3m44s"
+          },
+          {
+            "value": "28s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "9个hooks, 5通过 4失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "安装自定义算子包失败，libcust_opsproto_rt2.0.so存在undefined symbol"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F42:V42",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "17m0s"
+          },
+          {
+            "value": "10m4s"
+          },
+          {
+            "value": "6m22s"
+          },
+          {
+            "value": "29s"
+          },
+          {
+            "value": "5s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 1通过 1失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "使用文档推荐的add_example算子编译失败，CMake报错: Specified ops(add_example) not found in this depository; 样例运行时aclInit失败（错误码500000）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F43:V43",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "27m0s"
+          },
+          {
+            "value": "13m18s"
+          },
+          {
+            "value": "9m37s"
+          },
+          {
+            "value": "4m5s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 0通过 0失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "pre-commit 配置文件 .pre-commit-config.yaml 使用 tab 缩进导致 YAML 解析失败"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F44:V44",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "19m0s"
+          },
+          {
+            "value": "14m24s"
+          },
+          {
+            "value": "4m36s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "未知"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "Container name conflict on first start attempt; Image has non-standard entrypoint (jenkins-agent); Test build was taking longer than expected, process was stopped"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F45:V45",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "40m0s"
+          },
+          {
+            "value": "35m48s"
+          },
+          {
+            "value": "30s"
+          },
+          {
+            "value": "2m0s"
+          },
+          {
+            "value": "1m42s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "Missing bisheng compiler - required for build; Missing ASCEND_HOME_PATH environment variable; CANN toolkit is very large (1.4GB) and may take long to download"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F46:V46",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h5m0s"
+          },
+          {
+            "value": "1h2m50s"
+          },
+          {
+            "value": "2m7s"
+          },
+          {
+            "value": "3s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "缺少必须的CANN软件包; cann-cmake tag master-012在公开仓库中不可用，且cann-cmake master-001缺少set_cann_cpack_config函数; CANN 9.1.0缺少ccu相关头文件（如ccu_types.h, ccu_primitives.hpp等）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F48:V48",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h0m2s"
+          },
+          {
+            "value": "47m1s"
+          },
+          {
+            "value": "2m13s"
+          },
+          {
+            "value": "10m41s"
+          },
+          {
+            "value": "7s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "12个hooks, 4通过 7失败 1跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "仓库提交的代码未通过自身 pre-commit 检查(7个hook失败：trailing-whitespace/end-of-file-fixer/clang-format/ruff-check/ruff-format/codespell/oat-check); 首次构建在 cmake 配置阶段失败：git 检出 cann-cmake 时报 'detected dubious ownership'"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F49:V49",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "7h17m0s"
+          },
+          {
+            "value": "3h59m25s"
+          },
+          {
+            "value": "1h22m56s"
+          },
+          {
+            "value": "1h54m38s"
+          },
+          {
+            "value": "1s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "12个hooks, 5通过 7失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "git clone cann-cmake 报 'dubious ownership' (WSL 挂载卷属主不一致); bisheng 编译报 'Unsupported NPU architecture or soc: dav-3510' 且 dav-2201 报 'no type named SkSystemArgs in namespace sk'; init_env.sh 下载 CANN to"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F50:V50",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h1m0s"
+          },
+          {
+            "value": "58m41s"
+          },
+          {
+            "value": "1m58s"
+          },
+          {
+            "value": "21s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 1通过 1失败 0跳过"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "已配置"
+          },
+          {
+            "value": "使用文档推荐的 CANN 9.0.0-beta.2 镜像编译失败，缺少 rtFunctionGetMetaInfoSize 等新 runtime API; 编译失败：Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE)"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F51:V51",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h0m0s"
+          },
+          {
+            "value": "49m50s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "5m10s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 0通过 2失败 0跳过"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "已配置"
+          },
+          {
+            "value": "使用文档推荐的 CANN 9.0.0-beta.2 镜像执行 UT 失败，check_build_dependencies.py 报 WARNING: Required runtime version is 9.1, but runtime version is 9.0.0; C++ UT 链接失败：libcpudebug_cceprint.so 和 libcpudebug.so 需要 GLIBC"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F52:V52",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "15m0s"
+          },
+          {
+            "value": "12m38s"
+          },
+          {
+            "value": "1m40s"
+          },
+          {
+            "value": "37s"
+          },
+          {
+            "value": "5s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 3通过 2失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "openEuler 24.03 默认 GCC 12.3.1 不满足 C++20 编译器要求（需要 GCC 13+）; CMake FetchContent 无法从 GitHub 下载 GoogleTest; Clang 编译与系统 GTest 存在 ABI 不兼容（_GLIBCXX_USE_CXX11_ABI 差异导致链接失败）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F53:V53",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h30m0s"
+          },
+          {
+            "value": "1h18m23s"
+          },
+          {
+            "value": "6m30s"
+          },
+          {
+            "value": "5m5s"
+          },
+          {
+            "value": "2s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 1通过 1失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "CMake 配置阶段未找到 Python3 Development.Module 组件; Python UT 286 个测试失败，错误为 RuntimeError: Compiler executable is not found; C++ Lit 测试运行时找不到 llvm-lit"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F54:V54",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h45m0s"
+          },
+          {
+            "value": "1h38m40s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "1m10s"
+          },
+          {
+            "value": "10s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "5个hooks, 0通过 0失败 5跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "pre-commit 初始化失败，无法访问 github.com 下载 hooks; import pypto 失败：ModuleNotFoundError: No module named 'numpy'; interface 模块 UT 部分测试失败或挂起"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F55:V55",
+      "cells": [
+        [
+          {
+            "value": "成功"
+          },
+          {
+            "value": "50m0s"
+          },
+          {
+            "value": "44m30s"
+          },
+          {
+            "value": "1m0s"
+          },
+          {
+            "value": "2m0s"
+          },
+          {
+            "value": "2m30s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "2个hooks, 1通过 1失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": ""
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F57:V57",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "30m0s"
+          },
+          {
+            "value": "26m57s"
+          },
+          {
+            "value": "3m0s"
+          },
+          {
+            "value": "3s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "首次运行build.sh失败，提示'python3: command not found'; 内核模块编译失败：'/lib/modules/6.6.114.1-microsoft-standard-WSL2/build: No such file or directory'"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F58:V58",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "2h44m0s"
+          },
+          {
+            "value": "2h11m8s"
+          },
+          {
+            "value": "25m50s"
+          },
+          {
+            "value": "6m53s"
+          },
+          {
+            "value": "9s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "4个用例失败"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "7个hooks, 1通过 6失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "文档推荐的 AscendHub CANN 镜像公开拉取返回 not found(需登录认证); init_env.sh 安装 CANN toolkit 失败: .run 打印 EULA 后非交互式无法接受; pip 安装 requirements.txt 失败: ruff>=0.14.14 在默认 pypi 源 'from versions: none'"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F59:V59",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "55m21s"
+          },
+          {
+            "value": "42m49s"
+          },
+          {
+            "value": "4m40s"
+          },
+          {
+            "value": "7m52s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "✓"
+          },
+          {
+            "value": "3个hooks, 0通过 3失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          },
+          {
+            "value": "bash build.sh --torch 首次构建在 cann-cmake git clone 阶段报 fatal: detected dubious ownership，CMake 配置中断; bash build.sh -u 在 CMake 配置阶段报 Could NOT find Python3 (missing: Python3_INCLUDE_DIRS Python3_LIBRARIE"
+          }
+        ]
+      ]
+    }
+  }
+]

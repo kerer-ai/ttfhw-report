@@ -1,0 +1,1105 @@
+{
+  "metadata": {
+    "repo_path": "/home/<user>/pytorch",
+    "start_time": "2026-06-17T17:16:56",
+    "end_time": "2026-06-17T18:25:00",
+    "duration_seconds": 4084,
+    "total_steps": 16,
+    "repo_url": "https://gitcode.com/Ascend/pytorch.git",
+    "branch": "v2.7.1",
+    "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa",
+    "commit_subject": "fix(mfusion): preserve output container kind in contract restore",
+    "commit_date": "2026-06-17 12:00:29 +0800",
+    "git_describe": "v26.1.0-beta.1-pytorch2.7.1-400-g8e0459e51"
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G total / 926G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu4.1"
+    },
+    "container": {
+      "os": "AlmaLinux 8.10 (Cerulean Leopard)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无内存限制)"
+    },
+    "image_source": {
+      "type": "repository_dockerfile",
+      "image_name": "manylinux-builder:v1",
+      "selection_reason": "仓库 README 与 docker/README.md 明确指引使用 docker/builder/{arch}/Dockerfile 构建 manylinux-builder:v1 镜像；本机为 x86_64 架构，因此使用 docker/builder/X86/Dockerfile（与 ci/docker/X86/Dockerfile 内容一致）所构建出的镜像，禁止直接复用宿主机环境，符合任务约束 1"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - From Source 章节、docker/builder/X86/Dockerfile",
+      "value": "x86_64（manylinux_2_28_x86_64）"
+    },
+    "recommended_image": {
+      "source": "README.md - From Source 章节 + docker/README.md + docker/builder/X86/Dockerfile",
+      "value": "由仓库 docker/builder/X86/Dockerfile 构建的 manylinux-builder:v1（基于 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0）"
+    },
+    "dependencies": {
+      "source": "README.md + docker/builder/X86/Dockerfile + requirements.txt",
+      "value": [
+        "Python 3.9 / 3.10 / 3.11（镜像内置）",
+        "torch==2.7.1+cpu（镜像内置）",
+        "pyyaml、setuptools、numpy（镜像内置）",
+        "ninja-build、gcc-toolset-14、vim-common、dos2unix（镜像内置）",
+        "auditwheel（用于产物 manylinux 修复）",
+        "构建期间需要：CMAKE_POLICY_VERSION_MINIMUM=3.5（兼容 cmake 4.x 与 Tensorpipe libuv 子模块）",
+        "运行期需要：CANN（Ascend 工具包）+ NPU 硬件，本机不具备"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - From Source 第4步 + docker/README.md",
+      "value": "cd /home/pytorch && bash ci/build.sh --python=3.10"
+    },
+    "ut_commands": {
+      "source": "test/README.md",
+      "value": "python ci/access_control_test.py --all（需要 NPU 硬件 + CANN 环境）"
+    },
+    "sample_commands": {
+      "source": "README.md - Quick Verification 章节 + examples/",
+      "value": "import torch; x = torch.randn(2,2).npu(); 等示例（需要 NPU 硬件）"
+    },
+    "build_entry": {
+      "source": "unknown",
+      "value": "unknown"
+    },
+    "ut_entry": {
+      "source": "unknown",
+      "value": "unknown"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T17:00:00",
+      "command": "查阅 README.md / README.zh.md / docker/README.md / docker/Dockerfile / ci/docker/X86/Dockerfile / ci/build.sh / test/README.md",
+      "success": true,
+      "output": "确认推荐流程：在 manylinux-builder 容器内执行 bash ci/build.sh --python=3.10 生成 wheel；UT/样例需 NPU 硬件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T17:05:00",
+      "command": "ls -la .pre-commit-config.yaml .lintrunner.toml .devcontainer",
+      "success": true,
+      "output": "未找到 .pre-commit-config.yaml 与 .devcontainer；检测到 .lintrunner.toml（59931 bytes）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:06:00",
+      "command": "lintrunner --all-files",
+      "success": true,
+      "output": "ok No lint issues.（启用 linter：NEWLINE、TABS）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:16:30",
+      "command": "docker images | grep manylinux-builder",
+      "success": true,
+      "output": "manylinux-builder:v1（由 docker/builder/X86/Dockerfile 构建，基于 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:16:56",
+      "command": "docker run -d --name ttfhw-pytorch-env -v /home/<user>/pytorch:/home/pytorch -w /home/pytorch manylinux-builder:v1 tail -f /dev/null",
+      "success": true,
+      "output": "<container-id>",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T17:17:00",
+      "command": "docker exec ttfhw-pytorch-env bash -c 'cat /etc/os-release; uname -m; nproc; python3.10 --version; pip3.10 show torch'",
+      "success": true,
+      "output": "AlmaLinux 8.10；x86_64；20 cores；Python 3.10.17；torch 2.7.1+cpu",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:25:30",
+      "command": "首次构建：bash ci/build.sh --python=3.10",
+      "success": false,
+      "output": "configure 失败",
+      "error": "CMake Error: The current CMakeCache.txt directory /home/pytorch/build/CMakeCache.txt is different than the directory /workspace/build where CMakeCache.txt was created.",
+      "returncode": 1,
+      "duration_seconds": 38,
+      "note": "build/ 目录中残留来自之前路径 /workspace 的 CMake 缓存，按 .gitignore 与 setup.py 注释，build/ 属于构建产物可清理；不修改源码"
+    },
+    {
+      "timestamp": "2026-06-17T17:30:00",
+      "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info",
+      "success": true,
+      "output": "已清理过期 CMake 缓存目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:31:00",
+      "command": "第二次构建：bash ci/build.sh --python=3.10",
+      "success": false,
+      "output": "configure 失败",
+      "error": "CMake Error at third_party/Tensorpipe/third_party/libuv/CMakeLists.txt:1 (cmake_minimum_required): Compatibility with CMake < 3.5 has been removed from CMake.",
+      "returncode": 1,
+      "duration_seconds": 57,
+      "note": "镜像内 cmake 4.0.0 与第三方子模块 libuv 的 cmake_minimum_required 不兼容；按 cmake 错误提示，可设置 CMAKE_POLICY_VERSION_MINIMUM=3.5 通过环境变量绕过，无需修改源码"
+    },
+    {
+      "timestamp": "2026-06-17T17:35:00",
+      "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info /home/pytorch/third_party/torchair/torchair/build",
+      "success": true,
+      "output": "已清理 build/ 与子模块 torchair 残留 build/",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T17:35:30",
+      "command": "第三次构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 bash ci/build.sh --python=3.10（默认并发 = nproc = 20）",
+      "success": false,
+      "output": "构建到 1200/1294 时失败",
+      "error": "FAILED: ...StructKernelNpuOpApi.cpp.o；c++: fatal error: Killed signal terminated program cc1plus",
+      "returncode": 1,
+      "duration_seconds": 1438,
+      "note": "高并发下 cc1plus 在编译大模板文件时被 OOM Killer 终止；本机内存 15Gi，运行宿主进程后剩余 ~2Gi"
+    },
+    {
+      "timestamp": "2026-06-17T18:13:00",
+      "command": "第四次（增量）构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=4 bash ci/build.sh --python=3.10",
+      "success": true,
+      "output": "Successfully built wheel；auditwheel 修复后产物：torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 335,
+      "note": "并发降到 4（=容器核数 20 × 20%，远低于 60% 上限），单进程内存峰值得以控制；此次为增量构建（保留前次已编译产物）"
+    },
+    {
+      "timestamp": "2026-06-17T18:18:43",
+      "command": "ls -la /home/pytorch/dist/",
+      "success": true,
+      "output": "torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl（45,252,629 bytes ≈ 43.2 MB）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T18:19:00",
+      "command": "pip3.10 install dist/torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+      "success": true,
+      "output": "Successfully installed torch-npu-2.7.1.post5+git8e0459e",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-17T18:20:00",
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 python3.10 -c 'import torch; import torch_npu'",
+      "success": false,
+      "output": "torch: 2.7.1+cpu",
+      "error": "ImportError: libhccl.so: cannot open shared object file: No such file or directory（CANN/HCCL 未安装）",
+      "returncode": 1,
+      "duration_seconds": 1,
+      "note": "torch_npu 运行期依赖 CANN（HCCL/libhccl.so）以及 NPU 设备，宿主机为纯 CPU 的 WSL2 环境，无 Ascend 硬件，符合预期；构建产物本身完整"
+    },
+    {
+      "timestamp": "2026-06-17T18:24:30",
+      "command": "docker stop ttfhw-pytorch-env && docker rm ttfhw-pytorch-env",
+      "success": true,
+      "output": "ttfhw-pytorch-env 已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T17:00:00",
+      "step": "start",
+      "action": "开始 TTFHW 验证流程，目标仓库 https://gitcode.com/Ascend/pytorch.git 分支 v2.7.1，目标 Python 3.10",
+      "result": "已启动",
+      "details": {
+        "branch": "v2.7.1",
+        "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:00:30",
+      "step": "document_reading",
+      "action": "阅读 README.md / README.zh.md，了解从源码构建路径与镜像要求",
+      "result": "成功",
+      "details": {
+        "file": "README.md",
+        "sections_read": [
+          "From Source",
+          "Quick Verification",
+          "Auxiliary Software"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:01:00",
+      "step": "document_reading",
+      "action": "阅读 docker/README.md、docker/builder/X86/Dockerfile、ci/docker/X86/Dockerfile、ci/build.sh、test/README.md",
+      "result": "成功",
+      "details": {
+        "build_entry": "ci/build.sh --python=3.10",
+        "docker_image": "manylinux-builder:v1"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:05:00",
+      "step": "static_analysis_scan",
+      "action": "扫描 pre-commit / lint-runner 配置",
+      "result": "已配置 lint-runner（.lintrunner.toml），未配置 pre-commit",
+      "details": {
+        "pre_commit": false,
+        "lint_runner": true,
+        "active_linters": [
+          "NEWLINE",
+          "TABS"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:06:00",
+      "step": "static_analysis_execution",
+      "action": "执行 lintrunner --all-files",
+      "result": "全部通过",
+      "details": {
+        "output": "ok No lint issues.",
+        "duration_seconds": 1
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:07:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer/ 目录",
+      "result": "未配置",
+      "details": {
+        "searched": [
+          ".devcontainer/devcontainer.json"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:16:00",
+      "step": "image_selection",
+      "action": "选择基础镜像（优先使用仓库 Dockerfile 构建出的镜像）",
+      "result": "manylinux-builder:v1（由 docker/builder/X86/Dockerfile 构建）",
+      "details": {
+        "selection_reason": "仓库 README 与 docker/README.md 明确指引在该镜像内编译，禁止直接复用宿主机环境"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:16:56",
+      "step": "container_setup",
+      "action": "启动新容器 ttfhw-pytorch-env，挂载仓库到 /home/pytorch",
+      "result": "成功",
+      "details": {
+        "image": "manylinux-builder:v1",
+        "mount": "/home/<user>/pytorch -> /home/pytorch"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:25:30",
+      "step": "build_attempt",
+      "action": "首次构建尝试 bash ci/build.sh --python=3.10",
+      "result": "失败",
+      "details": {
+        "error": "build/ 目录残留旧 CMakeCache（路径 /workspace 与 /home/pytorch 不一致）"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:30:00",
+      "step": "problem_resolution",
+      "action": "清理 build/ 与 dist/ 等构建产物目录（不修改源码）",
+      "result": "已解决",
+      "details": {
+        "cleaned_dirs": [
+          "build/",
+          "dist/",
+          "torch_npu.egg-info/",
+          "third_party/torchair/torchair/build/"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:31:00",
+      "step": "build_attempt",
+      "action": "第二次构建：仅清理后重试",
+      "result": "失败",
+      "details": {
+        "error": "Tensorpipe/libuv 子模块要求 cmake_minimum_required<3.5，与镜像 cmake 4.0.0 不兼容"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:35:00",
+      "step": "problem_resolution",
+      "action": "按 CMake 报错提示设置环境变量 CMAKE_POLICY_VERSION_MINIMUM=3.5（不修改仓库源码）",
+      "result": "已解决",
+      "details": {
+        "env": "CMAKE_POLICY_VERSION_MINIMUM=3.5",
+        "source": "CMake 错误信息中的官方建议"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T17:35:30",
+      "step": "build_attempt",
+      "action": "第三次构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 + 默认并发（20）",
+      "result": "失败",
+      "details": {
+        "error": "编译进度 1200/1294 时 cc1plus 被 OOM 终止；本机可用内存约 2Gi"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T18:13:00",
+      "step": "build_retry",
+      "action": "第四次（增量）构建：MAX_JOBS=4 限制并发",
+      "result": "成功",
+      "details": {
+        "concurrency": 4,
+        "concurrency_ratio": "20% (远低于 60% 上限)",
+        "build_args": "ninja -j 4"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T18:18:43",
+      "step": "ut_execution",
+      "action": "尝试运行单元测试 / Quick Verification 样例",
+      "result": "跳过",
+      "details": {
+        "reason": "test/README.md 与 README.md 中 UT 与样例均要求 NPU 硬件 + CANN（/usr/local/Ascend/ascend-toolkit/set_env.sh），本机为 WSL2/x86 CPU，无 Ascend NPU 与 CANN，无法在硬件层面执行"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T18:19:00",
+      "step": "smoke_test",
+      "action": "安装并 import torch_npu 进行冒烟检查",
+      "result": "符合预期",
+      "details": {
+        "install": "成功",
+        "import": "因缺少 libhccl.so 失败（CANN 未安装），属于环境层面缺失而非构建产物缺陷"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T18:24:30",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-pytorch-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T18:25:00",
+      "step": "report_generation",
+      "action": "生成验证报告 verification_report_WSL_pytorch_20260617.json",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report/verification_report_WSL_pytorch_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "仓库未配置 pre-commit；配置了 lint-runner（.lintrunner.toml），启用 NEWLINE 与 TABS 两个 linter，执行 lintrunner --all-files 全部通过",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null,
+        "status": "unknown",
+        "duration_seconds": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "failures": []
+      },
+      "lint_runner": {
+        "configured": true,
+        "config_file": ".lintrunner.toml",
+        "status": "全部通过",
+        "duration_seconds": 1,
+        "active_linters": [
+          "NEWLINE",
+          "TABS"
+        ],
+        "result": "ok No lint issues."
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 .devcontainer 目录"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 1773,
+      "command": "CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=4 bash ci/build.sh --python=3.10",
+      "concurrency": 4,
+      "duration_breakdown": {
+        "first_attempt_failed_seconds": 38,
+        "second_attempt_failed_seconds": 57,
+        "third_attempt_oom_failed_seconds": 1438,
+        "fourth_incremental_success_seconds": 335,
+        "total_attempts_seconds": 1868
+      },
+      "artifacts": [
+        {
+          "name": "torch_npu wheel",
+          "path": "dist/torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+          "size": "43.2 MB (45,252,629 bytes)"
+        }
+      ]
+    },
+    "ut": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "total": 0,
+      "passed": 0,
+      "failed": 0,
+      "failures": [],
+      "skip_reason": "test/README.md 与 README.md 中明确说明 UT（python ci/access_control_test.py --all）需要 Ascend NPU 硬件 + CANN 环境（source /usr/local/Ascend/ascend-toolkit/set_env.sh）；本机为 WSL2 x86_64 纯 CPU 环境，没有 Ascend 硬件，无法运行真实 UT"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "Quick Verification (README)",
+          "execution_status": "unknown",
+          "output_summary": "x.npu()/y.npu() 调用需要 NPU 设备，本机无 Ascend 硬件",
+          "execution_time": "-"
+        },
+        {
+          "sample_name": "examples/libtorch_resnet",
+          "execution_status": "unknown",
+          "output_summary": "依赖 libtorch_npu 运行库与 NPU 设备",
+          "execution_time": "-"
+        }
+      ],
+      "smoke_test_after_install": {
+        "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 python3.10 -c 'import torch; import torch_npu'",
+        "status": "构建产物可被 pip 安装；导入时因 libhccl.so 缺失（CANN 未安装）失败",
+        "interpretation": "属于运行期环境缺失，非构建产物缺陷"
+      }
+    }
+  },
+  "documentation_gaps": [
+    "README.md 未提示 Tensorpipe/libuv 子模块在 cmake>=4 环境下需要设置 CMAKE_POLICY_VERSION_MINIMUM=3.5；当前 docker/builder/X86/Dockerfile 安装的是镜像默认 cmake（实际为 4.0.0），构建会直接失败",
+    "ci/build.sh 默认不设置 MAX_JOBS，会以 nproc 满并发编译，在内存受限场景（如 16GB 主机同时运行其他进程）大模板文件会被 OOM Killer 终止；建议文档建议根据可用内存调整 MAX_JOBS",
+    "README.md 未明确说明 build/ 与子模块 third_party/torchair/torchair/build/ 必须在更换挂载路径时清理（CMakeCache 中保存绝对路径会导致再次构建失败）",
+    "test/README.md 未明确写出离线/无 NPU 环境下哪些 UT 子集（若有）可执行；当前所有路径都要求真实 NPU"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T17:25:30",
+      "problem": "build/CMakeCache.txt 中保存的源目录是 /workspace，与本次挂载点 /home/pytorch 不一致，导致 cmake 拒绝复用",
+      "solution": "清理 build/、dist/、torch_npu.egg-info/、third_party/torchair/torchair/build/ 等构建产物目录（属于 .gitignore 范围，非源码）",
+      "source": "CMake 报错 + .gitignore + setup.py 的 clean 逻辑"
+    },
+    {
+      "timestamp": "2026-06-17T17:31:00",
+      "problem": "third_party/Tensorpipe/third_party/libuv/CMakeLists.txt 第1行 cmake_minimum_required 与镜像中的 cmake 4.0.0 不兼容（cmake 4 已移除对 <3.5 策略的兼容）",
+      "solution": "按 CMake 官方报错给出的提示，导出环境变量 CMAKE_POLICY_VERSION_MINIMUM=3.5（不修改仓库源码）",
+      "source": "third_party/Tensorpipe/third_party/libuv/CMakeLists.txt:1（CMake 输出中的官方建议）"
+    },
+    {
+      "timestamp": "2026-06-17T17:35:30",
+      "problem": "默认满并发（20）编译大模板文件 StructKernelNpuOpApi.cpp 时 cc1plus 被 OOM Killer 终止",
+      "solution": "导出 MAX_JOBS=4，将 ninja 并发降至 4（容器核数 20 × 20%，低于 60% 上限）",
+      "source": "/tmp/build_out4.log 中的 'fatal error: Killed signal terminated program cc1plus'"
+    },
+    {
+      "timestamp": "2026-06-17T18:20:00",
+      "problem": "已构建 wheel 安装后 import torch_npu 报 libhccl.so not found",
+      "solution": "未解决（环境层面缺失）：宿主与容器均未安装 CANN（/usr/local/Ascend/ascend-toolkit/set_env.sh 不存在），且无 Ascend NPU 硬件；属于平台限制，非仓库构建缺陷",
+      "source": "torch_npu/_C 加载时链接 libhccl.so（CANN HCCL 库）"
+    }
+  ],
+  "session_export_file": "verification_report/verification_report_WSL_pytorch_20260617.json",
+  "__original": {
+    "metadata": {
+      "repo_path": "/home/<user>/pytorch",
+      "repo_url": "https://gitcode.com/Ascend/pytorch.git",
+      "branch": "v2.7.1",
+      "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa",
+      "commit_subject": "fix(mfusion): preserve output container kind in contract restore",
+      "commit_date": "2026-06-17 12:00:29 +0800",
+      "git_describe": "v26.1.0-beta.1-pytorch2.7.1-400-g8e0459e51",
+      "python_version_target": "3.10",
+      "torch_version_target": "2.7.1",
+      "start_time": "2026-06-17T17:16:56",
+      "end_time": "2026-06-17T18:25:00",
+      "duration_seconds": 4084,
+      "total_steps": 16
+    },
+    "machine_spec": {
+      "host_machine": {
+        "architecture": "x86_64",
+        "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+        "cpu_cores": 20,
+        "memory": "15Gi",
+        "disk": "1007G total / 926G available",
+        "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu4.1",
+        "kernel": "Linux 6.6.87.2-microsoft-standard-WSL2"
+      },
+      "container": {
+        "name": "ttfhw-pytorch-env",
+        "os": "AlmaLinux 8.10 (Cerulean Leopard)",
+        "architecture": "x86_64",
+        "cpu_cores": 20,
+        "memory": "15Gi (无内存限制)",
+        "python_versions_available": [
+          "3.9.23",
+          "3.10.17",
+          "3.11"
+        ],
+        "torch_preinstalled": "2.7.1+cpu",
+        "gcc_toolset": "gcc-toolset-14"
+      },
+      "image_source": {
+        "type": "repository_dockerfile",
+        "image_name": "manylinux-builder:v1",
+        "base_image": "quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0",
+        "dockerfile_path": "docker/builder/X86/Dockerfile",
+        "selection_reason": "仓库 README 与 docker/README.md 明确指引使用 docker/builder/{arch}/Dockerfile 构建 manylinux-builder:v1 镜像；本机为 x86_64 架构，因此使用 docker/builder/X86/Dockerfile（与 ci/docker/X86/Dockerfile 内容一致）所构建出的镜像，禁止直接复用宿主机环境，符合任务约束 1"
+      }
+    },
+    "document_reading_summary": {
+      "architecture": {
+        "source": "README.md - From Source 章节、docker/builder/X86/Dockerfile",
+        "value": "x86_64（manylinux_2_28_x86_64）"
+      },
+      "recommended_image": {
+        "source": "README.md - From Source 章节 + docker/README.md + docker/builder/X86/Dockerfile",
+        "value": "由仓库 docker/builder/X86/Dockerfile 构建的 manylinux-builder:v1（基于 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0）"
+      },
+      "dependencies": {
+        "source": "README.md + docker/builder/X86/Dockerfile + requirements.txt",
+        "value": [
+          "Python 3.9 / 3.10 / 3.11（镜像内置）",
+          "torch==2.7.1+cpu（镜像内置）",
+          "pyyaml、setuptools、numpy（镜像内置）",
+          "ninja-build、gcc-toolset-14、vim-common、dos2unix（镜像内置）",
+          "auditwheel（用于产物 manylinux 修复）",
+          "构建期间需要：CMAKE_POLICY_VERSION_MINIMUM=3.5（兼容 cmake 4.x 与 Tensorpipe libuv 子模块）",
+          "运行期需要：CANN（Ascend 工具包）+ NPU 硬件，本机不具备"
+        ]
+      },
+      "build_commands": {
+        "source": "README.md - From Source 第4步 + docker/README.md",
+        "value": "cd /home/pytorch && bash ci/build.sh --python=3.10"
+      },
+      "ut_commands": {
+        "source": "test/README.md",
+        "value": "python ci/access_control_test.py --all（需要 NPU 硬件 + CANN 环境）"
+      },
+      "sample_commands": {
+        "source": "README.md - Quick Verification 章节 + examples/",
+        "value": "import torch; x = torch.randn(2,2).npu(); 等示例（需要 NPU 硬件）"
+      },
+      "special_dependencies": {
+        "source": "README.md - From Source 章节",
+        "value": [
+          "_GLIBCXX_USE_CXX11_ABI=1（与社区 torch 包保持一致）",
+          "可选 _ABI_VERSION=16（与社区 torch 包保持一致）"
+        ]
+      }
+    },
+    "execution_log": [
+      {
+        "timestamp": "2026-06-17T17:00:00",
+        "command": "查阅 README.md / README.zh.md / docker/README.md / docker/Dockerfile / ci/docker/X86/Dockerfile / ci/build.sh / test/README.md",
+        "success": true,
+        "output": "确认推荐流程：在 manylinux-builder 容器内执行 bash ci/build.sh --python=3.10 生成 wheel；UT/样例需 NPU 硬件",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 60
+      },
+      {
+        "timestamp": "2026-06-17T17:05:00",
+        "command": "ls -la .pre-commit-config.yaml .lintrunner.toml .devcontainer",
+        "success": true,
+        "output": "未找到 .pre-commit-config.yaml 与 .devcontainer；检测到 .lintrunner.toml（59931 bytes）",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:06:00",
+        "command": "lintrunner --all-files",
+        "success": true,
+        "output": "ok No lint issues.（启用 linter：NEWLINE、TABS）",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:16:30",
+        "command": "docker images | grep manylinux-builder",
+        "success": true,
+        "output": "manylinux-builder:v1（由 docker/builder/X86/Dockerfile 构建，基于 quay.io/pypa/manylinux_2_28_x86_64:2025.04.26-0）",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:16:56",
+        "command": "docker run -d --name ttfhw-pytorch-env -v /home/<user>/pytorch:/home/pytorch -w /home/pytorch manylinux-builder:v1 tail -f /dev/null",
+        "success": true,
+        "output": "<container-id>",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 2
+      },
+      {
+        "timestamp": "2026-06-17T17:17:00",
+        "command": "docker exec ttfhw-pytorch-env bash -c 'cat /etc/os-release; uname -m; nproc; python3.10 --version; pip3.10 show torch'",
+        "success": true,
+        "output": "AlmaLinux 8.10；x86_64；20 cores；Python 3.10.17；torch 2.7.1+cpu",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:25:30",
+        "command": "首次构建：bash ci/build.sh --python=3.10",
+        "success": false,
+        "output": "configure 失败",
+        "error": "CMake Error: The current CMakeCache.txt directory /home/pytorch/build/CMakeCache.txt is different than the directory /workspace/build where CMakeCache.txt was created.",
+        "returncode": 1,
+        "duration_seconds": 38,
+        "note": "build/ 目录中残留来自之前路径 /workspace 的 CMake 缓存，按 .gitignore 与 setup.py 注释，build/ 属于构建产物可清理；不修改源码"
+      },
+      {
+        "timestamp": "2026-06-17T17:30:00",
+        "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info",
+        "success": true,
+        "output": "已清理过期 CMake 缓存目录",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:31:00",
+        "command": "第二次构建：bash ci/build.sh --python=3.10",
+        "success": false,
+        "output": "configure 失败",
+        "error": "CMake Error at third_party/Tensorpipe/third_party/libuv/CMakeLists.txt:1 (cmake_minimum_required): Compatibility with CMake < 3.5 has been removed from CMake.",
+        "returncode": 1,
+        "duration_seconds": 57,
+        "note": "镜像内 cmake 4.0.0 与第三方子模块 libuv 的 cmake_minimum_required 不兼容；按 cmake 错误提示，可设置 CMAKE_POLICY_VERSION_MINIMUM=3.5 通过环境变量绕过，无需修改源码"
+      },
+      {
+        "timestamp": "2026-06-17T17:35:00",
+        "command": "docker exec ttfhw-pytorch-env rm -rf /home/pytorch/build /home/pytorch/dist /home/pytorch/torch_npu.egg-info /home/pytorch/third_party/torchair/torchair/build",
+        "success": true,
+        "output": "已清理 build/ 与子模块 torchair 残留 build/",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T17:35:30",
+        "command": "第三次构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 bash ci/build.sh --python=3.10（默认并发 = nproc = 20）",
+        "success": false,
+        "output": "构建到 1200/1294 时失败",
+        "error": "FAILED: ...StructKernelNpuOpApi.cpp.o；c++: fatal error: Killed signal terminated program cc1plus",
+        "returncode": 1,
+        "duration_seconds": 1438,
+        "note": "高并发下 cc1plus 在编译大模板文件时被 OOM Killer 终止；本机内存 15Gi，运行宿主进程后剩余 ~2Gi"
+      },
+      {
+        "timestamp": "2026-06-17T18:13:00",
+        "command": "第四次（增量）构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=4 bash ci/build.sh --python=3.10",
+        "success": true,
+        "output": "Successfully built wheel；auditwheel 修复后产物：torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 335,
+        "note": "并发降到 4（=容器核数 20 × 20%，远低于 60% 上限），单进程内存峰值得以控制；此次为增量构建（保留前次已编译产物）"
+      },
+      {
+        "timestamp": "2026-06-17T18:18:43",
+        "command": "ls -la /home/pytorch/dist/",
+        "success": true,
+        "output": "torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl（45,252,629 bytes ≈ 43.2 MB）",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 1
+      },
+      {
+        "timestamp": "2026-06-17T18:19:00",
+        "command": "pip3.10 install dist/torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+        "success": true,
+        "output": "Successfully installed torch-npu-2.7.1.post5+git8e0459e",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 3
+      },
+      {
+        "timestamp": "2026-06-17T18:20:00",
+        "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 python3.10 -c 'import torch; import torch_npu'",
+        "success": false,
+        "output": "torch: 2.7.1+cpu",
+        "error": "ImportError: libhccl.so: cannot open shared object file: No such file or directory（CANN/HCCL 未安装）",
+        "returncode": 1,
+        "duration_seconds": 1,
+        "note": "torch_npu 运行期依赖 CANN（HCCL/libhccl.so）以及 NPU 设备，宿主机为纯 CPU 的 WSL2 环境，无 Ascend 硬件，符合预期；构建产物本身完整"
+      },
+      {
+        "timestamp": "2026-06-17T18:24:30",
+        "command": "docker stop ttfhw-pytorch-env && docker rm ttfhw-pytorch-env",
+        "success": true,
+        "output": "ttfhw-pytorch-env 已停止并删除",
+        "error": "",
+        "returncode": 0,
+        "duration_seconds": 5
+      }
+    ],
+    "process_timeline": [
+      {
+        "timestamp": "2026-06-17T17:00:00",
+        "step": "start",
+        "action": "开始 TTFHW 验证流程，目标仓库 https://gitcode.com/Ascend/pytorch.git 分支 v2.7.1，目标 Python 3.10",
+        "result": "已启动",
+        "details": {
+          "branch": "v2.7.1",
+          "commit": "8e0459e51c048ac0ddc278c7efdf00e9da7605aa"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:00:30",
+        "step": "document_reading",
+        "action": "阅读 README.md / README.zh.md，了解从源码构建路径与镜像要求",
+        "result": "成功",
+        "details": {
+          "file": "README.md",
+          "sections_read": [
+            "From Source",
+            "Quick Verification",
+            "Auxiliary Software"
+          ]
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:01:00",
+        "step": "document_reading",
+        "action": "阅读 docker/README.md、docker/builder/X86/Dockerfile、ci/docker/X86/Dockerfile、ci/build.sh、test/README.md",
+        "result": "成功",
+        "details": {
+          "build_entry": "ci/build.sh --python=3.10",
+          "docker_image": "manylinux-builder:v1"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:05:00",
+        "step": "static_analysis_scan",
+        "action": "扫描 pre-commit / lint-runner 配置",
+        "result": "已配置 lint-runner（.lintrunner.toml），未配置 pre-commit",
+        "details": {
+          "pre_commit": false,
+          "lint_runner": true,
+          "active_linters": [
+            "NEWLINE",
+            "TABS"
+          ]
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:06:00",
+        "step": "static_analysis_execution",
+        "action": "执行 lintrunner --all-files",
+        "result": "全部通过",
+        "details": {
+          "output": "ok No lint issues.",
+          "duration_seconds": 1
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:07:00",
+        "step": "devcontainer_scan",
+        "action": "检查 .devcontainer/ 目录",
+        "result": "未配置",
+        "details": {
+          "searched": [
+            ".devcontainer/devcontainer.json"
+          ]
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:16:00",
+        "step": "image_selection",
+        "action": "选择基础镜像（优先使用仓库 Dockerfile 构建出的镜像）",
+        "result": "manylinux-builder:v1（由 docker/builder/X86/Dockerfile 构建）",
+        "details": {
+          "selection_reason": "仓库 README 与 docker/README.md 明确指引在该镜像内编译，禁止直接复用宿主机环境"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:16:56",
+        "step": "container_setup",
+        "action": "启动新容器 ttfhw-pytorch-env，挂载仓库到 /home/pytorch",
+        "result": "成功",
+        "details": {
+          "image": "manylinux-builder:v1",
+          "mount": "/home/<user>/pytorch -> /home/pytorch"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:25:30",
+        "step": "build_attempt",
+        "action": "首次构建尝试 bash ci/build.sh --python=3.10",
+        "result": "失败",
+        "details": {
+          "error": "build/ 目录残留旧 CMakeCache（路径 /workspace 与 /home/pytorch 不一致）"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:30:00",
+        "step": "problem_resolution",
+        "action": "清理 build/ 与 dist/ 等构建产物目录（不修改源码）",
+        "result": "已解决",
+        "details": {
+          "cleaned_dirs": [
+            "build/",
+            "dist/",
+            "torch_npu.egg-info/",
+            "third_party/torchair/torchair/build/"
+          ]
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:31:00",
+        "step": "build_attempt",
+        "action": "第二次构建：仅清理后重试",
+        "result": "失败",
+        "details": {
+          "error": "Tensorpipe/libuv 子模块要求 cmake_minimum_required<3.5，与镜像 cmake 4.0.0 不兼容"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:35:00",
+        "step": "problem_resolution",
+        "action": "按 CMake 报错提示设置环境变量 CMAKE_POLICY_VERSION_MINIMUM=3.5（不修改仓库源码）",
+        "result": "已解决",
+        "details": {
+          "env": "CMAKE_POLICY_VERSION_MINIMUM=3.5",
+          "source": "CMake 错误信息中的官方建议"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T17:35:30",
+        "step": "build_attempt",
+        "action": "第三次构建：CMAKE_POLICY_VERSION_MINIMUM=3.5 + 默认并发（20）",
+        "result": "失败",
+        "details": {
+          "error": "编译进度 1200/1294 时 cc1plus 被 OOM 终止；本机可用内存约 2Gi"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T18:13:00",
+        "step": "build_retry",
+        "action": "第四次（增量）构建：MAX_JOBS=4 限制并发",
+        "result": "成功",
+        "details": {
+          "concurrency": 4,
+          "concurrency_ratio": "20% (远低于 60% 上限)",
+          "build_args": "ninja -j 4"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T18:18:43",
+        "step": "ut_execution",
+        "action": "尝试运行单元测试 / Quick Verification 样例",
+        "result": "跳过",
+        "details": {
+          "reason": "test/README.md 与 README.md 中 UT 与样例均要求 NPU 硬件 + CANN（/usr/local/Ascend/ascend-toolkit/set_env.sh），本机为 WSL2/x86 CPU，无 Ascend NPU 与 CANN，无法在硬件层面执行"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T18:19:00",
+        "step": "smoke_test",
+        "action": "安装并 import torch_npu 进行冒烟检查",
+        "result": "符合预期",
+        "details": {
+          "install": "成功",
+          "import": "因缺少 libhccl.so 失败（CANN 未安装），属于环境层面缺失而非构建产物缺陷"
+        }
+      },
+      {
+        "timestamp": "2026-06-17T18:24:30",
+        "step": "cleanup",
+        "action": "停止并删除容器 ttfhw-pytorch-env",
+        "result": "成功",
+        "details": {}
+      },
+      {
+        "timestamp": "2026-06-17T18:25:00",
+        "step": "report_generation",
+        "action": "生成验证报告 verification_report_WSL_pytorch_20260617.json",
+        "result": "成功",
+        "details": {
+          "output_file": "verification_report/verification_report_WSL_pytorch_20260617.json"
+        }
+      }
+    ],
+    "final_results": {
+      "static_analysis": {
+        "enabled": true,
+        "summary": "仓库未配置 pre-commit；配置了 lint-runner（.lintrunner.toml），启用 NEWLINE 与 TABS 两个 linter，执行 lintrunner --all-files 全部通过",
+        "pre_commit": {
+          "configured": false,
+          "config_file": null
+        },
+        "lint_runner": {
+          "configured": true,
+          "config_file": ".lintrunner.toml",
+          "status": "全部通过",
+          "duration_seconds": 1,
+          "active_linters": [
+            "NEWLINE",
+            "TABS"
+          ],
+          "result": "ok No lint issues."
+        }
+      },
+      "devcontainer": {
+        "enabled": false,
+        "config_dir": null,
+        "config_files": [],
+        "summary": "仓库未配置 .devcontainer 目录"
+      },
+      "build": {
+        "status": "成功",
+        "duration_seconds": 1773,
+        "duration_breakdown": {
+          "first_attempt_failed_seconds": 38,
+          "second_attempt_failed_seconds": 57,
+          "third_attempt_oom_failed_seconds": 1438,
+          "fourth_incremental_success_seconds": 335,
+          "total_attempts_seconds": 1868
+        },
+        "command": "CMAKE_POLICY_VERSION_MINIMUM=3.5 MAX_JOBS=4 bash ci/build.sh --python=3.10",
+        "concurrency": 4,
+        "artifacts": [
+          {
+            "name": "torch_npu wheel",
+            "path": "dist/torch_npu-2.7.1.post5+git8e0459e-cp310-cp310-manylinux_2_28_x86_64.whl",
+            "size": "43.2 MB (45,252,629 bytes)"
+          }
+        ]
+      },
+      "ut": {
+        "status": "未执行（环境不具备）",
+        "duration_seconds": 0,
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "failures": [],
+        "skip_reason": "test/README.md 与 README.md 中明确说明 UT（python ci/access_control_test.py --all）需要 Ascend NPU 硬件 + CANN 环境（source /usr/local/Ascend/ascend-toolkit/set_env.sh）；本机为 WSL2 x86_64 纯 CPU 环境，没有 Ascend 硬件，无法运行真实 UT"
+      },
+      "sample": {
+        "status": "未执行（环境不具备）",
+        "duration_seconds": 0,
+        "results": [
+          {
+            "sample_name": "Quick Verification (README)",
+            "execution_status": "跳过",
+            "output_summary": "x.npu()/y.npu() 调用需要 NPU 设备，本机无 Ascend 硬件",
+            "execution_time": "-"
+          },
+          {
+            "sample_name": "examples/libtorch_resnet",
+            "execution_status": "跳过",
+            "output_summary": "依赖 libtorch_npu 运行库与 NPU 设备",
+            "execution_time": "-"
+          }
+        ],
+        "smoke_test_after_install": {
+          "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 python3.10 -c 'import torch; import torch_npu'",
+          "status": "构建产物可被 pip 安装；导入时因 libhccl.so 缺失（CANN 未安装）失败",
+          "interpretation": "属于运行期环境缺失，非构建产物缺陷"
+        }
+      }
+    },
+    "documentation_gaps": [
+      "README.md 未提示 Tensorpipe/libuv 子模块在 cmake>=4 环境下需要设置 CMAKE_POLICY_VERSION_MINIMUM=3.5；当前 docker/builder/X86/Dockerfile 安装的是镜像默认 cmake（实际为 4.0.0），构建会直接失败",
+      "ci/build.sh 默认不设置 MAX_JOBS，会以 nproc 满并发编译，在内存受限场景（如 16GB 主机同时运行其他进程）大模板文件会被 OOM Killer 终止；建议文档建议根据可用内存调整 MAX_JOBS",
+      "README.md 未明确说明 build/ 与子模块 third_party/torchair/torchair/build/ 必须在更换挂载路径时清理（CMakeCache 中保存绝对路径会导致再次构建失败）",
+      "test/README.md 未明确写出离线/无 NPU 环境下哪些 UT 子集（若有）可执行；当前所有路径都要求真实 NPU"
+    ],
+    "problems_encountered": [
+      {
+        "timestamp": "2026-06-17T17:25:30",
+        "problem": "build/CMakeCache.txt 中保存的源目录是 /workspace，与本次挂载点 /home/pytorch 不一致，导致 cmake 拒绝复用",
+        "solution": "清理 build/、dist/、torch_npu.egg-info/、third_party/torchair/torchair/build/ 等构建产物目录（属于 .gitignore 范围，非源码）",
+        "source": "CMake 报错 + .gitignore + setup.py 的 clean 逻辑"
+      },
+      {
+        "timestamp": "2026-06-17T17:31:00",
+        "problem": "third_party/Tensorpipe/third_party/libuv/CMakeLists.txt 第1行 cmake_minimum_required 与镜像中的 cmake 4.0.0 不兼容（cmake 4 已移除对 <3.5 策略的兼容）",
+        "solution": "按 CMake 官方报错给出的提示，导出环境变量 CMAKE_POLICY_VERSION_MINIMUM=3.5（不修改仓库源码）",
+        "source": "third_party/Tensorpipe/third_party/libuv/CMakeLists.txt:1（CMake 输出中的官方建议）"
+      },
+      {
+        "timestamp": "2026-06-17T17:35:30",
+        "problem": "默认满并发（20）编译大模板文件 StructKernelNpuOpApi.cpp 时 cc1plus 被 OOM Killer 终止",
+        "solution": "导出 MAX_JOBS=4，将 ninja 并发降至 4（容器核数 20 × 20%，低于 60% 上限）",
+        "source": "/tmp/build_out4.log 中的 'fatal error: Killed signal terminated program cc1plus'"
+      },
+      {
+        "timestamp": "2026-06-17T18:20:00",
+        "problem": "已构建 wheel 安装后 import torch_npu 报 libhccl.so not found",
+        "solution": "未解决（环境层面缺失）：宿主与容器均未安装 CANN（/usr/local/Ascend/ascend-toolkit/set_env.sh 不存在），且无 Ascend NPU 硬件；属于平台限制，非仓库构建缺陷",
+        "source": "torch_npu/_C 加载时链接 libhccl.so（CANN HCCL 库）"
+      }
+    ],
+    "session_export_file": "verification_report/verification_report_WSL_pytorch_20260617.json"
+  },
+  "static_analysis": {
+    "enabled": true,
+    "summary": "仓库未配置 pre-commit；配置了 lint-runner（.lintrunner.toml），启用 NEWLINE 与 TABS 两个 linter，执行 lintrunner --all-files 全部通过",
+    "pre_commit": {
+      "configured": false,
+      "config_file": null,
+      "status": "unknown",
+      "duration_seconds": 0,
+      "passed": 0,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "lint_runner": {
+      "configured": true,
+      "config_file": ".lintrunner.toml",
+      "status": "全部通过",
+      "duration_seconds": 1,
+      "active_linters": [
+        "NEWLINE",
+        "TABS"
+      ],
+      "result": "ok No lint issues."
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 .devcontainer 目录"
+  }
+}

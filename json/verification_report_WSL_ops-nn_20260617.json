@@ -1,0 +1,460 @@
+{
+  "metadata": {
+    "repo_name": "ops-nn",
+    "repo_path": "/root/workspace/ttfhw-verify-0617/ops-nn",
+    "repo_url": "",
+    "start_time": "2026-06-17T06:50:00",
+    "end_time": "2026-06-17T06:59:00",
+    "duration_seconds": 540,
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Core(TM) i7-10700 CPU @ 2.90GHz",
+      "cpu_cores": 12,
+      "memory": "11Gi",
+      "disk": "783G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS-SP3)",
+      "architecture": "x86_64",
+      "cpu_cores": 12,
+      "memory": "11Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像，包含CANN 9.1.0-beta.1软件包及ops-nn所需依赖"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "文档未指定架构要求",
+      "value": "文档未指定，默认使用 x86_64"
+    },
+    "recommended_image": {
+      "source": "docs/zh/install/quick_install.md 行58",
+      "value": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+    },
+    "dependencies": {
+      "source": "docs/zh/install/quick_install.md 行130-137 + install_deps.sh + requirements.txt",
+      "value": [
+        "python >= 3.7.0",
+        "gcc >= 7.3.0",
+        "cmake >= 3.16.0",
+        "pigz >= 2.4 (可选)",
+        "dos2unix",
+        "make",
+        "patch",
+        "googletest (仅UT时依赖)",
+        "pip3: pyyaml, absl-py>=2.0.0, jinja2>=3.1.0, numpy<2.0, decorator, sympy, scipy, attrs, psutil, protobuf, setuptools>=59.0.0, wheel",
+        "pip3 (UT): tensorflow==2.20.0"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/QUICKSTART.md 行55 + docs/zh/install/compile.md 行51",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j7"
+    },
+    "ut_commands": {
+      "source": "docs/zh/install/compile.md 行246",
+      "value": "bash build.sh -u --ophost --ops=add_example"
+    },
+    "sample_commands": {
+      "source": "docs/QUICKSTART.md 行103",
+      "value": "bash build.sh --run_example add_example eager cust --vendor_name=custom"
+    },
+    "build_entry": {
+      "source": "docs/QUICKSTART.md 行55 + docs/zh/install/compile.md 行51",
+      "value": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j7"
+    },
+    "ut_entry": {
+      "source": "docs/zh/install/compile.md 行246",
+      "value": "bash build.sh -u --ophost --ops=add_example"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T06:50:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "7个hook中5个通过，check-json失败，clang-format失败，ruff-check/ruff-format/codespell通过",
+      "error": "check-json: 多个runtime_kb.json文件JSON解码失败; clang-format: 870个C++文件被自动格式化",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-17T06:51:00",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:51:01",
+      "command": "ls .devcontainer/",
+      "success": false,
+      "output": "未找到 .devcontainer 目录",
+      "error": "目录不存在",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:51:30",
+      "command": "docker pull swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "success": true,
+      "output": "镜像已存在本地",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T06:51:35",
+      "command": "docker run -d --name ttfhw-ops-nn-env -v /root/workspace/ttfhw-verify-0617/ops-nn:/workspace -w /workspace swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel tail -f /dev/null",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T06:52:00",
+      "command": "pip3 install -r requirements.txt",
+      "success": true,
+      "output": "安装 MarkupSafe-3.0.3, jinja2-3.1.6，其余依赖已预装",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T06:52:30",
+      "command": "pip3 install -r tests/requirements.txt (tensorflow==2.20.0)",
+      "success": true,
+      "output": "安装 tensorflow-2.20.0 及相关依赖",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-17T06:53:50",
+      "command": "bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
+      "success": true,
+      "output": "Self-extractable archive cann-ops-nn-custom_linux-x86_64.run successfully created",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 208
+    },
+    {
+      "timestamp": "2026-06-17T06:57:30",
+      "command": "./build_out/cann-ops-nn-custom_linux-x86_64.run",
+      "success": true,
+      "output": "安装成功，自定义算子包安装至 /usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_nn",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T06:57:50",
+      "command": "export LD_LIBRARY_PATH=/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_nn/op_api/lib/:${LD_LIBRARY_PATH}",
+      "success": true,
+      "output": "环境变量配置成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T06:57:54",
+      "command": "bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "success": false,
+      "output": "编译样例可执行文件成功，但运行时发生段错误 (Segmentation fault)",
+      "error": "容器内无NPU设备，aclnn调用需要NPU硬件支持，导致段错误",
+      "returncode": 139,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T06:58:10",
+      "command": "bash build.sh -u --ophost --ops=add_example",
+      "success": true,
+      "output": "3 tests from 2 test suites ran. (0 ms total) [PASSED] 3 tests.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 19
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T06:50:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:50:00",
+      "step": "document_reading",
+      "action": "从README入口按链接逐层阅读所有文档",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/QUICKSTART.md",
+          "docs/README.md",
+          "docs/zh/install/quick_install.md",
+          "docs/zh/install/compile.md",
+          "docs/zh/install/build.md",
+          "docs/zh/invocation/quick_op_invocation.md",
+          "CONTRIBUTING.md"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:50:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 7
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:50:30",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "passed": 5,
+        "failed": 2,
+        "skipped": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:51:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:51:01",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:51:10",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "CANN 9.1.0-beta.1 openEuler 24.03",
+      "details": {
+        "selection_reason": "docs/zh/install/quick_install.md 行58明确推荐该镜像"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:51:30",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:52:00",
+      "step": "dependency_installation",
+      "action": "安装构建和测试依赖",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "pip3: requirements.txt",
+          "pip3: tests/requirements.txt (tensorflow==2.20.0)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:53:50",
+      "step": "build",
+      "action": "执行构建: bash build.sh --pkg --soc=ascend910b --ops=add_example -j7",
+      "result": "成功",
+      "details": {
+        "concurrency": 7,
+        "concurrency_ratio": "58%",
+        "artifact": "cann-ops-nn-custom_linux-x86_64.run"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:57:30",
+      "step": "install",
+      "action": "安装自定义算子包",
+      "result": "成功",
+      "details": {
+        "install_path": "/usr/local/Ascend/cann-9.1.0-beta.1/opp/vendors/custom_nn"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:57:54",
+      "step": "sample_execution",
+      "action": "运行样例: bash build.sh --run_example add_example eager cust --vendor_name=custom",
+      "result": "失败",
+      "details": {
+        "error": "容器内无NPU设备，aclnn调用需要NPU硬件，导致段错误"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:58:10",
+      "step": "ut_execution",
+      "action": "执行UT: bash build.sh -u --ophost --ops=add_example",
+      "result": "成功",
+      "details": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-17T06:59:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T06:59:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_ops-nn_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（7个hooks，5通过2失败），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "partial_success",
+        "duration_seconds": 120,
+        "total_hooks": 7,
+        "passed": 5,
+        "failed": 2,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "check-json",
+            "file": "多个 runtime_kb.json 及 binary.json 文件",
+            "error": "JSON解码失败：Extra data / Duplicate key（这些JSON文件为CANN算子配置文件，非标准JSON格式）"
+          },
+          {
+            "hook_name": "clang-format",
+            "file": "870个C++文件",
+            "error": "文件被clang-format自动格式化，格式与仓库现有代码风格不一致"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "仓库未配置 devcontainer"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 208,
+      "artifacts": [
+        {
+          "name": "cann-ops-nn-custom_linux-x86_64.run",
+          "path": "build_out/cann-ops-nn-custom_linux-x86_64.run",
+          "size": "约50MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 19,
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "failed",
+      "duration_seconds": 2,
+      "results": [
+        {
+          "sample_name": "test_aclnn_add_example",
+          "execution_status": "failed",
+          "output_summary": "段错误 (Segmentation fault)，容器内无NPU设备，aclnn调用需要NPU硬件",
+          "execution_time": "2秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 和 QUICKSTART 未链接到 docs/zh/install/compile.md 的 UT 章节，新手从README入口容易遗漏UT命令",
+    "QUICKSTART.md 未说明 --run_example 样例运行需要NPU设备，在无NPU环境下执行会段错误",
+    "docs/zh/install/compile.md 行262 的UT示例命令 bash build.sh -u --ophost 未带 --ops 参数，与构建命令使用 --ops=add_example 的场景不一致"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T06:57:54",
+      "problem": "样例运行时发生段错误 (Segmentation fault)",
+      "solution": "容器内无NPU设备，aclnn调用需要NPU硬件支持，属于环境限制而非代码问题",
+      "source": "docs/zh/install/quick_install.md 提到运行态需安装驱动与固件"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_ops-nn_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（7个hooks，5通过2失败），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 120,
+      "total_hooks": 7,
+      "passed": 5,
+      "failed": 2,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "check-json",
+          "file": "多个 runtime_kb.json 及 binary.json 文件",
+          "error": "JSON解码失败：Extra data / Duplicate key（这些JSON文件为CANN算子配置文件，非标准JSON格式）"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "870个C++文件",
+          "error": "文件被clang-format自动格式化，格式与仓库现有代码风格不一致"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "仓库未配置 devcontainer"
+  }
+}

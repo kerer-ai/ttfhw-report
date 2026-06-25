@@ -1,0 +1,567 @@
+{
+  "metadata": {
+    "repo_name": "pto-isa",
+    "repo_path": "/workspace",
+    "repo_url": "https://gitcode.com/cann/pto-isa.git",
+    "start_time": "2026-06-17T10:02:00",
+    "end_time": "2026-06-17T10:17:00",
+    "duration_seconds": 900,
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "x86_64 (16 cores)",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "939G available",
+      "docker_version": "Docker version 29.5.3, build d1c06ef"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 平台支持章节",
+      "value": "x86_64 / AArch64（CPU 路径）"
+    },
+    "recommended_image": {
+      "source": "未在文档中找到镜像推荐",
+      "value": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+    },
+    "dependencies": {
+      "source": "docs/getting-started.md - Prerequisites 章节",
+      "value": [
+        "Python >= 3.11",
+        "CMake >= 3.16",
+        "C++20 编译器 (GCC 13+ 或 Clang 15+)",
+        "numpy >= 1.22.0",
+        "Ninja (可选，加速构建)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 编译与运行章节",
+      "value": "python3 tests/run_cpu.py --clean --verbose"
+    },
+    "ut_commands": {
+      "source": "README.md - 编译与运行章节 + tests/run_cpu.py",
+      "value": "python3 tests/run_cpu.py --clean --verbose (构建并运行所有 CPU ST 测试)"
+    },
+    "sample_commands": {
+      "source": "README.md - 编译与运行章节",
+      "value": "python3 tests/run_cpu.py --demo gemm --verbose / python3 tests/run_cpu.py --demo flash_attn --verbose"
+    },
+    "build_entry": {
+      "source": "README.md - 编译与运行章节",
+      "value": "python3 tests/run_cpu.py --clean --verbose"
+    },
+    "ut_entry": {
+      "source": "README.md - 编译与运行章节 + tests/run_cpu.py",
+      "value": "python3 tests/run_cpu.py --clean --verbose"
+    },
+    "special_dependencies": {
+      "source": "docs/getting-started.md",
+      "value": []
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-17T10:03:00",
+      "command": "pre-commit run --all-files",
+      "success": true,
+      "output": "check for added large files...Passed\ncheck yaml...Passed\nfix end of files...Failed (auto-fixed)\ntrim trailing whitespace...Passed\nclang-format...Failed (auto-fixed)",
+      "error": "end-of-file-fixer 和 clang-format 自动修复了部分文件",
+      "returncode": 1,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-17T10:04:00",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*' -o -name 'lint-runner.config.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T10:04:00",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "未找到 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T10:05:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T10:05:00",
+      "command": "docker run -d --name ttfhw-pto-isa-env -v <src>:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container started",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T10:06:00",
+      "command": "dnf install -y cmake gcc gcc-c++ make python3 python3-pip git",
+      "success": true,
+      "output": "安装完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-17T10:07:00",
+      "command": "pip3 install numpy -i https://pypi.tuna.tsinghua.edu.cn/simple",
+      "success": true,
+      "output": "Successfully installed numpy-2.4.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-17T10:07:00",
+      "command": "python3 tests/run_cpu.py --clean --verbose (首次尝试，GCC 12.3.1)",
+      "success": false,
+      "output": "Could not find a suitable compiler. Requirements: clang++ >= 15 OR g++ >= 13",
+      "error": "GCC 12.3.1 不满足 C++20 编译器要求（需要 GCC 13+ 或 Clang 15+）",
+      "returncode": 1,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-17T10:08:00",
+      "command": "dnf install -y clang",
+      "success": true,
+      "output": "安装完成，clang version 17.0.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-17T10:09:00",
+      "command": "python3 tests/run_cpu.py --clean --verbose (使用 Clang，GTest 下载失败)",
+      "success": false,
+      "output": "Build step for googletest failed: 2 (无法从 GitHub 下载 GTest)",
+      "error": "容器无法访问 github.com 下载 GoogleTest",
+      "returncode": 1,
+      "duration_seconds": 90
+    },
+    {
+      "timestamp": "2026-06-17T10:10:00",
+      "command": "dnf install -y gtest gtest-devel",
+      "success": true,
+      "output": "安装完成，gtest-1.14.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T10:11:00",
+      "command": "cmake -DCMAKE_BUILD_TYPE=Release -DPTO_CPU_SIM_ENABLE_BF16=OFF -DPTO_GLIBCXX_USE_CXX11_ABI=1 -DCMAKE_C_COMPILER=/usr/bin/clang -DCMAKE_CXX_COMPILER=/usr/bin/clang++ -S /workspace/tests/cpu/st -B /workspace/tests/cpu/st/build",
+      "success": true,
+      "output": "Configuring done, Generating done",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-17T10:12:00",
+      "command": "cmake --build . --parallel 9 --config Release",
+      "success": true,
+      "output": "Built 114 test binaries",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 100
+    },
+    {
+      "timestamp": "2026-06-17T10:14:00",
+      "command": "python3 tests/run_cpu.py --no-build --verbose --cxx=/usr/bin/clang++",
+      "success": true,
+      "output": "所有 114 个测试用例全部 PASS，总耗时 2.04s",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 37
+    },
+    {
+      "timestamp": "2026-06-17T10:15:00",
+      "command": "python3 tests/run_cpu.py --demo gemm --verbose --cxx=/usr/bin/clang++",
+      "success": true,
+      "output": "gemm_demo: M=32 K=16 N=32, max_abs_diff=0, gflops=1.87267",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-17T10:16:00",
+      "command": "python3 tests/run_cpu.py --demo flash_attn --verbose --cxx=/usr/bin/clang++",
+      "success": true,
+      "output": "flash_attention_demo: B=1 H=2 S=64 D=32, max_abs_diff=3.26e-09, gflops=1.54181",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-17T10:02:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T10:03:00",
+      "step": "document_reading",
+      "action": "读取 README.md 和 docs/getting-started.md 了解构建说明",
+      "result": "成功",
+      "details": {
+        "file": "README.md, README_zh.md, docs/getting-started.md",
+        "sections_read": [
+          "环境准备",
+          "编译与运行",
+          "Quick Start"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:04:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {
+        "config_file": ".pre-commit-config.yaml",
+        "hooks_count": 5
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:04:30",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "passed": 3,
+        "failed": 2,
+        "skipped": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:04:30",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [
+          ".lint-runner.yaml",
+          ".lint-runner.json",
+          "lint-runner.config.*"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:04:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T10:05:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "文档未指定镜像，默认使用 openEuler 24.03 LTS"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:05:00",
+      "step": "container_setup",
+      "action": "拉取镜像并启动容器",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:06:00",
+      "step": "dependency_installation",
+      "action": "安装构建依赖",
+      "result": "成功",
+      "details": {
+        "packages": [
+          "cmake",
+          "gcc",
+          "gcc-c++",
+          "make",
+          "python3",
+          "python3-pip",
+          "git",
+          "clang",
+          "gtest",
+          "gtest-devel",
+          "numpy"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:07:00",
+      "step": "build_attempt",
+      "action": "首次构建尝试（使用 GCC 12.3.1）",
+      "result": "失败",
+      "details": {
+        "error": "GCC 12.3.1 不满足编译器要求，需要 GCC 13+ 或 Clang 15+"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:08:00",
+      "step": "problem_resolution",
+      "action": "安装 Clang 17.0.6 替代 GCC",
+      "result": "已解决",
+      "details": {
+        "solution": "dnf install -y clang",
+        "source": "docs/getting-started.md 明确要求 GCC 13+ 或 Clang 15+"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:09:00",
+      "step": "build_attempt",
+      "action": "第二次构建尝试（使用 Clang，GTest 下载失败）",
+      "result": "失败",
+      "details": {
+        "error": "容器无法访问 github.com 下载 GoogleTest"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:10:00",
+      "step": "problem_resolution",
+      "action": "安装系统级 gtest-devel 并设置 ABI 标志",
+      "result": "已解决",
+      "details": {
+        "solution": "dnf install -y gtest gtest-devel, -DPTO_GLIBCXX_USE_CXX11_ABI=1",
+        "source": "CMakeLists.txt 中 PTO_GLIBCXX_USE_CXX11_ABI 选项"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:12:00",
+      "step": "build_retry",
+      "action": "重新构建（使用 Clang + 系统 GTest + ABI 修复）",
+      "result": "成功",
+      "details": {
+        "concurrency": 9,
+        "concurrency_ratio": "56%"
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:14:00",
+      "step": "ut_execution",
+      "action": "执行单元测试",
+      "result": "成功",
+      "details": {
+        "total": 114,
+        "passed": 114,
+        "failed": 0
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:15:00",
+      "step": "sample_execution",
+      "action": "执行 GEMM demo",
+      "result": "成功",
+      "details": {
+        "max_abs_diff": 0,
+        "gflops": 1.87
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:16:00",
+      "step": "sample_execution",
+      "action": "执行 Flash Attention demo",
+      "result": "成功",
+      "details": {
+        "max_abs_diff": "3.26e-09",
+        "gflops": 1.54
+      }
+    },
+    {
+      "timestamp": "2026-06-17T10:17:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-17T10:17:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_pto-isa_20260617.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（5个hooks，3通过2失败可自动修复），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "partial_success",
+        "duration_seconds": 45,
+        "total_hooks": 5,
+        "passed": 3,
+        "failed": 2,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "end-of-file-fixer",
+            "file": "多个文件",
+            "error": "文件末尾缺少换行符，已自动修复"
+          },
+          {
+            "hook_name": "clang-format",
+            "file": "多个 C++ 文件",
+            "error": "代码格式不符合规范，已自动修复"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "summary": "未配置 devcontainer"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 100,
+      "artifacts": [
+        {
+          "name": "CPU ST 测试二进制",
+          "path": "tests/cpu/st/build/bin/",
+          "size": "14 MB (114 个二进制文件)"
+        },
+        {
+          "name": "gemm_demo",
+          "path": "demos/cpu/gemm_demo/build/gemm_demo",
+          "size": "~100 KB"
+        },
+        {
+          "name": "flash_attention_demo",
+          "path": "demos/cpu/flash_attention_demo/build/flash_attention_demo",
+          "size": "~100 KB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "success",
+      "duration_seconds": 37,
+      "total": 114,
+      "passed": 114,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "success",
+      "duration_seconds": 5,
+      "results": [
+        {
+          "sample_name": "gemm_demo",
+          "execution_status": "success",
+          "output_summary": "M=32 K=16 N=32, max_abs_diff=0, gflops=1.87",
+          "execution_time": "2秒"
+        },
+        {
+          "sample_name": "flash_attention_demo",
+          "execution_status": "success",
+          "output_summary": "B=1 H=2 S=64 D=32, max_abs_diff=3.26e-09, gflops=1.54",
+          "execution_time": "3秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 未说明 openEuler 环境下 GCC 12 不满足编译器要求，需额外安装 Clang",
+    "CMakeLists.txt 中 GTest FetchContent 依赖 GitHub 网络访问，文档未说明离线环境下需手动安装 gtest-devel",
+    "文档未说明使用 Clang 编译时需设置 PTO_GLIBCXX_USE_CXX11_ABI=1 以解决与系统 GTest 的 ABI 兼容问题"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-17T10:07:00",
+      "problem": "openEuler 24.03 默认 GCC 12.3.1 不满足 C++20 编译器要求（需要 GCC 13+）",
+      "solution": "安装 Clang 17.0.6（dnf install -y clang）替代 GCC",
+      "source": "docs/getting-started.md 明确要求 GCC 13+ 或 Clang 15+"
+    },
+    {
+      "timestamp": "2026-06-17T10:09:00",
+      "problem": "CMake FetchContent 无法从 GitHub 下载 GoogleTest",
+      "solution": "安装系统级 gtest-devel（dnf install -y gtest gtest-devel）",
+      "source": "CMakeLists.txt 中 find_package(GTest) 逻辑"
+    },
+    {
+      "timestamp": "2026-06-17T10:10:00",
+      "problem": "Clang 编译与系统 GTest 存在 ABI 不兼容（_GLIBCXX_USE_CXX11_ABI 差异导致链接失败）",
+      "solution": "设置 CMake 变量 PTO_GLIBCXX_USE_CXX11_ABI=1",
+      "source": "CMakeLists.txt 中 PTO_GLIBCXX_USE_CXX11_ABI 选项"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_pto-isa_20260617.md",
+  "static_analysis": {
+    "enabled": true,
+    "summary": "检测到 pre-commit 配置（5个hooks，3通过2失败可自动修复），未检测到 lint-runner 配置",
+    "pre_commit": {
+      "configured": true,
+      "config_file": ".pre-commit-config.yaml",
+      "status": "partial_success",
+      "duration_seconds": 45,
+      "total_hooks": 5,
+      "passed": 3,
+      "failed": 2,
+      "skipped": 0,
+      "failures": [
+        {
+          "hook_name": "end-of-file-fixer",
+          "file": "多个文件",
+          "error": "文件末尾缺少换行符，已自动修复"
+        },
+        {
+          "hook_name": "clang-format",
+          "file": "多个 C++ 文件",
+          "error": "代码格式不符合规范，已自动修复"
+        }
+      ]
+    },
+    "lint_runner": {
+      "configured": false,
+      "config_file": null
+    }
+  },
+  "devcontainer": {
+    "enabled": false,
+    "config_dir": null,
+    "config_files": [],
+    "summary": "未配置 devcontainer"
+  }
+}

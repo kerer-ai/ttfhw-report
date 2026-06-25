@@ -1,0 +1,312 @@
+[
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F50:V50",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h1m0s"
+          },
+          {
+            "value": "58m41s"
+          },
+          {
+            "value": "1m58s"
+          },
+          {
+            "value": "21s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "使用文档推荐的 CANN 9.0.0-beta.2 镜像编译失败，缺少 rtFunctionGetMetaInfoSize 等新 runtime API; 编译失败：Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE)"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F51:V51",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h0m0s"
+          },
+          {
+            "value": "49m50s"
+          },
+          {
+            "value": "5m0s"
+          },
+          {
+            "value": "5m10s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "使用文档推荐的 CANN 9.0.0-beta.2 镜像执行 UT 失败，check_build_dependencies.py 报 WARNING: Required runtime version is 9.1, but runtime version is 9.0.0; C++ UT 链接失败：libcpudebug_cceprint.so 和 libcpudebug.so 需要 GLIBC"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F49:V49",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "7h17m0s"
+          },
+          {
+            "value": "3h59m25s"
+          },
+          {
+            "value": "1h22m56s"
+          },
+          {
+            "value": "1h54m38s"
+          },
+          {
+            "value": "1s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "git clone cann-cmake 报 'dubious ownership' (WSL 挂载卷属主不一致); bisheng 编译报 'Unsupported NPU architecture or soc: dav-3510' 且 dav-2201 报 'no type named SkSystemArgs in namespace sk'; init_env.sh 下载 CANN to"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F46:V46",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h5m0s"
+          },
+          {
+            "value": "1h2m50s"
+          },
+          {
+            "value": "2m7s"
+          },
+          {
+            "value": "3s"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "无法执行"
+          },
+          {
+            "value": "需NPU硬件/环境不具备"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "缺少必须的CANN软件包; cann-cmake tag master-012在公开仓库中不可用，且cann-cmake master-001缺少set_cann_cpack_config函数; CANN 9.1.0缺少ccu相关头文件（如ccu_types.h, ccu_primitives.hpp等）"
+          }
+        ]
+      ]
+    }
+  },
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "F48:V48",
+      "cells": [
+        [
+          {
+            "value": "部分成功"
+          },
+          {
+            "value": "1h0m2s"
+          },
+          {
+            "value": "47m1s"
+          },
+          {
+            "value": "2m13s"
+          },
+          {
+            "value": "10m41s"
+          },
+          {
+            "value": "7s"
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "成功"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "失败"
+          },
+          {
+            "value": ""
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "-"
+          },
+          {
+            "value": "未配置"
+          },
+          {
+            "value": "仓库提交的代码未通过自身 pre-commit 检查(7个hook失败：trailing-whitespace/end-of-file-fixer/clang-format/ruff-check/ruff-format/codespell/oat-check); 首次构建在 cmake 配置阶段失败：git 检出 cann-cmake 时报 'detected dubious ownership'"
+          }
+        ]
+      ]
+    }
+  }
+]

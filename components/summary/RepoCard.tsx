@@ -20,7 +20,7 @@ export function RepoCard({ repo }: RepoCardProps) {
   }
 
   return (
-    <Link href={`/ttfhw-report/${repo.name}`}>
+    <Link href={`/${repo.name}`}>
       <Card className={cn(
         'repo-card border-l-4 hover:border-l-4',
         borderColor[repo.result] || borderColor.unknown,

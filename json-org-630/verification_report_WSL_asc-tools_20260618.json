@@ -1,0 +1,500 @@
+{
+  "metadata": {
+    "repo_path": "/root/workspace/ttfhw-verify-0617/asc-tools",
+    "start_time": "2026-06-18T01:00:00",
+    "end_time": "2026-06-18T02:00:00",
+    "duration_seconds": 3600,
+    "total_steps": 14
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Xeon(R) CPU",
+      "cpu_cores": 12,
+      "memory": "11Gi",
+      "disk": "773G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS-SP3)",
+      "architecture": "x86_64",
+      "cpu_cores": 12,
+      "memory": "11Gi (无限制)"
+    },
+    "image_source": {
+      "type": "cann_image",
+      "image_name": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "selection_reason": "文档 00_quick_start.md 第56行推荐 CANN 9.0.0-beta.2 镜像，但 master 分支需要 CANN 9.1.0+ runtime API，9.0.0-beta.2 镜像编译构建可通过但 UT 因版本检查失败；最终使用 CANN 9.1.0-beta.1 镜像"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "docs/00_quick_start.md - Docker部署章节",
+      "value": "x86_64 (文档示例包含 x86_64 和 aarch64)"
+    },
+    "recommended_image": {
+      "source": "docs/00_quick_start.md - 2️⃣ 基于CANN镜像的Docker章节",
+      "value": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-ubuntu22.04-py3.11"
+    },
+    "dependencies": {
+      "source": "docs/00_quick_start.md - 安装依赖章节",
+      "value": [
+        "python >= 3.7.0 (建议 >= 3.9.x)",
+        "gcc/g++ 7.3.x ~ 14.x (版本需一致)",
+        "cmake >= 3.16.0",
+        "ccache >= 4.6.1",
+        "setuptools >= 45.2.0",
+        "lcov >= 1.13 (UT可选)",
+        "pytest >= 8.3.2 (UT可选)",
+        "coverage >= 4.5.4 (UT可选)",
+        "googletest (UT可选)"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/00_quick_start.md - 编译安装章节",
+      "value": "bash build.sh --pkg"
+    },
+    "ut_commands": {
+      "source": "docs/00_quick_start.md - UT测试章节",
+      "value": "bash build.sh -t 或 bash build.sh --test (全量UT); bash build.sh --cpp_utest (C++ UT); bash build.sh --python_utest (Python UT)"
+    },
+    "sample_commands": {
+      "source": "docs/00_quick_start.md - 无统一样例命令",
+      "value": "asc-tools 为调试工具库，样例在 examples/ 目录下，需按各子目录 README.md 单独执行"
+    },
+    "special_dependencies": {
+      "source": "docs/00_quick_start.md - 离线编译依赖章节",
+      "value": [
+        "makeself 2.5.0 (编译时自动下载)",
+        "boost 1.87.0 (编译时自动下载)",
+        "googletest 1.14.0 (编译时自动下载)",
+        "mockcpp 2.7 (编译时自动下载)",
+        "cann-cmake master-003 (编译时自动下载)",
+        "cpudebug闭源包 (编译时自动下载Release版，UT需手动下载Debug版)"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T01:00:00",
+      "command": "git clone https://gitcode.com/cann/asc-tools.git",
+      "success": true,
+      "output": "仓库克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T01:01:00",
+      "command": "检查 .pre-commit-config.yaml",
+      "success": true,
+      "output": "文件存在，包含 clang-format (v16.0.0) 和 oat-check 两个 hooks",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T01:01:10",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "clang-format: Failed (文件被修改); oat-check: Failed (License Header Invalid: 3~5个文件)",
+      "error": "clang-format 格式化修改了部分文件；oat-check 发现 License Header 不合规",
+      "returncode": 1,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-18T01:01:20",
+      "command": "检查 lint-runner 配置",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T01:01:25",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "已配置 devcontainer，包含 devcontainer.json、Dockerfile、README.md、README_en.md、requirements.txt",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T01:02:00",
+      "command": "docker run -d --name asc-tools-verify swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-ubuntu22.04-py3.11",
+      "success": true,
+      "output": "CANN 9.0.0-beta.2 容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-18T01:03:00",
+      "command": "bash build.sh --pkg -j7 (CANN 9.0.0-beta.2 镜像)",
+      "success": true,
+      "output": "编译成功，生成 cann-asc-tools_9.1.0_linux-x86_64.run",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-18T01:08:00",
+      "command": "bash build.sh -t -j7 (CANN 9.0.0-beta.2 镜像)",
+      "success": false,
+      "output": "UT 失败：check_build_dependencies.py WARNING: Required runtime version is 9.1, but runtime version is 9.0.0; Python UT 因 pytest 未安装失败",
+      "error": "CANN 9.0.0-beta.2 runtime 版本不满足 master 分支所需的 9.1 要求",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-18T01:10:00",
+      "command": "docker run -d --name asc-tools-verify2 swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel",
+      "success": true,
+      "output": "CANN 9.1.0-beta.1 容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-18T01:11:00",
+      "command": "bash build.sh --pkg -j7 (CANN 9.1.0-beta.1 镜像)",
+      "success": true,
+      "output": "编译成功，生成 cann-asc-tools_9.1.0_linux-x86_64.run",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-18T01:16:00",
+      "command": "bash build.sh --cpp_utest -j7 (CANN 9.1.0-beta.1，首次尝试)",
+      "success": false,
+      "output": "C++ UT 链接失败：libcpudebug_cceprint.so 和 libcpudebug.so 需要 GLIBCXX_3.4.32，但系统 libstdc++.so.6.0.30 仅支持到 GLIBCXX_3.4.30",
+      "error": "undefined reference to `std::ios_base_library_init()@GLIBCXX_3.4.32'",
+      "returncode": 1,
+      "duration_seconds": 180
+    },
+    {
+      "timestamp": "2026-06-18T01:25:00",
+      "command": "yum install -y gcc-toolset-14-libstdc++ (容器内)",
+      "success": true,
+      "output": "安装 gcc-toolset-14-libstdc++-14.3.1，提供 libstdc++.so.6.0.33 (支持 GLIBCXX_3.4.32)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T01:26:00",
+      "command": "替换系统 libstdc++.so.6 为 gcc-toolset-14 版本",
+      "success": true,
+      "output": "将 /usr/lib64/libstdc++.so.6 替换为 libstdc++.so.6.0.33，同时更新 /usr/lib/gcc/x86_64-openEuler-linux/12/libstdc++.so 符号链接",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-18T01:27:00",
+      "command": "bash build.sh --cpp_utest -j7 (更新 libstdc++ 后)",
+      "success": true,
+      "output": "C++ UT 全部通过：tikicpulib_utest (31 tests, PASSED) x6架构 + tikcpp_utest (185 tests, PASSED) x4架构 = 共 271 tests PASSED",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-18T01:35:00",
+      "command": "pip3 install pytest coverage (容器内)",
+      "success": true,
+      "output": "pytest 9.1.0, coverage 7.14.1 安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T01:36:00",
+      "command": "python3 -m pytest tests/py_ut/ (Python UT)",
+      "success": true,
+      "output": "Python UT 全部通过：msobjdump 21 passed, optype_collector 40 passed, show_kernel_debug_data 103 passed = 共 164 tests PASSED",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-18T01:37:00",
+      "command": "docker stop asc-tools-verify2 && docker rm asc-tools-verify2",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T01:00:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T01:01:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层遍历所有文档",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/00_quick_start.md",
+          "CONTRIBUTING.md",
+          ".pre-commit-config.yaml",
+          ".devcontainer/devcontainer.json",
+          ".devcontainer/Dockerfile",
+          ".devcontainer/requirements.txt",
+          "build.sh"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:01:10",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "clang-format": "Failed (文件被格式化修改)",
+        "oat-check": "Failed (License Header Invalid: 3~5个文件)"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:01:20",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 lint-runner 配置",
+      "result": "未配置",
+      "details": {
+        "searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*"]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:01:25",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "已配置",
+      "details": {
+        "config_dir": ".devcontainer",
+        "files": ["devcontainer.json", "Dockerfile", "README.md", "README_en.md", "requirements.txt"],
+        "base_image": "ubuntu:24.04",
+        "features": "conda Python 3.12, clangd, cmake, ccache, lcov, zsh, torch, torch_npu"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:02:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "先 CANN 9.0.0-beta.2 后切换至 CANN 9.1.0-beta.1",
+      "details": {
+        "selection_reason": "文档 00_quick_start.md 推荐 CANN 9.0.0-beta.2 镜像，但 master 分支 UT 需要 CANN 9.1.0+ runtime，9.0.0-beta.2 仅构建通过而 UT 版本检查失败"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:03:00",
+      "step": "container_setup",
+      "action": "启动 CANN 9.0.0-beta.2 容器",
+      "result": "成功",
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.0.0-beta.2-910b-ubuntu22.04-py3.11"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:03:00",
+      "step": "build_success",
+      "action": "构建 asc-tools 包（CANN 9.0.0-beta.2）",
+      "result": "成功",
+      "details": {
+        "duration_seconds": 300,
+        "concurrency": 7,
+        "concurrency_ratio": "58%"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:08:00",
+      "step": "ut_attempt",
+      "action": "UT 尝试（CANN 9.0.0-beta.2）",
+      "result": "失败",
+      "details": {
+        "error": "Required runtime version is 9.1, but runtime version is 9.0.0"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:10:00",
+      "step": "container_setup",
+      "action": "启动 CANN 9.1.0-beta.1 容器",
+      "result": "成功",
+      "details": {
+        "image": "swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:11:00",
+      "step": "build_success",
+      "action": "构建 asc-tools 包（CANN 9.1.0-beta.1）",
+      "result": "成功",
+      "details": {
+        "duration_seconds": 300,
+        "concurrency": 7,
+        "concurrency_ratio": "58%"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:16:00",
+      "step": "ut_attempt",
+      "action": "C++ UT 尝试（链接失败，libstdc++ 版本不兼容）",
+      "result": "失败",
+      "details": {
+        "error": "libcpudebug_cceprint.so 需要 GLIBCXX_3.4.32，系统 libstdc++.so.6.0.30 仅到 GLIBCXX_3.4.30"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:25:00",
+      "step": "problem_resolution",
+      "action": "安装 gcc-toolset-14-libstdc++ 并替换系统 libstdc++",
+      "result": "已解决",
+      "details": {
+        "solution": "yum install -y gcc-toolset-14-libstdc++ && cp /opt/openEuler/gcc-toolset-14/root/usr/lib64/libstdc++.so.6.0.33 /usr/lib64/ && ln -sf libstdc++.so.6.0.33 /usr/lib64/libstdc++.so.6",
+        "source": "openEuler 系统提供的 gcc-toolset-14 软件包"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:27:00",
+      "step": "ut_execution",
+      "action": "C++ UT 执行（更新 libstdc++ 后）",
+      "result": "成功",
+      "details": {
+        "cpp_ut": "271 tests PASSED (tikicpulib: 31x6=186, tikcpp: 185 tests across 4 architectures)",
+        "architectures": "ascend910, ascend910B1_AIC, ascend910B1_AIV, ascend310p, ascend310B1, ascend950pr_9599, kirin9030, kirinx90"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:36:00",
+      "step": "ut_execution",
+      "action": "Python UT 执行",
+      "result": "成功",
+      "details": {
+        "python_ut": "164 tests PASSED (msobjdump: 21, optype_collector: 40, show_kernel_debug_data: 103)"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T01:37:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T01:38:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_asc-tools_20260618.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（2个hooks：clang-format v16.0.0 失败(文件被修改)，oat-check 失败(License Header Invalid)）；未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 10,
+        "total_hooks": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "clang-format",
+            "file": "多个C++文件",
+            "error": "clang-format 格式化修改了部分文件，说明代码格式与 .clang-format 配置不一致"
+          },
+          {
+            "hook_name": "oat-check",
+            "file": "3~5个文件",
+            "error": "License Header Invalid: 3~5个文件的 License 头不合规"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": true,
+      "config_dir": ".devcontainer",
+      "config_files": ["devcontainer.json", "Dockerfile", "README.md", "README_en.md", "requirements.txt"],
+      "summary": "已配置 devcontainer，基于 Ubuntu 24.04 镜像（FROM ubuntu:24.04），内置 conda Python 3.12、clangd、cmake、ccache、lcov、torch、torch_npu 等开发工具，支持 NPU 设备挂载"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 300,
+      "artifacts": [
+        {
+          "name": "cann-asc-tools_9.1.0_linux-x86_64.run",
+          "path": "build_out/cann-asc-tools_9.1.0_linux-x86_64.run",
+          "size": "~22 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 310,
+      "total": 435,
+      "passed": 435,
+      "failed": 0,
+      "failures": [],
+      "note": "C++ UT: 271 tests PASSED (tikicpulib: 31 tests x 6 architectures = 186, tikcpp: 185 tests across 4 architectures); Python UT: 164 tests PASSED (msobjdump: 21, optype_collector: 40, show_kernel_debug_data: 103)"
+    },
+    "sample": {
+      "status": "未执行",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "无",
+          "execution_status": "未执行",
+          "output_summary": "asc-tools 为调试工具库，样例在 examples/ 目录下（show_kernel_debug_data、cpudebug、msopgen、msobjdump），需要 NPU 设备运行，容器内无 NPU 无法执行",
+          "execution_time": "0秒"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "文档推荐 CANN 9.0.0-beta.2 镜像，但 master 分支 UT 需要 CANN 9.1.0+ runtime（check_build_dependencies.py 检查 runtime version 9.1），文档未明确说明 master 分支与 CANN 版本的对应关系",
+    "文档编译报错可能章节提到 master 分支需使用 CANN master 包，但未明确 UT 对 CANN 版本有更严格的版本检查要求（构建可通过但 UT 版本检查失败）",
+    "CANN 9.1.0-beta.1 openEuler 镜像的 libstdc++ (GLIBCXX_3.4.30) 不满足仓库预编译 cpudebug 库（libcpudebug_cceprint.so）对 GLIBCXX_3.4.32 的要求，文档未提及此兼容性问题",
+    "pre-commit 配置中 oat-check hook 使用了已弃用的 stage 名称 'commit'（应为 'pre-commit'），运行时产生 WARNING",
+    "Python UT 依赖 pytest 和 coverage，但 CANN 镜像未预装，需手动安装，文档虽在 UT 可选依赖中列出但未明确说明需手动安装"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-18T01:08:00",
+      "problem": "使用文档推荐的 CANN 9.0.0-beta.2 镜像执行 UT 失败，check_build_dependencies.py 报 WARNING: Required runtime version is 9.1, but runtime version is 9.0.0",
+      "solution": "切换到 CANN 9.1.0-beta.1 镜像（swr.cn-south-1.myhuaweicloud.com/ascendhub/cann:9.1.0-beta.1-910b-openeuler24.03-py3.12-devel）",
+      "source": "docs/00_quick_start.md - 编译报错可能章节：master分支需使用CANN master包"
+    },
+    {
+      "timestamp": "2026-06-18T01:16:00",
+      "problem": "C++ UT 链接失败：libcpudebug_cceprint.so 和 libcpudebug.so 需要 GLIBCXX_3.4.32，但 CANN 9.1.0-beta.1 openEuler 镜像的 libstdc++.so.6.0.30 仅支持到 GLIBCXX_3.4.30",
+      "solution": "安装 gcc-toolset-14-libstdc++ 软件包（提供 libstdc++.so.6.0.33，支持 GLIBCXX_3.4.32），替换系统 /usr/lib64/libstdc++.so.6 符号链接和 /usr/lib/gcc/x86_64-openEuler-linux/12/libstdc++.so 符号链接",
+      "source": "openEuler 系统软件仓库提供的 gcc-toolset-14 兼容库"
+    },
+    {
+      "timestamp": "2026-06-18T01:08:00",
+      "problem": "Python UT 因 pytest 未安装而失败（CANN 镜像未预装 pytest）",
+      "solution": "pip3 install pytest coverage",
+      "source": "docs/00_quick_start.md - UT可选依赖：pytest >= 8.3.2, coverage >= 4.5.4"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_asc-tools_20260618.md"
+}

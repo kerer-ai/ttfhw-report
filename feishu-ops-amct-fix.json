@@ -1,0 +1,25 @@
+[
+  {
+    "shortcut": "+cells-set",
+    "input": {
+      "sheet_id": "m66BDJ",
+      "range": "R59:U59",
+      "cells": [
+        [
+          {
+            "value": "✓"
+          },
+          {
+            "value": "3个hooks, 0通过 3失败 0跳过"
+          },
+          {
+            "value": "✗"
+          },
+          {
+            "value": "仓库未配置 .devcontainer 开发容器环境"
+          }
+        ]
+      ]
+    }
+  }
+]

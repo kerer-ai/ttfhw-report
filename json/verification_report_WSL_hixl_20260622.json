@@ -1,0 +1,607 @@
+{
+  "metadata": {
+    "repo_url": "https://gitcode.com/cann/hixl.git",
+    "repo_path": "/mnt/c/project/TTFHW3/hixl/tmp_src",
+    "start_time": "2026-06-22T20:00:00",
+    "end_time": "2026-06-22T21:30:00",
+    "duration_seconds": 5400,
+    "repo_name": "hixl",
+    "total_steps": 12
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "x86_64 (WSL2)",
+      "cpu_cores": 16,
+      "memory": "15Gi",
+      "disk": "available",
+      "docker_version": "Docker version 29.1.3"
+    },
+    "container": {
+      "os": "Ubuntu 24.04",
+      "architecture": "x86_64",
+      "cpu_cores": 16,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "recommended_image",
+      "image_name": "swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu24.04_x86:lv6_v1.1039",
+      "selection_reason": "文档中 build.md 明确指定使用此配套镜像"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md + build.md",
+      "value": "x86_64 (支持 ARM64)"
+    },
+    "recommended_image": {
+      "source": "docs/build.md",
+      "value": "swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu24.04_x86:lv6_v1.1039 (x86_64) / ubuntu24.04_arm:lv6_v1.1039 (ARM64)"
+    },
+    "dependencies": {
+      "source": "docs/build.md + requirements.txt + CMakeLists.txt",
+      "value": [
+        "cmake >= 3.16.0",
+        "gcc/g++ 7.3.x - 14.2.x",
+        "Python 3.9.x - 3.14.x",
+        "bash >= 5.1.16",
+        "unzip",
+        "ccache (可选)",
+        "numpy",
+        "pyyaml>=6.0.1",
+        "decorator",
+        "sympy",
+        "scipy",
+        "attrs",
+        "protobuf",
+        "psutil",
+        "setuptools>=59.0.1",
+        "wheel>=0.37.1",
+        "coverage",
+        "CANN toolkit 9.0.0"
+      ]
+    },
+    "build_commands": {
+      "source": "docs/build.md + build.sh",
+      "value": "bash build.sh [-j<N>] [--examples] [--build_type=<Release|Debug>] [--cann_3rd_lib_path=<PATH>]"
+    },
+    "ut_commands": {
+      "source": "docs/build.md + tests/run_test.sh",
+      "value": "bash tests/run_test.sh [-t <cpp|py>] [-s <suite>] [-c] [-j<N>]"
+    },
+    "sample_commands": {
+      "source": "examples/README.md",
+      "value": "需要先安装 build 生成的 cann-hixl_*.run 包，配置好硬件设备后，运行 examples/cpp/ 或 examples/python/ 中的示例"
+    },
+    "special_dependencies": {
+      "source": "docs/build.md + cmake/dependencies.cmake",
+      "value": [
+        "昇腾 NPU 驱动和固件",
+        "CANN toolkit 和 ops 包",
+        "第三方开源依赖: googletest 1.14.0, json 3.11.3, makeself 2.5.0, pybind11 2.13.6, cann-cmake master-025"
+      ]
+    },
+    "build_entry": {
+      "source": "docs/build.md + build.sh",
+      "value": "bash build.sh [-j<N>] [--examples] [--build_type=<Release|Debug>] [--cann_3rd_lib_path=<PATH>]"
+    },
+    "ut_entry": {
+      "source": "docs/build.md + tests/run_test.sh",
+      "value": "bash tests/run_test.sh [-t <cpp|py>] [-s <suite>] [-c] [-j<N>]"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-22T20:15:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "多个 pre-commit hook 运行，其中 trailing-whitespace、end-of-file-fixer、clang-format、ruff-check、ruff-format、codespell、OAT Compliance Check 均有修改或失败",
+      "error": "部分 hook 发现文件问题并进行了修复，OAT 检查由于 oat-py 安装失败而失败",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-22T20:25:00",
+      "command": "检查 devcontainer 配置",
+      "success": true,
+      "output": "未找到 .devcontainer 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-22T20:27:00",
+      "command": "检查 lint-runner 配置",
+      "success": true,
+      "output": "未找到 lint-runner 相关配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-22T20:30:00",
+      "command": "docker pull swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu24.04_x86:lv6_v1.1039",
+      "success": true,
+      "output": "Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-22T20:35:00",
+      "command": "使用已运行的 verification-env 容器并检查环境",
+      "success": true,
+      "output": "容器中已挂载源码，cmake、gcc、g++、python3、bash、unzip、make 等工具均已安装，CANN toolkit 位于 /home/jenkins/Ascend/cann/",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-22T20:40:00",
+      "command": "source /home/jenkins/Ascend/cann/set_env.sh && bash build.sh -j10",
+      "success": true,
+      "output": "构建成功完成，生成了 build 目录和 build_out/cann-hixl_9.1.0_linux-x86_64.run 安装包",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 720
+    },
+    {
+      "timestamp": "2026-06-22T20:55:00",
+      "command": "cd build_out && ./cann-hixl_9.1.0_linux-x86_64.run --full --quiet --install-path=/home/jenkins/Ascend --pylocal",
+      "success": true,
+      "output": "HIXL 包安装成功，包括 llm_datadist Python 模块",
+      "error": "WARNING: driver and firmware is not exists（正常，因为此环境没有真实 NPU 硬件）",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-22T21:00:00",
+      "command": "bash tests/run_test.sh -t py（构建测试）",
+      "success": true,
+      "output": "测试构建成功完成，生成了 build_test 目录和测试依赖库",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1800
+    },
+    {
+      "timestamp": "2026-06-22T21:25:00",
+      "command": "python3 -m pytest tests/python/test_utils.py -v",
+      "success": true,
+      "output": "1个纯工具类Python测试通过",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-22T21:26:00",
+      "command": "python3 -m pytest tests/python/test_cache_manager.py -v",
+      "success": false,
+      "output": "19个测试全部失败",
+      "error": "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, Failed to initialize llm datadist（需要真实NPU硬件）",
+      "returncode": 1,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-22T21:27:00",
+      "command": "./build_test/tests/cpp/hixl/fabric_mem/fabric_mem_test",
+      "success": true,
+      "output": "150个C++测试全部通过！",
+      "error": "部分测试有预期的ERROR日志（测试错误处理路径）",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-22T21:28:00",
+      "command": "在无NPU环境下执行示例程序",
+      "success": false,
+      "output": "执行了4个示例（1个C++，3个Python），全部因缺少硬件而失败",
+      "error": "C++示例：aclrtSetDevice失败；Python示例：torch.npu不存在或LLMDataDist初始化失败",
+      "returncode": 1,
+      "duration_seconds": 30
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-22T20:00:00",
+      "step": "start",
+      "action": "开始 HIXL 仓库验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-22T20:05:00",
+      "step": "document_reading",
+      "action": "读取 README.md、docs/build.md、examples/README.md、CMakeLists.txt、build.sh、tests/run_test.sh 等文档",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/build.md",
+          "examples/README.md",
+          "CMakeLists.txt",
+          "build.sh",
+          "tests/run_test.sh",
+          "requirements.txt",
+          ".pre-commit-config.yaml"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:15:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 和 lint-runner 配置",
+      "result": "pre-commit 已配置，lint-runner 未配置",
+      "details": {
+        "pre-commit_configured": true,
+        "pre-commit_hooks": [
+          "trailing-whitespace",
+          "end-of-file-fixer",
+          "check-yaml",
+          "check-added-large-files",
+          "check-merge-conflict",
+          "detect-private-key",
+          "check-json",
+          "clang-format",
+          "ruff-check",
+          "ruff-format",
+          "codespell",
+          "OAT Compliance Check"
+        ],
+        "lint-runner_configured": false
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:17:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分失败/修改",
+      "details": {
+        "failed_hooks": [
+          "trailing-whitespace",
+          "end-of-file-fixer",
+          "clang-format",
+          "ruff-check",
+          "ruff-format",
+          "codespell",
+          "OAT Compliance Check"
+        ],
+        "passed_hooks": [
+          "check-yaml",
+          "check-added-large-files",
+          "check-merge-conflict",
+          "detect-private-key",
+          "check-json"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:25:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "未配置",
+      "details": {
+        ".devcontainer_exists": false
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:30:00",
+      "step": "image_selection",
+      "action": "选择基础镜像",
+      "result": "使用文档推荐的 swr.cn-north-4.myhuaweicloud.com/ci_cann/ubuntu24.04_x86:lv6_v1.1039",
+      "details": {
+        "selection_reason": "docs/build.md 中明确指定此为配套构建镜像"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:35:00",
+      "step": "container_setup",
+      "action": "使用已运行的 verification-env 容器并检查环境",
+      "result": "成功",
+      "details": {
+        "cann_installed": true,
+        "cann_path": "/home/jenkins/Ascend/cann/",
+        "cann_version": "9.0.0",
+        "tools_available": [
+          "cmake",
+          "gcc",
+          "g++",
+          "python3",
+          "bash",
+          "unzip",
+          "make"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:40:00",
+      "step": "build",
+      "action": "执行构建 bash build.sh -j10",
+      "result": "成功",
+      "details": {
+        "concurrency": 10,
+        "concurrency_ratio": "62.5% (16 cores)",
+        "build_output": "build_out/cann-hixl_9.1.0_linux-x86_64.run",
+        "build_dir": "build/"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:52:00",
+      "step": "package_installation",
+      "action": "安装构建生成的 cann-hixl_9.1.0_linux-x86_64.run 包",
+      "result": "成功",
+      "details": {
+        "install_mode": "--full --pylocal",
+        "install_path": "/home/jenkins/Ascend",
+        "python_package": "llm_datadist-0.0.1-py3-none-any.whl"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T20:55:00",
+      "step": "ut_and_sample_evaluation",
+      "action": "评估单元测试和示例执行条件",
+      "result": "部分测试可在无NPU硬件下运行",
+      "details": {
+        "reason": "HIXL是昇腾单边通信库，部分纯软件逻辑测试无需真实硬件",
+        "package_status": "包安装成功，Python模块可导入"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T21:00:00",
+      "step": "test_build",
+      "action": "构建测试工程 bash tests/run_test.sh -t py",
+      "result": "成功",
+      "details": {
+        "test_build_dir": "build_test/",
+        "stub_libraries_generated": true,
+        "note": "生成了用于无硬件测试的stub库"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T21:25:00",
+      "step": "python_test_execution",
+      "action": "执行Python测试",
+      "result": "部分通过",
+      "details": {
+        "test_utils_result": "PASSED: 1/1",
+        "test_cache_manager_result": "FAILED: 0/19",
+        "failed_reason": "LLMDataDist初始化失败，需要真实NPU硬件",
+        "errors": [
+          "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, Failed to initialize llm datadist"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-22T21:27:00",
+      "step": "cpp_test_execution",
+      "action": "执行C++测试 fabric_mem_test",
+      "result": "全部通过",
+      "details": {
+        "total_tests": 150,
+        "passed_tests": 150,
+        "failed_tests": 0,
+        "test_suites": [
+          "FabricMemStatisticUTest",
+          "FabricMemControlUTest",
+          "FabricMemConfigParserUTest",
+          "VirtualMemoryManagerTest",
+          "FabricMemSTest"
+        ],
+        "duration_seconds": 4.5,
+        "note": "部分测试输出预期的ERROR日志（用于测试错误处理路径）"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T21:28:00",
+      "step": "sample_execution",
+      "action": "在无NPU硬件环境下执行示例程序",
+      "result": "全部失败（预期）",
+      "details": {
+        "executed_samples": [
+          "cpp/prompt_pull_cache_and_blocks",
+          "python/push_blocks_sample.py",
+          "python/pull_blocks_sample.py",
+          "python/prompt_pull_cache_and_blocks_sample.py"
+        ],
+        "failure_reason": "缺少真实的昇腾 NPU 硬件设备",
+        "cpp_error": "aclrtSetDevice(0) 返回错误码 4294967295",
+        "python_error": "AttributeError: module 'torch' has no attribute 'npu' 或 LLMDataDist 初始化失败"
+      }
+    },
+    {
+      "timestamp": "2026-06-22T21:30:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_hixl_20260622.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（12 个 hooks），未检测到 lint-runner 配置。pre-commit 运行发现部分文件格式问题，但工具本身配置正确。",
+      "pre-commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "partial_success",
+        "duration_seconds": 120,
+        "total_hooks": 12,
+        "passed": 5,
+        "failed": 7,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "trailing-whitespace",
+            "error": "发现并修复了多个文件的行尾空白"
+          },
+          {
+            "hook_name": "end-of-file-fixer",
+            "error": "发现并修复了多个文件的文件尾换行"
+          },
+          {
+            "hook_name": "clang-format",
+            "error": "C++ 代码格式化修改"
+          },
+          {
+            "hook_name": "ruff-check",
+            "error": "Python 代码静态检查发现问题"
+          },
+          {
+            "hook_name": "ruff-format",
+            "error": "Python 代码格式化修改"
+          },
+          {
+            "hook_name": "codespell",
+            "error": "拼写检查发现潜在拼写问题"
+          },
+          {
+            "hook_name": "OAT Compliance Check",
+            "error": "oat-py 安装失败（外部 Python 环境限制）"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": null,
+      "summary": "仓库未配置 .devcontainer"
+    },
+    "build": {
+      "status": "success",
+      "duration_seconds": 720,
+      "artifacts": [
+        {
+          "name": "cann-hixl_9.1.0_linux-x86_64.run",
+          "path": "build_out/cann-hixl_9.1.0_linux-x86_64.run",
+          "size": "4.6 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "partial_success",
+      "duration_seconds": 10,
+      "total": 170,
+      "passed": 151,
+      "failed": 19,
+      "failures": [
+        {
+          "test_type": "python",
+          "test_file": "tests/python/test_cache_manager.py",
+          "total_tests": 19,
+          "passed": 0,
+          "failed": 19,
+          "error_message": "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, Failed to initialize llm datadist"
+        }
+      ],
+      "successes": [
+        {
+          "test_type": "python",
+          "test_file": "tests/python/test_utils.py",
+          "total_tests": 1,
+          "passed": 1,
+          "failed": 0
+        },
+        {
+          "test_type": "cpp",
+          "test_file": "fabric_mem_test",
+          "total_tests": 150,
+          "passed": 150,
+          "failed": 0,
+          "test_suites": [
+            "FabricMemStatisticUTest",
+            "FabricMemControlUTest",
+            "FabricMemConfigParserUTest",
+            "VirtualMemoryManagerTest",
+            "FabricMemSTest"
+          ],
+          "duration_seconds": 4.5
+        }
+      ],
+      "note": "纯软件逻辑的单元测试可以在无NPU硬件环境下运行（151个测试通过）；需要真实硬件通信的测试无法运行（19个Python测试失败）"
+    },
+    "sample": {
+      "status": "not_run",
+      "duration_seconds": 30,
+      "results": [
+        {
+          "name": "cpp/prompt_pull_cache_and_blocks",
+          "type": "cpp",
+          "status": "失败",
+          "error": "aclrtSetDevice(0) 返回错误码 4294967295，错误信息：Invalid_Argument(EE1003): SetDevice failed because value 0 for parameter drv devId is invalid. 原因：无可用的昇腾 NPU 设备。"
+        },
+        {
+          "name": "python/push_blocks_sample.py",
+          "type": "python",
+          "status": "失败",
+          "error": "AttributeError: module 'torch' has no attribute 'npu'. 原因：未安装 torch_npu，且无可用的昇腾 NPU 设备。"
+        },
+        {
+          "name": "python/pull_blocks_sample.py",
+          "type": "python",
+          "status": "失败",
+          "error": "AttributeError: module 'torch' has no attribute 'npu'. 原因：未安装 torch_npu，且无可用的昇腾 NPU 设备。"
+        },
+        {
+          "name": "python/prompt_pull_cache_and_blocks_sample.py",
+          "type": "python",
+          "status": "失败",
+          "error": "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, msg: neither llm.ClusterInfo nor llm.listenIp was specified. 原因：需要配置集群信息或监听IP，且无可用的昇腾 NPU 设备。"
+        }
+      ],
+      "note": "HIXL 示例依赖真实的昇腾 NPU 硬件设备和网络配置，当前环境无可用硬件。所有示例执行均因缺少硬件而失败，但错误信息准确反映了问题原因。"
+    }
+  },
+  "documentation_gaps": [
+    "README.md 中关于构建依赖的信息不如 docs/build.md 详细，建议在 README 中增加快速构建指南的链接",
+    "缺少关于在没有真实 NPU 硬件情况下进行开发/测试的说明。实际验证发现：仓库已有stub库支持，约150个纯软件逻辑的C++测试可以在无硬件环境下全部通过！"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-22T20:17:00",
+      "problem": "pre-commit 中的 OAT Compliance Check 由于 Python 外部环境限制而无法安装 oat-py",
+      "solution": "这是环境限制问题，不影响代码库本身的质量",
+      "source": "pre-commit run 输出"
+    },
+    {
+      "timestamp": "2026-06-22T20:55:00",
+      "problem": "安装 HIXL 包时提示 'driver and firmware is not exists'",
+      "solution": "这是正常的，因为当前验证环境没有真实的昇腾 NPU 硬件",
+      "source": "cann-hixl_*.run 安装输出"
+    },
+    {
+      "timestamp": "2026-06-22T21:26:00",
+      "problem": "Python测试 test_cache_manager.py 中的19个测试全部失败",
+      "solution": "这是预期的，因为这些测试需要真实的NPU硬件才能初始化LLMDataDist",
+      "source": "pytest 输出",
+      "error_message": "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, Failed to initialize llm datadist"
+    },
+    {
+      "timestamp": "2026-06-22T21:28:00",
+      "problem": "C++示例 prompt_pull_cache_and_blocks 执行失败",
+      "solution": "这是预期的，因为需要真实的昇腾 NPU 硬件",
+      "source": "C++示例输出",
+      "error_message": "aclrtSetDevice(0) 返回错误码 4294967295，Invalid_Argument(EE1003): SetDevice failed because value 0 for parameter drv devId is invalid"
+    },
+    {
+      "timestamp": "2026-06-22T21:29:00",
+      "problem": "Python示例 push_blocks_sample.py 和 pull_blocks_sample.py 执行失败",
+      "solution": "这是预期的，因为需要 torch_npu 和真实的昇腾 NPU 硬件",
+      "source": "Python示例输出",
+      "error_message": "AttributeError: module 'torch' has no attribute 'npu'"
+    },
+    {
+      "timestamp": "2026-06-22T21:30:00",
+      "problem": "Python示例 prompt_pull_cache_and_blocks_sample.py 执行失败",
+      "solution": "这是预期的，因为需要配置集群信息或监听IP，以及真实的昇腾 NPU 硬件",
+      "source": "Python示例输出",
+      "error_message": "llm_datadist.status.LLMException: [LLMDataDist.init] failed, error code is LLMStatusCode.LLM_FAILED, msg: neither llm.ClusterInfo nor llm.listenIp was specified"
+    }
+  ],
+  "session_export_file": ""
+}

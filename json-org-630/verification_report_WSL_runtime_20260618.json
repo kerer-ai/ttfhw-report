@@ -1,0 +1,383 @@
+{
+  "metadata": {
+    "repo_path": "/root/workspace/ttfhw-verify-0617/runtime",
+    "start_time": "2026-06-18T03:00:00",
+    "end_time": "2026-06-18T04:30:00",
+    "duration_seconds": 5400,
+    "total_steps": 10
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "Intel(R) Xeon(R) CPU",
+      "cpu_cores": 12,
+      "memory": "11Gi",
+      "disk": "773G available",
+      "docker_version": "Docker version 29.4.1, build 055a478"
+    },
+    "container": {
+      "os": "Ubuntu 22.04 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 12,
+      "memory": "11Gi (无限制)"
+    },
+    "image_source": {
+      "type": "devcontainer_dockerfile",
+      "image_name": "runtime-dev (基于 .devcontainer/Dockerfile 构建，Ubuntu 22.04 + gcc-9 + cmake 3.22+)",
+      "selection_reason": "文档 .devcontainer/README.md 和 .devcontainer/Dockerfile 提供了完整的开发容器配置，包含编译和 UT 所需的全部工具链依赖"
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 目录结构",
+      "value": "x86_64 和 aarch64"
+    },
+    "recommended_image": {
+      "source": ".devcontainer/Dockerfile",
+      "value": "Ubuntu 22.04 LTS + gcc-9 + cmake 3.22+ + python 3.10+（devcontainer 自定义 Dockerfile）"
+    },
+    "dependencies": {
+      "source": "README.md - 环境部署章节",
+      "value": [
+        "python >= 3.7.0 (建议 >= 3.9.0)",
+        "pip3",
+        "gcc >= 7.3.0, <= 13",
+        "cmake >= 3.16.0",
+        "ccache",
+        "autoconf",
+        "gperf",
+        "libtool",
+        "make",
+        "libc6-dev/glibc-devel",
+        "googletest (仅 UT 依赖)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 编译runtime包章节",
+      "value": "bash build.sh (网络可用); bash build.sh --cann_3rd_lib_path=third_party (离线)"
+    },
+    "ut_commands": {
+      "source": "README.md - 本地验证章节",
+      "value": "bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -c --cann_3rd_lib_path={your_3rd_party_path}"
+    },
+    "sample_commands": {
+      "source": "example/README.md - 运行样例章节",
+      "value": "cd ${git_clone_path}/example/<sample_dir>; source ${install_root}/cann/set_env.sh; export ASCEND_INSTALL_PATH=${install_root}/cann; bash run.sh"
+    },
+    "special_dependencies": {
+      "source": "README.md - 环境部署章节 + .devcontainer/README.md",
+      "value": [
+        "CANN toolkit 包 (从 CANN master OBS 下载，运行样例必需)",
+        "CANN ops 算子包 (运行样例必需，如 Ascend-cann-910b-ops)",
+        "NPU 驱动与固件 (运行样例必需，仅编译不需要)"
+      ]
+    },
+    "supported_products": {
+      "source": "README.md - 版本配套章节",
+      "value": "Atlas A2 (910b), Atlas A3, Ascend 950PR/950DT"
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-18T03:00:00",
+      "command": "git clone https://gitcode.com/cann/runtime.git",
+      "success": true,
+      "output": "仓库克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T03:01:00",
+      "command": "检查 .pre-commit-config.yaml",
+      "success": true,
+      "output": "文件存在，包含 clang-format (v16.0.0) 和 oat-check (local hook) 两个 hooks",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T03:02:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "clang-format: 检测到文件格式不一致; oat-check: 发现 16 个 License Header Invalid 和 3 个 Invalid File Type，最终跳过(Skipping OAT check)",
+      "error": "clang-format 格式化修改了部分文件；oat-check 首次运行报 License Header Invalid，二次运行因增量模式异常退出(exit code 2)，最终跳过检查",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-18T03:04:00",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "存在 .devcontainer/ 目录，包含 devcontainer.json、Dockerfile、README.md",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-18T03:05:00",
+      "command": "docker build -t runtime-dev -f .devcontainer/Dockerfile .",
+      "success": true,
+      "output": "devcontainer 镜像构建成功 (Ubuntu 22.04 + gcc-9 + cmake 3.22+ + python 3.10+)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T03:06:00",
+      "command": "python3 download_3rd_party.py",
+      "success": true,
+      "output": "第三方依赖下载成功：abseil-cpp, acl-compat, boost, eigen, googletest, json, libboundscheck, libseccomp, mockcpp, protobuf, makeself, cann-cmake",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-18T03:07:00",
+      "command": "bash build.sh -j7",
+      "success": false,
+      "output": "构建失败，ascend_hal.c stub 生成存在 20+ 个 conflicting types 错误",
+      "error": "ascend_hal.c 中多个函数声明与定义类型冲突（halQueueGetQidsbyPid, halSensorNodeUpdateState, halMemCpyAsync 等），原因是 CANN 9.1.0 toolkit 的驱动头文件与 master 分支源码的 stub 生成不兼容",
+      "returncode": 2,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-18T03:12:00",
+      "command": "bash build.sh --build_host_only -j7",
+      "success": false,
+      "output": "host-only 构建同样失败，stub 类型冲突问题存在于 host 构建路径",
+      "error": "与完整构建相同的 stub 生成冲突错误，host-only 模式无法绕过",
+      "returncode": 2,
+      "duration_seconds": 180
+    },
+    {
+      "timestamp": "2026-06-18T03:15:00",
+      "command": "bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -c --cann_3rd_lib_path=/workspace/third_party",
+      "success": true,
+      "output": "UT 构建并执行成功，覆盖率: lines 85.4% (8860/10375), functions 90.3% (1214/1344)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 600
+    },
+    {
+      "timestamp": "2026-06-18T03:25:00",
+      "command": "bash run.sh (0_hello_cann 样例)",
+      "success": false,
+      "output": "样例运行失败：缺少 aclnnop/aclnn_add.h 头文件和 libopapi.so 库",
+      "error": "样例运行需要 CANN ops 算子包（提供 aclnnop 头文件和 libopapi.so），仅安装 toolkit 不够；此外样例运行依赖 NPU 设备，容器内无 NPU 环境下 aclInit 会失败",
+      "returncode": 1,
+      "duration_seconds": 10
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-18T03:00:00",
+      "step": "start",
+      "action": "开始验证流程",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-18T03:01:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层遍历所有文档",
+      "result": "成功",
+      "details": {
+        "files_read": [
+          "README.md",
+          "docs/01_quick_start/quick_start.md",
+          "docs/01_quick_start/Runtime简介.md",
+          "docs/01_quick_start/Runtime编程模型.md",
+          ".devcontainer/README.md",
+          ".devcontainer/devcontainer.json",
+          ".devcontainer/Dockerfile",
+          "example/README.md",
+          "AGENTS.md",
+          ".pre-commit-config.yaml",
+          "build.sh",
+          "tests/build_ut.sh"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:02:00",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {
+        "clang-format": "Failed (检测到文件格式不一致)",
+        "oat-check": "Failed (16 License Header Invalid, 3 Invalid File Type)，最终跳过"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:04:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及配置",
+      "result": "已配置",
+      "details": {
+        "config_dir": ".devcontainer/",
+        "files": ["devcontainer.json", "Dockerfile", "README.md"],
+        "base_image": "ubuntu:22.04",
+        "tools": "gcc-9, cmake 3.22+, python 3.10+, ccache, lcov, libasan5/libtsan0/libubsan1"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:05:00",
+      "step": "image_selection",
+      "action": "基于 .devcontainer/Dockerfile 构建开发镜像",
+      "result": "成功",
+      "details": {
+        "selection_reason": "文档 .devcontainer/README.md 明确推荐使用此 Dockerfile 构建开发容器"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:06:00",
+      "step": "dependency_installation",
+      "action": "下载第三方依赖",
+      "result": "成功",
+      "details": {
+        "command": "python3 download_3rd_party.py",
+        "packages": ["abseil-cpp 20230802.1", "acl-compat 9.1.0", "boost 1.87.0", "eigen 5.0.0", "googletest 1.14.0", "json 3.11.3", "libboundscheck 1.1.16", "libseccomp 2.5.4", "mockcpp 2.7-h5", "protobuf 25.1", "makeself 2.5.0", "cann-cmake master-026"]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:07:00",
+      "step": "build_execution",
+      "action": "执行 bash build.sh 编译 runtime 包",
+      "result": "失败",
+      "details": {
+        "command": "bash build.sh -j7",
+        "error_type": "stub 类型冲突",
+        "error_detail": "ascend_hal.c 中 20+ 个函数声明与定义类型冲突，原因是 CANN 9.1.0 toolkit 驱动头文件与 master 分支源码的 stub 生成不兼容",
+        "affected_functions": ["halQueueGetQidsbyPid", "halSensorNodeUpdateState", "halMemCpyAsync", "halMemCreate", "halResAddrMap", "halHdcSessionConnectEx", "halResourceIdAlloc 等"]
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:15:00",
+      "step": "ut_execution",
+      "action": "执行 UT 单元测试",
+      "result": "成功",
+      "details": {
+        "command": "bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -c --cann_3rd_lib_path=/workspace/third_party",
+        "coverage_lines": "85.4% (8860/10375)",
+        "coverage_functions": "90.3% (1214/1344)",
+        "note": "UT 使用独立的 tests/build_ut.sh 脚本，不依赖完整 runtime 包构建"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T03:25:00",
+      "step": "sample_execution",
+      "action": "运行 0_hello_cann 样例",
+      "result": "失败",
+      "details": {
+        "command": "cd example/0_quickstart/0_hello_cann && bash run.sh",
+        "error": "缺少 aclnnop/aclnn_add.h 头文件和 libopapi.so 库（需安装 CANN ops 算子包），且无 NPU 设备"
+      }
+    },
+    {
+      "timestamp": "2026-06-18T04:30:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_runtime_20260618.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（2个hooks：clang-format v16.0.0 失败(格式不一致)，oat-check 失败(License Header Invalid)后跳过）；未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "失败",
+        "duration_seconds": 120,
+        "total_hooks": 2,
+        "passed": 0,
+        "failed": 2,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "clang-format",
+            "file": "多个C/C++文件",
+            "error": "代码格式与 .clang-format 配置不一致，clang-format 修改了部分文件"
+          },
+          {
+            "hook_name": "oat-check",
+            "file": "多个文件",
+            "error": "发现 16 个 License Header Invalid 和 3 个 Invalid File Type；增量模式运行异常退出(exit code 2)，最终跳过检查"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": true,
+      "config_dir": ".devcontainer/",
+      "config_files": ["devcontainer.json", "Dockerfile", "README.md"],
+      "summary": "仓库配置了完整的 .devcontainer，包含 Dockerfile (Ubuntu 22.04 + gcc-9 + cmake 3.22+)、devcontainer.json (含 postCreateCommand 自动下载第三方依赖) 和 README.md"
+    },
+    "build": {
+      "status": "失败",
+      "duration_seconds": 480,
+      "artifacts": [],
+      "error": "ascend_hal.c stub 生成存在 20+ 个 conflicting types 错误，CANN 9.1.0 toolkit 驱动头文件与 master 分支源码不兼容。host-only 构建 (--build_host_only) 同样失败。"
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 600,
+      "total": null,
+      "passed": null,
+      "failed": 0,
+      "failures": [],
+      "coverage_lines": "85.4% (8860/10375)",
+      "coverage_functions": "90.3% (1214/1344)",
+      "note": "使用 tests/build_ut.sh --ut=acl --target=ascendcl_utest -c 执行，UT 不依赖完整 runtime 包构建，独立编译运行成功"
+    },
+    "sample": {
+      "status": "失败",
+      "duration_seconds": 10,
+      "results": [
+        {
+          "sample_name": "0_hello_cann",
+          "execution_status": "编译失败",
+          "output_summary": "缺少 aclnnop/aclnn_add.h 头文件和 libopapi.so 库，需安装 CANN ops 算子包；且运行需要 NPU 设备",
+          "error_detail": "样例依赖 CANN ops 算子包提供的 aclnnop 头文件和 libopapi.so，仅安装 toolkit 不够；此外运行时 aclInit 需要 NPU 驱动"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README.md 中编译命令 bash build.sh 未提及需要安装 CANN toolkit 包才能编译成功（.devcontainer/README.md 提到需要手动安装，但 README.md 正文中未明确说明）",
+    "README.md 中 UT 命令示例 bash tests/build_ut.sh --ut=acl --target=ascendcl_utest -c --cann_3rd_lib_path={your_3rd_party_path} 中 {your_3rd_party_path} 必须为绝对路径，但文档未强调这一点",
+    "README.md 中源码构建章节未说明 master 分支可能需要特定版本的 CANN toolkit，当前 CANN 9.1.0 与 master 分支存在 stub 类型不兼容问题",
+    "example/README.md 中样例运行步骤未明确说明需要安装 CANN ops 算子包（仅提到 CANN 软件包），新手可能不清楚需要额外安装 ops 包",
+    "pre-commit 配置中 oat-check hook 使用了已弃用的 stage 名称 'commit'（应为 'pre-commit'），运行时产生 WARNING",
+    "README.md 中 UT 的 --ut 参数支持多个模块（acl, runtime, runtime_c, platform, qs, aicpusd, slog, atrace, msprof, adump, tsd, error_manager, mmpa），但文档仅给出 acl 示例，未列出所有可用模块"
+  ],
+  "problems_encountered": [
+    {
+      "problem": "bash build.sh 构建失败，ascend_hal.c stub 生成存在 20+ 个 conflicting types 错误",
+      "cause": "CANN 9.1.0 toolkit 的驱动头文件 (include/driver/) 中函数声明与 master 分支源码的 stub 生成脚本产生的函数签名不一致，属于版本不匹配问题",
+      "workaround": "使用 tests/build_ut.sh 独立执行 UT 测试，UT 不依赖完整 runtime 包构建",
+      "impact": "无法生成 runtime 安装包 (.run 文件)"
+    },
+    {
+      "problem": "0_hello_cann 样例编译失败，缺少 aclnnop/aclnn_add.h 头文件",
+      "cause": "样例依赖 CANN ops 算子包提供的 aclnnop 头文件和 libopapi.so，仅安装 CANN toolkit 不够",
+      "workaround": "需额外安装 CANN ops 算子包（如 Ascend-cann-910b-ops_9.1.0_linux-x86_64.run）",
+      "impact": "样例无法编译和运行"
+    },
+    {
+      "problem": "样例运行需要 NPU 设备，容器内无 NPU 环境",
+      "cause": "Runtime 样例调用 aclInit 初始化需要 NPU 驱动和设备，容器内无 NPU 设备时无法初始化",
+      "workaround": "runtime 仓库不支持 cannsim 仿真，必须在有 NPU 设备的环境中运行样例",
+      "impact": "无法在无 NPU 环境下验证样例运行"
+    }
+  ],
+  "session_export_file": "verification_session_WSL_runtime_20260618.md"
+}
