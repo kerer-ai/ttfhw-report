@@ -677,6 +677,7 @@ function normalizeStatusString(status?: string): string {
   // -- Chinese status values --
   if (raw === '成功') return 'success'
   if (raw === '不成功' || raw === '超时失败') return 'failed'
+  if (raw === '部分成功') return 'partial_success'
 
   const lower = raw.toLowerCase()
   if (lower === 'skipped') return 'skipped'
@@ -699,6 +700,7 @@ function normalizeDisplayStatus(status?: string): string {
   // Chinese status values
   if (raw === '成功') return 'success'
   if (raw === '不成功' || raw === '超时失败') return 'failed'
+  if (raw === '部分成功') return 'partial_success'
   const lower = raw.toLowerCase()
   if (lower === 'no_tests') return 'no_tests'
   if (lower.includes('success') && !lower.includes('partial')) return 'success'

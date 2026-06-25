@@ -481,6 +481,7 @@ function normalizeStatus(status: any): ResultStatus {
   // -- Chinese status values (from raw verification reports) --
   if (raw === '成功') return 'success'
   if (raw === '不成功' || raw === '超时失败') return 'failed'
+  if (raw === '部分成功') return 'partial_success'
 
   // -- English standard values --
   if (s === 'success' || s === 'passed') return 'success'
