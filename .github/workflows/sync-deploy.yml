@@ -1,6 +1,14 @@
 name: Sync Reports & Deploy
 
 on:
+  push:
+    paths:
+      - 'json/**.json'
+      - 'lib/**'
+      - 'components/**'
+      - 'app/**'
+      - 'next.config.js'
+      - 'package-lock.json'
   schedule:
     # Daily at 03:07 UTC (off-peak minute to avoid :00/:30 contention)
     - cron: '7 3 * * *'
