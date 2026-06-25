@@ -470,13 +470,28 @@ function normalizeImageSelection(imgSrc: any): ImageSelection | undefined {
 
 function normalizeStatus(status: any): ResultStatus {
   if (!status) return 'unknown'
-  const s = String(status).toLowerCase().trim()
+
+  // Handle boolean values from execution_log entries
+  if (typeof status === 'boolean') return status ? 'success' : 'failed'
+
+  const raw = String(status).trim()
+  const s = raw.toLowerCase()
+
+  // -- Chinese status values (from raw verification reports) --
+  if (raw === '成功') return 'success'
+  if (raw === '不成功' || raw === '超时失败') return 'failed'
+
+  // -- English standard values --
   if (s === 'success' || s === 'passed') return 'success'
   if (s === 'failed' || s === 'failure' || s === 'error' || s === 'blocked') return 'failed'
   if (s === 'partial_success' || s === 'partial_failure' || s === 'mainly_success' || s === 'mostly_success' || s.includes('partial') || (s.includes('success') && s.includes('fail'))) return 'partial_success'
   if (s === 'skipped') return 'skipped'
   if (s === 'no_tests' || s === 'not_applicable' || s === 'not_available') return 'no_tests'
   if (s === 'not_run' || s === 'not_executed' || s === 'not_configured' || s === 'not_attempted') return 'not_run'
+
+  // -- Other non-standard values --
+  if (s === 'incomplete') return 'partial_success'
+
   return 'unknown'
 }
 
