@@ -269,6 +269,7 @@ function buildTimelineFromProcessEntries(entries: any[]): TimelinePhase[] {
       phase: entry.action || entry.step || 'unknown',
       durationSeconds: duration,
       status: entry.result || 'unknown',
+      timestamp: entry.timestamp,
     })
   }
 

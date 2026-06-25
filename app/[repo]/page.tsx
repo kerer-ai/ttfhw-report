@@ -1038,7 +1038,7 @@ function ProcessTimelineCard({ items }: { items: any[] }) {
               <div className={`rounded-lg border p-3 ${tone.panel}`}>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   {item.timestamp && (
-                    <time className="font-mono text-xs text-slate-500">{item.timestamp}</time>
+                    <time className="font-mono text-xs text-slate-500">{formatTimestamp(item.timestamp)}</time>
                   )}
                   {item.step && (
                     <span className="rounded bg-white/70 px-2 py-0.5 text-xs font-medium text-slate-600">{item.step}</span>
@@ -1071,11 +1071,14 @@ function PhaseTimelineCard({ items }: { items: any[] }) {
               <span className={`absolute -left-[31px] top-1 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white ${tone.dot}`} />
               <div className={`rounded-lg border p-3 ${tone.panel}`}>
                 <div className="flex flex-wrap items-center gap-2">
+                  {item.timestamp && (
+                    <span className="font-mono text-xs text-slate-500">{formatTimestamp(item.timestamp)}</span>
+                  )}
                   <span className="text-sm font-medium text-slate-800">{item.phase}</span>
                   <span className={`rounded px-2 py-0.5 text-xs font-medium ${tone.badge}`}>{item.status}</span>
                   <span className="font-mono text-xs text-slate-500">{formatSeconds(item.durationSeconds)}</span>
                 </div>
-                <JsonObjectGrid data={omitKeys(item, ['phase', 'status', 'durationSeconds'])} compact />
+                <JsonObjectGrid data={omitKeys(item, ['phase', 'status', 'durationSeconds', 'timestamp'])} compact />
               </div>
             </div>
           )
@@ -1083,6 +1086,17 @@ function PhaseTimelineCard({ items }: { items: any[] }) {
       </div>
     </Card>
   )
+}
+
+function formatTimestamp(isoString: string): string {
+  if (!isoString) return ''
+  try {
+    const d = new Date(isoString)
+    if (isNaN(d.getTime())) return isoString
+    return d.toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
+  } catch {
+    return isoString
+  }
 }
 
 function formatSeconds(seconds: number): string {

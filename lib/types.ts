@@ -275,6 +275,7 @@ export interface TimelinePhase {
   phase: string;
   durationSeconds: number;
   status: string;
+  timestamp?: string;
   breakdown?: Record<string, number>;
 }
 

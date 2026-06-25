@@ -1,6 +1,6 @@
 import { TimelinePhase } from '@/lib/types'
 import { Card } from '@/components/ui/Card'
-import { formatDuration } from '@/lib/utils'
+import { formatDuration, formatDateTime } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
 interface TimelineCardProps {
@@ -36,6 +36,9 @@ export function TimelineCard({ timeline }: TimelineCardProps) {
               'bg-gray-50 border border-gray-200'
             )}>
               <span className="font-medium text-gray-700 text-center break-words">{phase.phase}</span>
+              {phase.timestamp && (
+                <span className="text-xs text-gray-400 mt-0.5">{formatDateTime(phase.timestamp)}</span>
+              )}
               <span className="text-xs text-gray-500">{formatDuration(phase.durationSeconds)}</span>
             </div>
           </div>
