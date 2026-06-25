@@ -1,0 +1,333 @@
+name: Sync Reports & Deploy
+
+on:
+  schedule:
+    # Daily at 03:07 UTC (off-peak minute to avoid :00/:30 contention)
+    - cron: '7 3 * * *'
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: 'Force rebuild and deploy even if no new reports'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  sync-build-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      # ============================================================
+      # Step 1: Checkout this repository
+      # ============================================================
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      # ============================================================
+      # Step 2: Checkout the data source (ttfhw-json)
+      #   computing-TTFHW/ttfhw-json is a PUBLIC repo.
+      #   GITHUB_TOKEN has read access to public repos by default.
+      #   The TTFHW_JSON_TOKEN fallback is kept for forward
+      #   compatibility in case the repo is made private later.
+      # ============================================================
+      - name: Checkout ttfhw-json (data source)
+        id: checkout-source
+        uses: actions/checkout@v4
+        with:
+          repository: computing-TTFHW/ttfhw-json
+          path: _ttfhw-json
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: false
+
+      # ============================================================
+      # Step 3: Verify source repo has expected structure
+      # ============================================================
+      - name: Verify source structure
+        id: verify-source
+        run: |
+          if [ ! -d "_ttfhw-json/reports" ]; then
+            echo "::error::ttfhw-json repo missing 'reports/' directory"
+            ls -la _ttfhw-json/ || true
+            exit 1
+          fi
+          REPORT_COUNT=$(find _ttfhw-json/reports -maxdepth 1 -name '*.json' | wc -l)
+          echo "report_count=$REPORT_COUNT" >> "$GITHUB_OUTPUT"
+          echo "Source reports available: $REPORT_COUNT"
+
+      # ============================================================
+      # Step 4: Snapshot current json/ state for change detection
+      # ============================================================
+      - name: Snapshot current state
+        id: snapshot
+        run: |
+          mkdir -p json
+          md5sum json/*.json 2>/dev/null > /tmp/json_before.md5 || true
+
+      # ============================================================
+      # Step 5: Sync reports with deduplication
+      #
+      #   Phase 1: Copy new/updated files from source.
+      #     - New files (not in json/) → copied
+      #     - Existing files with different content → overwritten
+      #     - Identical files → skipped
+      #
+      #   Phase 2: Per-repo deduplication.
+      #     - Groups files by repo key (extracted from filename)
+      #     - For each repo, keeps only the file with the highest
+      #       date suffix (YYYYMMDD)
+      #     - Files without a recognizable date are preserved as-is
+      # ============================================================
+      - name: Sync JSON reports
+        id: sync
+        run: |
+          set -euo pipefail
+
+          # --- Phase 1: Copy new/updated reports ---
+          echo "=== Phase 1: Copy new/updated reports ==="
+          COPIED=0
+          SKIPPED=0
+
+          for src in _ttfhw-json/reports/*.json; do
+            [ -f "$src" ] || continue
+            name="$(basename "$src")"
+
+            if [ -f "json/$name" ]; then
+              if cmp -s "$src" "json/$name"; then
+                SKIPPED=$((SKIPPED + 1))
+              else
+                cp "$src" "json/$name"
+                echo "  ~ updated: $name"
+                COPIED=$((COPIED + 1))
+              fi
+            else
+              cp "$src" "json/$name"
+              echo "  + new: $name"
+              COPIED=$((COPIED + 1))
+            fi
+          done
+          echo "Phase 1: $COPIED new/updated, $SKIPPED unchanged"
+
+          # --- Phase 2: Per-repo deduplication ---
+          echo ""
+          echo "=== Phase 2: Deduplicate per repo (keep latest) ==="
+
+          rm -f /tmp/repo_files.txt
+          for f in json/verification_report_*.json; do
+            [ -f "$f" ] || continue
+            name="$(basename "$f")"
+
+            # Extract date: 8 consecutive digits before .json or _final.json
+            date_val="$(echo "$name" | grep -oP '\d{8}(?=(_final)?\.json)' || echo "00000000")"
+
+            # Extract repo key: strip "verification_report_" prefix and
+            # the date + optional _final + .json suffix
+            repo_key="$(echo "$name" | sed -E 's/^verification_report_//; s/_[0-9]{8}(_final)?\.json$//')"
+
+            echo "${repo_key}|${date_val}|${f}" >> /tmp/repo_files.txt
+          done
+
+          # Sort by key ascending, then date descending.
+          # For each key, the first line is the latest file.
+          sort -t'|' -k1,1 -k2,2r /tmp/repo_files.txt > /tmp/repo_sorted.txt
+
+          # Keep only the first occurrence of each key
+          awk -F'|' '!seen[$1]++ { print $3 }' /tmp/repo_sorted.txt > /tmp/keep_files.txt
+
+          CLEANED=0
+          for f in json/verification_report_*.json; do
+            [ -f "$f" ] || continue
+            if ! grep -Fxq "$f" /tmp/keep_files.txt; then
+              echo "  - removing old: $(basename "$f")"
+              rm "$f"
+              CLEANED=$((CLEANED + 1))
+            fi
+          done
+          echo "Phase 2: cleaned $CLEANED old file(s)"
+
+          # Final report
+          FINAL_COUNT=$(find json -maxdepth 1 -name '*.json' | wc -l)
+          echo "final_count=$FINAL_COUNT" >> "$GITHUB_OUTPUT"
+          echo ""
+          echo "=== Sync complete: $FINAL_COUNT reports in json/ ==="
+
+      # ============================================================
+      # Step 6: Detect if json/ files actually changed
+      # ============================================================
+      - name: Detect changes
+        id: changes
+        run: |
+          md5sum json/*.json 2>/dev/null > /tmp/json_after.md5 || true
+
+          if diff /tmp/json_before.md5 /tmp/json_after.md5 > /dev/null 2>&1; then
+            echo "json_changed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes in json/ directory"
+          else
+            echo "json_changed=true" >> "$GITHUB_OUTPUT"
+            echo "Changes detected in json/ directory:"
+            diff /tmp/json_before.md5 /tmp/json_after.md5 || true
+          fi
+
+      # ============================================================
+      # Step 7: Skip build if nothing changed (unless forced)
+      # ============================================================
+      - name: Check if build is needed
+        id: build-needed
+        run: |
+          FORCE="${{ inputs.force_rebuild || false }}"
+          if [ "${{ steps.changes.outputs.json_changed }}" = "true" ] || [ "$FORCE" = "true" ]; then
+            echo "needed=true" >> "$GITHUB_OUTPUT"
+            echo "Build is needed (changes=${{ steps.changes.outputs.json_changed }}, force=$FORCE)"
+          else
+            echo "needed=false" >> "$GITHUB_OUTPUT"
+            echo "No changes and not forced - skipping build"
+          fi
+
+      # ============================================================
+      # Step 8: Setup Node.js
+      # ============================================================
+      - name: Setup Node.js
+        if: steps.build-needed.outputs.needed == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      # ============================================================
+      # Step 9: Install dependencies
+      # ============================================================
+      - name: Install dependencies
+        if: steps.build-needed.outputs.needed == 'true'
+        run: npm ci
+
+      # ============================================================
+      # Step 10: Build static site
+      #
+      #   npm run build executes:
+      #     next build && rm -rf docs && mv out docs && touch docs/.nojekyll
+      #
+      #   During build, data-loader reads json/*.json and converts
+      #   all format variants (standard, report-511, openEuler,
+      #   stratovirt) via convertReport511Format().
+      # ============================================================
+      - name: Build static site
+        if: steps.build-needed.outputs.needed == 'true'
+        id: build
+        run: |
+          echo "Building with $(ls json/*.json 2>/dev/null | wc -l) report files..."
+          npm run build
+          echo "Build complete: $(find docs -type f | wc -l) files in docs/"
+
+      # ============================================================
+      # Step 11: Verify build output integrity
+      # ============================================================
+      - name: Verify build output
+        if: steps.build-needed.outputs.needed == 'true'
+        run: |
+          if [ ! -f "docs/index.html" ]; then
+            echo "::error::Missing docs/index.html - build failed silently"
+            exit 1
+          fi
+          if [ ! -f "docs/.nojekyll" ]; then
+            echo "::error::Missing docs/.nojekyll - GitHub Pages will skip _next/"
+            exit 1
+          fi
+          if [ ! -d "docs/_next" ]; then
+            echo "::warning::Missing docs/_next/ - JS/CSS assets not found"
+          fi
+          echo "Build verification passed"
+          echo "  index.html: $(wc -c < docs/index.html) bytes"
+          echo "  .nojekyll: present"
+
+      # ============================================================
+      # Step 12: Commit and push changes
+      # ============================================================
+      - name: Commit and push
+        if: steps.build-needed.outputs.needed == 'true'
+        id: push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # Check if there are actual changes
+          if git diff --quiet json/ docs/ && git diff --cached --quiet; then
+            echo "No effective changes to commit"
+            exit 0
+          fi
+
+          git add json/ docs/
+
+          # Build a descriptive commit message
+          JSON_ADDED=$(git diff --cached --name-only --diff-filter=A -- json/ | wc -l)
+          JSON_MODIFIED=$(git diff --cached --name-only --diff-filter=M -- json/ | wc -l)
+          JSON_DELETED=$(git diff --cached --name-only --diff-filter=D -- json/ | wc -l)
+
+          DATE_STR="$(date +%Y-%m-%d)"
+          COMMIT_MSG="data: sync reports and rebuild docs [${DATE_STR}]"
+
+          DETAILS=""
+          [ "$JSON_ADDED" -gt 0 ] && DETAILS="$DETAILS +$JSON_ADDED"
+          [ "$JSON_MODIFIED" -gt 0 ] && DETAILS="$DETAILS ~$JSON_MODIFIED"
+          [ "$JSON_DELETED" -gt 0 ] && DETAILS="$DETAILS -$JSON_DELETED"
+          if [ -n "$DETAILS" ]; then
+            COMMIT_MSG="data: sync reports (${DETAILS# }) and rebuild docs [${DATE_STR}]"
+          fi
+
+          git commit -m "$COMMIT_MSG"
+
+          # Push with retry (handles concurrent workflow races)
+          PUSH_SUCCESS=false
+          for attempt in 1 2 3; do
+            if git push origin HEAD; then
+              echo "Push successful on attempt $attempt"
+              PUSH_SUCCESS=true
+              break
+            fi
+            echo "Push attempt $attempt failed - pulling and retrying..."
+            git pull --rebase origin HEAD || true
+            sleep $((attempt * 3))
+          done
+
+          if [ "$PUSH_SUCCESS" = "false" ]; then
+            echo "::error::Push failed after 3 attempts"
+            exit 1
+          fi
+
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      # ============================================================
+      # Step 13: Deployment confirmation
+      # ============================================================
+      - name: Deployment confirmation
+        if: steps.push.outputs.commit_sha
+        continue-on-error: true
+        run: |
+          echo "Deployed commit: ${{ steps.push.outputs.commit_sha }}"
+          echo "GitHub Pages will deploy from docs/ on the pushed branch."
+          echo "Allow 1-2 minutes for Pages to reflect the update."
+          echo "URL: https://kerer-ai.github.io/ttfhw-report/"
+
+      # ============================================================
+      # Step 14: Workflow summary
+      # ============================================================
+      - name: Workflow summary
+        if: always()
+        run: |
+          {
+            echo "## Workflow Summary"
+            echo ""
+            echo "| Step | Result |"
+            echo "|------|--------|"
+            echo "| Source reports | ${{ steps.verify-source.outputs.report_count }} files in ttfhw-json |"
+            echo "| Synced reports | ${{ steps.sync.outputs.final_count }} files in json/ |"
+            echo "| Build needed | ${{ steps.build-needed.outputs.needed }} |"
+            echo "| Deployed | ${{ steps.push.outputs.commit_sha || 'N/A (no changes)' }} |"
+          } >> "$GITHUB_STEP_SUMMARY"
