@@ -1,0 +1,550 @@
+{
+  "metadata": {
+    "repo_path": "https://gitcode.com/cann/amct.git (local: /mnt/d/code/ttfhw_0624/amct/amct)",
+    "start_time": "2026-06-25T14:30:00",
+    "end_time": "2026-06-25T16:30:00",
+    "duration_seconds": 7200,
+    "total_steps": 38
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "332G available (50% used)",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库未提供 Dockerfile / devcontainer，README 与 quick_install.md 仅给出通用 Linux + CANN 环境要求，未指定容器镜像，故按强制约束使用 openEuler 24.03 LTS 基础镜像从零构建",
+      "dependency_mapping": {
+        "from_dockerfile": "仓库无 Dockerfile，依赖来源为 README 环境要求表 + docs/zh/quick_install.md + docs/zh/build.md + CMakeLists.txt + requirements.txt",
+        "mappings": [
+          {"original": "securec.h / libc_sec (CANN 自带)", "openEuler": "libboundscheck (dnf install libboundscheck，提供 securec.h 与 libboundscheck.so)", "source": "CMakeLists amct_tensor_decompose: include securec.h, link c_sec"},
+          {"original": "Python 依赖 (requirements.txt)", "openEuler": "pip install (openEuler 仓库无 python3-torch，numpy 版本过低)", "source": "requirements.txt"},
+          {"original": "protobuf (CANN 第三方源码编译 host_protoc)", "openEuler": "protobuf / protobuf-devel / protobuf-compiler (dnf install)", "source": "CMakeLists add_cann_third_party(protobuf)"}
+        ]
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md / build.sh / version.info（产物名含 linux_x86_64 与 linux_aarch64）",
+      "value": "x86_64（同时支持 aarch64；本次在 x86_64 验证）"
+    },
+    "recommended_image": {
+      "source": "仓库无 Dockerfile / devcontainer；README.md + docs/zh/quick_install.md",
+      "value": "文档未指定容器镜像，仅要求通用 Linux + CANN≥8.5.0 + NPU 驱动固件；按强制约束改用 openEuler 24.03 LTS"
+    },
+    "dockerfile_dependencies": {
+      "source": "仓库无 Dockerfile",
+      "value": []
+    },
+    "dependencies": {
+      "source": "README.md 环境要求 + docs/zh/quick_install.md + docs/zh/build.md + CMakeLists.txt + requirements.txt + .pre-commit-config.yaml",
+      "value": [
+        "Python >= 3.9 (dnf: python3，实际 3.11.6)",
+        "PyTorch 2.7.1 或 2.1.0 + torch_npu (pip: torch 2.7.1+cpu；torch_npu 不在标准 PyPI，UT 通过 conftest mock)",
+        "GCC >= 7.3 (dnf: gcc gcc-c++，实际 12.3.1)",
+        "CMake >= 3.16，推荐 3.20 (dnf: cmake，实际 3.27.9)",
+        "patch >= 2.7 (dnf: patch，实际 2.7.6)",
+        "bash >= 5.1.16 (实际 5.2.15)",
+        "CANN Toolkit & Ops >= 8.5.0 (需 NPU 驱动/固件；--torch 构建实际仅需 securec/libc_sec)",
+        "securec.h / libc_sec (openEuler: libboundscheck，构建 amct_tensor_decompose 算子必需)",
+        "protobuf (CANN 第三方编译 host_protoc；openEuler: protobuf 25.1)",
+        "Python 第三方库: numpy/onnx/onnxruntime/transformers/datasets/accelerate/compressed_tensors/scipy/torchao/einops/sentencepiece/zstandard 等 (pip)",
+        "测试: pytest + pytest-cov (dnf: python3-pytest；pip: pytest-cov)",
+        "静态检查: pre-commit + clang-format v16 + ruff v0.14.14 (.pre-commit-config.yaml)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md 安装&验证 + docs/zh/build.md 编译章节",
+      "value": "bash build.sh --torch   (产物: build_out/amct_pytorch-${version}-py3-none-linux_${arch}.tar.gz)"
+    },
+    "ut_commands": {
+      "source": "docs/zh/build.md 本地验证章节 + pyproject.toml [tool.pytest.ini_options]",
+      "value": "bash build.sh -u  (构建 UT 目标并运行 pytest；testpaths=tests/unit_test, tests/amct_pytorch；markers: cpu/npu/slow)"
+    },
+    "sample_commands": {
+      "source": "examples/README.md + examples/algorithms/*/README.md",
+      "value": "各算法样例位于 examples/algorithms/<algo>/src/run_*.py，需指定模型路径与数据集，依赖 NPU + CANN ops + torch_npu"
+    },
+    "special_dependencies": {
+      "source": "docs/zh/quick_install.md + requirements.txt + examples/algorithms/minmax/README.md",
+      "value": [
+        "CANN Toolkit/Ops (华为专有 .run 包，需 NPU 驱动固件，不在 openEuler 仓库)",
+        "torch_npu==2.7.1.post4 (华为 PyTorch 扩展，不在标准 PyPI)",
+        "样例需用户自行下载 LLM 模型 (Llama2-7b / Qwen2-7b / Qwen3-8b 等) + pileval/wikitext2 数据集"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-25T14:30:00",
+      "command": "git clone https://gitcode.com/cann/amct.git",
+      "success": true,
+      "output": "Cloning into 'amct'... Updating files: 100% (1130/1130), done.",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 40
+    },
+    {
+      "timestamp": "2026-06-25T14:32:00",
+      "command": "find . -iname 'Dockerfile*' / .devcontainer / .pre-commit-config / .lint-runner* (扫描静态检查与 devcontainer 配置)",
+      "success": true,
+      "output": "找到 .pre-commit-config.yaml；未找到 Dockerfile / .devcontainer / lint-runner / CI workflow",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-25T14:34:00",
+      "command": "pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple pre-commit",
+      "success": true,
+      "output": "Successfully installed pre-commit-4.6.0 virtualenv-21.5.1 ...",
+      "error": "首次直连 PyPI 超时，改用清华源成功",
+      "returncode": 0,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-25T14:35:00",
+      "command": "PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple pre-commit run --all-files",
+      "success": false,
+      "output": "clang-format.............................Passed\nruff check...............................Failed\nruff format..............................Passed (首次自动格式化 613 文件后通过)",
+      "error": "ruff check 报告 364 处问题 (F841 未使用变量、E741 模糊命名、F811 重复定义)；pre-commit 整体退出码 1",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-25T14:37:00",
+      "command": "git checkout -- .  (pre-commit --fix 修改了 624 个文件，恢复工作区至原始状态)",
+      "success": true,
+      "output": "工作区已恢复，git status 干净 (0 处改动)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-25T14:38:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974; Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-25T14:39:00",
+      "command": "docker run -d --name ttfhw-amct-openeuler-env -v /mnt/d/code/ttfhw_0624/amct/amct:/workspace -w /workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: 88c436c9...; openEuler 24.03 LTS, x86_64, 20 cores, 15Gi",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-25T14:40:00",
+      "command": "dnf install -y --setopt=timeout=120 --setopt=retries=10 gcc gcc-c++ make cmake git python3 python3-pip patch",
+      "success": true,
+      "output": "Complete! (gcc 12.3.1, gcc-c++ 12.3.1, cmake 3.27.9, make 4.4.1, git 2.43.0, python3 3.11.6, python3-pip 23.3.1, patch 2.7.6)",
+      "error": "首次因 perl-Data-Dumper 下载超时失败，增大 retries 后重试成功",
+      "returncode": 0,
+      "duration_seconds": 480
+    },
+    {
+      "timestamp": "2026-06-25T14:50:00",
+      "command": "dnf install -y --setopt=retries=10 python3-pytest protobuf protobuf-devel protobuf-compiler",
+      "success": true,
+      "output": "Complete! (python3-pytest 7.4.4, protobuf 25.1, protobuf-devel 25.1, protobuf-compiler 25.1)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 90
+    },
+    {
+      "timestamp": "2026-06-25T15:00:00",
+      "command": "time bash build.sh --torch -j12  (首次构建)",
+      "success": false,
+      "output": "cmake FetchContent 克隆 cann-cmake 后 make 失败",
+      "error": "fatal: detected dubious ownership in repository at '/workspace/build/_deps/cann-cmake-src' (容器 root 与挂载卷属主不一致)",
+      "returncode": 1,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-25T15:01:00",
+      "command": "git config --global --add safe.directory '*' && rm -rf build && time bash build.sh --torch -j12  (重试1)",
+      "success": false,
+      "output": "cann-cmake 拉取成功，abseil/protobuf 第三方编译至 30% 后失败",
+      "error": "amct_pytorch/classic/graph_based/amct_tensor_decompose/src/vector.cpp:25:10: fatal error: securec.h: No such file or directory",
+      "returncode": 1,
+      "duration_seconds": 11
+    },
+    {
+      "timestamp": "2026-06-25T15:03:00",
+      "command": "dnf install -y libboundscheck && ln -sf /usr/lib64/libboundscheck.so /usr/lib64/libc_sec.so  (补装 securec 库)",
+      "success": true,
+      "output": "Installed libboundscheck-v1.1.11; /usr/include/securec.h, /usr/lib64/libboundscheck.so; libc_sec.so 软链建立，-lc_sec 链接测试通过",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30,
+      "note": "securec.h/libc_sec 原由 CANN 提供，openEuler 原生 libboundscheck 即华为开源 libsecurec，提供相同 API；CMakeLists link c_sec 故建立 libc_sec.so→libboundscheck.so 软链"
+    },
+    {
+      "timestamp": "2026-06-25T15:04:00",
+      "command": "rm -rf build && time bash build.sh --torch -j12  (重试2，清理缓存后重新构建)",
+      "success": true,
+      "output": "Build success! package amct_pytorch run success; 产物 build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz (456K), libtensor_decompose.so (39K)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 380
+    },
+    {
+      "timestamp": "2026-06-25T15:12:00",
+      "command": "pip install --no-build-isolation build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz",
+      "success": false,
+      "output": "Preparing metadata (pyproject.toml) ... error",
+      "error": "error: invalid command 'bdist_wheel' (缺少 wheel 包)",
+      "returncode": 1,
+      "duration_seconds": 8
+    },
+    {
+      "timestamp": "2026-06-25T15:13:00",
+      "command": "pip install wheel && pip install --no-build-isolation build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz",
+      "success": true,
+      "output": "Successfully installed amct-pytorch-1.1.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-25T15:14:00",
+      "command": "pip install --index-url https://download.pytorch.org/whl/cpu torch==2.7.1",
+      "success": true,
+      "output": "Successfully installed torch-2.7.1+cpu (openEuler 仓库无 python3-torch)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 300
+    },
+    {
+      "timestamp": "2026-06-25T15:20:00",
+      "command": "pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numpy onnx onnxruntime protobuf pyyaml transformers loguru datasets accelerate compressed_tensors scipy torchao einops sentencepiece zstandard + pytest-cov",
+      "success": true,
+      "output": "Successfully installed transformers-5.5.4 datasets-4.8.4 torchao-0.17.0 compressed_tensors-0.15.0.1 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 240
+    },
+    {
+      "timestamp": "2026-06-25T15:25:00",
+      "command": "python3 -c \"import amct_pytorch as amct; ...\"  (README 冒烟测试，注入 torch_npu mock)",
+      "success": true,
+      "output": "successfully installed AMCT; create_quant_config=True, quantize_model=True, save_model=True",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 6,
+      "note": "torch_npu 未安装(非标准 PyPI)，按 tests/conftest.py 方式注入 MagicMock 后导入成功，验证产物可被正常导入使用"
+    },
+    {
+      "timestamp": "2026-06-25T15:26:00",
+      "command": "pytest tests/unit_test -m 'cpu and not slow'",
+      "success": true,
+      "output": "1047 deselected (cpu marker 为描述性默认标记，未显式标注，0 用例匹配)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 9
+    },
+    {
+      "timestamp": "2026-06-25T15:27:00",
+      "command": "TORCH_DEVICE_BACKEND_AUTOLOAD=0 pytest tests/unit_test -m 'not npu and not slow'",
+      "success": true,
+      "output": "1046 passed, 1 skipped, 0 failed in 35.10s",
+      "error": "1 skipped: test_public_api.py:141 graph-based 包在源码树中 pb2 循环导入(已安装包不受影响)",
+      "returncode": 0,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-25T15:28:00",
+      "command": "检查样例运行条件 (examples/algorithms/minmax/README.md)",
+      "success": false,
+      "output": "样例需 torch_npu + CANN ops + NPU 设备 + 用户下载 LLM 模型(Llama2-7b/Qwen2-7b/Qwen3-8b) + pileval/wikitext2 数据集",
+      "error": "CPU-only 容器无 Ascend NPU 硬件，环境不兼容，样例无法执行",
+      "returncode": 1,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-25T14:30:00",
+      "step": "start",
+      "action": "开始验证流程（openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {"repo": "gitcode.com/cann/amct.git"}
+    },
+    {
+      "timestamp": "2026-06-25T14:31:00",
+      "step": "document_reading",
+      "action": "从 README.md 入口逐层阅读 README/build.sh/setup.py/CMakeLists/docs/requirements/examples",
+      "result": "成功",
+      "details": {"files_read": ["README.md", "docs/zh/build.md", "docs/zh/quick_install.md", "build.sh", "CMakeLists.txt", "setup.py", "pyproject.toml", "requirements.txt", "cmake/*.cmake", "tests/CMakeLists.txt"]}
+    },
+    {
+      "timestamp": "2026-06-25T14:33:00",
+      "step": "dockerfile_analysis",
+      "action": "扫描 Dockerfile / devcontainer / CI 配置",
+      "result": "未找到",
+      "details": {"dockerfile": "无", "devcontainer": "无", "ci": "无"}
+    },
+    {
+      "timestamp": "2026-06-25T14:35:00",
+      "step": "static_analysis_scan",
+      "action": "检查 pre-commit 配置 (.pre-commit-config.yaml)",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "hooks": ["clang-format (mirrors-clang-format v16.0.0)", "ruff-check (ruff v0.14.14)", "ruff-format"]}
+    },
+    {
+      "timestamp": "2026-06-25T14:35:30",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {"passed": 2, "failed": 1, "failed_hook": "ruff-check (364 处 F841/E741/F811)"}
+    },
+    {
+      "timestamp": "2026-06-25T14:36:00",
+      "step": "static_analysis_scan",
+      "action": "检查 lint-runner 配置",
+      "result": "未配置",
+      "details": {"searched_patterns": [".lint-runner.yaml", ".lint-runner.json", "lint-runner.config.*", ".lintrunner.toml"]}
+    },
+    {
+      "timestamp": "2026-06-25T14:36:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {"config_dir": "无"}
+    },
+    {
+      "timestamp": "2026-06-25T14:38:00",
+      "step": "image_selection",
+      "action": "选择 openEuler 基础镜像 (仓库无镜像推荐)",
+      "result": "openEuler 24.03 LTS",
+      "details": {"selection_reason": "仓库未指定镜像，按强制约束使用 openEuler 24.03 LTS 从零构建"}
+    },
+    {
+      "timestamp": "2026-06-25T14:39:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 镜像并启动容器",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container_name": "ttfhw-amct-openeuler-env"}
+    },
+    {
+      "timestamp": "2026-06-25T14:40:00",
+      "step": "dependency_installation_layer1",
+      "action": "安装系统工具链 (gcc gcc-c++ make cmake git python3 python3-pip patch)",
+      "result": "成功",
+      "details": {"source": "openEuler 官方仓库 (dnf)", "versions": "gcc 12.3.1 / cmake 3.27.9 / python 3.11.6 / patch 2.7.6 / bash 5.2.15"}
+    },
+    {
+      "timestamp": "2026-06-25T14:50:00",
+      "step": "dependency_installation_layer2",
+      "action": "安装构建依赖 (python3-pytest, protobuf/protobuf-devel/protobuf-compiler)",
+      "result": "成功",
+      "details": {"source": "openEuler 官方仓库 (dnf)"}
+    },
+    {
+      "timestamp": "2026-06-25T15:00:00",
+      "step": "build_attempt",
+      "action": "首次构建 bash build.sh --torch",
+      "result": "失败",
+      "details": {"error": "git dubious ownership 阻止 FetchContent 克隆 cann-cmake"}
+    },
+    {
+      "timestamp": "2026-06-25T15:01:00",
+      "step": "problem_resolution",
+      "action": "git config --global --add safe.directory '*' 修复属主检查",
+      "result": "已解决",
+      "details": {"solution": "环境配置修复(非源码改动)"}
+    },
+    {
+      "timestamp": "2026-06-25T15:01:30",
+      "step": "build_attempt",
+      "action": "重试1构建",
+      "result": "失败",
+      "details": {"error": "vector.cpp:25: fatal error: securec.h: No such file or directory"}
+    },
+    {
+      "timestamp": "2026-06-25T15:03:00",
+      "step": "problem_resolution",
+      "action": "问题定位：amct_tensor_decompose 依赖 securec.h/libc_sec(原由 CANN 提供)，改用 openEuler libboundscheck",
+      "result": "已解决",
+      "details": {"solution": "dnf install libboundscheck + ln -sf libboundscheck.so libc_sec.so (openEuler 原生包)", "source": "amct_pytorch/classic/graph_based/amct_tensor_decompose/CMakeLists.txt: include securec.h, link c_sec"}
+    },
+    {
+      "timestamp": "2026-06-25T15:04:00",
+      "step": "build_retry",
+      "action": "清理缓存后重新构建 (重试2)",
+      "result": "成功",
+      "details": {"concurrency": 12, "concurrency_ratio": "60% (20核×60%≈12)", "duration_seconds": 380}
+    },
+    {
+      "timestamp": "2026-06-25T15:11:00",
+      "step": "smoke_test",
+      "action": "安装产物包并执行 import 冒烟测试",
+      "result": "成功",
+      "details": {"package": "amct_pytorch-1.1.0", "import_ok": true, "public_api": ["create_quant_config", "quantize_model", "save_model"]}
+    },
+    {
+      "timestamp": "2026-06-25T15:27:00",
+      "step": "ut_execution",
+      "action": "执行 CPU 单元测试 pytest tests/unit_test -m 'not npu and not slow'",
+      "result": "成功",
+      "details": {"total": 1047, "passed": 1046, "failed": 0, "skipped": 1, "duration_seconds": 35}
+    },
+    {
+      "timestamp": "2026-06-25T15:28:00",
+      "step": "sample_execution",
+      "action": "评估样例执行可行性",
+      "result": "环境不兼容",
+      "details": {"reason": "样例依赖 Ascend NPU + CANN ops + torch_npu + 下载的 LLM 模型，CPU-only 容器无法执行"}
+    },
+    {
+      "timestamp": "2026-06-25T16:30:00",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-amct-openeuler-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-25T16:30:30",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_amct_20260625.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置(3个hook：clang-format 通过、ruff-check 失败 364 处问题、ruff-format 通过)，未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 120,
+        "total_hooks": 3,
+        "passed": 2,
+        "failed": 1,
+        "skipped": 0,
+        "failures": [
+          {
+            "hook_name": "ruff-check",
+            "file": "多处 (tests/amct_pytorch/testcase_python/* 与 tests/unit_test/*)",
+            "error": "364 处问题：主要为 F841(局部变量赋值后未使用)、E741(模糊变量名 l)、F811(重复定义)"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "original_base_image": null,
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer，使用 openEuler 24.03 LTS 从零构建"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 380,
+      "artifacts": [
+        {
+          "name": "amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz",
+          "path": "build_out/amct_pytorch-1.1.0-py3-none-linux_x86_64.tar.gz",
+          "size": "456 KB"
+        },
+        {
+          "name": "libtensor_decompose.so",
+          "path": "amct_pytorch/classic/graph_based/lib/libtensor_decompose.so",
+          "size": "39 KB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 35,
+      "total": 1047,
+      "passed": 1046,
+      "failed": 0,
+      "skipped": 1,
+      "failures": [],
+      "note": "文档命令 bash build.sh -u 需 NPU/完整 proto 构建环境；在 CPU-only 容器中改跑 tests/unit_test 的 CPU 子集 (-m 'not npu and not slow')。1 skipped 为 test_public_api.py 源码树 pb2 循环导入守卫(已安装包不受影响)。"
+    },
+    "sample": {
+      "status": "环境不兼容（未执行）",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "examples/algorithms/* (minmax/awq/gptq/smoothquant 等)",
+          "execution_status": "未执行",
+          "output_summary": "样例需 torch_npu + CANN ops + Ascend NPU 设备 + 用户下载的 LLM 模型(Llama2-7b/Qwen2-7b/Qwen3-8b) + pileval/wikitext2 数据集；CPU-only openEuler 容器无 NPU 硬件，环境不兼容，无法运行。AMCT 工具包本身已成功构建安装并可通过 import 冒烟测试。",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "仓库无 Dockerfile / devcontainer / CI workflow 配置，外部新手无法直接复现容器环境",
+    "README 环境要求表列出 CANN≥8.5.0 + NPU 为必需，但未说明 --torch(pytorch-only)构建实际仅需 securec/libc_sec，CANN ACL 头库并非该构建路径硬依赖",
+    "securec.h / libc_sec 依赖未在 README 中列出，仅在编译期 fatal error 暴露(CMakeLists amct_tensor_decompose 引用)",
+    "torch_npu==2.7.1.post4 写入 requirements.txt 但不在标准 PyPI，UT 通过 conftest mock 规避，文档未说明无 NPU 时的替代方案",
+    "样例 README 要求用户自行下载大模型与数据集，未提供最小化/免模型的冒烟样例，CI 友好度低",
+    "ruff-check 在 613 个文件上报告 364 处问题，说明仓库提交前未完整运行 pre-commit(代码风格与已配置 gate 不一致)"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-25T14:40:00",
+      "problem": "dnf 安装工具链时 perl-Data-Dumper 从镜像下载超时失败",
+      "solution": "增大重试次数 dnf install --setopt=timeout=120 --setopt=retries=10 重试成功(已下载包缓存复用)",
+      "source": "dnf"
+    },
+    {
+      "timestamp": "2026-06-25T14:35:00",
+      "problem": "pre-commit ruff hook 的虚拟环境 pip 无法访问默认 PyPI(找不到 ruff==0.14.14)",
+      "solution": "为 pre-commit 注入 PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple，hook 环境使用清华源安装 ruff",
+      "source": ".pre-commit-config.yaml ruff-pre-commit"
+    },
+    {
+      "timestamp": "2026-06-25T15:00:00",
+      "problem": "cmake FetchContent 克隆 cann-cmake 时 git 报 dubious ownership(容器 root 与挂载卷属主不一致)",
+      "solution": "git config --global --add safe.directory '*' (仅环境配置，未改动仓库源码)",
+      "source": "cmake/fetch_cann_cmake.cmake FetchContent + 挂载卷属主"
+    },
+    {
+      "timestamp": "2026-06-25T15:01:30",
+      "problem": "编译 amct_tensor_decompose 算子报 fatal error: securec.h: No such file or directory",
+      "solution": "从 openEuler 仓库安装 libboundscheck(华为开源 libsecurec，提供 securec.h)，并建立 libc_sec.so→libboundscheck.so 软链以满足 CMakeLists 的 -lc_sec 链接",
+      "source": "amct_pytorch/classic/graph_based/amct_tensor_decompose/CMakeLists.txt: include securec.h, target_link_libraries c_sec"
+    },
+    {
+      "timestamp": "2026-06-25T15:12:00",
+      "problem": "安装构建产物包报 error: invalid command 'bdist_wheel'",
+      "solution": "pip install wheel 后重试安装成功",
+      "source": "pip 安装 sdist 包缺少 wheel 构建后端"
+    },
+    {
+      "timestamp": "2026-06-25T15:28:00",
+      "problem": "样例无法执行：依赖 Ascend NPU 硬件 + CANN ops + torch_npu + 下载的 LLM 模型",
+      "solution": "环境不兼容，CPU-only 容器无法提供 NPU；记录原因，未强行执行(属硬件依赖，非可补装依赖)",
+      "source": "examples/algorithms/minmax/README.md + docs/zh/quick_install.md"
+    }
+  ]
+}
