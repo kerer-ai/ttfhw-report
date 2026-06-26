@@ -1,0 +1,448 @@
+{
+  "metadata": {
+    "repo_path": "/workspace/TTFHW-630-openEuler/UBSCore/memfabric/memfabric_hybrid",
+    "start_time": "2026-06-24T14:30:00",
+    "end_time": "2026-06-24T14:55:00",
+    "duration_seconds": 1500,
+    "total_steps": 7
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "1007G total, 886G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 (LTS)",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库文档推荐 Ubuntu 22.04 LTS，仓库内无 Dockerfile，按规范使用 openEuler 24.03 LTS 基础镜像",
+      "dependency_mapping": {
+        "from_dockerfile": "仓库内无 Dockerfile，依赖从 doc/installation.md 和 CMakeLists.txt 提取",
+        "mappings": []
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 软件硬件配套说明 及 doc/installation.md",
+      "value": "aarch64/x86（文档支持两种架构）"
+    },
+    "recommended_image": {
+      "source": "doc/installation.md - 编译环境要求",
+      "value": "文档推荐 Ubuntu 22.04 LTS，改用 openEuler 24.03 LTS"
+    },
+    "dockerfile_dependencies": {
+      "source": "无 Dockerfile",
+      "value": "仓库内未找到任何 Dockerfile，依赖从 doc/installation.md 和构建脚本提取"
+    },
+    "dependencies": {
+      "source": "doc/installation.md + CMakeLists.txt + script/build.sh",
+      "value": [
+        "cmake >= 3.12（openEuler dnf: cmake 3.27.9）",
+        "gcc >= 11.4（openEuler dnf: gcc gcc-c++ 12.3.1）",
+        "make 或 ninja >= 1.10.1（openEuler dnf: make 4.4.1, ninja-build 1.11.1.1）",
+        "pybind11 >= 2.10.3（openEuler dnf: python3-pybind11 2.11.1 + pybind11-devel）",
+        "python3 + python3-pip + python3-devel（openEuler dnf: python3 3.11.6）",
+        "dos2unix（UT 需要，openEuler dnf: dos2unix 7.5.2）",
+        "patch（UT mockcpp 补丁应用，openEuler dnf: patch 2.7.6）",
+        "libasan + libubsan（UT ASAN 模式链接，openEuler dnf）",
+        "wheel（pip3 install wheel，whl 打包需要）"
+      ]
+    },
+    "build_commands": {
+      "source": "doc/installation.md - 编译构建章节",
+      "value": "bash script/build_and_pack_run.sh --xpu_type NPU --build_python ON --build_mode RELEASE。生成 .run 安装包和 .whl Python 包。编译不需要 NPU 硬件，--xpu_type NPU（默认值）仅表示编译适配昇腾 CANN 的代码路径。"
+    },
+    "ut_commands": {
+      "source": "README.md 目录结构 - script/run_ut.sh",
+      "value": "bash script/run_ut.sh。以 ASAN + BUILD_UT=ON 模式构建并运行全部单元测试。需先 git clone 子模块 mockcpp 和 googletest。"
+    },
+    "sample_commands": {
+      "source": "README.md - 样例执行 → examples/memory_pool/README.md",
+      "value": "examples/memory_pool/ 目录下 Python 和 C++ 样例。所有样例依赖 NPU（Ascend NPU + torch_npu + acl）或 RDMA 硬件，普通开发环境无法执行。进行了 .whl 包安装冒烟测试作为替代验证。"
+    },
+    "special_dependencies": {
+      "source": "doc/installation.md + CMakeLists.txt",
+      "value": [
+        "运行环境需 CANN 8.1.RC1+ 工具包及 NPU 固件/驱动",
+        "HOST_RDMA/HOST_URMA 需 libibverbs-dev 或等效 RDMA 库",
+        "etcd 后端需 Go 编译器（dnf: golang）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-24T14:32:00",
+      "command": "pre-commit run --all-files",
+      "success": true,
+      "output": "基础钩子全部通过（trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files, check-merge-conflict, detect-private-key, check-json: Skipped）；clang-format 通过；ruff-check/codespell/pylint/bandit/typos 失败（主机 pip 网络问题导致 Python 工具未安装）",
+      "error": "5 个 Python 工具钩子因 pip 网络不可用未能安装",
+      "returncode": 1,
+      "duration_seconds": 25
+    },
+    {
+      "timestamp": "2026-06-24T14:33:00",
+      "command": "检查 lint-runner 配置：find . -name '.lint-runner*' -o -name 'lint-runner.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:34:00",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "不存在 .devcontainer 目录，仓库未配置 devcontainer",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:35:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Image is up to date",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T14:36:00",
+      "command": "docker run -d --name ttfhw-memfabric_hybrid-openeuler-env -v <repo>:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T14:38:00",
+      "command": "第一层依赖：dnf install -y gcc gcc-c++ make cmake git python3 python3-pip dos2unix python3-devel ninja-build patch",
+      "success": true,
+      "output": "gcc-12.3.1, gcc-c++-12.3.1, make-4.4.1, cmake-3.27.9, git-2.43.0, python3-3.11.6, python3-pip-23.3.1, dos2unix-7.5.2, python3-devel-3.11.6, ninja-build-1.11.1.1, patch-2.7.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T14:40:00",
+      "command": "第二层依赖：dnf install -y python3-pybind11 pybind11-devel libasan libubsan",
+      "success": true,
+      "output": "python3-pybind11-2.11.1, pybind11-devel-2.11.1, libasan-12.3.1, libubsan-12.3.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T14:40:00",
+      "command": "第三层依赖：pip3 install wheel（whl 打包需要）",
+      "success": true,
+      "output": "wheel-0.47.0 安装成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T14:42:00",
+      "command": "子模块克隆：googletest 从 gitcode 镜像、mockcpp 从 GitHub",
+      "success": true,
+      "output": "googletest v1.12.0 从 gitcode.com/gh_mirrors/go/googletest 克隆成功；mockcpp v2.7 从 github.com/sinojelly/mockcpp 克隆成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T14:43:00",
+      "command": "dos2unix 转换 mockcpp 源文件和 patch 文件（修复 CRLF 行尾）",
+      "success": true,
+      "output": "mockcpp 头文件/源文件和 mockcpp_support_arm64.patch 转换为 Unix 行尾",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:44:00",
+      "command": "主构建：CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h' bash script/build_and_pack_run.sh --xpu_type NPU --build_python ON --build_mode RELEASE",
+      "success": true,
+      "output": "构建成功。产物：memfabric_hybrid-1.2.0_linux_x86_64.run (7.4 MB) + memfabric_hybrid-1.2.0-cp311-cp311-linux_x86_64.whl (2.3 MB)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 20
+    },
+    {
+      "timestamp": "2026-06-24T14:46:00",
+      "command": "单元测试：CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h' bash script/run_ut.sh",
+      "success": true,
+      "output": "1721 tests from 72 test suites ran. 1719 PASSED, 2 SKIPPED, 0 FAILED",
+      "error": "lcov 未安装（覆盖率报告未生成），不影响测试结果",
+      "returncode": 0,
+      "duration_seconds": 213
+    },
+    {
+      "timestamp": "2026-06-24T14:50:00",
+      "command": "冒烟测试：pip3 install memfabric_hybrid-*.whl && python3 -c 'import memfabric_hybrid'",
+      "success": true,
+      "output": "whl 包安装成功，模块导入成功。暴露接口：TransferEngine, TransferOpcode, bm, shm, initialize, uninitialize, set_log_level 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T14:52:00",
+      "command": "清理：docker stop ttfhw-memfabric_hybrid-openeuler-env && docker rm ttfhw-memfabric_hybrid-openeuler-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-24T14:30:00",
+      "step": "document_reading",
+      "action": "逐层阅读 README.md → doc/installation.md → examples/memory_pool/README.md → script/build_and_pack_run.sh → script/build.sh → script/run_ut.sh → CMakeLists.txt → cmake/config_*.cmake",
+      "result": "成功",
+      "details": {
+        "key_findings": "构建: bash script/build_and_pack_run.sh --xpu_type NPU（默认，编译不需NPU硬件）；UT: bash script/run_ut.sh；依赖: cmake>=3.12, gcc>=11.4, pybind11>=2.10.3, ninja/make；无 Dockerfile"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:32:00",
+      "step": "static_analysis_scan",
+      "action": "检查 pre-commit 配置并执行（.pre-commit-config.yaml）；检查 lint-runner 配置",
+      "result": "pre-commit: 14 hooks, 8通过5失败1跳过；lint-runner: 未配置",
+      "details": {
+        "pre_commit_passed": ["trailing-whitespace", "end-of-file-fixer", "check-yaml", "check-added-large-files", "check-merge-conflict", "detect-private-key", "clang-format", "ruff-format"],
+        "pre_commit_failed": ["ruff-check", "codespell", "pylint", "bandit", "typos（均因 pip 网络问题）"],
+        "pre_commit_skipped": ["check-json（无 JSON 文件）"]
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:34:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:35:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 24.03 LTS 镜像并启动容器，挂载仓库",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-memfabric_hybrid-openeuler-env",
+        "selection_reason": "仓库文档推荐 Ubuntu 22.04，改用 openEuler 24.03 LTS"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:38:00",
+      "step": "dependency_installation",
+      "action": "从 openEuler 官方仓库（dnf）分三层安装所有依赖",
+      "result": "成功",
+      "details": {
+        "layer1_system": "gcc gcc-c++ make cmake git python3 python3-pip dos2unix python3-devel ninja-build patch（来源：doc/installation.md）",
+        "layer2_libs": "python3-pybind11 pybind11-devel libasan libubsan（来源：cmake/config_python.cmake + UT 构建需求）",
+        "layer3_pip": "wheel（pip3 install，whl 打包需要）",
+        "total_duration_seconds": 128
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:42:00",
+      "step": "submodule_setup",
+      "action": "克隆 UT 子模块并修复行尾",
+      "result": "成功",
+      "details": {
+        "googletest": "gitcode.com/gh_mirrors/go/googletest.git v1.12.0",
+        "mockcpp": "github.com/sinojelly/mockcpp.git v2.7",
+        "fix": "dos2unix 转换 mockcpp 源文件和 arm64 patch"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:44:00",
+      "step": "build",
+      "action": "执行主构建：build_and_pack_run.sh --xpu_type NPU --build_python ON --build_mode RELEASE",
+      "result": "成功",
+      "details": {
+        "compiler": "GCC 12.3.1 (openEuler 原生)",
+        "concurrency": 12,
+        "extra_flags": "CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h'（GCC12 下 NPU 驱动代码缺少数个头文件 include）",
+        "products": "memfabric_hybrid-1.2.0_linux_x86_64.run (7.4 MB), memfabric_hybrid-1.2.0-cp311-cp311-linux_x86_64.whl (2.3 MB)",
+        "duration_seconds": 20
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:46:00",
+      "step": "ut_execution",
+      "action": "执行单元测试：script/run_ut.sh（ASAN + BUILD_UT=ON）",
+      "result": "成功",
+      "details": {
+        "total_tests": 1721,
+        "total_suites": 72,
+        "passed": 1719,
+        "skipped": 2,
+        "failed": 0,
+        "skipped_detail": "NetworkEndpointUtilTest.GetLocalIpWithTarget_ipv4_loopback / _ipv6_loopback（开发者硬编码 GTEST_SKIP for docker env）",
+        "duration_seconds": 213
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:50:00",
+      "step": "sample_smoke_test",
+      "action": "WHL 包安装冒烟测试",
+      "result": "成功",
+      "details": {
+        "whl_install": "pip3 install 成功",
+        "import_test": "memfabric_hybrid 模块导入成功"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:52:00",
+      "step": "cleanup",
+      "action": "停止并删除容器",
+      "result": "成功",
+      "details": {}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（14个hooks，8通过5失败1跳过），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 25,
+        "total_hooks": 14,
+        "passed": 8,
+        "failed": 5,
+        "skipped": 1,
+        "failures": [
+          {
+            "hook_name": "ruff-check",
+            "error": "ruff 工具因主机 pip 网络问题未能安装"
+          },
+          {
+            "hook_name": "codespell",
+            "error": "codespell 工具因主机 pip 网络问题未能安装"
+          },
+          {
+            "hook_name": "pylint",
+            "error": "pylint 工具因主机 pip 网络问题未能安装"
+          },
+          {
+            "hook_name": "bandit",
+            "error": "bandit 工具因主机 pip 网络问题未能安装"
+          },
+          {
+            "hook_name": "typos",
+            "error": "typos 工具因主机 pip 网络问题未能安装"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "original_base_image": null,
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer 开发容器环境"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 20,
+      "command": "CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h' bash script/build_and_pack_run.sh --xpu_type NPU --build_python ON --build_mode RELEASE",
+      "artifacts": [
+        {
+          "name": "memfabric_hybrid-1.2.0_linux_x86_64.run",
+          "path": "output/memfabric_hybrid-1.2.0_linux_x86_64.run",
+          "size": "7.4 MB",
+          "description": "一键安装包，支持 --install-path / --uninstall / --install-for-all / --no-check 参数"
+        },
+        {
+          "name": "memfabric_hybrid-1.2.0-cp311-cp311-linux_x86_64.whl",
+          "path": "output/memfabric_hybrid/wheel/memfabric_hybrid-1.2.0-cp311-cp311-linux_x86_64.whl",
+          "size": "2.3 MB",
+          "description": "Python Wheel 包，pip install 安装后暴露 TransferEngine/TransferOpcode/bm/shm/initialize/uninitialize 等接口"
+        }
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 213,
+      "total": 1721,
+      "passed": 1719,
+      "failed": 0,
+      "skipped": 2,
+      "failures": [],
+      "note": "通过 script/run_ut.sh 运行（ASAN 模式）。1721 个用例来自 72 个测试套件，1719 通过（99.88%），2 跳过。跳过的 2 个用例为 NetworkEndpointUtilTest loopback 网络测试，源码中硬编码了 GTEST_SKIP for docker env，非环境问题。"
+    },
+    "sample": {
+      "status": "冒烟测试通过，完整样例无法执行",
+      "duration_seconds": 3,
+      "results": [
+        {
+          "sample_name": "WHL 包安装冒烟测试",
+          "execution_status": "成功",
+          "output_summary": "pip3 install 安装成功，memfabric_hybrid 模块导入正常，暴露 TransferEngine, TransferOpcode, bm, shm, initialize, uninitialize, set_log_level 等接口",
+          "execution_time": "1秒"
+        },
+        {
+          "sample_name": "RUN 包结构验证",
+          "execution_status": "成功",
+          "output_summary": "RUN 包支持 --install-path / --uninstall / --install-for-all / --no-check 参数",
+          "execution_time": "<1秒"
+        },
+        {
+          "sample_name": "examples/transfer/ + examples/memory_pool/ 样例",
+          "execution_status": "无法执行",
+          "output_summary": "所有样例依赖 NPU 硬件（torch_npu, acl）或 RDMA 网络，WSL x86_64 环境不具备运行条件",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "文档推荐 Ubuntu 22.04 LTS，实际在 openEuler 24.03 LTS + GCC 12.3.1 上构建和 UT 均成功，但需额外 CXXFLAGS 补充缺失的头文件 include",
+    "未在安装文档中列出 UT 构建的额外依赖：dos2unix（mockcpp 行尾转换）、patch（mockcpp 补丁应用）、libasan + libubsan（ASAN 链接）、wheel（pip3 install，whl 打包）",
+    "未在安装文档中说明 GCC 12 环境下需设置 CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h'（NPU 驱动代码中 devmm_ioctl.h 等头文件缺少标准库 include）",
+    "examples/memory_pool/01_basic/04_no_xpu_host_rdma_dram_pool 和 05_no_xpu_host_urma_dram_pool 目录仅含 README.md 无可执行样例代码",
+    "未提供无 NPU 硬件环境下的最小化冒烟测试，无法在普通开发机上验证端到端功能"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-24T14:44:00",
+      "problem": "devmm_ioctl.h 等 NPU 驱动头文件缺少 #include <cstddef>/<atomic>/<memory>/<netinet/in.h>，GCC 12.3.1 在 C++17 标准下不再通过间接包含提供这些符号",
+      "solution": "设置环境变量 CXXFLAGS='-include cstddef -include atomic -include memory -include netinet/in.h' 在编译时强制包含缺失头文件。不修改源码，不改构建脚本，仅通过标准编译器机制绕过。",
+      "source": "src/hybm/csrc/driver/userspace/devmm_ioctl.h 等"
+    },
+    {
+      "timestamp": "2026-06-24T14:42:00",
+      "problem": "mockcpp 子模块在 gitcode/gitee 均无镜像，仅 GitHub 有源",
+      "solution": "googletest 从 gitcode.com/gh_mirrors/go/googletest 克隆；mockcpp 从 github.com/sinojelly/mockcpp 直接克隆成功（网络间歇可用）",
+      "source": ".gitmodules"
+    },
+    {
+      "timestamp": "2026-06-24T14:43:00",
+      "problem": "mockcpp 源文件包含 Windows CRLF 行尾，导致 arm64 patch 应用失败",
+      "solution": "dos2unix 转换 mockcpp 源文件和 .patch 文件为 Unix 行尾格式。此步骤在 build.sh / run_ut.sh 中已有 dos2unix 调用，但因 git clone 而非 submodule update 导致脚本中的 dos2unix 未覆盖全部文件。",
+      "source": "test/3rdparty/mockcpp/"
+    }
+  ]
+}

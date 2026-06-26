@@ -1,0 +1,450 @@
+{
+  "metadata": {
+    "repo_path": "/workspace/TTFHW-630-openEuler/UBSCore/memcache",
+    "repo_version": "1.2.0",
+    "commit": "e42c889",
+    "start_time": "2026-06-24T14:00:00",
+    "end_time": "2026-06-24T14:25:00",
+    "duration_seconds": 1500,
+    "total_steps": 7
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "885G available",
+      "docker_version": "Docker version 29.1.3"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库无 Dockerfile（文档推荐 Ubuntu 22.04 LTS），强制使用 openEuler 24.03 LTS 从零构建",
+      "dependency_mapping": {
+        "from_dockerfile": "仓库无 Dockerfile，依赖从文档和构建脚本提取",
+        "mappings": []
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "doc/install_run.md",
+      "value": "文档推荐 Ubuntu 22.04 LTS+，本次验证使用 openEuler 24.03 LTS x86_64"
+    },
+    "key_build_doc": {
+      "source": "README.md → doc/install_run.md",
+      "value": "构建指导文档：doc/install_run.md（run 包编译）；构建入口：script/build_and_pack_run.sh"
+    },
+    "key_ut_doc": {
+      "source": "script/run_ut.sh",
+      "value": "UT 入口：script/run_ut.sh（内部 cmake -DBUILD_TESTS=ON DEBUG → ninja install → test_mmc_test）"
+    },
+    "dependencies": {
+      "source": "doc/install_run.md + CMakeLists.txt",
+      "value": [
+        "cmake >= 3.20（openEuler: cmake 3.27.9）",
+        "gcc >= 11.4（openEuler: gcc 12.3.1）",
+        "python >= 3.11（openEuler: python3 3.11.6）",
+        "python3-devel（openEuler dnf）",
+        "pybind11 >= 2.10.3（pip: pybind11 3.0.4）",
+        "make / ninja（openEuler dnf）",
+        "wheel, auditwheel（pip）",
+        "patch, dos2unix（openEuler dnf，UT 需要）"
+      ]
+    },
+    "build_commands": {
+      "source": "doc/install_run.md",
+      "value": "bash script/build_and_pack_run.sh --build_mode RELEASE --build_test OFF"
+    },
+    "ut_commands": {
+      "source": "script/run_ut.sh",
+      "value": "bash script/run_ut.sh（BUILD_TESTS=ON DEBUG，执行 test_mmc_test）"
+    },
+    "submodules": {
+      "source": ".gitmodules",
+      "value": [
+        "3rdparty/memfabric_hybrid（gitcode.com/Ascend/memfabric_hybrid.git）",
+        "3rdparty/log/spdlog v1.15.3",
+        "3rdparty/cpp-httplib v0.28.0",
+        "3rdparty/nlohmann/json v3.12.0",
+        "3rdparty/prometheus-cpp-lite（master）",
+        "test/3rdparty/googletest v1.12.0（仅 UT）",
+        "test/3rdparty/mockcpp v2.7（仅 UT）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-24T14:01:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "14 hooks: 8 Passed (trailing-whitespace, end-of-file-fixer, check-yaml, check-added-large-files, check-merge-conflict, detect-private-key, ruff-format, clang-format), 5 Failed (ruff-check, codespell, pylint, bandit, typos), 1 Skipped (check-json)",
+      "error": "ruff-check: F841/E402/F401; codespell: 拼写错误; pylint: 重复代码; bandit: B404/B603; typos: datas→data",
+      "returncode": 1,
+      "duration_seconds": 12
+    },
+    {
+      "timestamp": "2026-06-24T14:02:00",
+      "command": "检查 lint-runner 配置（.lint-runner.yaml/.json/.toml/.lintrunner.toml）",
+      "success": true,
+      "output": "未找到 lint-runner 配置",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:02:30",
+      "command": "检查 .devcontainer 目录",
+      "success": true,
+      "output": "仓库未配置 devcontainer",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T14:03:00",
+      "command": "docker run -d --privileged --name ttfhw-memcache-openeuler-env -v .../memcache:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "容器启动，仓库挂载到 /workspace",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T14:04:00",
+      "command": "第一层依赖：dnf install -y gcc gcc-c++ make cmake git python3 python3-pip",
+      "success": true,
+      "output": "gcc 12.3.1, gcc-c++ 12.3.1, make 4.4.1, cmake 3.27.9, python3 3.11.6, pip 23.3.1",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 288
+    },
+    {
+      "timestamp": "2026-06-24T14:09:00",
+      "command": "第二层依赖：dnf install -y ninja-build dos2unix libcurl-devel openssl-devel python3-devel patch",
+      "success": true,
+      "output": "ninja-build, dos2unix 7.5.2, libcurl-devel, openssl-devel, python3-devel 3.11.6, patch 2.7.6",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T14:09:30",
+      "command": "pip3 install pybind11 wheel auditwheel",
+      "success": true,
+      "output": "pybind11 3.0.4, wheel 0.47.0, auditwheel 6.7.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 30
+    },
+    {
+      "timestamp": "2026-06-24T14:10:30",
+      "command": "子模块初始化：.gitmodules 中 GitHub URL 替换为 gitcode.com/gh_mirrors 镜像（2 字符 repo 名前缀）；prometheus-cpp-lite 和 mockcpp 镜像不存在，从 ghproxy.net 下载 tarball 解压",
+      "success": true,
+      "output": "spdlog, cpp-httplib, nlohmann/json, memfabric_hybrid, googletest 从 gitcode 克隆；prometheus-cpp-lite, mockcpp 从 ghproxy 下载",
+      "error": "GitHub 不可达（中国大陆网络），替换数据源",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T14:12:30",
+      "command": "openEuler 适配修复：①prometheus-cpp-lite v2 目录重组→手动创建 simpleapi/include/ + core/include/ 并复制头文件及 ip-sockets-cpp-lite 依赖；②CXXFLAGS='-include cstdint -include charconv'；③编译 src/simpleapi.cpp→simpleapi.o 并注入 build.ninja；④DEBUG 模式避免 Wcast-qual+Werror",
+      "success": true,
+      "output": "4 项适配完成",
+      "error": "prometheus v2 不再 header-only；spdlogger4c.h 缺 cstdint；prometheus/core.h 缺 charconv；RELEASE Wcast-qual+Werror 不兼容 v2 头文件",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-24T14:13:00",
+      "command": "构建：bash script/build.sh DEBUG OFF OFF ON ON OFF OFF",
+      "success": true,
+      "output": "libmf_memcache.so (56MB), mmc_meta_service (17MB), _pymmc.cpython-311.so (15MB)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 60
+    },
+    {
+      "timestamp": "2026-06-24T14:14:30",
+      "command": "Python wheel 构建 + run 包打包",
+      "success": true,
+      "output": "memcache_hybrid-0.0.0-cp311-cp311-linux_x86_64.whl (21MB)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T14:15:00",
+      "command": "UT 构建：cmake -DBUILD_TESTS=ON DEBUG → ninja install（mockcpp dos2unix 修复后 patch 通过）",
+      "success": true,
+      "output": "test_mmc_test (86MB) + 18 个独立 test binary",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 90
+    },
+    {
+      "timestamp": "2026-06-24T14:17:00",
+      "command": "UT 执行：sysctl net.ipv4.tcp_tw_reuse=1 → 按 CI 链路顺序运行 test_mmc_test",
+      "success": true,
+      "output": "236/236 全部通过（31 个测试套件），与门禁流水线一致",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T14:19:30",
+      "command": "Python wheel 冒烟测试：pip install → import memcache_hybrid",
+      "success": true,
+      "output": "MetaConfig, LocalConfig, DistributedObjectStore, MetaService 导入成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T14:20:00",
+      "command": "停止并删除容器 ttfhw-memcache-openeuler-env",
+      "success": true,
+      "output": "已清理",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-24T14:00:00",
+      "step": "start",
+      "action": "开始验证流程（openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:01:00",
+      "step": "document_reading",
+      "action": "阅读 README.md → doc/install_run.md（构建）+ script/run_ut.sh（UT）+ CMakeLists.txt/.gitmodules（依赖）",
+      "result": "成功",
+      "details": {"files": ["README.md", "doc/install_run.md", "script/run_ut.sh", "CMakeLists.txt", ".gitmodules"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:02:00",
+      "step": "static_analysis_scan",
+      "action": "pre-commit 扫描 + lint-runner 检查",
+      "result": "pre-commit: 8/14 通过（ruff-check, codespell, pylint, bandit, typos 失败）；lint-runner: 未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:02:30",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T14:03:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 24.03 LTS 镜像，启动容器挂载仓库",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts"}
+    },
+    {
+      "timestamp": "2026-06-24T14:04:00",
+      "step": "dependency_layer1",
+      "action": "系统工具链安装（gcc gcc-c++ make cmake git python3 python3-pip）",
+      "result": "成功",
+      "details": {"source": "dnf", "duration_seconds": 288}
+    },
+    {
+      "timestamp": "2026-06-24T14:09:00",
+      "step": "dependency_layer2",
+      "action": "构建工具安装（ninja-build dos2unix libcurl-devel openssl-devel python3-devel patch）",
+      "result": "成功",
+      "details": {"source": "dnf", "duration_seconds": 10}
+    },
+    {
+      "timestamp": "2026-06-24T14:09:30",
+      "step": "dependency_layer3",
+      "action": "Python 依赖安装（pybind11 wheel auditwheel）",
+      "result": "成功",
+      "details": {"source": "pip", "duration_seconds": 30}
+    },
+    {
+      "timestamp": "2026-06-24T14:10:30",
+      "step": "submodule_setup",
+      "action": "GitHub 子模块替换为 gitcode 镜像 + ghproxy 下载缺失包",
+      "result": "成功",
+      "details": {"github_unreachable": true, "workaround": "gitcode.com/gh_mirrors（spdlog/cpp-httplib/nlohmann/googletest）+ ghproxy.net（prometheus-cpp-lite/mockcpp）"}
+    },
+    {
+      "timestamp": "2026-06-24T14:12:30",
+      "step": "build_adaptation",
+      "action": "openEuler 适配（prometheus v2 头文件重组 + 编译 simpleapi.cpp + CXXFLAGS 修复 + DEBUG 模式）",
+      "result": "成功",
+      "details": {"adaptations": 4}
+    },
+    {
+      "timestamp": "2026-06-24T14:13:00",
+      "step": "build_execution",
+      "action": "编译 memcache + memfabric_hybrid + Python 绑定 + wheel + run 包",
+      "result": "成功",
+      "details": {
+        "artifacts": {
+          "libmf_memcache.so": "56 MB",
+          "mmc_meta_service": "17 MB",
+          "_pymmc.cpython-311.so": "15 MB",
+          "wheel": "21 MB"
+        },
+        "duration_seconds": 60
+      }
+    },
+    {
+      "timestamp": "2026-06-24T14:15:00",
+      "step": "ut_build",
+      "action": "UT 构建（BUILD_TESTS=ON DEBUG，mockcpp dos2unix + patch）",
+      "result": "成功",
+      "details": {"duration_seconds": 90}
+    },
+    {
+      "timestamp": "2026-06-24T14:17:00",
+      "step": "ut_execution",
+      "action": "UT 执行（按 CI 链路顺序运行 test_mmc_test，tcp_tw_reuse=1 避免端口竞争）",
+      "result": "236/236 全部通过",
+      "details": {"total": 236, "passed": 236, "failed": 0, "suites": 31, "duration_seconds": 120}
+    },
+    {
+      "timestamp": "2026-06-24T14:19:30",
+      "step": "smoke_test",
+      "action": "Python wheel 冒烟测试",
+      "result": "成功",
+      "details": {"imports_ok": ["MetaConfig", "LocalConfig", "DistributedObjectStore", "MetaService"]}
+    },
+    {
+      "timestamp": "2026-06-24T14:20:00",
+      "step": "cleanup",
+      "action": "停止容器，输出验证报告",
+      "result": "完成",
+      "details": {"output_file": "verification_report_WSL_memcache_20260624.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "pre-commit 已配置（14 hooks，8 通过 5 失败 1 跳过），lint-runner 未配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 12,
+        "total_hooks": 14,
+        "passed": 8,
+        "failed": 5,
+        "skipped": 1,
+        "failures": [
+          {"hook_name": "ruff-check", "error": "F841 未使用变量; E402 导入不在文件顶部; F401 未使用导入"},
+          {"hook_name": "codespell", "error": "neccessary→necessary; datas→data"},
+          {"hook_name": "pylint", "error": "R0801 重复代码"},
+          {"hook_name": "bandit", "error": "B404 subprocess 模块; B603 subprocess 不可信输入"},
+          {"hook_name": "typos", "error": "datas→data（2处）"}
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "summary": "仓库未配置 devcontainer"
+    },
+    "build": {
+      "status": "成功（需 4 项 openEuler 适配）",
+      "duration_seconds": 60,
+      "adaptations": [
+        "prometheus-cpp-lite v2 目录重组 → 手动创建 simpleapi/core 头文件结构 + ip-sockets-cpp-lite 依赖",
+        "编译 prometheus-cpp-lite/src/simpleapi.cpp 并注入 ninja 链接（v2 不再 header-only）",
+        "CXXFLAGS='-include cstdint -include charconv'（spdlogger4c.h 缺 cstdint；core.h 缺 charconv）",
+        "DEBUG 模式构建（RELEASE 的 Wcast-qual+Werror 与 prometheus v2 ip-sockets 头文件不兼容）"
+      ],
+      "artifacts": [
+        {"name": "libmf_memcache.so", "path": "output/memcache/lib64/", "size": "56 MB"},
+        {"name": "mmc_meta_service", "path": "output/memcache/bin/", "size": "17 MB"},
+        {"name": "_pymmc.cpython-311.so", "path": "output/memcache/lib64/", "size": "15 MB"},
+        {"name": "memcache_hybrid wheel", "path": "output/memcache/wheel/", "size": "21 MB"},
+        {"name": "run 安装包", "path": "output/", "size": "90+ MB"}
+      ]
+    },
+    "ut": {
+      "status": "成功（236/236 全部通过）",
+      "duration_seconds": 120,
+      "total": 236,
+      "passed": 236,
+      "failed": 0,
+      "suites": 31,
+      "failures": [],
+      "note": "与门禁流水线结果一致。按 CI 测试链路顺序运行：TestMmcServiceInterface（预注册 MmcClientDefault）→ TestMmcBlobAllocator → TestUbsIoEnabled.ClientInitWithUbsIoEnabled（复用已注册单例）。sysctl net.ipv4.tcp_tw_reuse=1 解决套件间 TCP 端口 TIME_WAIT 竞争。覆盖 URL 解析、IP 验证、线程池、锁、配置、日志、MetaService 启停、GlobalAllocator、MetaManager、Proto 序列化、UbsIoProxy 等全部模块。"
+    },
+    "sample": {
+      "status": "冒烟测试成功",
+      "duration_seconds": 10,
+      "results": [
+        {
+          "sample_name": "Python wheel 冒烟测试",
+          "execution_status": "成功",
+          "output_summary": "pip install → from memcache_hybrid import MetaConfig, LocalConfig, DistributedObjectStore, MetaService 均正常"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "文档推荐 Ubuntu 22.04 LTS，未提及 openEuler 适配（实际可行）",
+    "prometheus-cpp-lite 子模块仅指定 branch=master（无版本号），v2 重构目录结构且不再是 header-only，构建不兼容",
+    "spdlogger4c.h 缺少 #include <cstdint>（openEuler GCC 12.3.1 暴露）",
+    "prometheus/core.h 缺少 #include <charconv>（std::to_chars 不可用）",
+    "文档未列出完整构建依赖（python3-devel、patch、dos2unix 等需从构建失败推断）",
+    "GitHub 子模块在中国大陆网络不可达，需替换数据源（gitcode 镜像 + ghproxy）",
+    "test_ubs_io_enabled.cpp 被 test_mmc_test 的 GLOB_RECURSE 重复编译，且 ClientInit 测试依赖 MmcClientDefault 单例残留状态（测试顺序敏感）"
+  ],
+  "problems_encountered": [
+    {
+      "problem": "GitHub 子模块克隆超时（中国大陆网络不可达）",
+      "solution": ".gitmodules 中 GitHub URL 替换为 gitcode.com/gh_mirrors/<首2字符>/<仓库名>；prometheus-cpp-lite 和 mockcpp 无镜像，从 ghproxy.net 下载 tarball",
+      "source": ".gitmodules 全部 7 个子模块"
+    },
+    {
+      "problem": "prometheus-cpp-lite v2 目录重组（include/ 替代 simpleapi/include/ + core/include/）",
+      "solution": "手动创建 simpleapi/include/prometheus/ + core/include/prometheus/，复制头文件及 ip-sockets-cpp-lite 依赖",
+      "source": "prometheus-cpp-lite master 分支 v2 重构"
+    },
+    {
+      "problem": "spdlogger4c.h:55 int32_t 未声明；prometheus/core.h:152 to_chars 不是 std 成员",
+      "solution": "CXXFLAGS='-include cstdint -include charconv'",
+      "source": "头文件缺少标准库包含"
+    },
+    {
+      "problem": "RELEASE 模式 Wcast-qual + Werror 导致 prometheus v2 ip-sockets 头文件编译失败",
+      "solution": "改用 DEBUG 模式（不使用 -Werror）",
+      "source": "CMakeLists.txt RELEASE 编译选项"
+    },
+    {
+      "problem": "链接错误：undefined reference to prometheus::global_registry",
+      "solution": "编译 prometheus-cpp-lite/src/simpleapi.cpp → simpleapi.o，注入 build.ninja 链接命令",
+      "source": "prometheus-cpp-lite v2 不再是纯 header-only"
+    },
+    {
+      "problem": "mockcpp patch 行尾 CRLF/LF 不匹配",
+      "solution": "对 mockcpp 源文件及 .patch 执行 dos2unix",
+      "source": "ghproxy 下载的 tarball 行尾格式为 Windows 风格"
+    },
+    {
+      "problem": "test_mmc_test 全量执行时套件间 TCP 端口竞争（MetaService 测试共享端口 5678 等）",
+      "solution": "sysctl net.ipv4.tcp_tw_reuse=1；按 CI 链路顺序执行（TestMmcServiceInterface → … → ClientInit）",
+      "source": "多个 MetaService 测试套件绑定相同 TCP 端口"
+    }
+  ]
+}

@@ -1,0 +1,553 @@
+{
+  "metadata": {
+    "repo_path": "/workspace/TTFHW-630-openEuler/openUBMC/libipmi/repo",
+    "start_time": "2026-06-24T11:56:00",
+    "end_time": "2026-06-24T12:32:00",
+    "duration_seconds": 2160,
+    "total_steps": 42
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "878G available",
+      "docker_version": "Docker version 29.1.3"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi (无限制)"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库未提供 Dockerfile，README 中使用 apt 命令（Ubuntu/Debian 系），强制使用 openEuler 24.03 LTS 基础镜像从零构建",
+      "dependency_mapping": {
+        "from_readme": "README.md 中的 apt-get install 指令",
+        "mappings": [
+          {"original": "libboost-all-dev", "openEuler": "boost-devel", "source": "README.md"},
+          {"original": "libgtest-dev", "openEuler": "gtest-devel", "source": "README.md"},
+          {"original": "ninja-build", "openEuler": "ninja-build (通过 --nobest 解决 python3-ninja 冲突)", "source": "README.md + meson.build"}
+        ]
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 系统要求章节",
+      "value": "x86_64（GCC 7+ / Clang 5+ / MSVC 2019+）"
+    },
+    "recommended_image": {
+      "source": "未找到 Dockerfile",
+      "value": "仓库未提供 Dockerfile，README 使用 apt 命令（Ubuntu/Debian 系），已改用 openEuler 24.03 LTS"
+    },
+    "dockerfile_dependencies": {
+      "source": "仓库无 Dockerfile",
+      "value": "仓库中未找到 Dockerfile 或 .devcontainer 配置"
+    },
+    "dependencies": {
+      "source": "README.md + meson.build + meson_options.txt + conanfile.py",
+      "value": [
+        "meson >= 0.56 (dnf: meson)",
+        "ninja (dnf: ninja-build)",
+        "gcc >= 7.0 / C++17 (dnf: gcc gcc-c++)",
+        "boost-devel (dnf: boost-devel，映射自 README libboost-all-dev)",
+        "gtest >= 1.14.0 (dnf: gtest-devel，映射自 README libgtest-dev)",
+        "dbus-devel (dnf: dbus-devel，meson.build 中 dependency('dbus-1'))",
+        "glib2-devel (dnf: glib2-devel，meson.build 中 dependency('glib-2.0'))",
+        "libmcpp >= 1.1.34 (mds/service.json，通过 pkg-config 或 subprojects fallback)",
+        "luajit >= 2.1.0 (libmcpp 子依赖 mcapp 需要，README 未列出)",
+        "sqlite3 with PREUPDATE_HOOK/SESSION (openEuler 仓库版本不满足，需从源码编译)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson setup builddir && meson compile -C builddir"
+    },
+    "ut_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson test -C builddir"
+    },
+    "sample_commands": {
+      "source": "README.md - 快速开始章节",
+      "value": "仓库为 C++ 库项目，提供 Lua 包装器 API 示例（README 中），无可独立执行的二进制示例程序"
+    },
+    "special_dependencies": {
+      "source": "subprojects/libmcpp.wrap + mds/service.json",
+      "value": [
+        "libmcpp（通过 wrap-git 从 git@gitcode.com:openUBMC/libmcpp.git 拉取，SSH 不可用时需本地构建）",
+        "libsomp（仅在 enable_conan_compile=true 时需要，默认 false 不需要）"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-24T11:56:00",
+      "command": "git clone https://gitcode.com/openUBMC/libipmi.git repo",
+      "success": true,
+      "output": "仓库克隆成功，包含 README.md、meson.build、conanfile.py、src/、tests/ 等",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T11:57:00",
+      "command": "读取 README.md、meson.build、meson_options.txt、conanfile.py、CONTRIBUTING.md",
+      "success": true,
+      "output": "提取依赖信息：Meson 构建系统，依赖 libmcpp、boost、gtest、dbus、glib。无 Dockerfile/无 .devcontainer",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T11:58:00",
+      "command": "pre-commit run --all-files",
+      "success": false,
+      "output": "check-sr: Skipped, check-json: Failed (launch.json JSON 解析错误), check-yaml: Passed, trailing-whitespace: Passed, end-of-file-fixer: Passed, check-merge-conflict: Passed, check-added-large-files: Passed, check-case-conflicts: Passed, detect-private-key: Passed",
+      "error": ".vscode/launch.json 第2行 JSON 解析错误：Expecting property name enclosed in double quotes",
+      "returncode": 1,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-24T11:58:30",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner.*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T11:59:00",
+      "command": "检查 .devcontainer 目录: ls .devcontainer/",
+      "success": false,
+      "output": "目录不存在",
+      "error": "仓库未配置 devcontainer",
+      "returncode": 2,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T11:59:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "镜像已存在，无需下载",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T12:00:00",
+      "command": "docker run -d --name ttfhw-libipmi-openeuler-env -v /workspace/.../openUBMC:/workspace -w /workspace/libipmi/repo hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "容器启动成功",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T12:01:00",
+      "command": "第一层依赖：dnf install -y gcc gcc-c++ make git python3 python3-pip pkg-config",
+      "success": true,
+      "output": "安装完成：gcc-12.3.1, gcc-c++-12.3.1, make-4.4.1, git-2.43.0, python3-3.11.6, python3-pip-23.3.1, pkg-config-1.9.5",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-24T12:02:00",
+      "command": "dnf install -y meson --nobest（解决 python3-ninja 与 ninja-build 冲突）",
+      "success": true,
+      "output": "安装完成：meson-1.3.1, ninja-build-1.11.1, python3-ninja-1.11.1.1-4",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 15
+    },
+    {
+      "timestamp": "2026-06-24T12:03:00",
+      "command": "第二层依赖：dnf install -y boost-devel gtest-devel dbus-devel glib2-devel（映射自 README libboost-all-dev libgtest-dev）",
+      "success": true,
+      "output": "安装完成：boost-devel-1.83.0, gtest-devel-1.14.0, dbus-devel-1.14.8, glib2-devel-2.78.3（含48个依赖包）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 35
+    },
+    {
+      "timestamp": "2026-06-24T12:04:00",
+      "command": "构建 libmcpp（本地依赖）: cd /workspace/libmcpp/tmp_src && meson setup builddir -Dtests=false",
+      "success": true,
+      "output": "配置成功，包含 mcbase、mcengine、mcdbus、mcdatabase、mcexpr、mcapp、secfile 子项目",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T12:05:00",
+      "command": "首次编译 libmcpp: meson compile -C builddir -j 12",
+      "success": false,
+      "output": "269/326 编译成功，链接 mcdatabase.so 失败",
+      "error": "undefined reference to sqlite3_preupdate_hook/old/new/count/depth — openEuler 的 sqlite3 库未启用 SQLITE_ENABLE_PREUPDATE_HOOK",
+      "returncode": 1,
+      "duration_seconds": 65
+    },
+    {
+      "timestamp": "2026-06-24T12:14:00",
+      "command": "从源码编译 sqlite3（支持 PREUPDATE/SESSION）: python3 下载 sqlite-amalgamation-3490100.zip → gcc -shared -DSQLITE_ENABLE_PREUPDATE_HOOK -DSQLITE_ENABLE_SESSION -o libsqlite3_custom.so",
+      "success": true,
+      "output": "编译成功，libsqlite3_custom.so (1.2MB)，包含 sqlite3_preupdate_hook 等符号",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-24T12:23:00",
+      "command": "安装自定义 sqlite3 并重新构建 libmcpp",
+      "success": false,
+      "output": "283/326 编译成功，mcapp 编译失败",
+      "error": "fatal error: lauxlib.h: No such file or directory — 缺少 lua-devel",
+      "returncode": 1,
+      "duration_seconds": 95
+    },
+    {
+      "timestamp": "2026-06-24T12:24:00",
+      "command": "dnf install -y lua-devel luajit luajit-devel",
+      "success": true,
+      "output": "安装完成：lua-devel-5.4.6, luajit-2.1.0, luajit-devel-2.1.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 8
+    },
+    {
+      "timestamp": "2026-06-24T12:26:00",
+      "command": "重新构建 libmcpp（含 luajit）: rm -rf builddir && meson setup -Dtests=false && meson compile -j 12",
+      "success": true,
+      "output": "326/326 编译成功！libmcpp 完全构建完成",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 150
+    },
+    {
+      "timestamp": "2026-06-24T12:28:00",
+      "command": "安装 libmcpp 并创建 pkg-config 文件（libmcpp 不自动生成 .pc 文件）",
+      "success": true,
+      "output": "手动复制 .so 文件到 /usr/local/lib64，创建 /usr/local/lib64/pkgconfig/libmcpp.pc",
+      "error": "libmcpp 的 meson.build 未配置 pkg.generate()，需手动创建 pkg-config 文件",
+      "returncode": 0,
+      "duration_seconds": 10
+    },
+    {
+      "timestamp": "2026-06-24T12:30:00",
+      "command": "构建 libipmi: cd /workspace/libipmi/repo && meson setup builddir -Dtests=true",
+      "success": true,
+      "output": "配置成功，发现 libmcpp 通过 pkg-config，7 个构建目标",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T12:31:00",
+      "command": "首次编译 libipmi: meson compile -C builddir -j 12",
+      "success": false,
+      "output": "编译失败：fatal error: mc/log.h、mc/debounce/base.h 等头文件未找到",
+      "error": "libmcpp 安装的头文件不完整（mc/debounce/、mc/log.h 等未安装），需手动复制",
+      "returncode": 1,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T12:31:10",
+      "command": "cp -r /workspace/libmcpp/tmp_src/include/mc/* /usr/local/include/mc/（补充缺失头文件）",
+      "success": true,
+      "output": "头文件补充完成，mc/log.h、mc/debounce/base.h 等就位",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T12:31:15",
+      "command": "重新构建 libipmi: rm -rf builddir && meson setup -Dtests=true && meson compile -j 12",
+      "success": true,
+      "output": "42/42 编译成功！构建产物：libipmi.so(4.7M), libipmi_bt.so(3.0M), libipmi_ipmb.so(2.7M), libipmi_ipmb_eth.so(3.2M), libipmi_edma.so(3.1M), libipmi_wrapper.so(3.1M), libipmi_test(5.1M)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 8
+    },
+    {
+      "timestamp": "2026-06-24T12:31:30",
+      "command": "meson test -C builddir --print-errorlogs",
+      "success": true,
+      "output": "1/1 libipmi_test OK — 149 tests from 17 test suites, 全部通过",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T12:32:00",
+      "command": "docker stop ttfhw-libipmi-openeuler-env && docker rm ttfhw-libipmi-openeuler-env",
+      "success": true,
+      "output": "容器已停止并删除",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-24T11:56:00",
+      "step": "start",
+      "action": "开始验证流程（openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T11:57:00",
+      "step": "document_reading",
+      "action": "读取 README.md、meson.build、meson_options.txt、conanfile.py、CONTRIBUTING.md、mds/service.json 了解项目结构和依赖",
+      "result": "成功",
+      "details": {"project": "libipmi v1.0.40", "type": "C++17 库项目", "build_system": "Meson >= 0.56"}
+    },
+    {
+      "timestamp": "2026-06-24T11:58:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 配置",
+      "result": "已配置",
+      "details": {"config_file": ".pre-commit-config.yaml", "repos": ["openUBMC/pre-commit-hooks", "pre-commit-hooks (mirrored)"], "hooks_count": 10}
+    },
+    {
+      "timestamp": "2026-06-24T11:58:30",
+      "step": "static_analysis_execution",
+      "action": "执行 pre-commit run --all-files",
+      "result": "部分通过",
+      "details": {"passed": 7, "failed": 1, "skipped": 2, "failure": ".vscode/launch.json JSON 解析错误"}
+    },
+    {
+      "timestamp": "2026-06-24T11:58:30",
+      "step": "static_analysis_scan",
+      "action": "检查 lint-runner 配置",
+      "result": "未配置",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T11:59:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录",
+      "result": "未配置",
+      "details": {"config_dir": null, "summary": "仓库未提供 devcontainer 开发容器配置"}
+    },
+    {
+      "timestamp": "2026-06-24T12:00:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 24.03 LTS 镜像并启动容器，挂载 openUBMC 工作区",
+      "result": "成功",
+      "details": {"image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts", "container": "ttfhw-libipmi-openeuler-env"}
+    },
+    {
+      "timestamp": "2026-06-24T12:01:00",
+      "step": "dependency_installation_layer1",
+      "action": "安装系统工具链（gcc gcc-c++ make git python3 python3-pip pkg-config）",
+      "result": "成功",
+      "details": {"source": "openEuler 官方仓库 (dnf)", "gcc": "12.3.1", "meson": "1.3.1（--nobest 解决 ninja 冲突）"}
+    },
+    {
+      "timestamp": "2026-06-24T12:03:00",
+      "step": "dependency_installation_layer2",
+      "action": "安装构建依赖（boost-devel gtest-devel dbus-devel glib2-devel，映射自 README apt 包名）",
+      "result": "成功",
+      "details": {"mappings": {"libboost-all-dev": "boost-devel", "libgtest-dev": "gtest-devel"}, "additional": ["dbus-devel (meson.build)" , "glib2-devel (meson.build)"]}
+    },
+    {
+      "timestamp": "2026-06-24T12:05:00",
+      "step": "dependency_installation_layer3",
+      "action": "构建本地依赖 libmcpp（openEuler 仓库无此包，需从源码构建）",
+      "result": "失败（首次尝试）",
+      "details": {"error": "mcdatabase 链接失败：sqlite3_preupdate_hook 未定义", "reason": "openEuler sqlite3 未启用 SQLITE_ENABLE_PREUPDATE_HOOK"}
+    },
+    {
+      "timestamp": "2026-06-24T12:14:00",
+      "step": "problem_resolution",
+      "action": "从源码编译 sqlite3（amalgamation 3490100），启用 SQLITE_ENABLE_PREUPDATE_HOOK + SQLITE_ENABLE_SESSION",
+      "result": "已解决",
+      "details": {"solution": "下载 sqlite3 源码，gcc -DSQLITE_ENABLE_PREUPDATE_HOOK -DSQLITE_ENABLE_SESSION 编译，替换系统 libsqlite3", "source": "https://sqlite.org/2025/sqlite-amalgamation-3490100.zip"}
+    },
+    {
+      "timestamp": "2026-06-24T12:24:00",
+      "step": "problem_resolution",
+      "action": "libmcpp mcapp 模块需要 LuaJIT：dnf install -y luajit luajit-devel",
+      "result": "已解决",
+      "details": {"solution": "安装 luajit-2.1.0 + luajit-devel（README 未列出此间接依赖）"}
+    },
+    {
+      "timestamp": "2026-06-24T12:26:00",
+      "step": "dependency_installation_layer3_retry",
+      "action": "重新构建 libmcpp（含 sqlite3 修复 + luajit）",
+      "result": "成功",
+      "details": {"status": "326/326 编译通过", "duration": "约 150s"}
+    },
+    {
+      "timestamp": "2026-06-24T12:28:00",
+      "step": "libmcpp_install",
+      "action": "安装 libmcpp 到 /usr/local 并创建 pkg-config 文件（libmcpp meson.build 未生成 .pc）",
+      "result": "成功",
+      "details": {"issue": "libmcpp 未配置 pkg.generate()，手动创建 /usr/local/lib64/pkgconfig/libmcpp.pc"}
+    },
+    {
+      "timestamp": "2026-06-24T12:31:00",
+      "step": "build_attempt",
+      "action": "首次构建 libipmi",
+      "result": "失败",
+      "details": {"error": "缺少 libmcpp 头文件（mc/log.h、mc/debounce/base.h 等未安装）"}
+    },
+    {
+      "timestamp": "2026-06-24T12:31:10",
+      "step": "problem_resolution",
+      "action": "手动复制 libmcpp 缺失头文件到 /usr/local/include/mc/",
+      "result": "已解决",
+      "details": {"solution": "cp -r libmcpp/tmp_src/include/mc/* /usr/local/include/mc/"}
+    },
+    {
+      "timestamp": "2026-06-24T12:31:15",
+      "step": "build_retry",
+      "action": "重新构建 libipmi（清理 builddir 后重试）",
+      "result": "成功",
+      "details": {"status": "42/42 编译成功", "concurrency": "12核 (60%)", "duration": "约 8s"}
+    },
+    {
+      "timestamp": "2026-06-24T12:31:30",
+      "step": "ut_execution",
+      "action": "执行单元测试：meson test -C builddir",
+      "result": "成功",
+      "details": {"total_tests": 149, "test_suites": 17, "passed": 149, "failed": 0, "duration_seconds": 2.56}
+    },
+    {
+      "timestamp": "2026-06-24T12:31:35",
+      "step": "sample_execution",
+      "action": "检查可执行示例程序",
+      "result": "无可执行示例",
+      "details": {"reason": "libipmi 是 C++ 共享库项目，提供 Lua 包装器 API（README 中有代码示例），无独立可执行的二进制样例"}
+    },
+    {
+      "timestamp": "2026-06-24T12:32:00",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-libipmi-openeuler-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T12:32:30",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {"output_file": "verification_report_WSL_libipmi_20260624.json"}
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": true,
+      "summary": "检测到 pre-commit 配置（10个hooks，7通过1失败2跳过），未检测到 lint-runner 配置",
+      "pre_commit": {
+        "configured": true,
+        "config_file": ".pre-commit-config.yaml",
+        "status": "部分通过",
+        "duration_seconds": 35,
+        "total_hooks": 10,
+        "passed": 7,
+        "failed": 1,
+        "skipped": 2,
+        "failures": [
+          {
+            "hook_name": "check-json",
+            "file": ".vscode/launch.json",
+            "error": "JSON 解析错误：Expecting property name enclosed in double quotes at line 2 column 5"
+          }
+        ]
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "original_base_image": null,
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer 开发容器能力"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 8,
+      "artifacts": [
+        {"name": "libipmi.so", "path": "builddir/src/libipmi.so", "size": "4.7 MB"},
+        {"name": "libipmi_bt.so", "path": "builddir/src/bt/libipmi_bt.so", "size": "3.0 MB"},
+        {"name": "libipmi_ipmb.so", "path": "builddir/src/ipmb/libipmi_ipmb.so", "size": "2.7 MB"},
+        {"name": "libipmi_ipmb_eth.so", "path": "builddir/src/ipmb-eth/libipmi_ipmb_eth.so", "size": "3.2 MB"},
+        {"name": "libipmi_edma.so", "path": "builddir/src/edma/libipmi_edma.so", "size": "3.1 MB"},
+        {"name": "libipmi_wrapper.so", "path": "builddir/src/wrapper/libipmi_wrapper.so", "size": "3.1 MB"},
+        {"name": "libipmi_test", "path": "builddir/tests/libipmi_test", "size": "5.1 MB"}
+      ]
+    },
+    "ut": {
+      "status": "成功",
+      "duration_seconds": 3,
+      "total": 149,
+      "passed": 149,
+      "failed": 0,
+      "failures": []
+    },
+    "sample": {
+      "status": "不适用",
+      "duration_seconds": 0,
+      "results": [
+        {
+          "sample_name": "无独立可执行示例",
+          "execution_status": "不适用",
+          "output_summary": "libipmi 是 C++ 共享库项目，README 中的快速开始章节提供 Lua API 代码示例（需在 Lua 环境中 require('ipmi_wrapper')），无可独立运行的二进制示例程序",
+          "execution_time": "N/A"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 使用 apt 包名（libboost-all-dev、libgtest-dev），未提供 openEuler/dnf 等效包名映射",
+    "README 未列出 libmcpp 子依赖 luajit（仅 README 快速开始章节提到兼容 LuaJIT 2.1.0，未在构建依赖中说明）",
+    "README 未列出 dbus-devel 和 glib2-devel 依赖（仅在 meson.build 中声明）",
+    "libmcpp 的 meson.build 未配置 pkg.generate()，不生成 .pc 文件，导致外部项目通过 pkg-config 查找时失败",
+    "libmcpp 依赖 sqlite3 的 PREUPDATE_HOOK 特性（需编译时启用 SQLITE_ENABLE_PREUPDATE_HOOK），openEuler 仓库的 sqlite3 不包含此特性，文档未说明",
+    "仓库无 Dockerfile 或 .devcontainer，缺少容器化构建环境参考",
+    "conanfile.py 依赖 conanbase 模块（from conanbase import ConanBase），该模块不在标准 conan 包中，conan 构建路径不可用"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-24T12:02:00",
+      "problem": "dnf 安装 meson 时 python3-ninja 与 ninja-build 冲突",
+      "solution": "使用 dnf install --nobest 允许安装非最佳版本，python3-ninja 和 ninja-build 共存",
+      "source": "openEuler 24.03 仓库包冲突"
+    },
+    {
+      "timestamp": "2026-06-24T12:05:00",
+      "problem": "libmcpp 构建失败：mcdatabase.so 链接时找不到 sqlite3_preupdate_hook 等符号",
+      "solution": "从源码编译 sqlite3（amalgamation 3490100），启用 -DSQLITE_ENABLE_PREUPDATE_HOOK -DSQLITE_ENABLE_SESSION，替换系统 libsqlite3.so",
+      "source": "openEuler sqlite3 未启用 PREUPDATE_HOOK 编译选项"
+    },
+    {
+      "timestamp": "2026-06-24T12:24:00",
+      "problem": "libmcpp mcapp 模块编译失败：fatal error: lauxlib.h: No such file or directory",
+      "solution": "dnf install -y lua-devel luajit luajit-devel（luajit 为 libmcpp mcapp 子模块的间接依赖）",
+      "source": "libmcpp 子项目 mcapp 需要 LuaJIT 头文件"
+    },
+    {
+      "timestamp": "2026-06-24T12:28:00",
+      "problem": "libmcpp 安装后 pkg-config 找不到 libmcpp",
+      "solution": "手动创建 /usr/local/lib64/pkgconfig/libmcpp.pc 文件，配置正确的 libdir/includedir/Requires/Libs",
+      "source": "libmcpp meson.build 未使用 pkg.generate() 生成 .pc 文件"
+    },
+    {
+      "timestamp": "2026-06-24T12:31:00",
+      "problem": "libipmi 编译失败：fatal error: mc/log.h、mc/debounce/base.h 等头文件未找到",
+      "solution": "手动复制 libmcpp 源码中的完整 include/mc/ 目录到 /usr/local/include/mc/，补充 libmcpp meson install 未包含的头文件",
+      "source": "libmcpp 的 meson install 未安装所有子模块头文件（debounce、log.h 等）"
+    }
+  ]
+}

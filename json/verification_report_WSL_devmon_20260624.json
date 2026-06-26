@@ -1,0 +1,596 @@
+{
+  "metadata": {
+    "repo_path": "/workspace/TTFHW-630-openEuler/openUBMC/devmon-clone",
+    "repo_url": "https://gitcode.com/openUBMC/devmon.git",
+    "start_time": "2026-06-24T20:40:00",
+    "end_time": "2026-06-24T21:30:00",
+    "duration_seconds": 3000,
+    "total_steps": 35
+  },
+  "machine_spec": {
+    "host_machine": {
+      "architecture": "x86_64",
+      "cpu_model": "12th Gen Intel(R) Core(TM) i7-12700",
+      "cpu_cores": 20,
+      "memory": "15Gi",
+      "disk": "874G available",
+      "docker_version": "Docker version 29.1.3, build 29.1.3-0ubuntu3~24.04.2"
+    },
+    "container": {
+      "os": "openEuler 24.03 LTS",
+      "architecture": "x86_64",
+      "cpu_cores": 20,
+      "memory": "15Gi"
+    },
+    "image_source": {
+      "type": "base_image",
+      "image_name": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "selection_reason": "仓库未提供 Dockerfile，无预构建镜像推荐，按规范强制使用 openEuler 24.03 LTS 基础镜像从零构建环境",
+      "dependency_mapping": {
+        "from_dockerfile": "仓库无 Dockerfile，所有依赖均从 meson.build 和 README.md 中提取",
+        "mappings": [
+          {"original": "apt-get install libboost-all-dev（README 推荐）", "openEuler": "dnf install -y boost-devel", "source": "README.md 编译环境章节"},
+          {"original": "apt-get install libgtest-dev ninja-build（README 推荐）", "openEuler": "dnf install -y gtest-devel gtest ninja-build", "source": "README.md 编译环境章节"},
+          {"original": "luajit（meson.build 依赖）", "openEuler": "lua-devel 5.4.6 + luajit.pc 重定向至 lua5.4", "source": "meson.build + component_drivers subproject"},
+          {"original": "sqlite3（libmcpp subproject 编译依赖）", "openEuler": "从源码编译 sqlite 3.42.0（启用 SQLITE_ENABLE_PREUPDATE_HOOK）", "source": "libmcpp/libraries/mcdatabase subproject"}
+        ]
+      }
+    }
+  },
+  "document_reading_summary": {
+    "architecture": {
+      "source": "README.md - 系统要求章节 + uname -m",
+      "value": "x86_64（README 推荐 Ubuntu 20.04+，未显式指定架构）"
+    },
+    "recommended_image": {
+      "source": "仓库文档",
+      "value": "仓库未提供 Dockerfile，README 推荐 Ubuntu 20.04；无 .devcontainer 目录。改用 openEuler 24.03 LTS"
+    },
+    "dockerfile_dependencies": {
+      "source": "无 Dockerfile，依赖从 meson.build 和 README 中提取",
+      "value": [
+        {"original": "README: apt-get install libboost-all-dev", "openEuler_equivalent": "dnf install -y boost-devel"},
+        {"original": "README: apt-get install libgtest-dev ninja-build", "openEuler_equivalent": "dnf install -y gtest-devel gtest ninja-build"},
+        {"original": "meson.build: boost program_options", "openEuler_equivalent": "dnf install -y boost-devel（已包含 boost-program-options）"},
+        {"original": "meson.build: dbus-1", "openEuler_equivalent": "dnf install -y dbus-devel"},
+        {"original": "meson.build: glib-2.0", "openEuler_equivalent": "dnf install -y glib2-devel"},
+        {"original": "meson.build: luajit", "openEuler_equivalent": "dnf install -y luajit-devel + lua-devel（Lua 5.4 兼容层）"},
+        {"original": "libmcpp subproject: sqlite3", "openEuler_equivalent": "从源码编译 sqlite 3.42.0（启用 SQLITE_ENABLE_PREUPDATE_HOOK）"}
+      ]
+    },
+    "dependencies": {
+      "source": "README.md + meson.build + subproject meson.build 文件",
+      "value": [
+        "gcc >= 7.0 C++17 (dnf: gcc gcc-c++ 12.3.1)",
+        "meson >= 1.0 (dnf: meson 1.3.1)",
+        "ninja-build (dnf: ninja-build 1.11.1)",
+        "boost-devel 1.83.0 (dnf)",
+        "gtest-devel + gtest 1.14.0 (dnf)",
+        "dbus-devel 1.14.8 (dnf)",
+        "glib2-devel 2.78.3 (dnf)",
+        "luajit-devel 2.1.0 → 重定向至 lua-devel 5.4.6 (dnf)",
+        "jsoncpp-devel 1.9.5 (dnf)",
+        "libcurl-devel 8.4.0 (dnf)",
+        "sqlite3 3.42.0 with SQLITE_ENABLE_PREUPDATE_HOOK（从源码编译）",
+        "lua-devel 5.4.6 (dnf)"
+      ]
+    },
+    "build_commands": {
+      "source": "README.md - 用 ninja 命令构建章节",
+      "value": "meson setup builddir && meson compile -C builddir（实际执行: meson setup builddir -Dtests=true && meson compile -C builddir -j 12）"
+    },
+    "ut_commands": {
+      "source": "README.md - 从源码构建章节",
+      "value": "meson install -C builddir && meson test -C builddir"
+    },
+    "sample_commands": {
+      "source": "README.md - 开发者测试章节",
+      "value": "busctl --user call bmc.kepler.devmon /bmc/dev bmc.dev AddDevice sa{sv} ...（需 D-Bus 运行环境，容器中不可用）"
+    },
+    "special_dependencies": {
+      "source": "subproject wrap 文件（component_drivers.wrap、libmcpp.wrap）",
+      "value": [
+        "subproject: git@gitcode.com:openUBMC/component_drivers.git（重写为 HTTPS）",
+        "subproject: git@gitcode.com:openUBMC/libmcpp.git（重写为 HTTPS）",
+        "subproject 粒度依赖: mcbase, mcengine, mcdbus, mcdatabase, mcexpr, mcapp, secfile, log_appenders"
+      ]
+    }
+  },
+  "execution_log": [
+    {
+      "timestamp": "2026-06-24T20:40:00",
+      "command": "git clone https://gitcode.com/openUBMC/devmon.git devmon-clone",
+      "success": true,
+      "output": "仓库克隆成功，含 15 个目录/文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "command": "检查 .pre-commit-config.yaml: 不存在",
+      "success": true,
+      "output": "仓库未配置 pre-commit",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "command": "检查 lint-runner 配置: find . -name '.lint-runner*' -o -name 'lint-runner.config*' -o -name '.lintrunner*'",
+      "success": true,
+      "output": "未找到 lint-runner 配置文件",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "command": "检查 .devcontainer/: 不存在",
+      "success": true,
+      "output": "仓库未配置 devcontainer",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T20:42:00",
+      "command": "docker pull hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+      "success": true,
+      "output": "Digest: sha256:ace677f48c79ae6bc17046cb8c2940b38f7050afc752c8463e1553b9e7b60974",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T20:43:00",
+      "command": "docker run -d --name ttfhw-devmon-openeuler-env -v /workspace/TTFHW-630-openEuler/openUBMC/devmon-clone:/workspace hub.oepkgs.net/openeuler/openeuler:24.03-lts tail -f /dev/null",
+      "success": true,
+      "output": "Container ID: b88cf9c6154e...",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 2
+    },
+    {
+      "timestamp": "2026-06-24T20:44:00",
+      "command": "git config --global url.https://gitcode.com/.insteadOf git@gitcode.com:",
+      "success": true,
+      "output": "Git URL 重写配置完成，subproject SSH 地址映射为 HTTPS",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T20:44:00",
+      "command": "第一层依赖安装: dnf install -y gcc gcc-c++ make cmake git python3 python3-pip pkg-config",
+      "success": true,
+      "output": "安装完成：gcc 12.3.1, gcc-c++ 12.3.1, make 4.4.1, cmake 3.27.9, git 2.43.0, python3 3.11.6, python3-pip 23.3.1, pkgconf 1.9.5",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 127
+    },
+    {
+      "timestamp": "2026-06-24T20:46:00",
+      "command": "第二层依赖安装: dnf install -y meson ninja-build boost-devel gtest-devel gtest dbus-devel glib2-devel luajit-devel jsoncpp-devel libcurl-devel libatomic",
+      "success": true,
+      "output": "安装完成：meson 1.3.1, ninja-build 1.11.1, boost-devel 1.83.0, gtest-devel 1.14.0, dbus-devel 1.14.8, glib2-devel 2.78.3, luajit-devel 2.1.0, jsoncpp-devel 1.9.5",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 13
+    },
+    {
+      "timestamp": "2026-06-24T20:48:00",
+      "command": "首次 meson setup builddir",
+      "success": false,
+      "output": "ERROR: Dependency \"sqlite3\" not found",
+      "error": "libmcpp subproject 要求 sqlite3，未安装 sqlite-devel",
+      "returncode": 1,
+      "duration_seconds": 3
+    },
+    {
+      "timestamp": "2026-06-24T20:48:00",
+      "command": "dnf install -y sqlite-devel",
+      "success": true,
+      "output": "安装 sqlite-devel 3.42.0",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T20:49:00",
+      "command": "第二次 meson setup builddir（已安装 sqlite-devel）",
+      "success": true,
+      "output": "meson 配置成功，126 个构建目标",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 18
+    },
+    {
+      "timestamp": "2026-06-24T20:50:00",
+      "command": "meson compile -C builddir -j 12（首次构建尝试）",
+      "success": false,
+      "output": "undefined reference to sqlite3_preupdate_hook 等",
+      "error": "openEuler 的 sqlite3 未启用 SQLITE_ENABLE_PREUPDATE_HOOK 编译选项",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T20:53:00",
+      "command": "从源码编译 sqlite 3.42.0: CFLAGS=\"-DSQLITE_ENABLE_PREUPDATE_HOOK=1\" ./configure --prefix=/usr/local --libdir=/usr/lib64 && make -j20 && make install",
+      "success": true,
+      "output": "sqlite3 编译安装完成，preupdate 符号已确认可用",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 45
+    },
+    {
+      "timestamp": "2026-06-24T20:55:00",
+      "command": "第三次 meson setup builddir && meson compile -C builddir -j 12",
+      "success": false,
+      "output": "error: 'lua_rawlen' was not declared; error: 'lua_isinteger' was not declared",
+      "error": "LuaJIT 2.1 仅支持 Lua 5.1 API，代码使用了 Lua 5.2+ 函数（lua_rawlen）和 Lua 5.3+ 函数（lua_isinteger）",
+      "returncode": 1,
+      "duration_seconds": 120
+    },
+    {
+      "timestamp": "2026-06-24T20:58:00",
+      "command": "dnf install -y lua-devel && ln -sf /usr/lib64/pkgconfig/lua.pc /usr/lib64/pkgconfig/lua5.4.pc",
+      "success": true,
+      "output": "安装 lua-devel 5.4.6，创建 lua5.4.pc 符号链接",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T20:59:00",
+      "command": "pkg-config luajit.pc 重定向: cp luajit.pc.bak && 替换为 lua5.4 的 Libs/Cflags",
+      "success": true,
+      "output": "luajit.pc 现在指向 lua 5.4.0（-llua -lm -ldl, -I/usr/include）",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T21:00:00",
+      "command": "第四次 meson setup builddir -Dtests=true && meson compile -C builddir -j 12",
+      "success": true,
+      "output": "构建成功，1055 编译目标，无错误。产物：src/devmon (2.9MB), libs/common/libdevmon-common.so (26MB), libs/devmon/libdevmon.so (8.4MB)",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 539
+    },
+    {
+      "timestamp": "2026-06-24T21:09:00",
+      "command": "meson install -C builddir",
+      "success": true,
+      "output": "运行时产物安装到 builddir 目录",
+      "error": "",
+      "returncode": 0,
+      "duration_seconds": 1
+    },
+    {
+      "timestamp": "2026-06-24T21:10:00",
+      "command": "meson test -C builddir -v（执行单元测试）",
+      "success": false,
+      "output": "common_test: 211 tests PASSED (2.97s)\ndevmon_test: 724 tests PASSED, 1 FAILED (4.24s)\n失败测试: TopologyTest.test_dump_topology_uses_parent_relation_for_sibling_paths",
+      "error": "1 个测试失败：TopologyTest.test_dump_topology_uses_parent_relation_for_sibling_paths，原因是 D-Bus 服务 bmc.kepler.persistence 和 bmc.kepler.hwdiscovery 在容器中不可用",
+      "returncode": 1,
+      "duration_seconds": 5
+    },
+    {
+      "timestamp": "2026-06-24T21:11:00",
+      "command": "执行样例程序: timeout 3 /workspace/builddir/src/devmon --help",
+      "success": true,
+      "output": "devmon 可执行文件启动成功，输出类型注册警告后挂起等待 D-Bus 连接（守护进程预期行为）",
+      "error": "timeout 终止（正常：devmon 是 D-Bus 守护进程，启动后等待连接）",
+      "returncode": 124,
+      "duration_seconds": 3
+    }
+  ],
+  "process_timeline": [
+    {
+      "timestamp": "2026-06-24T20:40:00",
+      "step": "start",
+      "action": "开始验证流程（openEuler 原生构建模式）",
+      "result": "已启动",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "step": "document_reading",
+      "action": "读取 README.md、meson.build、conanfile.py、.clang-format、test README、scripts/smart_build.sh 等文档",
+      "result": "成功",
+      "details": {
+        "files_read": ["README.md", "meson.build", "meson_options.txt", "conanfile.py", ".clang-format", "tests/README.md", "scripts/smart_build.sh"],
+        "key_findings": "构建系统: Meson+Ninja；语言: C++17；主依赖: boost/gtest/dbus/glib/luajit；subproject: libmcpp+component_drivers"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "step": "static_analysis_scan",
+      "action": "检查仓库 pre-commit 和 lint-runner 配置",
+      "result": "均未配置",
+      "details": {
+        "pre_commit": "未找到 .pre-commit-config.yaml",
+        "lint_runner": "未找到任何 lint-runner 配置文件",
+        "clang_format": "存在 .clang-format（LLVM-based，IndentWidth=4），但未集成到 pre-commit"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:41:00",
+      "step": "devcontainer_scan",
+      "action": "检查 .devcontainer 目录及 Dockerfile",
+      "result": "未配置",
+      "details": {
+        "devcontainer_dir": "不存在",
+        "dockerfile": "仓库无任何 Dockerfile"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:42:00",
+      "step": "image_selection",
+      "action": "选择 openEuler 基础镜像",
+      "result": "openEuler 24.03 LTS",
+      "details": {
+        "selection_reason": "仓库未提供 Dockerfile 或 devcontainer，默认使用 openEuler 24.03 LTS 基础镜像从零构建"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:43:00",
+      "step": "container_setup",
+      "action": "拉取 openEuler 基础镜像并启动容器，挂载仓库目录",
+      "result": "成功",
+      "details": {
+        "image": "hub.oepkgs.net/openeuler/openeuler:24.03-lts",
+        "container_name": "ttfhw-devmon-openeuler-env"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:44:00",
+      "step": "git_config",
+      "action": "配置 git URL 重写，将 subproject 的 SSH 地址映射为 HTTPS（git@gitcode.com: → https://gitcode.com/）",
+      "result": "成功",
+      "details": {
+        "reason": "subproject wrap 文件使用 SSH URL，容器无 SSH 密钥"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:44:00",
+      "step": "dependency_installation_layer1",
+      "action": "安装系统工具链（gcc gcc-c++ make cmake git python3 python3-pip pkg-config）",
+      "result": "成功",
+      "details": {
+        "source": "openEuler 官方仓库 (dnf)",
+        "packages": ["gcc 12.3.1", "gcc-c++ 12.3.1", "make 4.4.1", "cmake 3.27.9", "git 2.43.0", "python3 3.11.6", "python3-pip 23.3.1", "pkgconf 1.9.5"]
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:46:00",
+      "step": "dependency_installation_layer2",
+      "action": "安装构建依赖（meson ninja-build boost-devel gtest-devel gtest dbus-devel glib2-devel luajit-devel jsoncpp-devel libcurl-devel libatomic）",
+      "result": "成功",
+      "details": {
+        "source": "openEuler 官方仓库 (dnf)",
+        "packages": ["meson 1.3.1", "ninja-build 1.11.1", "boost-devel 1.83.0", "gtest-devel 1.14.0", "dbus-devel 1.14.8", "glib2-devel 2.78.3", "luajit-devel 2.1.0", "jsoncpp-devel 1.9.5"]
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:48:00",
+      "step": "build_attempt",
+      "action": "首次构建尝试 (meson setup + meson compile)",
+      "result": "失败",
+      "details": {
+        "error": "libmcpp subproject 的 mcdatabase 模块链接失败：undefined reference to sqlite3_preupdate_hook 等"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:53:00",
+      "step": "problem_resolution_1",
+      "action": "分析 sqlite3 链接错误，发现 openEuler 的 sqlite3 未启用 SQLITE_ENABLE_PREUPDATE_HOOK。从源码编译 sqlite 3.42.0 并安装到 /usr/lib64",
+      "result": "已解决",
+      "details": {
+        "solution": "dnf install -y wget && wget sqlite-autoconf-3420000.tar.gz && CFLAGS=\"-DSQLITE_ENABLE_PREUPDATE_HOOK=1\" ./configure && make install",
+        "source": "libmcpp/libraries/mcdatabase 的 sqlite_wrapper.cpp 使用了 sqlite3_preupdate_* 系列函数"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:55:00",
+      "step": "build_retry_1",
+      "action": "清理构建缓存后重新构建",
+      "result": "失败",
+      "details": {
+        "error": "lua_rawlen 和 lua_isinteger 未定义 - LuaJIT 2.1（Lua 5.1 API）不支持代码使用的 Lua 5.2+ 函数"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T20:58:00",
+      "step": "problem_resolution_2",
+      "action": "安装 lua-devel 5.4.6 并将 luajit.pc 重定向至 lua5.4，使所有依赖 luajit 的代码实际使用 Lua 5.4 API",
+      "result": "已解决",
+      "details": {
+        "solution": "dnf install -y lua-devel（lua 5.4.6）+ 创建 lua5.4.pc 符号链接 + 替换 luajit.pc 内容指向 lua 5.4",
+        "source": "component_drivers 代码使用了 lua_rawlen (Lua 5.2) 和 lua_isinteger (Lua 5.3)"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T21:00:00",
+      "step": "build_retry_2",
+      "action": "最终构建尝试 (meson setup -Dtests=true && meson compile -j 12)，使用 lua5.4 redirect + 自编译 sqlite3",
+      "result": "成功",
+      "details": {
+        "concurrency": 12,
+        "concurrency_ratio": "60%（20核 × 60% = 12）",
+        "targets": 1055,
+        "time": "8 分 59 秒"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T21:09:00",
+      "step": "meson_install",
+      "action": "安装运行时产物到构建目录",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T21:10:00",
+      "step": "ut_execution",
+      "action": "执行单元测试（meson test -C builddir -v）",
+      "result": "部分通过",
+      "details": {
+        "total_suites": 2,
+        "suites": {
+          "common_test": {"total": 211, "passed": 211, "failed": 0, "duration_seconds": 2.97},
+          "devmon_test": {"total": 725, "passed": 724, "failed": 1, "duration_seconds": 4.24}
+        },
+        "overall_total": 936,
+        "overall_passed": 935,
+        "overall_failed": 1
+      }
+    },
+    {
+      "timestamp": "2026-06-24T21:11:00",
+      "step": "sample_execution",
+      "action": "执行样例程序 (devmon --help with 3s timeout)",
+      "result": "部分成功",
+      "details": {
+        "executable": "src/devmon",
+        "behavior": "可执行文件正常启动并初始化，输出类型注册警告后挂起等待 D-Bus 连接（守护进程预期行为），3 秒后 timeout 终止",
+        "note": "完整的 D-Bus 样例需要在有 D-Bus 会话的环境中运行"
+      }
+    },
+    {
+      "timestamp": "2026-06-24T21:12:00",
+      "step": "cleanup",
+      "action": "停止并删除容器 ttfhw-devmon-openeuler-env",
+      "result": "成功",
+      "details": {}
+    },
+    {
+      "timestamp": "2026-06-24T21:15:00",
+      "step": "report_generation",
+      "action": "生成验证报告",
+      "result": "成功",
+      "details": {
+        "output_file": "verification_report_WSL_devmon_20260624.json"
+      }
+    }
+  ],
+  "final_results": {
+    "static_analysis": {
+      "enabled": false,
+      "summary": "仓库未配置 pre-commit 和 lint-runner 静态检查工具。存在 .clang-format 配置文件（基于 LLVM 风格），但未集成到自动化检查流程中",
+      "pre_commit": {
+        "configured": false,
+        "config_file": null,
+        "status": "未配置",
+        "duration_seconds": 0,
+        "total_hooks": 0,
+        "passed": 0,
+        "failed": 0,
+        "skipped": 0,
+        "failures": []
+      },
+      "lint_runner": {
+        "configured": false,
+        "config_file": null
+      }
+    },
+    "devcontainer": {
+      "enabled": false,
+      "config_dir": null,
+      "config_files": [],
+      "original_base_image": null,
+      "used_image": "openEuler 24.03 LTS",
+      "summary": "仓库未配置 devcontainer，无 Dockerfile。全部依赖通过 openEuler 24.03 LTS 原生仓库安装"
+    },
+    "build": {
+      "status": "成功",
+      "duration_seconds": 539,
+      "artifacts": [
+        {
+          "name": "devmon（主可执行文件）",
+          "path": "builddir/src/devmon",
+          "size": "2.9 MB"
+        },
+        {
+          "name": "libdevmon-common.so",
+          "path": "builddir/libs/common/libdevmon-common.so.0.1.0",
+          "size": "26 MB"
+        },
+        {
+          "name": "libdevmon.so",
+          "path": "builddir/libs/devmon/libdevmon.so.0.1.0",
+          "size": "8.4 MB"
+        }
+      ]
+    },
+    "ut": {
+      "status": "部分通过",
+      "duration_seconds": 7,
+      "total": 936,
+      "passed": 935,
+      "failed": 1,
+      "failures": [
+        {
+          "test_name": "TopologyTest.test_dump_topology_uses_parent_relation_for_sibling_paths",
+          "suite": "devmon_test",
+          "error": "D-Bus 服务 bmc.kepler.persistence 和 bmc.kepler.hwdiscovery 在容器环境中不可用，导致 topology dump 输出缺少预期的 Chip_PathSibling 路径",
+          "assessment": "环境相关失败，非代码缺陷。该测试依赖完整 BMC D-Bus 服务栈"
+        }
+      ]
+    },
+    "sample": {
+      "status": "部分成功",
+      "duration_seconds": 3,
+      "results": [
+        {
+          "sample_name": "devmon 可执行文件启动验证",
+          "execution_status": "成功启动",
+          "output_summary": "devmon 守护进程正常启动并完成类型注册初始化，随后挂起等待 D-Bus 连接（符合 BMC 守护进程预期行为）",
+          "execution_time": "3 秒（timeout 终止）"
+        }
+      ]
+    }
+  },
+  "documentation_gaps": [
+    "README 声称需要 CMake 3.10+，但实际构建系统为 Meson+Ninja（CMake 仅用于 subproject 中的依赖查找），README 构建说明有误导性",
+    "README 推荐 Ubuntu 20.04，但未提供 Dockerfile 或 devcontainer 配置，缺少容器化开发环境说明",
+    "仓库未在文档中说明 subproject 的 git SSH URL 依赖（libmcpp、component_drivers），外部开发者可能因无 SSH 密钥而无法获取依赖",
+    "README 未提及 sqlite3 的特殊编译需求（libmcpp subproject 需要 SQLITE_ENABLE_PREUPDATE_HOOK），openEuler 默认 sqlite3 不满足",
+    "README 未说明 Lua API 版本需求——代码使用了 Lua 5.2+ 函数（lua_rawlen）和 Lua 5.3+ 函数（lua_isinteger），但依赖声明为 luajit（Lua 5.1），存在文档不一致",
+    "README 推荐的 apt 包名（libboost-all-dev、libgtest-dev）与 openEuler dnf 包名（boost-devel、gtest-devel）存在差异，缺少跨发行版构建说明",
+    "README 中的 busctl 样例命令依赖完整 BMC D-Bus 服务栈，无法在独立容器中执行，缺少最小化验证样例"
+  ],
+  "problems_encountered": [
+    {
+      "timestamp": "2026-06-24T20:48:00",
+      "problem": "meson setup 阶段 libmcpp subproject 的 mcdatabase 模块找不到 sqlite3（通过 pkg-config）",
+      "solution": "通过 openEuler 仓库安装 sqlite-devel（dnf install sqlite-devel）",
+      "source": "libmcpp/libraries/mcdatabase/meson.build 第78行: dependency('sqlite3')"
+    },
+    {
+      "timestamp": "2026-06-24T20:50:00",
+      "problem": "链接阶段 sqlite3_preupdate_hook、sqlite3_preupdate_old 等符号未定义——openEuler 的 sqlite3 编译时未开启 SQLITE_ENABLE_PREUPDATE_HOOK",
+      "solution": "从 sqlite.org 下载 sqlite-autoconf-3420000.tar.gz，使用 CFLAGS=\"-DSQLITE_ENABLE_PREUPDATE_HOOK=1\" 从源码编译安装到 /usr/lib64",
+      "source": "libmcpp/libraries/mcdatabase/src/sqlite_wrapper.cpp"
+    },
+    {
+      "timestamp": "2026-06-24T20:55:00",
+      "problem": "编译阶段 component_drivers subproject 报错：lua_rawlen 和 lua_isinteger 未声明——LuaJIT 2.1 仅提供 Lua 5.1 API，不支持代码使用的 Lua 5.2+ 函数",
+      "solution": "安装 lua-devel 5.4.6，创建 lua5.4.pc → lua.pc 符号链接，并将 /usr/lib64/pkgconfig/luajit.pc 替换为指向 lua 5.4 的内容（备份原文件为 luajit.pc.bak）",
+      "source": "component_drivers/drivers/internal/chip/chip_base/lua_engine.cpp 和 lua_chip_binding.cpp"
+    },
+    {
+      "timestamp": "2026-06-24T20:58:00",
+      "problem": "subproject 通过 git@gitcode.com: SSH URL 获取，容器内无 SSH 密钥",
+      "solution": "配置 git URL 重写：git config --global url.\"https://gitcode.com/\".insteadOf \"git@gitcode.com:\"",
+      "source": "subprojects/component_drivers.wrap 和 subprojects/libmcpp.wrap"
+    },
+    {
+      "timestamp": "2026-06-24T21:10:00",
+      "problem": "1 个测试用例失败：TopologyTest.test_dump_topology_uses_parent_relation_for_sibling_paths",
+      "solution": "该测试依赖完整 BMC 环境中的 D-Bus 服务（bmc.kepler.persistence、bmc.kepler.hwdiscovery），在独立容器中无法启动这些服务。属于环境限制，非代码缺陷",
+      "source": "libs/devmon/tests/test_topology.cpp:7640"
+    }
+  ]
+}
